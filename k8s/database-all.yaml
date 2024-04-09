@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: challenge-flutter-go
+spec:
+  selector:
+    app: challenge-flutter-go-database-deployment
+  ports:
+  - port: 5432
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: challenge-flutter-go-database-pv
+  namespace: challenge-flutter-go
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/challenge-flutter-go-database-pv"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: challenge-flutter-go-database-pvc
+  namespace: challenge-flutter-go
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: challenge-flutter-go-database-deployment
+  namespace: challenge-flutter-go
+spec:
+  selector:
+    matchLabels:
+      app: challenge-flutter-go-database-deployment
+  template:
+    metadata:
+      labels:
+        app: challenge-flutter-go-database-deployment
+    spec:
+      volumes:
+      - name: challenge-flutter-go-database-pv-storage
+        persistentVolumeClaim:
+          claimName: challenge-flutter-go-database-pvc
+      containers:
+      - name: challenge-flutter-go-database-deployment
+        image: postgres:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DB_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DB_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DB_PASSWORD
+        volumeMounts:
+        - name: challenge-flutter-go-database-pv-storage
+          mountPath: /var/lib/postgresql/data
