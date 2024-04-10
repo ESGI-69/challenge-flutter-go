@@ -21,7 +21,7 @@
 
 - Retrive the service IP
   ```bash
-  kubectl get svc -n flutter-go
+  kubectl get svc -n challenge-flutter-go
   ```
   You can also retrive it via k9s
 
