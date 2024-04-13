@@ -1,5 +1,11 @@
 # Challenge Flutter Go
 
+## Development
+
+### Backend
+
+Launch with VS Code debugger with /go folder openned
+
 ## Deployment
 
 > All the following commands are executed in the `/k8s` directory.
