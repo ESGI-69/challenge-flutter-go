@@ -27,7 +27,7 @@ jobs:
 
     - name: Install depencies
       working-directory: go
-      run: go mod download
+      run: go get .
 
     - name: Build
       working-directory: go
