@@ -19,6 +19,9 @@ jobs:
       with:
         go-version: '1.20'
 
+    - name: Install depencies
+      run: go mod download
+
     - name: Build
       run: go build -v ./go/main.go
 
