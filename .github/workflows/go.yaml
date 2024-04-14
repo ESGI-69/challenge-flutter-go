@@ -23,6 +23,7 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version-file: 'go/go.mod'
+        cache-dependency-path: go/go.sum
 
     - name: Install depencies
       working-directory: go
