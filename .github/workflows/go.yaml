@@ -21,6 +21,8 @@ jobs:
 
     - name: Set up Go
       uses: actions/setup-go@v4
+      with:
+        go-version-file: 'go/go.mod'
 
     - name: Install depencies
       working-directory: go
