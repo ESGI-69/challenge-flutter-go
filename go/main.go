@@ -1,10 +1,9 @@
 package main
 
 import (
-	"esgi69/challenge-flutter-go/config"
-	"fmt"
+	"esgi69/challenge-flutter-go/api"
 )
 
 func main() {
-	fmt.Print(config.GetConfig().DBHost)
+	api.Start()
 }
