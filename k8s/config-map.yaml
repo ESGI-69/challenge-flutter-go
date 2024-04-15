@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: challenge-flutter-go-config
+  namespace: challenge-flutter-go
+data:
+  database_host: "database"
+  database_port: "5432"
+  database_user: "challenge_flutter_go"
+  database_name: "challenge_flutter_go"
+  backend_port: "8080"
+  mode: "debug"
+

@@ -73,19 +73,19 @@ spec:
         env:
         - name: POSTGRES_DB
           valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: DB_NAME
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: database_name
         - name: POSTGRES_USER
           valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: DB_USER
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: database_user
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: DB_PASSWORD
+              key: database_password
         volumeMounts:
         - name: challenge-flutter-go-database-pv-storage
           mountPath: /var/lib/postgresql/data

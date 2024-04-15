@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: challenge-flutter-go
+spec:
+  selector:
+    app: challenge-flutter-go-backend-deployment
+  ports:
+  - port: 8080
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: challenge-flutter-go-backend-deployment
+  namespace: challenge-flutter-go
+spec:
+  selector:
+    matchLabels:
+      app: challenge-flutter-go-backend-deployment
+  template:
+    metadata:
+      labels:
+        app: challenge-flutter-go-backend-deployment
+    spec:
+      containers:
+      - name: challenge-flutter-go-backend-deployment
+        image: test
+        imagePullPolicy: Never
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: backend_port
+        - name: MODE
+          valueFrom:
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: mode
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: database_host
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: database_port
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: database_user
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: database_name
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: database_password
+
+        ports:
+        - containerPort: 8080
