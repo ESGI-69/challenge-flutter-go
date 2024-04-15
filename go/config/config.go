@@ -10,6 +10,7 @@ type Config struct {
 	DBUser     string `mapstructure:"DB_USER"`
 	DBPassword string `mapstructure:"DB_PASSWORD"`
 	DBName     string `mapstructure:"DB_NAME"`
+	Mode       string `mapstructure:"MODE"`
 }
 
 func init() {
@@ -22,6 +23,7 @@ func init() {
 	viper.SetDefault("DB_USER", "challenge_flutter_go")
 	viper.SetDefault("DB_PASSWORD", "challenge_flutter_go")
 	viper.SetDefault("DB_NAME", "challenge_flutter_go")
+	viper.SetDefault("MODE", "debug")
 }
 
 func GetConfig() (config Config) {
