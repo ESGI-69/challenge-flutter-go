@@ -12,7 +12,6 @@ import (
 var database *gorm.DB
 
 func init() {
-	// dsn := "postgres://" + config.GetConfig().DBUser + ":" + config.GetConfig().DBPassword + "@" + config.GetConfig().DBHost + ":" + config.GetConfig().DBPort + "/" + config.GetConfig().DBName
 	dsn := "host=" + config.GetConfig().DBHost + " user=" + config.GetConfig().DBUser + " password=" + config.GetConfig().DBPassword + " dbname=" + config.GetConfig().DBName + " port=" + config.GetConfig().DBPort + " sslmode=disable"
 
 	var databaseConnectionError error
