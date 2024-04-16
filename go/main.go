@@ -1,7 +1,7 @@
 package main
 
 import (
-	"esgi69/challenge-flutter-go/api"
+	"challenge-flutter-go/api"
 )
 
 func main() {

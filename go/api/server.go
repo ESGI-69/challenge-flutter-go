@@ -1,10 +1,10 @@
 package api
 
 import (
-	"esgi69/challenge-flutter-go/api/handler"
-	"esgi69/challenge-flutter-go/config"
-	"esgi69/challenge-flutter-go/database"
-	"esgi69/challenge-flutter-go/repository"
+	"challenge-flutter-go/api/handler"
+	"challenge-flutter-go/config"
+	"challenge-flutter-go/database"
+	"challenge-flutter-go/repository"
 
 	"github.com/gin-gonic/gin"
 )

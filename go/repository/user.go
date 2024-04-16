@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"esgi69/challenge-flutter-go/models"
+	"challenge-flutter-go/models"
 
 	"gorm.io/gorm"
 )

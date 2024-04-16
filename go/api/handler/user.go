@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"esgi69/challenge-flutter-go/repository"
+	"challenge-flutter-go/repository"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

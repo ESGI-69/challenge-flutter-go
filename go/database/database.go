@@ -1,8 +1,8 @@
 package database
 
 import (
-	"esgi69/challenge-flutter-go/config"
-	"esgi69/challenge-flutter-go/models"
+	"challenge-flutter-go/config"
+	"challenge-flutter-go/models"
 	"log"
 
 	"gorm.io/driver/postgres"
