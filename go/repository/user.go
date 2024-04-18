@@ -16,9 +16,6 @@ func (u *UserRepository) Create(user models.User) (createdUser models.User, err 
 }
 
 func (u *UserRepository) Get(id string) (user models.User, err error) {
-	u.Database.First(&user, id)
-	if user.ID == 0 {
-		return user, gorm.ErrRecordNotFound
-	}
-	return user, nil
+	err = u.Database.First(&user, id).Error
+	return
 }
