@@ -1,7 +1,7 @@
 package api
 
 import (
-	"challenge-flutter-go/api/handler"
+	"challenge-flutter-go/api/handlers"
 	"challenge-flutter-go/config"
 	"challenge-flutter-go/database"
 	"challenge-flutter-go/repository"
@@ -19,12 +19,13 @@ func init() {
 }
 
 func setRoutes() {
-	var userHandler = handler.UserHandler{
+	var userHandler = handlers.UserHandler{
 		Repository: repository.UserRepository{
 			Database: database.GetInstance(),
 		},
 	}
 	router.GET("/users/:id", userHandler.Get)
+	router.POST("/users", userHandler.Create)
 }
 
 func Start() {
