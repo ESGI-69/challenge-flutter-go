@@ -12,7 +12,6 @@ import (
 func HandleBodyMissingFieldsError(err error, context *gin.Context) {
 	var missingFields []string
 	for _, err := range err.(validator.ValidationErrors) {
-		err.Tag()
 		missingFields = append(missingFields, err.Field())
 	}
 	context.JSON(http.StatusBadRequest, gin.H{"error": "Missing", "fields": missingFields})
@@ -23,7 +22,6 @@ func HandleBodyMissingFieldsError(err error, context *gin.Context) {
 func HandleBodyInvalidFieldsError(err error, context *gin.Context) {
 	var invalidFields []string
 	for _, err := range err.(validator.ValidationErrors) {
-		err.Tag()
 		invalidFields = append(invalidFields, err.Field())
 	}
 	context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid", "fields": invalidFields})
