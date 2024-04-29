@@ -1,16 +1,18 @@
 package config
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	DBHost     string `mapstructure:"DB_HOST"`
-	DBPort     string `mapstructure:"DB_PORT"`
-	DBUser     string `mapstructure:"DB_USER"`
-	DBPassword string `mapstructure:"DB_PASSWORD"`
-	DBName     string `mapstructure:"DB_NAME"`
-	Mode       string `mapstructure:"MODE"`
+	DBHost     string `mapstructure:"DB_HOST" validate:"required"`
+	DBPort     string `mapstructure:"DB_PORT" validate:"required"`
+	DBUser     string `mapstructure:"DB_USER" validate:"required"`
+	DBPassword string `mapstructure:"DB_PASSWORD" validate:"required"`
+	DBName     string `mapstructure:"DB_NAME" validate:"required"`
+	Mode       string `mapstructure:"MODE" validate:"required"`
+	JwtSecret  string `mapstructure:"JWT_SECRET" validate:"required"`
 }
 
 func init() {
@@ -24,6 +26,13 @@ func init() {
 	viper.SetDefault("DB_PASSWORD", "challenge_flutter_go")
 	viper.SetDefault("DB_NAME", "challenge_flutter_go")
 	viper.SetDefault("MODE", "debug")
+
+	// Check if no missing keys in config
+	validator := validator.New()
+	err := validator.Struct(GetConfig())
+	if err != nil {
+		panic(err)
+	}
 }
 
 func GetConfig() (config Config) {

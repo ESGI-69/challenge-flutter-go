@@ -69,6 +69,11 @@ spec:
             secretKeyRef:
               name: app-secrets
               key: database_password
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: jwt_secret
 
         ports:
         - containerPort: 8080
