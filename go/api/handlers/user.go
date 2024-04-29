@@ -29,7 +29,7 @@ func (handler *UserHandler) Get(context *gin.Context) {
 
 func (handler *UserHandler) Create(context *gin.Context) {
 	type RequestBody struct {
-		Name     string `json:"name" binding:"required"`
+		Username string `json:"username" binding:"required"`
 		Password string `json:"password" binding:"required" validate:"min=8,max=64"`
 	}
 
@@ -39,7 +39,7 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		return
 	}
 
-	user := models.User{Name: requestBody.Name, Password: requestBody.Password}
+	user := models.User{Username: requestBody.Username, Password: requestBody.Password}
 	createdUser, userCreationError := handler.Repository.Create(user)
 	if userCreationError != nil {
 		errorHandlers.HandleGormErrors(userCreationError, context)
