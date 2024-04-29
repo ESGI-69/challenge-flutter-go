@@ -25,7 +25,10 @@ func init() {
 
 func autoMigrate() {
 	defer log.Print("Database migrated")
-	database.AutoMigrate(&models.User{})
+	err := database.AutoMigrate(&models.User{})
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func GetInstance() *gorm.DB {
