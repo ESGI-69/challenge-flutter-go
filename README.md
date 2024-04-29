@@ -6,6 +6,8 @@
 
 Launch with VS Code debugger with /go folder openned
 
+Copy `.env.example` to `.env.` & set the database IP for development. See **Deployment** for more info.
+
 ## Deployment
 
 > All the following commands are executed in the `/k8s` directory.
