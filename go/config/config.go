@@ -23,7 +23,6 @@ func init() {
 	viper.SetDefault("DB_HOST", "localhost")
 	viper.SetDefault("DB_PORT", "5432")
 	viper.SetDefault("DB_USER", "challenge_flutter_go")
-	viper.SetDefault("DB_PASSWORD", "challenge_flutter_go")
 	viper.SetDefault("DB_NAME", "challenge_flutter_go")
 	viper.SetDefault("MODE", "debug")
 
