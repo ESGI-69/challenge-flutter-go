@@ -22,16 +22,16 @@ func init() {
 func setRoutes() {
 	databaseInstance := database.GetInstance()
 
-	var userHandler = handlers.UserHandler{
-		Repository: repository.UserRepository{
-			Database: databaseInstance,
-		},
+	userRepository := repository.UserRepository{
+		Database: databaseInstance,
 	}
 
-	var authHandler = handlers.AuthHandler{
-		UserRepository: repository.UserRepository{
-			Database: databaseInstance,
-		},
+	userHandler := handlers.UserHandler{
+		Repository: userRepository,
+	}
+
+	authHandler := handlers.AuthHandler{
+		UserRepository: userRepository,
 	}
 
 	router.GET("/users/:id", middlewares.AuthorizationsMiddleware, userHandler.Get)
