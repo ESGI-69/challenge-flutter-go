@@ -19,13 +19,23 @@ func init() {
 }
 
 func setRoutes() {
+	databaseInstance := database.GetInstance()
+
 	var userHandler = handlers.UserHandler{
 		Repository: repository.UserRepository{
-			Database: database.GetInstance(),
+			Database: databaseInstance,
 		},
 	}
+
+	var authHandler = handlers.AuthHandler{
+		UserRepository: repository.UserRepository{
+			Database: databaseInstance,
+		},
+	}
+
 	router.GET("/users/:id", userHandler.Get)
 	router.POST("/users", userHandler.Create)
+	router.POST("/login", authHandler.Login)
 }
 
 func Start() {

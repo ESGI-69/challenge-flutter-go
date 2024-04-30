@@ -19,3 +19,8 @@ func (u *UserRepository) Get(id string) (user models.User, err error) {
 	err = u.Database.First(&user, id).Error
 	return
 }
+
+func (u *UserRepository) GetFromUsername(username string) (user models.User, err error) {
+	err = u.Database.Where(&models.User{Username: username}).First(&user).Error
+	return
+}
