@@ -2,6 +2,7 @@ package api
 
 import (
 	"challenge-flutter-go/api/handlers"
+	"challenge-flutter-go/api/middlewares"
 	"challenge-flutter-go/config"
 	"challenge-flutter-go/database"
 	"challenge-flutter-go/repository"
@@ -33,7 +34,7 @@ func setRoutes() {
 		},
 	}
 
-	router.GET("/users/:id", userHandler.Get)
+	router.GET("/users/:id", middlewares.AuthorizationsMiddleware, userHandler.Get)
 	router.POST("/users", userHandler.Create)
 	router.POST("/login", authHandler.Login)
 }

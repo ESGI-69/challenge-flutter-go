@@ -27,10 +27,10 @@ func (handler AuthHandler) Login(context *gin.Context) {
 		return
 	}
 
-	user, databaseError := handler.UserRepository.GetFromUsername(requestBody.Username)
+	user, databaseError := handler.UserRepository.FindByUsername(requestBody.Username)
 
 	if requestBody.Password != user.Password || databaseError != nil {
-		context.Status(http.StatusUnauthorized)
+		context.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 

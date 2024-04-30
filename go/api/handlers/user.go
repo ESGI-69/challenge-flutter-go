@@ -6,6 +6,7 @@ import (
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,6 +17,30 @@ type UserHandler struct {
 
 func (handler *UserHandler) Get(context *gin.Context) {
 	id := context.Param("id")
+
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	uintId, errUintParse := strconv.ParseUint(id, 10, 32)
+
+	if errUintParse != nil {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	currentUser, exist := context.Get("currentUser")
+
+	if !exist {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	if currentUser.(models.User).ID != uint(uintId) {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
 
 	user, err := handler.Repository.Get(id)
 

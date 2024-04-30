@@ -20,7 +20,7 @@ func (u *UserRepository) Get(id string) (user models.User, err error) {
 	return
 }
 
-func (u *UserRepository) GetFromUsername(username string) (user models.User, err error) {
+func (u *UserRepository) FindByUsername(username string) (user models.User, err error) {
 	err = u.Database.Where(&models.User{Username: username}).First(&user).Error
 	return
 }
