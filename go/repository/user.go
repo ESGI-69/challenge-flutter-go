@@ -16,7 +16,7 @@ func (u *UserRepository) Create(user models.User) (createdUser models.User, err 
 }
 
 func (u *UserRepository) Get(id string) (user models.User, err error) {
-	err = u.Database.First(&user, id).Error
+	err = u.Database.Preload("Trips").Preload("Trips.Owner").First(&user, id).Error
 	return
 }
 
