@@ -7,6 +7,9 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// Retrive the current user interface filled by the middleware.
+//
+// Abort with a 401 if the user is not present
 func GetCurrentUser(context *gin.Context) models.User {
 	currentUserInterface, exist := context.Get("currentUser")
 	if !exist {
