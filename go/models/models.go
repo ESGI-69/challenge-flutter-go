@@ -9,8 +9,8 @@ import (
 type UserRole string
 
 const (
-	Admin   UserRole = "ADMIN"
-	Classic UserRole = "USER"
+	UserRoleAdmin UserRole = "ADMIN"
+	UserRoleUser  UserRole = "USER"
 )
 
 type User struct {
@@ -38,8 +38,8 @@ type Trip struct {
 type TripParticipantRole string
 
 const (
-	Editor TripParticipantRole = "EDITOR"
-	Guest  TripParticipantRole = "GUEST"
+	TripParticipantRoleEditor TripParticipantRole = "EDITOR"
+	TripParticipantRoleGuest  TripParticipantRole = "GUEST"
 )
 
 type TripParticipant struct {
