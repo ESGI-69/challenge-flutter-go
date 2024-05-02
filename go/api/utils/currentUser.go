@@ -10,15 +10,15 @@ import (
 // Retrive the current user interface filled by the middleware.
 //
 // Abort with a 401 if the user is not present
-func GetCurrentUser(context *gin.Context) models.User {
+func GetCurrentUser(context *gin.Context) (user models.User, exist bool) {
 	currentUserInterface, exist := context.Get("currentUser")
 	if !exist {
 		context.AbortWithStatus(401)
-		return models.User{}
+		return models.User{}, false
 	}
 
 	validator := validator.New()
 	validator.Struct(currentUserInterface)
 
-	return currentUserInterface.(models.User)
+	return currentUserInterface.(models.User), true
 }

@@ -25,7 +25,11 @@ func init() {
 
 func autoMigrate() {
 	defer log.Print("Database migrated")
-	err := database.AutoMigrate(&models.User{})
+	err := database.AutoMigrate(
+		&models.User{},
+		&models.Trip{},
+		&models.TripParticipant{},
+	)
 	if err != nil {
 		log.Fatalln(err)
 	}

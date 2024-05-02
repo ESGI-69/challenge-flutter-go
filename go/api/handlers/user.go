@@ -32,7 +32,10 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		return
 	}
 
-	currentUser := utils.GetCurrentUser(context)
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		return
+	}
 
 	if currentUser.ID != uint(uintId) {
 		log.Println("User is not authorized to access this resource")

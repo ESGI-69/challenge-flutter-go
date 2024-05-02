@@ -14,7 +14,7 @@ func HandleBodyMissingFieldsError(err error, context *gin.Context) {
 	for _, err := range err.(validator.ValidationErrors) {
 		missingFields = append(missingFields, err.Field())
 	}
-	context.JSON(http.StatusBadRequest, gin.H{"error": "Missing", "fields": missingFields})
+	context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Missing", "fields": missingFields})
 }
 
 // Handles the error when the body of the request has invalid fields
@@ -24,5 +24,5 @@ func HandleBodyInvalidFieldsError(err error, context *gin.Context) {
 	for _, err := range err.(validator.ValidationErrors) {
 		invalidFields = append(invalidFields, err.Field())
 	}
-	context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid", "fields": invalidFields})
+	context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid", "fields": invalidFields})
 }

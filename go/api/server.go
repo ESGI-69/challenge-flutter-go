@@ -26,6 +26,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	tripRepository := repository.TripRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -34,9 +38,14 @@ func setRoutes() {
 		UserRepository: userRepository,
 	}
 
+	tripHandler := handlers.TripHandler{
+		Repository: tripRepository,
+	}
+
 	router.GET("/users/:id", middlewares.AuthorizationsMiddleware, userHandler.Get)
 	router.POST("/users", userHandler.Create)
 	router.POST("/login", authHandler.Login)
+	router.POST("/trips", middlewares.AuthorizationsMiddleware, tripHandler.Create)
 }
 
 func Start() {
