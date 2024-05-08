@@ -68,3 +68,38 @@ func (handler *TripHandler) Create(context *gin.Context) {
 
 	context.JSON(http.StatusCreated, createdTrip)
 }
+
+func (handler *TripHandler) Join(context *gin.Context) {
+	id := context.Param("id")
+
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		return
+	}
+
+	trip, err := handler.Repository.Get(id)
+
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	err = handler.Repository.AddParticipant(trip, currentUser, models.TripParticipantRoleGuest)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	updatedTrip, err := handler.Repository.Get(id)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	context.JSON(http.StatusOK, updatedTrip)
+}
