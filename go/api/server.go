@@ -46,6 +46,7 @@ func setRoutes() {
 	router.POST("/users", userHandler.Create)
 	router.POST("/login", authHandler.Login)
 	router.POST("/trips", middlewares.AuthorizationsMiddleware, tripHandler.Create)
+	router.POST("/trips/:id/join", middlewares.AuthorizationsMiddleware, tripHandler.Join)
 }
 
 func Start() {
