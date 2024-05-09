@@ -69,6 +69,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	context.JSON(http.StatusCreated, createdTrip)
 }
 
+// Join an existing trip using its id and associate it with the current user
 func (handler *TripHandler) Join(context *gin.Context) {
 	id := context.Param("id")
 
