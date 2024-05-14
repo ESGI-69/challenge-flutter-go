@@ -69,7 +69,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	context.JSON(http.StatusCreated, createdTrip)
 }
 
-// Join an existing trip using its id and associate it with the current user
+// Join an existing trip using its inviteCode and associate it with the current user
 func (handler *TripHandler) Join(context *gin.Context) {
 	id := context.Param("id")
 
@@ -83,7 +83,7 @@ func (handler *TripHandler) Join(context *gin.Context) {
 		return
 	}
 
-	trip, err := handler.Repository.Get(id)
+	trip, err := handler.Repository.GetByInviteCode(id)
 
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
@@ -96,7 +96,7 @@ func (handler *TripHandler) Join(context *gin.Context) {
 		return
 	}
 
-	updatedTrip, err := handler.Repository.Get(id)
+	updatedTrip, err := handler.Repository.GetByInviteCode(id)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

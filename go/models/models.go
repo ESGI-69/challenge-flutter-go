@@ -33,6 +33,7 @@ type Trip struct {
 	City         string    `gorm:"not null"`
 	StartDate    time.Time `gorm:"not null"`
 	EndDate      time.Time `gorm:"not null"`
+	InviteCode   string    `gorm:"default:null;unique"`
 }
 
 type TripParticipantRole string
