@@ -61,3 +61,29 @@ func (t *TripRepository) AddParticipant(trip models.Trip, user models.User, role
 	result := t.Database.Create(&participant)
 	return result.Error
 }
+
+// Get all the participants of a trip with their role
+func (t *TripRepository) GetParticipants(trip models.Trip) (participants []models.TripParticipant, err error) {
+	err = t.Database.Model(&models.TripParticipant{}).Where("trip_id = ?", trip.ID).Find(&participants).Error
+	return
+}
+
+// Get all the transports of a trip
+func (t *TripRepository) GetTransports(trip models.Trip) (transports []models.Transport, err error) {
+	err = t.Database.Model(&models.Transport{}).Where("trip_id = ?", trip.ID).Find(&transports).Error
+	return
+}
+
+// Add a transport to a trip
+func (t *TripRepository) AddTransport(trip models.Trip, transport models.Transport) (err error) {
+	transport.TripID = trip.ID
+
+	result := t.Database.Create(&transport)
+	return result.Error
+}
+
+// Delete a transport from a trip
+func (t *TripRepository) DeleteTransport(trip models.Trip, transportID uint) (err error) {
+	result := t.Database.Delete(&models.Transport{}, transportID)
+	return result.Error
+}
