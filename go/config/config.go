@@ -18,13 +18,19 @@ type Config struct {
 func init() {
 	viper.SetConfigFile(".env")
 	viper.ReadInConfig()
-	viper.AutomaticEnv()
 
+	viper.BindEnv("DB_HOST")
 	viper.SetDefault("DB_HOST", "localhost")
+	viper.BindEnv("DB_PORT")
 	viper.SetDefault("DB_PORT", "5432")
+	viper.BindEnv("DB_USER")
 	viper.SetDefault("DB_USER", "challenge_flutter_go")
+	viper.BindEnv("DB_NAME")
 	viper.SetDefault("DB_NAME", "challenge_flutter_go")
+	viper.BindEnv("MODE")
 	viper.SetDefault("MODE", "debug")
+	viper.BindEnv("DB_PASSWORD")
+	viper.BindEnv("JWT_SECRET")
 
 	// Check if no missing keys in config
 	validator := validator.New()
