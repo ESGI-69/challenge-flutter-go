@@ -16,6 +16,19 @@ type UserHandler struct {
 	Repository repository.UserRepository
 }
 
+type UserResponse struct {
+	ID       uint          `json:"id"`
+	Username string        `json:"username"`
+	Trips    []models.Trip `json:"trips"`
+}
+
+type UserAdminResponse struct {
+	ID       uint          `json:"id"`
+	Username string        `json:"username"`
+	Trips    []models.Trip `json:"trips"`
+	Role     string        `json:"role"`
+}
+
 // Get the user by his id
 func (handler *UserHandler) Get(context *gin.Context) {
 	id := context.Param("id")
@@ -50,7 +63,13 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, user)
+	response := UserResponse{
+		ID:       user.ID,
+		Username: user.Username,
+		Trips:    user.Trips,
+	}
+
+	context.JSON(http.StatusOK, response)
 }
 
 // Register a new user
@@ -72,5 +91,11 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		errorHandlers.HandleGormErrors(userCreationError, context)
 		return
 	}
-	context.JSON(http.StatusCreated, createdUser)
+
+	reponse := UserResponse{
+		ID:       createdUser.ID,
+		Username: createdUser.Username,
+		Trips:    createdUser.Trips,
+	}
+	context.JSON(http.StatusCreated, reponse)
 }
