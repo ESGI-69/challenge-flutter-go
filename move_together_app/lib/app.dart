@@ -10,7 +10,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => HomeScreen(),
+        '/': (context) => const HomeScreen(),
         '/login':(context) => LoginScreen(),
       },
       theme: ThemeData(
