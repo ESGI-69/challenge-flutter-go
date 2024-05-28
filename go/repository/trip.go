@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type TripRepository struct {
@@ -34,7 +35,7 @@ func (t *TripRepository) Create(trip models.Trip) (createdTrip models.Trip, err 
 }
 
 func (t *TripRepository) Get(id string) (trip models.Trip, err error) {
-	err = t.Database.Preload("Participants").First(&trip, id).Error
+	err = t.Database.Preload(clause.Associations).Preload("Participants").First(&trip, id).Error
 	return
 }
 
@@ -59,5 +60,36 @@ func (t *TripRepository) AddParticipant(trip models.Trip, user models.User, role
 	}
 
 	result := t.Database.Create(&participant)
+	return result.Error
+}
+
+// Get all the participants of a trip with their role
+func (t *TripRepository) GetParticipants(trip models.Trip) (participants []models.TripParticipant, err error) {
+	err = t.Database.Model(&models.TripParticipant{}).Where("trip_id = ?", trip.ID).Find(&participants).Error
+	return
+}
+
+// Get all the transports of a trip
+func (t *TripRepository) GetTransports(trip models.Trip) (transports []models.Transport, err error) {
+	err = t.Database.Model(&models.Transport{}).Where("trip_id = ?", trip.ID).Find(&transports).Error
+	return
+}
+
+// Add a transport to a trip
+func (t *TripRepository) AddTransport(trip models.Trip, transport models.Transport) (models.Transport, error) {
+	transport.TripID = trip.ID
+
+	result := t.Database.Create(&transport)
+	if result.Error != nil {
+		return models.Transport{}, result.Error
+	}
+	//add associations
+	t.Database.Model(&transport).Association("Trip").Append(&trip)
+	return transport, nil
+}
+
+// Delete a transport from a trip
+func (t *TripRepository) DeleteTransport(trip models.Trip, transportID uint) (err error) {
+	result := t.Database.Delete(&models.Transport{}, transportID)
 	return result.Error
 }

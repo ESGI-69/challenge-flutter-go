@@ -104,3 +104,177 @@ func (handler *TripHandler) Join(context *gin.Context) {
 
 	context.JSON(http.StatusOK, updatedTrip)
 }
+
+// Add a transport to a trip
+func (handler *TripHandler) AddTransport(context *gin.Context) {
+	id := context.Param("id")
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	type RequestBody struct {
+		StartDate     string `json:"StartDate" binding:"required"`
+		EndDate       string `json:"EndDate" binding:"required"`
+		TransportType string `json:"TransportType" binding:"required"`
+		StartAddress  string `json:"StartAddress" binding:"required"`
+		EndAddress    string `json:"EndAddress" binding:"required"`
+	}
+
+	var requestBody RequestBody
+	isBodyValid := utils.Deserialize(&requestBody, context)
+	if !isBodyValid {
+		return
+	}
+
+	startDate, startDateParseError := time.Parse(time.RFC3339, requestBody.StartDate)
+	if startDateParseError != nil {
+		fmt.Println(startDateParseError)
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid start date"})
+		return
+	}
+
+	endDate, endDateParseError := time.Parse(time.RFC3339, requestBody.EndDate)
+	if endDateParseError != nil {
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid end date"})
+		return
+	}
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	trip, err := handler.Repository.Get(id)
+
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	participants, err := handler.Repository.GetParticipants(trip)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	// Check si l'user à le droit (owner ou editor)
+	isUserHasRights := false
+	for _, participant := range participants {
+		if participant.UserID == currentUser.ID {
+			if participant.Role == "EDITOR" {
+				isUserHasRights = true
+			}
+			break
+		}
+	}
+
+	if !isUserHasRights {
+		if trip.OwnerID != currentUser.ID {
+			context.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+	}
+
+	if requestBody.TransportType != string(models.TransportTypeCar) {
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid transport type"})
+		return
+	}
+
+	var transport = models.Transport{
+		TripID:        trip.ID,
+		TransportType: models.TransportTypeCar,
+		StartDate:     startDate,
+		EndDate:       endDate,
+		StartAddress:  requestBody.StartAddress,
+		EndAddress:    requestBody.EndAddress,
+	}
+
+	var transportCreated, errTransport = handler.Repository.AddTransport(trip, transport)
+
+	if errTransport != nil {
+		errorHandlers.HandleGormErrors(errTransport, context)
+		return
+	}
+
+	context.JSON(http.StatusCreated, transportCreated)
+}
+
+// Delete a transport from a trip
+func (handler *TripHandler) DeleteTransport(context *gin.Context) {
+	id := context.Param("id")
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	transportID := context.Param("transportID")
+	if transportID == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	trip, err := handler.Repository.Get(id)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	participants, err := handler.Repository.GetParticipants(trip)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	// Check si l'user à le droit (owner ou editor)
+	isUserHasRights := false
+	for _, participant := range participants {
+		if participant.UserID == currentUser.ID {
+			if participant.Role == "EDITOR" {
+				isUserHasRights = true
+			}
+			break
+		}
+	}
+
+	if !isUserHasRights {
+		if trip.OwnerID != currentUser.ID {
+			context.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+	}
+
+	transports, err := handler.Repository.GetTransports(trip)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	// Delete the transport
+	isTransportFound := false
+	for _, transport := range transports {
+		if fmt.Sprint(transport.ID) == transportID {
+			isTransportFound = true
+			// Quand on delete un transport, on ne le Delete pas vraiment de la BD, on set le deleted_at à la date actuelle mais il est ignoré dans les requêtes
+			err = handler.Repository.DeleteTransport(trip, transport.ID)
+			if err != nil {
+				errorHandlers.HandleGormErrors(err, context)
+				return
+			}
+			break
+		}
+	}
+	if !isTransportFound {
+		context.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Transport not found"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "Transport deleted"})
+
+}

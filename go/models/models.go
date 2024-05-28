@@ -64,3 +64,22 @@ type TripParticipant struct {
 	UserID uint
 	Role   TripParticipantRole `gorm:"not null; default:'GUEST'"`
 }
+
+type TransportType string
+
+const (
+	TransportTypeCar   TransportType = "car"
+	TransportTypePlane TransportType = "plane"
+	TransportTypeBus   TransportType = "bus"
+)
+
+type Transport struct {
+	gorm.Model
+	TransportType TransportType `gorm:"not null; default:'car'"`
+	StartDate     time.Time     `gorm:"not null"`
+	TripID        uint
+	Trip          Trip      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	EndDate       time.Time `gorm:"not null"`
+	StartAddress  string    `gorm:"not null"`
+	EndAddress    string    `gorm:"not null"`
+}
