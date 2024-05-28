@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class ApiServices {
   static Future<String> loginUser(String username, String password) async {
     final response = await http.post(
-      Uri.parse('https://dummyjson.com/auth/login'),
+      Uri.parse('http://10.0.2.2:8080/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -15,7 +15,6 @@ class ApiServices {
     );
 
     if (response.statusCode == 200) {
-      print('request success');
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData['token'];
       return token;

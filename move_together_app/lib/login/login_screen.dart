@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _usernameController.text,
         _passwordController.text,
       );
+      print("TOKEN : "+token);
       await _secureStorage.write(key: 'jwt', value: token);
       setState(() {
         errorMessage = null;
@@ -47,11 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               TextField(
                 controller: _usernameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Username',
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
