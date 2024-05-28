@@ -29,10 +29,6 @@ spec:
       - name: challenge-flutter-go-backend-deployment
         image: gatien1/challenge-flutter-go-backend:latest
         imagePullPolicy: Always
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         env:
         - name: PORT
           valueFrom:

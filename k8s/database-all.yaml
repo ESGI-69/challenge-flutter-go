@@ -64,10 +64,6 @@ spec:
       containers:
       - name: challenge-flutter-go-database-deployment
         image: postgres:latest
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 5432
         env:
