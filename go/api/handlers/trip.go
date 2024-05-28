@@ -182,7 +182,7 @@ func (handler *TripHandler) AddTransport(context *gin.Context) {
 		return
 	}
 
-	transport := models.Transport{
+	var transport = models.Transport{
 		TripID:        trip.ID,
 		TransportType: models.TransportTypeCar,
 		StartDate:     startDate,
@@ -191,14 +191,14 @@ func (handler *TripHandler) AddTransport(context *gin.Context) {
 		EndAddress:    requestBody.EndAddress,
 	}
 
-	err = handler.Repository.AddTransport(trip, transport)
+	var transportCreated, errTransport = handler.Repository.AddTransport(trip, transport)
 
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
+	if errTransport != nil {
+		errorHandlers.HandleGormErrors(errTransport, context)
 		return
 	}
 
-	context.JSON(http.StatusCreated, transport)
+	context.JSON(http.StatusCreated, transportCreated)
 }
 
 // Delete a transport from a trip

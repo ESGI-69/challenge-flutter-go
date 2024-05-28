@@ -62,6 +62,7 @@ type Transport struct {
 	TransportType TransportType `gorm:"not null; default:'car'"`
 	StartDate     time.Time     `gorm:"not null"`
 	TripID        uint
+	Trip          Trip      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	EndDate       time.Time `gorm:"not null"`
 	StartAddress  string    `gorm:"not null"`
 	EndAddress    string    `gorm:"not null"`

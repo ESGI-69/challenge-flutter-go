@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type TripRepository struct {
@@ -34,7 +35,7 @@ func (t *TripRepository) Create(trip models.Trip) (createdTrip models.Trip, err 
 }
 
 func (t *TripRepository) Get(id string) (trip models.Trip, err error) {
-	err = t.Database.Preload("Participants").First(&trip, id).Error
+	err = t.Database.Preload(clause.Associations).Preload("Participants").First(&trip, id).Error
 	return
 }
 
@@ -75,11 +76,14 @@ func (t *TripRepository) GetTransports(trip models.Trip) (transports []models.Tr
 }
 
 // Add a transport to a trip
-func (t *TripRepository) AddTransport(trip models.Trip, transport models.Transport) (err error) {
+func (t *TripRepository) AddTransport(trip models.Trip, transport models.Transport) (models.Transport, error) {
 	transport.TripID = trip.ID
 
 	result := t.Database.Create(&transport)
-	return result.Error
+	if result.Error != nil {
+		return models.Transport{}, result.Error
+	}
+	return transport, nil
 }
 
 // Delete a transport from a trip
