@@ -12,6 +12,7 @@ type UserRepository struct {
 }
 
 func (u *UserRepository) Create(user models.User) (createdUser models.User, err error) {
+	user.HashPassword()
 	result := u.Database.Create(&user)
 	return user, result.Error
 }
@@ -25,4 +26,8 @@ func (u *UserRepository) Get(id string) (user models.User, err error) {
 func (u *UserRepository) FindByUsername(username string) (user models.User, err error) {
 	err = u.Database.Where(&models.User{Username: username}).First(&user).Error
 	return
+}
+
+func (u *UserRepository) ComparePassword(user models.User, password string) (isSame bool) {
+	return user.CheckPassword(password)
 }
