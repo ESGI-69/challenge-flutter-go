@@ -5,7 +5,7 @@ import 'package:move_together_app/core/models/user.dart';
 class ApiServices {
   static Future<String> loginUser(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/login'),
+      Uri.parse('http://192.168.194.29:8080/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -26,7 +26,7 @@ class ApiServices {
 
   static Future<User> registerUser(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://10.2.2:8080/register'),
+      Uri.parse('http://192.168.194.29:8080/users'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -39,7 +39,6 @@ class ApiServices {
     if (response.statusCode == 201) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       return User.fromJson(responseData);
-
     } else {
       throw Exception('Failed to register user');
     }

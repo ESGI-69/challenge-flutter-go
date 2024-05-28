@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/home/home_screen.dart';
 import 'package:move_together_app/login/login_screen.dart';
+import 'package:move_together_app/login/register_screen.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -12,6 +13,7 @@ class App extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/login':(context) => const LoginScreen(),
+        '/register':(context) => const RegisterScreen(),
       },
       theme: ThemeData(
         textTheme: const TextTheme(
