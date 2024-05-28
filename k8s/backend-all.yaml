@@ -28,7 +28,7 @@ spec:
       containers:
       - name: challenge-flutter-go-backend-deployment
         image: gatien1/challenge-flutter-go-backend:latest
-        imagePullPolicy: Never
+        imagePullPolicy: Always
         resources:
           limits:
             memory: "128Mi"
