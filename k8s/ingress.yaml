@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx
+  namespace: challenge-flutter-go
+spec:
+  tls:
+  - hosts:
+    - jppduphp.uk
+  defaultBackend:
+    service:
+      name: backend
+      port:
+        number: 8080
