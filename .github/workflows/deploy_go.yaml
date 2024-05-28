@@ -32,3 +32,22 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ env.DOCKERHUB_REPO }}:latest, ${{ env.DOCKERHUB_REPO }}:${{ github.sha }}
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    needs:
+      - publish
+    environment:
+      name: production
+      url: ${{ vars.URL }}
+    concurrency: deploy
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up kubectl
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+      - name: Redeploy
+        run: |
+          kubectl set image deployment/challenge-flutter-go-backend-deployment challenge-flutter-go-backend-deployment=${{ env.DOCKERHUB_REPO }}:${{ github.sha }} -n challenge-flutter-go
+          kubectl rollout status deployment/challenge-flutter-go-backend-deployment -n challenge-flutter-go
