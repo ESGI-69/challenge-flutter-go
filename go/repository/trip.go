@@ -83,6 +83,8 @@ func (t *TripRepository) AddTransport(trip models.Trip, transport models.Transpo
 	if result.Error != nil {
 		return models.Transport{}, result.Error
 	}
+	//add associations
+	t.Database.Model(&transport).Association("Trip").Append(&trip)
 	return transport, nil
 }
 
