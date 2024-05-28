@@ -2,6 +2,7 @@ package utils
 
 import (
 	"challenge-flutter-go/api/errorHandlers"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -12,6 +13,11 @@ import (
 // Otherwise, it will return true
 func Deserialize(object any, context *gin.Context) (passed bool) {
 	requiredError := context.ShouldBindJSON(&object)
+	// requiredError EOF equivalent to missing body
+	if context.Request.Body == http.NoBody {
+		errorHandlers.HandleMissingBodyError(context)
+		return false
+	}
 	if requiredError != nil {
 		errorHandlers.HandleBodyMissingFieldsError(requiredError, context)
 		return false
