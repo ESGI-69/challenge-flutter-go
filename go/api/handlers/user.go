@@ -70,6 +70,7 @@ func (handler *UserHandler) Create(context *gin.Context) {
 	createdUser, userCreationError := handler.Repository.Create(user)
 	if userCreationError != nil {
 		errorHandlers.HandleGormErrors(userCreationError, context)
+		return
 	}
 	context.JSON(http.StatusCreated, createdUser)
 }

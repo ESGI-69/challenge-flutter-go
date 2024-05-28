@@ -15,7 +15,7 @@ type AuthHandler struct {
 	UserRepository repository.UserRepository
 }
 
-func (handler AuthHandler) Login(context *gin.Context) {
+func (handler *AuthHandler) Login(context *gin.Context) {
 	type RequestBody struct {
 		Username string `json:"username" binding:"required"`
 		Password string `json:"password" binding:"required"`
@@ -29,7 +29,7 @@ func (handler AuthHandler) Login(context *gin.Context) {
 
 	user, databaseError := handler.UserRepository.FindByUsername(requestBody.Username)
 
-	if requestBody.Password != user.Password || databaseError != nil {
+	if !handler.UserRepository.ComparePassword(user, requestBody.Password) || databaseError != nil {
 		context.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}

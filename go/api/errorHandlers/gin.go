@@ -26,3 +26,7 @@ func HandleBodyInvalidFieldsError(err error, context *gin.Context) {
 	}
 	context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid", "fields": invalidFields})
 }
+
+func HandleMissingBodyError(context *gin.Context) {
+	context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Missing body"})
+}
