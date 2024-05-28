@@ -11,12 +11,12 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       routes: {
         '/': (context) => const HomeScreen(),
-        '/login':(context) => LoginScreen(),
+        '/login':(context) => const LoginScreen(),
       },
       theme: ThemeData(
         textTheme: const TextTheme(
           displayLarge: TextStyle(
-            color: Colors.amber,
+            color: Color(0xFF55C0A8),
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
