@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"challenge-flutter-go/api/errorHandlers"
+	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
@@ -81,7 +82,46 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, trips)
+func (handler *TripHandler) Get(context *gin.Context) {
+	id := context.Param("id")
+
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		return
+	}
+
+	trip, err := handler.Repository.Get(id)
+
+	if trip.OwnerID != currentUser.ID {
+		context.AbortWithStatus(http.StatusUnauthorized)
+	}
+
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	response := responses.TripResponse{
+		ID:        trip.ID,
+		Name:      trip.Name,
+		Country:   trip.Country,
+		City:      trip.City,
+		StartDate: trip.StartDate.Format(time.RFC3339),
+		EndDate:   trip.EndDate.Format(time.RFC3339),
+		Owner: responses.UserResponse{
+			ID:       trip.Owner.ID,
+			Username: trip.Owner.Username,
+			Role:     string(trip.Owner.Role),
+		},
+		Participants: []responses.UserResponse{},
+	}
+
+	context.JSON(http.StatusOK, response)
 }
 
 // Join an existing trip using its inviteCode and associate it with the current user
