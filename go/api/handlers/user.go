@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"challenge-flutter-go/api/errorHandlers"
+	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
@@ -50,7 +51,13 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, user)
+	response := responses.UserResponse{
+		ID:       user.ID,
+		Username: user.Username,
+		Trips:    user.Trips,
+	}
+
+	context.JSON(http.StatusOK, response)
 }
 
 // Register a new user
@@ -72,5 +79,11 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		errorHandlers.HandleGormErrors(userCreationError, context)
 		return
 	}
-	context.JSON(http.StatusCreated, createdUser)
+
+	reponse := responses.UserResponse{
+		ID:       createdUser.ID,
+		Username: createdUser.Username,
+		Trips:    createdUser.Trips,
+	}
+	context.JSON(http.StatusCreated, reponse)
 }
