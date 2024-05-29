@@ -82,6 +82,23 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 		return
 	}
 
+	response := make([]responses.TripResponse, len(trips))
+	for i, trip := range trips {
+		response[i] = responses.TripResponse{
+			ID:           trip.ID,
+			Name:         trip.Name,
+			Country:      trip.Country,
+			City:         trip.City,
+			StartDate:    trip.StartDate.Format(time.RFC3339),
+			EndDate:      trip.EndDate.Format(time.RFC3339),
+			Owner:        responses.UserResponse{ID: trip.Owner.ID, Username: trip.Owner.Username, Role: string(trip.Owner.Role)},
+			Participants: []responses.UserResponse{},
+		}
+	}
+
+	context.JSON(http.StatusOK, response)
+}
+
 func (handler *TripHandler) Get(context *gin.Context) {
 	id := context.Param("id")
 
