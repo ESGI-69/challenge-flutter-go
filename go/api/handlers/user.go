@@ -52,10 +52,28 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		return
 	}
 
+	userTrips := []responses.TripResponse{}
+	for _, trip := range user.Trips {
+		userTrips = append(userTrips, responses.TripResponse{
+			ID:        trip.ID,
+			Name:      trip.Name,
+			StartDate: trip.StartDate.Format(time.RFC3339),
+			EndDate:   trip.EndDate.Format(time.RFC3339),
+			Country:   trip.Country,
+			City:      trip.City,
+			Owner: responses.UserResponse{
+				ID:       trip.Owner.ID,
+				Username: trip.Owner.Username,
+				Role:     string(trip.Owner.Role),
+			},
+			Participants: []responses.UserResponse{},
+		})
+	}
+
 	response := responses.UserInfoResponse{
 		ID:       user.ID,
 		Username: user.Username,
-		Trips:    user.Trips,
+		Trips:    userTrips,
 	}
 
 	context.JSON(http.StatusOK, response)
@@ -103,7 +121,7 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		ID:       createdUser.ID,
 		Username: createdUser.Username,
 		Role:     string(createdUser.Role),
-		Trips:    createdUser.Trips,
+		Trips:    userTrips,
 	}
 	context.JSON(http.StatusCreated, reponse)
 }
