@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/config"
 	"challenge-flutter-go/repository"
@@ -41,9 +42,7 @@ func (handler *AuthHandler) Login(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{
-		"token": token,
-	})
+	context.JSON(http.StatusOK, responses.LoginResponse{Token: token})
 }
 
 func createJwt(username string) (string, error) {
