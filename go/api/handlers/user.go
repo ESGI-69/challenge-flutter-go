@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"challenge-flutter-go/api/errorHandlers"
+	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
@@ -14,19 +15,6 @@ import (
 
 type UserHandler struct {
 	Repository repository.UserRepository
-}
-
-type UserResponse struct {
-	ID       uint          `json:"id"`
-	Username string        `json:"username"`
-	Trips    []models.Trip `json:"trips"`
-}
-
-type UserAdminResponse struct {
-	ID       uint          `json:"id"`
-	Username string        `json:"username"`
-	Trips    []models.Trip `json:"trips"`
-	Role     string        `json:"role"`
 }
 
 // Get the user by his id
@@ -63,7 +51,7 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		return
 	}
 
-	response := UserResponse{
+	response := responses.UserResponse{
 		ID:       user.ID,
 		Username: user.Username,
 		Trips:    user.Trips,
@@ -92,7 +80,7 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		return
 	}
 
-	reponse := UserResponse{
+	reponse := responses.UserResponse{
 		ID:       createdUser.ID,
 		Username: createdUser.Username,
 		Trips:    createdUser.Trips,
