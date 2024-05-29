@@ -69,6 +69,21 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	context.JSON(http.StatusCreated, createdTrip)
 }
 
+func (handler *TripHandler) GetAllJoined(context *gin.Context) {
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		return
+	}
+
+	trips, err := handler.Repository.GetAllJoined(currentUser)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	context.JSON(http.StatusOK, trips)
+}
+
 // Join an existing trip using its inviteCode and associate it with the current user
 func (handler *TripHandler) Join(context *gin.Context) {
 	id := context.Param("id")

@@ -93,3 +93,8 @@ func (t *TripRepository) DeleteTransport(trip models.Trip, transportID uint) (er
 	result := t.Database.Delete(&models.Transport{}, transportID)
 	return result.Error
 }
+
+func (t *TripRepository) GetAllJoined(user models.User) (trips []models.Trip, err error) {
+	err = t.Database.Model(&user).Where("owner_id = ?", user.ID).Association("Trips").Find(&trips)
+	return
+}
