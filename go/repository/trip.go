@@ -69,31 +69,6 @@ func (t *TripRepository) GetParticipants(trip models.Trip) (participants []model
 	return
 }
 
-// Get all the transports of a trip
-func (t *TripRepository) GetTransports(trip models.Trip) (transports []models.Transport, err error) {
-	err = t.Database.Model(&models.Transport{}).Where("trip_id = ?", trip.ID).Find(&transports).Error
-	return
-}
-
-// Add a transport to a trip
-func (t *TripRepository) AddTransport(trip models.Trip, transport models.Transport) (models.Transport, error) {
-	transport.TripID = trip.ID
-
-	result := t.Database.Create(&transport)
-	if result.Error != nil {
-		return models.Transport{}, result.Error
-	}
-	//add associations
-	t.Database.Model(&transport).Association("Trip").Append(&trip)
-	return transport, nil
-}
-
-// Delete a transport from a trip
-func (t *TripRepository) DeleteTransport(trip models.Trip, transportID uint) (err error) {
-	result := t.Database.Delete(&models.Transport{}, transportID)
-	return result.Error
-}
-
 func (t *TripRepository) GetAllJoined(user models.User) (trips []models.Trip, err error) {
 	err = t.Database.Model(&user).Where("owner_id = ?", user.ID).Preload("Owner").Association("Trips").Find(&trips)
 	return

@@ -30,6 +30,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	transportRepository := repository.TransportRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -42,6 +46,11 @@ func setRoutes() {
 		Repository: tripRepository,
 	}
 
+	transportHandler := handlers.TransportHandler{
+		Repository:     transportRepository,
+		TripRepository: tripRepository,
+	}
+
 	router.GET("/users/:id", middlewares.AuthorizationsMiddleware, userHandler.Get)
 	router.POST("/users", userHandler.Create)
 	router.POST("/login", authHandler.Login)
@@ -49,8 +58,8 @@ func setRoutes() {
 	router.GET("/trips", middlewares.AuthorizationsMiddleware, tripHandler.GetAllJoined)
 	router.GET("/trips/:id", middlewares.AuthorizationsMiddleware, tripHandler.Get)
 	router.POST("/trips/:id/join", middlewares.AuthorizationsMiddleware, tripHandler.Join)
-	router.POST("/trips/:id/transport", middlewares.AuthorizationsMiddleware, tripHandler.AddTransport)
-	router.DELETE("/trips/:id/transport/:transportID", middlewares.AuthorizationsMiddleware, tripHandler.DeleteTransport)
+	router.POST("/trips/:id/transport", middlewares.AuthorizationsMiddleware, transportHandler.AddTransportToTrip)
+	router.DELETE("/trips/:id/transport/:transportID", middlewares.AuthorizationsMiddleware, transportHandler.DeleteTransportFromTrip)
 }
 
 func Start() {
