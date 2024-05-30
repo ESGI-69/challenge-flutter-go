@@ -19,7 +19,7 @@ func (u *UserRepository) Create(user models.User) (createdUser models.User, err 
 
 // Used to retrive a user from his ID with all this direct relations preloaded
 func (u *UserRepository) Get(id string) (user models.User, err error) {
-	err = u.Database.Preload(clause.Associations).Preload("Trips.Owner").First(&user, id).Error
+	err = u.Database.Model(&models.User{}).Preload(clause.Associations).First(&user, id).Error
 	return
 }
 

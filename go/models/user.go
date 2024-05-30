@@ -16,11 +16,13 @@ const (
 
 type User struct {
 	gorm.Model
-	Username string   `gorm:"not null;unique"`
-	Password string   `gorm:"not null"`
-	Trips    []Trip   `gorm:"many2many:trip_participants;"`
-	Role     UserRole `gorm:"not null; default:'USER'"`
-	GoogleID string
+	Username         string   `gorm:"not null;unique"`
+	Password         string   `gorm:"not null"`
+	Role             UserRole `gorm:"not null; default:'USER'"`
+	TripsEditor      []Trip   `gorm:"many2many:trip_editors;"`
+	TripsViewer      []Trip   `gorm:"many2many:trip_viewers;"`
+	TripsInvitations []Trip   `gorm:"many2many:trip_invited;"`
+	GoogleID         string
 }
 
 // Replace the current user password by hashing it

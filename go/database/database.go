@@ -28,7 +28,6 @@ func autoMigrate() {
 	err := database.AutoMigrate(
 		&models.User{},
 		&models.Trip{},
-		&models.TripParticipant{},
 		&models.Transport{},
 	)
 	if err != nil {

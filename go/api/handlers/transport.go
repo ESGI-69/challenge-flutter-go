@@ -66,22 +66,7 @@ func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
 		return
 	}
 
-	participants, err := handler.TripRepository.GetParticipants(trip)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	// Check si l'user à le droit (owner ou editor)
-	isUserHasRights := false
-	for _, participant := range participants {
-		if participant.UserID == currentUser.ID {
-			if participant.Role == "EDITOR" {
-				isUserHasRights = true
-			}
-			break
-		}
-	}
+	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
 
 	if !isUserHasRights {
 		if trip.OwnerID != currentUser.ID {
@@ -149,22 +134,8 @@ func (handler *TransportHandler) DeleteTransportFromTrip(context *gin.Context) {
 		return
 	}
 
-	participants, err := handler.TripRepository.GetParticipants(trip)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
 	// Check si l'user à le droit (owner ou editor)
-	isUserHasRights := false
-	for _, participant := range participants {
-		if participant.UserID == currentUser.ID {
-			if participant.Role == "EDITOR" {
-				isUserHasRights = true
-			}
-			break
-		}
-	}
+	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
 
 	if !isUserHasRights {
 		if trip.OwnerID != currentUser.ID {

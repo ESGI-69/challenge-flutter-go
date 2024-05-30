@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,28 +65,10 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		return
 	}
 
-	userTrips := []responses.TripResponse{}
-	for _, trip := range user.Trips {
-		userTrips = append(userTrips, responses.TripResponse{
-			ID:        trip.ID,
-			Name:      trip.Name,
-			StartDate: trip.StartDate.Format(time.RFC3339),
-			EndDate:   trip.EndDate.Format(time.RFC3339),
-			Country:   trip.Country,
-			City:      trip.City,
-			Owner: responses.UserResponse{
-				ID:       trip.Owner.ID,
-				Username: trip.Owner.Username,
-				Role:     string(trip.Owner.Role),
-			},
-			Participants: []responses.UserResponse{},
-		})
-	}
-
-	response := responses.UserInfoResponse{
+	response := responses.UserRoleReponse{
 		ID:       user.ID,
 		Username: user.Username,
-		Trips:    userTrips,
+		Role:     user.Role,
 	}
 
 	context.JSON(http.StatusOK, response)
@@ -120,29 +101,10 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		return
 	}
 
-	userTrips := []responses.TripResponse{}
-	for _, trip := range createdUser.Trips {
-		userTrips = append(userTrips, responses.TripResponse{
-			ID:        trip.ID,
-			Name:      trip.Name,
-			StartDate: trip.StartDate.Format(time.RFC3339),
-			EndDate:   trip.EndDate.Format(time.RFC3339),
-			Country:   trip.Country,
-			City:      trip.City,
-			Owner: responses.UserResponse{
-				ID:       trip.Owner.ID,
-				Username: trip.Owner.Username,
-				Role:     string(trip.Owner.Role),
-			},
-			Participants: []responses.UserResponse{},
-		})
-	}
-
-	reponse := responses.UserInfoResponse{
+	reponse := responses.UserRoleReponse{
 		ID:       createdUser.ID,
 		Username: createdUser.Username,
-		Role:     string(createdUser.Role),
-		Trips:    userTrips,
+		Role:     createdUser.Role,
 	}
 	context.JSON(http.StatusCreated, reponse)
 }

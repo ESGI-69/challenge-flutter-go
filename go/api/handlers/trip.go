@@ -74,18 +74,13 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	}
 
 	responseTrip := responses.TripResponse{
-		ID:        createdTrip.ID,
-		Name:      createdTrip.Name,
-		Country:   createdTrip.Country,
-		City:      createdTrip.City,
-		StartDate: createdTrip.StartDate.Format(time.RFC3339),
-		EndDate:   createdTrip.EndDate.Format(time.RFC3339),
-		Owner: responses.UserResponse{
-			ID:       createdTrip.Owner.ID,
-			Username: createdTrip.Owner.Username,
-			Role:     string(createdTrip.Owner.Role),
-		},
-		Participants: []responses.UserResponse{},
+		ID:           createdTrip.ID,
+		Name:         createdTrip.Name,
+		Country:      createdTrip.Country,
+		City:         createdTrip.City,
+		StartDate:    createdTrip.StartDate.Format(time.RFC3339),
+		EndDate:      createdTrip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(createdTrip.Viewers, createdTrip.Editors, createdTrip.Owner),
 	}
 
 	context.JSON(http.StatusCreated, responseTrip)
@@ -124,8 +119,7 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 			City:         trip.City,
 			StartDate:    trip.StartDate.Format(time.RFC3339),
 			EndDate:      trip.EndDate.Format(time.RFC3339),
-			Owner:        responses.UserResponse{ID: trip.Owner.ID, Username: trip.Owner.Username, Role: string(trip.Owner.Role)},
-			Participants: []responses.UserResponse{},
+			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		}
 	}
 
@@ -161,28 +155,24 @@ func (handler *TripHandler) Get(context *gin.Context) {
 
 	trip, err := handler.Repository.Get(id)
 
-	if trip.OwnerID != currentUser.ID {
-		context.AbortWithStatus(http.StatusUnauthorized)
-	}
-
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
 	}
 
+	if trip.OwnerID != currentUser.ID {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	responseTrip := responses.TripResponse{
-		ID:        trip.ID,
-		Name:      trip.Name,
-		Country:   trip.Country,
-		City:      trip.City,
-		StartDate: trip.StartDate.Format(time.RFC3339),
-		EndDate:   trip.EndDate.Format(time.RFC3339),
-		Owner: responses.UserResponse{
-			ID:       trip.Owner.ID,
-			Username: trip.Owner.Username,
-			Role:     string(trip.Owner.Role),
-		},
-		Participants: []responses.UserResponse{},
+		ID:           trip.ID,
+		Name:         trip.Name,
+		Country:      trip.Country,
+		City:         trip.City,
+		StartDate:    trip.StartDate.Format(time.RFC3339),
+		EndDate:      trip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
@@ -221,7 +211,7 @@ func (handler *TripHandler) Join(context *gin.Context) {
 		return
 	}
 
-	err = handler.Repository.AddParticipant(trip, currentUser, models.TripParticipantRoleGuest)
+	handler.Repository.AddEditor(trip, currentUser)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
@@ -234,18 +224,13 @@ func (handler *TripHandler) Join(context *gin.Context) {
 	}
 
 	responseTrip := responses.TripResponse{
-		ID:        updatedTrip.ID,
-		Name:      updatedTrip.Name,
-		Country:   updatedTrip.Country,
-		City:      updatedTrip.City,
-		StartDate: updatedTrip.StartDate.Format(time.RFC3339),
-		EndDate:   updatedTrip.EndDate.Format(time.RFC3339),
-		Owner: responses.UserResponse{
-			ID:       updatedTrip.Owner.ID,
-			Username: updatedTrip.Owner.Username,
-			Role:     string(updatedTrip.Owner.Role),
-		},
-		Participants: []responses.UserResponse{},
+		ID:           updatedTrip.ID,
+		Name:         updatedTrip.Name,
+		Country:      updatedTrip.Country,
+		City:         updatedTrip.City,
+		StartDate:    updatedTrip.StartDate.Format(time.RFC3339),
+		EndDate:      updatedTrip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
