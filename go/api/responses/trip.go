@@ -10,3 +10,13 @@ type TripResponse struct {
 	Owner        UserResponse   `json:"owner"`
 	Participants []UserResponse `json:"participants"`
 }
+
+type TripAddTransport struct {
+	TransportType string       `json:"transportType"`
+	StartDate     string       `json:"startDate"`
+	TripID        uint         `json:"tripId"`
+	Trip          TripResponse `json:"trip"`
+	EndDate       string       `json:"endDate"`
+	StartAddress  string       `json:"startAddress"`
+	EndAddress    string       `json:"endAddress"`
+}

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/config"
@@ -16,13 +17,21 @@ type AuthHandler struct {
 	UserRepository repository.UserRepository
 }
 
+// Login the user
+//
+//	@Summary		Login the user
+//	@Description	Login the user
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		requests.AuthLoginBody	true	"Body of the request"
+//	@Success		200		{object}	responses.LoginResponse
+//	@Failure		400		{object}	error
+//	@Failure		401		{object}	error
+//	@Router			/login [post]
 func (handler *AuthHandler) Login(context *gin.Context) {
-	type RequestBody struct {
-		Username string `json:"username" binding:"required"`
-		Password string `json:"password" binding:"required"`
-	}
 
-	var requestBody RequestBody
+	var requestBody requests.AuthLoginBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
 	if !isBodyValid {
 		return

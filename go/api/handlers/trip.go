@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"challenge-flutter-go/api/errorHandlers"
+	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/models"
@@ -18,16 +19,21 @@ type TripHandler struct {
 }
 
 // Create a new trip & associate it with the current user
+//
+//	@Summary		Create a new trip
+//	@Description	Create a new trip & associate it with the current user
+//	@Tags			trips
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			body	body		requests.TripCreateBody	true	"Body of the trip"
+//	@Success		201		{object}	responses.TripResponse
+//	@Failure		400		{object}	error
+//	@Failure		401		{object}	error
+//	@Router			/trips [post]
 func (handler *TripHandler) Create(context *gin.Context) {
-	type RequestBody struct {
-		Name      string `json:"name" binding:"required"`
-		Country   string `json:"country" binding:"required"`
-		City      string `json:"city" binding:"required"`
-		StartDate string `json:"startDate" binding:"required"`
-		EndDate   string `json:"endDate" binding:"required"`
-	}
 
-	var requestBody RequestBody
+	var requestBody requests.TripCreateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
 	if !isBodyValid {
 		return
@@ -85,6 +91,18 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	context.JSON(http.StatusCreated, responseTrip)
 }
 
+// Get all trips associated with the current user
+//
+//	@Summary		Get all trips
+//	@Description	Get all trips associated with the current user
+//	@Tags			trips
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Success		200	{array}		responses.TripResponse
+//	@Failure		400	{object}	error
+//	@Failure		401	{object}	error
+//	@Router			/trips [get]
 func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 	currentUser, exist := utils.GetCurrentUser(context)
 	if !exist {
@@ -114,6 +132,20 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 	context.JSON(http.StatusOK, responseTrips)
 }
 
+// Get a trip by its id
+//
+//	@Summary		Get a trip
+//	@Description	Get a trip by its id
+//	@Tags			trips
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			id	path		string	true	"ID of the trip"
+//	@Success		200	{object}	responses.TripResponse
+//	@Failure		400	{object}	error
+//	@Failure		401	{object}	error
+//	@Failure		404	{object}	error
+//	@Router			/trips/{id} [get]
 func (handler *TripHandler) Get(context *gin.Context) {
 	id := context.Param("id")
 
@@ -157,6 +189,18 @@ func (handler *TripHandler) Get(context *gin.Context) {
 }
 
 // Join an existing trip using its inviteCode and associate it with the current user
+//
+//	@Summary		Join a trip
+//	@Description	Join an existing trip using its inviteCode and associate it with the current user
+//	@Tags			trips
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			id	path		string	true	"Invite code of the trip"
+//	@Success		200	{object}	responses.TripResponse
+//	@Failure		400	{object}	error
+//	@Failure		401	{object}	error
+//	@Router			/trips/join/{id} [post]
 func (handler *TripHandler) Join(context *gin.Context) {
 	id := context.Param("id")
 
