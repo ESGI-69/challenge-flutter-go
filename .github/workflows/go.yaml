@@ -50,7 +50,9 @@ jobs:
       run: go build -v main.go
 
   docker_build:
-    needs: build
+    needs: 
+      - build
+      - generate_swagger
     runs-on: ubuntu-latest
     name: Build Docker Image (go)
     defaults:
