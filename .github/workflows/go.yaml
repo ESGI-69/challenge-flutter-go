@@ -11,6 +11,9 @@ jobs:
   generate_swagger:
     runs-on: ubuntu-latest
     name: Generate Swagger (go)
+    defaults:
+      run:
+        working-directory: go
     steps:
     - uses: actions/checkout@v4
 
