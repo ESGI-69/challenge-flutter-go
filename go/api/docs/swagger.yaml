@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   models.TransportType:
     enum:
@@ -147,7 +146,6 @@ definitions:
       username:
         type: string
     type: object
-host: jppduphp.uk
 info:
   contact:
     name: Challenge Flutter Go
@@ -158,7 +156,6 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: https://challenge-flutter-go.com/terms
   title: Challenge Flutter Go API
-  version: "1.0"
 paths:
   /login:
     post:

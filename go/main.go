@@ -5,15 +5,12 @@ import (
 )
 
 // @title						Challenge Flutter Go API
-// @version					1.0
 // @description				This is the API for the Challenge Flutter Go project
 // @termsOfService				https://challenge-flutter-go.com/terms
 // @contact.name				Challenge Flutter Go
 // @contact.url				https://challenge-flutter-go.com
 // @license.name				Apache 2.0
 // @license.url				http://www.apache.org/licenses/LICENSE-2.0.html
-// @host						jppduphp.uk
-// @BasePath					/
 // @securityDefinitions.apikey	BearerAuth
 // @in							header
 // @name						Authorization
