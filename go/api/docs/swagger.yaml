@@ -1,5 +1,15 @@
 basePath: /
 definitions:
+  models.TransportType:
+    enum:
+    - car
+    - plane
+    - bus
+    type: string
+    x-enum-varnames:
+    - TransportTypeCar
+    - TransportTypePlane
+    - TransportTypeBus
   models.UserRole:
     enum:
     - ADMIN
@@ -17,6 +27,25 @@ definitions:
     required:
     - password
     - username
+    type: object
+  requests.TransportCreateBody:
+    properties:
+      EndAddress:
+        type: string
+      EndDate:
+        type: string
+      StartAddress:
+        type: string
+      StartDate:
+        type: string
+      TransportType:
+        type: string
+    required:
+    - EndAddress
+    - EndDate
+    - StartAddress
+    - StartDate
+    - TransportType
     type: object
   requests.TripCreateBody:
     properties:
@@ -73,6 +102,21 @@ definitions:
     - ParticipantTripRoleOwner
     - ParticipantTripRoleEditor
     - ParticipantTripRoleViewer
+  responses.TransportResponse:
+    properties:
+      endAddress:
+        type: string
+      endDate:
+        type: string
+      id:
+        type: integer
+      startAddress:
+        type: string
+      startDate:
+        type: string
+      transportType:
+        $ref: '#/definitions/models.TransportType'
+    type: object
   responses.TripResponse:
     properties:
       city:
@@ -202,7 +246,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a trip by its id if the current user is a participant
+      description: Get a trip by its id
       parameters:
       - description: ID of the trip
         in: path
@@ -228,6 +272,67 @@ paths:
       security:
       - BearerAuth: []
       summary: Get a trip
+      tags:
+      - trips
+  /trips/{id}/transports:
+    post:
+      consumes:
+      - application/json
+      description: Create a new transport & associate it with the trip
+      parameters:
+      - description: Body of the transport
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.TransportCreateBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.TransportResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new transport on trip
+      tags:
+      - trips
+  /trips/{id}/transports/{transportID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a transport from a trip
+      parameters:
+      - description: ID of the transport
+        in: path
+        name: transportID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a transport from a trip
       tags:
       - trips
   /trips/join/{id}:

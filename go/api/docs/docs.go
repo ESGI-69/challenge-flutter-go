@@ -201,7 +201,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get a trip by its id if the current user is a participant",
+                "description": "Get a trip by its id",
                 "consumes": [
                     "application/json"
                 ],
@@ -227,6 +227,100 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/responses.TripResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/transports": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new transport \u0026 associate it with the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trips"
+                ],
+                "summary": "Create a new transport on trip",
+                "parameters": [
+                    {
+                        "description": "Body of the transport",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.TransportCreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.TransportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/transports/{transportID}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a transport from a trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trips"
+                ],
+                "summary": "Delete a transport from a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the transport",
+                        "name": "transportID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {}
                     },
                     "400": {
                         "description": "Bad Request",
@@ -332,6 +426,19 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.TransportType": {
+            "type": "string",
+            "enum": [
+                "car",
+                "plane",
+                "bus"
+            ],
+            "x-enum-varnames": [
+                "TransportTypeCar",
+                "TransportTypePlane",
+                "TransportTypeBus"
+            ]
+        },
         "models.UserRole": {
             "type": "string",
             "enum": [
@@ -354,6 +461,33 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.TransportCreateBody": {
+            "type": "object",
+            "required": [
+                "EndAddress",
+                "EndDate",
+                "StartAddress",
+                "StartDate",
+                "TransportType"
+            ],
+            "properties": {
+                "EndAddress": {
+                    "type": "string"
+                },
+                "EndDate": {
+                    "type": "string"
+                },
+                "StartAddress": {
+                    "type": "string"
+                },
+                "StartDate": {
+                    "type": "string"
+                },
+                "TransportType": {
                     "type": "string"
                 }
             }
@@ -436,6 +570,29 @@ const docTemplate = `{
                 "ParticipantTripRoleEditor",
                 "ParticipantTripRoleViewer"
             ]
+        },
+        "responses.TransportResponse": {
+            "type": "object",
+            "properties": {
+                "endAddress": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "startAddress": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "transportType": {
+                    "$ref": "#/definitions/models.TransportType"
+                }
+            }
         },
         "responses.TripResponse": {
             "type": "object",

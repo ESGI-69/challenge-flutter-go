@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"challenge-flutter-go/api/errorHandlers"
+	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/models"
@@ -18,7 +19,17 @@ type TransportHandler struct {
 	TripRepository repository.TripRepository
 }
 
-// Add a transport to a trip
+// @Summary		Create a new transport on trip
+// @Description	Create a new transport & associate it with the trip
+// @Tags			trips
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Param			body	body		requests.TransportCreateBody	true	"Body of the transport"
+// @Success		201		{object}	responses.TransportResponse
+// @Failure		400		{object}	error
+// @Failure		401		{object}	error
+// @Router			/trips/{id}/transports [post]
 func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
 	id := context.Param("id")
 	if id == "" {
@@ -26,15 +37,7 @@ func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
 		return
 	}
 
-	type RequestBody struct {
-		StartDate     string `json:"StartDate" binding:"required"`
-		EndDate       string `json:"EndDate" binding:"required"`
-		TransportType string `json:"TransportType" binding:"required"`
-		StartAddress  string `json:"StartAddress" binding:"required"`
-		EndAddress    string `json:"EndAddress" binding:"required"`
-	}
-
-	var requestBody RequestBody
+	var requestBody requests.TransportCreateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
 	if !isBodyValid {
 		return
@@ -108,7 +111,18 @@ func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
 	context.JSON(http.StatusCreated, transportResponse)
 }
 
-// Delete a transport from a trip
+// @Summary		Delete a transport from a trip
+// @Description	Delete a transport from a trip
+// @Tags			trips
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Param			transportID	path	string	true	"ID of the transport"
+// @Success		204		{object}	error
+// @Failure		400		{object}	error
+// @Failure		401		{object}	error
+// @Failure		404		{object}	error
+// @Router			/trips/{id}/transports/{transportID} [delete]
 func (handler *TransportHandler) DeleteTransportFromTrip(context *gin.Context) {
 	id := context.Param("id")
 	if id == "" {
