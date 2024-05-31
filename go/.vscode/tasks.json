@@ -6,11 +6,10 @@
       "label": "Generate swagger",
       "command": "source ~/.bashrc || source ~/.zshrc && swag init -o ./api/docs",
       "presentation": {
-        "reveal": "always",
-        "focus": true,
+        "reveal": "silent",
         "panel": "shared",
         "showReuseMessage": true,
-        "clear": false
+        "clear": true
       },
     }
   ]
