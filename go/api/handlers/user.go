@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"challenge-flutter-go/api/errorHandlers"
+	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/models"
@@ -19,6 +20,19 @@ type UserHandler struct {
 }
 
 // Get the user by his id
+//
+//	@Summary		Get the user
+//	@Description	Get the user by his id
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			id	path		string	true	"ID of the user"
+//	@Success		200	{object}	responses.UserInfoResponse
+//	@Failure		400	{object}	error
+//	@Failure		401	{object}	error
+//	@Failure		404	{object}	error
+//	@Router			/users/{id} [get]
 func (handler *UserHandler) Get(context *gin.Context) {
 	id := context.Param("id")
 
@@ -80,13 +94,20 @@ func (handler *UserHandler) Get(context *gin.Context) {
 }
 
 // Register a new user
+//
+//	@Summary		Register a new user
+//	@Description	Register a new user with a username and a password
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//
+//	@Param			user	body		requests.UserCreateBody	true	"User registration details"
+//	@Success		201		{object}	responses.UserInfoResponse
+//	@Failure		400		{object}	error
+//	@Router			/users [post]
 func (handler *UserHandler) Create(context *gin.Context) {
-	type RequestBody struct {
-		Username string `json:"username" binding:"required"`
-		Password string `json:"password" binding:"required" validate:"min=8,max=64"`
-	}
 
-	var requestBody RequestBody
+	var requestBody requests.UserCreateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
 	if !isBodyValid {
 		return

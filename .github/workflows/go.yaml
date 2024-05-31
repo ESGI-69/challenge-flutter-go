@@ -8,6 +8,27 @@ on:
       - '.github/workflows/go.yaml'
 
 jobs:
+  generate_swagger:
+    runs-on: ubuntu-latest
+    name: Generate Swagger (go)
+    defaults:
+      run:
+        working-directory: go
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go/go.mod'
+        cache-dependency-path: go/go.sum
+
+    - name: Install swagger
+      run: go install github.com/swaggo/swag/cmd/swag@latest
+
+    - name: Generate Swagger
+      run: swag init -o ./api/docs
+
   build:
     runs-on: ubuntu-latest
     name: Build (go)
@@ -29,7 +50,9 @@ jobs:
       run: go build -v main.go
 
   docker_build:
-    needs: build
+    needs: 
+      - build
+      - generate_swagger
     runs-on: ubuntu-latest
     name: Build Docker Image (go)
     defaults:

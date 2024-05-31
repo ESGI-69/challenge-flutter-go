@@ -1,6 +1,7 @@
 package api
 
 import (
+	_ "challenge-flutter-go/api/docs"
 	"challenge-flutter-go/api/handlers"
 	"challenge-flutter-go/api/middlewares"
 	"challenge-flutter-go/config"
@@ -8,6 +9,8 @@ import (
 	"challenge-flutter-go/repository"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 var router *gin.Engine
@@ -51,6 +54,7 @@ func setRoutes() {
 		TripRepository: tripRepository,
 	}
 
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/users/:id", middlewares.AuthorizationsMiddleware, userHandler.Get)
 	router.POST("/users", userHandler.Create)
 	router.POST("/login", authHandler.Login)
