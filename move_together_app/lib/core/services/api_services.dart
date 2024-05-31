@@ -6,7 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ApiServices {
   static Future<String> loginUser(String username, String password) async {
     final response = await http.post(
-      Uri.parse('${dotenv.env['API_IP']!}/login'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -27,7 +27,7 @@ class ApiServices {
 
   static Future<User> registerUser(String username, String password) async {
     final response = await http.post(
-      Uri.parse('${dotenv.env['API_IP']!}/users'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/users'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
