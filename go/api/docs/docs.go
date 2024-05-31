@@ -258,7 +258,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "trips"
+                    "transport"
                 ],
                 "summary": "Create a new transport on trip",
                 "parameters": [
@@ -305,7 +305,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "trips"
+                    "transport"
                 ],
                 "summary": "Delete a transport from a trip",
                 "parameters": [
@@ -653,7 +653,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "jppduphp.uk",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Challenge Flutter Go API",

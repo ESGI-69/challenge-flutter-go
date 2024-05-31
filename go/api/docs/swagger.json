@@ -14,7 +14,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "jppduphp.uk",
     "basePath": "/",
     "paths": {
         "/login": {
@@ -252,7 +252,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "trips"
+                    "transport"
                 ],
                 "summary": "Create a new transport on trip",
                 "parameters": [
@@ -299,7 +299,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "trips"
+                    "transport"
                 ],
                 "summary": "Delete a transport from a trip",
                 "parameters": [

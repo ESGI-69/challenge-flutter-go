@@ -147,7 +147,7 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:8080
+host: jppduphp.uk
 info:
   contact:
     name: Challenge Flutter Go
@@ -303,7 +303,7 @@ paths:
       - BearerAuth: []
       summary: Create a new transport on trip
       tags:
-      - trips
+      - transport
   /trips/{id}/transports/{transportID}:
     delete:
       consumes:
@@ -334,7 +334,7 @@ paths:
       - BearerAuth: []
       summary: Delete a transport from a trip
       tags:
-      - trips
+      - transport
   /trips/join/{id}:
     post:
       consumes:

@@ -21,7 +21,7 @@ type TransportHandler struct {
 
 // @Summary		Create a new transport on trip
 // @Description	Create a new transport & associate it with the trip
-// @Tags			trips
+// @Tags			transport
 // @Accept			json
 // @Produce		json
 // @Security		BearerAuth
@@ -113,7 +113,7 @@ func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
 
 // @Summary		Delete a transport from a trip
 // @Description	Delete a transport from a trip
-// @Tags			trips
+// @Tags			transport
 // @Accept			json
 // @Produce		json
 // @Security		BearerAuth

@@ -12,7 +12,7 @@ import (
 // @contact.url				https://challenge-flutter-go.com
 // @license.name				Apache 2.0
 // @license.url				http://www.apache.org/licenses/LICENSE-2.0.html
-// @host						localhost:8080
+// @host						jppduphp.uk
 // @BasePath					/
 // @securityDefinitions.apikey	BearerAuth
 // @in							header
