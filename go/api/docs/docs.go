@@ -201,7 +201,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get a trip by its id",
+                "description": "Get a trip by its id if the current user is a participant",
                 "consumes": [
                     "application/json"
                 ],
@@ -271,7 +271,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/responses.UserInfoResponse"
+                            "$ref": "#/definitions/responses.UserRoleReponse"
                         }
                     },
                     "400": {
@@ -312,7 +312,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.UserInfoResponse"
+                            "$ref": "#/definitions/responses.UserRoleReponse"
                         }
                     },
                     "400": {
@@ -332,6 +332,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.UserRole": {
+            "type": "string",
+            "enum": [
+                "ADMIN",
+                "USER"
+            ],
+            "x-enum-varnames": [
+                "UserRoleAdmin",
+                "UserRoleUser"
+            ]
+        },
         "requests.AuthLoginBody": {
             "type": "object",
             "required": [
@@ -399,6 +410,33 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.ParticipantResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "tripRole": {
+                    "$ref": "#/definitions/responses.ParticipantTripRole"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ParticipantTripRole": {
+            "type": "string",
+            "enum": [
+                "OWNER",
+                "EDITOR",
+                "VIEWER"
+            ],
+            "x-enum-varnames": [
+                "ParticipantTripRoleOwner",
+                "ParticipantTripRoleEditor",
+                "ParticipantTripRoleViewer"
+            ]
+        },
         "responses.TripResponse": {
             "type": "object",
             "properties": {
@@ -414,16 +452,16 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "inviteCode": {
                     "type": "string"
                 },
-                "owner": {
-                    "$ref": "#/definitions/responses.UserResponse"
+                "name": {
+                    "type": "string"
                 },
                 "participants": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/responses.UserResponse"
+                        "$ref": "#/definitions/responses.ParticipantResponse"
                     }
                 },
                 "startDate": {
@@ -431,34 +469,14 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.UserInfoResponse": {
+        "responses.UserRoleReponse": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "integer"
                 },
                 "role": {
-                    "type": "string"
-                },
-                "trips": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.TripResponse"
-                    }
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.UserResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "role": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.UserRole"
                 },
                 "username": {
                     "type": "string"

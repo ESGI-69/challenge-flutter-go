@@ -1,5 +1,13 @@
 basePath: /
 definitions:
+  models.UserRole:
+    enum:
+    - ADMIN
+    - USER
+    type: string
+    x-enum-varnames:
+    - UserRoleAdmin
+    - UserRoleUser
   requests.AuthLoginBody:
     properties:
       password:
@@ -46,6 +54,25 @@ definitions:
       token:
         type: string
     type: object
+  responses.ParticipantResponse:
+    properties:
+      id:
+        type: integer
+      tripRole:
+        $ref: '#/definitions/responses.ParticipantTripRole'
+      user:
+        type: string
+    type: object
+  responses.ParticipantTripRole:
+    enum:
+    - OWNER
+    - EDITOR
+    - VIEWER
+    type: string
+    x-enum-varnames:
+    - ParticipantTripRoleOwner
+    - ParticipantTripRoleEditor
+    - ParticipantTripRoleViewer
   responses.TripResponse:
     properties:
       city:
@@ -56,36 +83,23 @@ definitions:
         type: string
       id:
         type: integer
+      inviteCode:
+        type: string
       name:
         type: string
-      owner:
-        $ref: '#/definitions/responses.UserResponse'
       participants:
         items:
-          $ref: '#/definitions/responses.UserResponse'
+          $ref: '#/definitions/responses.ParticipantResponse'
         type: array
       startDate:
         type: string
     type: object
-  responses.UserInfoResponse:
+  responses.UserRoleReponse:
     properties:
       id:
         type: integer
       role:
-        type: string
-      trips:
-        items:
-          $ref: '#/definitions/responses.TripResponse'
-        type: array
-      username:
-        type: string
-    type: object
-  responses.UserResponse:
-    properties:
-      id:
-        type: integer
-      role:
-        type: string
+        $ref: '#/definitions/models.UserRole'
       username:
         type: string
     type: object
@@ -188,7 +202,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a trip by its id
+      description: Get a trip by its id if the current user is a participant
       parameters:
       - description: ID of the trip
         in: path
@@ -264,7 +278,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/responses.UserInfoResponse'
+            $ref: '#/definitions/responses.UserRoleReponse'
         "400":
           description: Bad Request
           schema: {}
@@ -288,7 +302,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.UserInfoResponse'
+            $ref: '#/definitions/responses.UserRoleReponse'
         "400":
           description: Bad Request
           schema: {}
