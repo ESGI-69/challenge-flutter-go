@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:move_together_app/core/services/api_services.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  RegisterScreenState createState() => RegisterScreenState();
 }
 
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? errorMessage;
 
   Future<void> _register() async {
     try {
-      final user = await ApiServices.registerUser(
+      await ApiServices.registerUser(
         _usernameController.text,
         _passwordController.text,
       );
-      setState(() {
-        errorMessage = null;
-      });
-      Navigator.pushReplacementNamed(context, '/');
+      if (mounted) {
+        setState(() {
+          errorMessage = null;
+        });
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     } catch (e) {
-      print(e);
-      setState(() {
-        errorMessage = 'Registration failed';
-      });
+      if (mounted) {
+        setState(() {
+          errorMessage = 'Registration failed';
+        });
+      }
     }
   }
 
