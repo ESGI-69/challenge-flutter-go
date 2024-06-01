@@ -17,7 +17,7 @@ class LandingScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset('assets/images/voyage.jpeg'),
-              const SizedBox(height: 20), //spacing
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                 },
@@ -38,7 +38,7 @@ class LandingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 10), //spacing
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
                 },

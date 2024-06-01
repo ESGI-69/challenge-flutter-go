@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:move_together_app/core/services/api_services.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,7 +9,6 @@ class LoginScreen extends StatefulWidget {
   @override
   LoginScreenState createState() => LoginScreenState();
 }
-
 
 class LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
@@ -22,17 +22,18 @@ class LoginScreenState extends State<LoginScreen> {
         _usernameController.text,
         _passwordController.text,
       );
-      print("TOKEN : $token");
       await _secureStorage.write(key: 'jwt', value: token);
       setState(() {
         errorMessage = null;
       });
-      Navigator.pushReplacementNamed(context, '/home');
+      if (!mounted) return;
+      context.go('/home');
     } catch (e) {
-      print(e);
-      setState(() {
-        errorMessage = 'Login failed';
-      });
+      if (mounted) {
+        setState(() {
+          errorMessage = 'Login failed';
+        });
+      }
     }
   }
 
@@ -67,7 +68,7 @@ class LoginScreenState extends State<LoginScreen> {
                 onPressed: _login,
                 child: const Text('Login'),
               ),
-              if (errorMessage != null) 
+              if (errorMessage != null)
                 Text(errorMessage!, style: const TextStyle(color: Colors.red)),
             ],
           ),

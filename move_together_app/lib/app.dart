@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/home/home_screen.dart';
-import 'package:move_together_app/home/landing_screen.dart';
 import 'package:move_together_app/login/login_screen.dart';
 import 'package:move_together_app/login/register_screen.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:go_router/go_router.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
-  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final GoRouter router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: '/login',
+          builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: '/register',
+          builder: (context, state) => const RegisterScreen(),
+        ),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const HomeScreen(),
+        ),
+      ],
+    );
+
+    return MaterialApp.router(
       debugShowCheckedModeBanner: true,
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/login':(context) => const LoginScreen(),
-        '/register':(context) => const RegisterScreen(),
-        '/home':(context) => const HomeScreen(),
-      },
       theme: ThemeData(
         textTheme: const TextTheme(
           displayLarge: TextStyle(
@@ -28,6 +42,9 @@ class App extends StatelessWidget {
           ),
         ),
       ),
+      routerDelegate: router.routerDelegate,
+      routeInformationParser: router.routeInformationParser,
+      routeInformationProvider: router.routeInformationProvider,
     );
   }
 }
