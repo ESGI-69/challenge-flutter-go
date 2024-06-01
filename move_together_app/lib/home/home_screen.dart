@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -111,6 +108,32 @@ class HomeScreen extends StatelessWidget {
                     Icon(Icons.email),
                     SizedBox(width: 10), // spacing
                     Text('Continuer avec e-mail'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 15), // Add some spacing
+              const Text('OR'),
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/register');
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                  foregroundColor: WidgetStateProperty.all<Color>(const Color(0xFF55C0A8)),
+                  side: WidgetStateProperty.all<BorderSide>(const BorderSide(color: Color(0xFF55C0A8))),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Icon(Icons.email),
+                    SizedBox(width: 10), // spacing
+                    Text('Nouvel utilisateur'),
                   ],
                 ),
               ),

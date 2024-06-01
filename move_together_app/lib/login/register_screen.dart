@@ -1,38 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:move_together_app/core/services/api_services.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  LoginScreenState createState() => LoginScreenState();
+  RegisterScreenState createState() => RegisterScreenState();
 }
 
 
-class LoginScreenState extends State<LoginScreen> {
+class RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   String? errorMessage;
 
-  Future<void> _login() async {
+  Future<void> _register() async {
     try {
-      final token = await ApiServices.loginUser(
+      await ApiServices.registerUser(
         _usernameController.text,
         _passwordController.text,
       );
-      print("TOKEN : $token");
-      await _secureStorage.write(key: 'jwt', value: token);
-      setState(() {
-        errorMessage = null;
-      });
-      Navigator.pushReplacementNamed(context, '/home');
+      if (mounted) {
+        setState(() {
+          errorMessage = null;
+        });
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     } catch (e) {
-      print(e);
-      setState(() {
-        errorMessage = 'Login failed';
-      });
+      if (mounted) {
+        setState(() {
+          errorMessage = 'Registration failed';
+        });
+      }
     }
   }
 
@@ -40,7 +39,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Register'),
       ),
       body: Center(
         child: Padding(
@@ -64,10 +63,10 @@ class LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _login,
-                child: const Text('Login'),
+                onPressed: _register,
+                child: const Text('Register'),
               ),
-              if (errorMessage != null) 
+              if (errorMessage != null)
                 Text(errorMessage!, style: const TextStyle(color: Colors.red)),
             ],
           ),
