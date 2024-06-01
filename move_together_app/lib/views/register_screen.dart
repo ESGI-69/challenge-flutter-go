@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/core/services/api_services.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -7,7 +8,6 @@ class RegisterScreen extends StatefulWidget {
   @override
   RegisterScreenState createState() => RegisterScreenState();
 }
-
 
 class RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usernameController = TextEditingController();
@@ -24,7 +24,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         setState(() {
           errorMessage = null;
         });
-        Navigator.pushReplacementNamed(context, '/login');
+        context.go('/login');
       }
     } catch (e) {
       if (mounted) {
