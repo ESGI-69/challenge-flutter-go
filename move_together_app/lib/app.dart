@@ -17,6 +17,11 @@ class App extends StatelessWidget {
     List<String> loggedRoutes = [
       '/home',
     ];
+    List<String> unloggedRoutes = [
+      '/login',
+      '/register',
+      '/',
+    ];
 
     Future<bool> isAuthenticated() async {
       final token = await secureStorage.read(key: 'jwt');
@@ -44,12 +49,12 @@ class App extends StatelessWidget {
       ],
       redirect: (context, state) async {
         final bool loggedIn = await isAuthenticated();
-        final bool goingToLogin = state.uri.toString() == '/login';
+        final bool goingToUnlogged = unloggedRoutes.contains(state.uri.toString());
 
+        if (loggedIn && goingToUnlogged) return '/home';
         if (!loggedRoutes.contains(state.uri.toString())) return null;
+        if (!loggedIn && !goingToUnlogged) return '/';
 
-        if (!loggedIn && !goingToLogin) return '/login';
-        if (loggedIn && goingToLogin) return '/login';
         return null;
       },
     );
