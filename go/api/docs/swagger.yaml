@@ -96,11 +96,13 @@ definitions:
     - OWNER
     - EDITOR
     - VIEWER
+    - NONE
     type: string
     x-enum-varnames:
     - ParticipantTripRoleOwner
     - ParticipantTripRoleEditor
     - ParticipantTripRoleViewer
+    - ParticipantTripRoleNone
   responses.TransportResponse:
     properties:
       endAddress:
@@ -271,6 +273,33 @@ paths:
       summary: Get a trip
       tags:
       - trips
+  /trips/{id}/leave:
+    post:
+      consumes:
+      - application/json
+      description: Leave a trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Leave a trip
+      tags:
+      - trips
   /trips/{id}/transports:
     post:
       consumes:
@@ -332,7 +361,7 @@ paths:
       summary: Delete a transport from a trip
       tags:
       - transport
-  /trips/join/{id}:
+  /trips/join:
     post:
       consumes:
       - application/json
@@ -340,8 +369,8 @@ paths:
         the current user
       parameters:
       - description: Invite code of the trip
-        in: path
-        name: id
+        in: query
+        name: inviteCode
         required: true
         type: string
       produces:

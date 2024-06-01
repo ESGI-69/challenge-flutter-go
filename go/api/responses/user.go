@@ -19,6 +19,7 @@ const (
 	ParticipantTripRoleOwner  ParticipantTripRole = "OWNER"
 	ParticipantTripRoleEditor ParticipantTripRole = "EDITOR"
 	ParticipantTripRoleViewer ParticipantTripRole = "VIEWER"
+	ParticipantTripRoleNone   ParticipantTripRole = "NONE"
 )
 
 type ParticipantResponse struct {

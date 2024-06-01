@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/models"
 	"crypto/rand"
 	"encoding/base64"
@@ -40,12 +41,24 @@ func (t *TripRepository) Get(id string) (trip models.Trip, err error) {
 }
 
 func (t *TripRepository) GetByInviteCode(invitecode string) (trip models.Trip, err error) {
-	err = t.Database.Where("invite_code = ?", invitecode).Preload("Participants").First(&trip).Error
+	err = t.Database.Where("invite_code = ?", invitecode).Preload(clause.Associations).First(&trip).Error
 	return trip, err
 }
 
 func (t *TripRepository) AddEditor(trip models.Trip, user models.User) {
 	t.Database.Model(&trip).Association("Editors").Append(&user)
+}
+
+func (t *TripRepository) AddViewer(trip models.Trip, user models.User) {
+	t.Database.Model(&trip).Association("Viewers").Append(&user)
+}
+
+func (t *TripRepository) RemoveEditor(trip models.Trip, user models.User) {
+	t.Database.Model(&trip).Association("Editors").Delete(&user)
+}
+
+func (t *TripRepository) RemoveViewer(trip models.Trip, user models.User) {
+	t.Database.Model(&trip).Association("Viewers").Delete(&user)
 }
 
 // Get all the trips that the user is an editor, a viewer or the owner
@@ -60,9 +73,50 @@ func (t *TripRepository) GetAllJoined(user models.User) (trips []models.Trip, er
 	return
 }
 
+// If the user is the owner or an editor of the trip
+//
+// If the user is not in the editors list, it will return false
 func (t *TripRepository) HasEditRight(trip models.Trip, user models.User) (isEditor bool) {
-	editorError := t.Database.Model(&trip).Association("Editors").Find(&user)
-	return editorError == nil || trip.OwnerID == user.ID
+	isOwner := trip.OwnerID == user.ID
+	isEditor = false
+	err := t.Database.Preload("Editors").First(&trip, "id = ?", trip.ID).Error
+	if err == nil {
+		for _, editor := range trip.Editors {
+			if editor.ID == user.ID {
+				isEditor = true
+			}
+		}
+	}
+	return isOwner || isEditor
+}
+
+// If the user is a viewer of the trip
+//
+// If the user is not in the viewers list, it will return false
+func (t *TripRepository) HasViewRight(trip models.Trip, user models.User) (isViewer bool) {
+	isViewer = false
+	err := t.Database.Preload("Viewers").First(&trip, "id = ?", trip.ID).Error
+	if err == nil {
+		for _, viewer := range trip.Viewers {
+			if viewer.ID == user.ID {
+				isViewer = true
+			}
+		}
+	}
+	return isViewer
+}
+
+func (t *TripRepository) GetUserTripRole(trip models.Trip, user models.User) (role responses.ParticipantTripRole) {
+	if trip.OwnerID == user.ID {
+		return responses.ParticipantTripRoleOwner
+	}
+	if t.HasEditRight(trip, user) {
+		return responses.ParticipantTripRoleEditor
+	}
+	if t.HasViewRight(trip, user) {
+		return responses.ParticipantTripRoleViewer
+	}
+	return responses.ParticipantTripRoleNone
 }
 
 // Get all the users who has access to the trip

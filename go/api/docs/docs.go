@@ -149,7 +149,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/trips/join/{id}": {
+        "/trips/join": {
             "post": {
                 "security": [
                     {
@@ -171,8 +171,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Invite code of the trip",
-                        "name": "id",
-                        "in": "path",
+                        "name": "inviteCode",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -238,6 +238,48 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/leave": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Leave a trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trips"
+                ],
+                "summary": "Leave a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {}
                     }
                 }
@@ -563,12 +605,14 @@ const docTemplate = `{
             "enum": [
                 "OWNER",
                 "EDITOR",
-                "VIEWER"
+                "VIEWER",
+                "NONE"
             ],
             "x-enum-varnames": [
                 "ParticipantTripRoleOwner",
                 "ParticipantTripRoleEditor",
-                "ParticipantTripRoleViewer"
+                "ParticipantTripRoleViewer",
+                "ParticipantTripRoleNone"
             ]
         },
         "responses.TransportResponse": {
