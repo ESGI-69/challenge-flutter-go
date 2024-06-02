@@ -76,6 +76,7 @@ func setRoutes() {
 	router.DELETE("/trips/:id/transport/:transportID", middlewares.AuthorizationsMiddleware, transportHandler.DeleteTransportFromTrip)
 
 	router.PATCH("/trips/:tripId/participants/:participantId/role", middlewares.AuthorizationsMiddleware, participantHandler.ChangeRole)
+	router.DELETE("/trips/:id/participants/:participantId/", middlewares.AuthorizationsMiddleware, participantHandler.RemoveParticipant)
 }
 
 func Start() {
