@@ -90,7 +90,7 @@ class JoinTripScreenState extends State<JoinTripScreen> {
                 style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.resolveWith<Color>(
                     (Set<WidgetState> states) {
-                      if (_tripCodeController.text.length == 8) {
+                      if (_tripCodeController.text.length >= 8) {
                         return const Color(0xFF79D0BF);
                       }
                       return const Color(0xFFb2e4da);
