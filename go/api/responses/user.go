@@ -22,6 +22,21 @@ const (
 	ParticipantTripRoleNone   ParticipantTripRole = "NONE"
 )
 
+func StringToParticipantTripRole(role string) ParticipantTripRole {
+	switch role {
+	case "OWNER":
+		return ParticipantTripRoleOwner
+	case "EDITOR":
+		return ParticipantTripRoleEditor
+	case "VIEWER":
+		return ParticipantTripRoleViewer
+	case "NONE":
+		return ParticipantTripRoleNone
+	default:
+		return ParticipantTripRoleNone
+	}
+}
+
 type ParticipantResponse struct {
 	ID       uint                `json:"id"`
 	Username string              `json:"user"`

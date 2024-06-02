@@ -361,6 +361,43 @@ paths:
       summary: Delete a transport from a trip
       tags:
       - transport
+  /trips/{tripId}/participants/{participantId}/role:
+    patch:
+      consumes:
+      - application/json
+      description: Only the owner of the trip can change the role of a participant
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: tripId
+        required: true
+        type: string
+      - description: ID of the participant
+        in: path
+        name: participantId
+        required: true
+        type: string
+      - description: Role of the participant
+        in: query
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Change the role of a participant in a trip
+      tags:
+      - participants
   /trips/join:
     post:
       consumes:

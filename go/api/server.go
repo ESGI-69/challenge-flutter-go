@@ -54,6 +54,11 @@ func setRoutes() {
 		TripRepository: tripRepository,
 	}
 
+	participantHandler := handlers.ParticipantHandler{
+		TripRepository: tripRepository,
+		UserRepository: userRepository,
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.POST("/login", authHandler.Login)
@@ -69,6 +74,8 @@ func setRoutes() {
 
 	router.POST("/trips/:id/transport", middlewares.AuthorizationsMiddleware, transportHandler.AddTransportToTrip)
 	router.DELETE("/trips/:id/transport/:transportID", middlewares.AuthorizationsMiddleware, transportHandler.DeleteTransportFromTrip)
+
+	router.PATCH("/trips/:tripId/participants/:participantId/role", middlewares.AuthorizationsMiddleware, participantHandler.ChangeRole)
 }
 
 func Start() {
