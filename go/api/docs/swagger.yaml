@@ -65,6 +65,19 @@ definitions:
     - name
     - startDate
     type: object
+  requests.TripUpdateBody:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      endDate:
+        type: string
+      name:
+        type: string
+      startDate:
+        type: string
+    type: object
   requests.UserCreateBody:
     properties:
       password:
@@ -271,6 +284,43 @@ paths:
       security:
       - BearerAuth: []
       summary: Get a trip
+      tags:
+      - trips
+    patch:
+      consumes:
+      - application/json
+      description: Update a trip if the current has the right permissions
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Body of the trip
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.TripUpdateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.TripResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update a trip
       tags:
       - trips
   /trips/{id}/leave:

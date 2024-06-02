@@ -64,6 +64,7 @@ func setRoutes() {
 	router.POST("/trips", middlewares.AuthorizationsMiddleware, tripHandler.Create)
 	router.GET("/trips", middlewares.AuthorizationsMiddleware, tripHandler.GetAllJoined)
 	router.GET("/trips/:id", middlewares.AuthorizationsMiddleware, tripHandler.Get)
+	router.PATCH("/trips/:id", middlewares.AuthorizationsMiddleware, tripHandler.Update)
 	router.POST("/trips/join", middlewares.AuthorizationsMiddleware, tripHandler.Join)
 	router.POST("/trips/:id/leave", middlewares.AuthorizationsMiddleware, tripHandler.Leave)
 

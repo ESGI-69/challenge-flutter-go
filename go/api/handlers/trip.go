@@ -182,6 +182,101 @@ func (handler *TripHandler) Get(context *gin.Context) {
 	context.JSON(http.StatusOK, responseTrip)
 }
 
+// @Summary Update a trip
+// @Description Update a trip if the current has the right permissions
+// @Tags trips
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "ID of the trip"
+// @Param body body requests.TripUpdateBody true "Body of the trip"
+// @Success 200 {object} responses.TripResponse
+// @Failure 400 {object} error
+// @Failure 401 {object} error
+// @Failure 404 {object} error
+// @Router /trips/{id} [patch]
+func (handler *TripHandler) Update(context *gin.Context) {
+	id := context.Param("id")
+
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var requestBody requests.TripUpdateBody
+
+	isBodyValid := utils.Deserialize(&requestBody, context)
+	if !isBodyValid {
+		return
+	}
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		return
+	}
+
+	trip, err := handler.Repository.Get(id)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	canEdit := handler.Repository.HasEditRight(trip, currentUser)
+	if !canEdit {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	if requestBody.Name != "" {
+		trip.Name = requestBody.Name
+	}
+
+	if requestBody.Country != "" {
+		trip.Country = requestBody.Country
+	}
+
+	if requestBody.City != "" {
+		trip.City = requestBody.City
+	}
+
+	if requestBody.StartDate != "" {
+		startDate, startDateParseError := time.Parse(time.RFC3339, requestBody.StartDate)
+		if startDateParseError != nil {
+			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid start date"})
+			return
+		}
+		trip.StartDate = startDate
+	}
+
+	if requestBody.EndDate != "" {
+		endDate, endDateParseError := time.Parse(time.RFC3339, requestBody.EndDate)
+		if endDateParseError != nil {
+			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid end date"})
+			return
+		}
+		trip.EndDate = endDate
+	}
+
+	updatedTrip, err := handler.Repository.Update(trip)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	responseTrip := responses.TripResponse{
+		ID:           updatedTrip.ID,
+		Name:         updatedTrip.Name,
+		Country:      updatedTrip.Country,
+		City:         updatedTrip.City,
+		StartDate:    updatedTrip.StartDate.Format(time.RFC3339),
+		EndDate:      updatedTrip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(updatedTrip.Viewers, updatedTrip.Editors, updatedTrip.Owner),
+		InviteCode:   updatedTrip.InviteCode,
+	}
+
+	context.JSON(http.StatusOK, responseTrip)
+}
+
 // Join an existing trip using its inviteCode and associate it with the current user
 //
 //	@Summary		Join a trip

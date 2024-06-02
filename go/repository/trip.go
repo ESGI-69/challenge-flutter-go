@@ -134,3 +134,9 @@ func (t *TripRepository) GetParticipants(trip models.Trip) (participants []model
 	participants = append(participants, participantsBuffer...)
 	return
 }
+
+// Update a trip
+func (t *TripRepository) Update(trip models.Trip) (updatedTrip models.Trip, err error) {
+	err = t.Database.Save(&trip).Error
+	return trip, err
+}
