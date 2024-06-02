@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:move_together_app/core/services/api_services.dart';
+import 'package:go_router/go_router.dart';
+
 
 class JoinTripScreen extends StatefulWidget {
   const JoinTripScreen({ super.key });
 
   @override
-  _JoinTripScreenState createState() => _JoinTripScreenState();
+  JoinTripScreenState createState() => JoinTripScreenState();
 }
 
-class _JoinTripScreenState extends State<JoinTripScreen> {
+class JoinTripScreenState extends State<JoinTripScreen> {
   final TextEditingController _tripCodeController = TextEditingController();
   String? errorMessage;
 
@@ -31,10 +34,18 @@ class _JoinTripScreenState extends State<JoinTripScreen> {
 
   Future<void> _joinTrip() async {
     try {
-      //Code  : _tripCodeController.text;
       String? errorMessage;
+      final apiServices = ApiServices();
+      await apiServices.joinTrip(
+        _tripCodeController.text,
+      );
+      if (mounted) {
+        setState(() {
+          errorMessage = null;
+        });
+        context.go('/trip');
+      }
     } catch (e) {
-      print(e);
       setState(() {
         errorMessage = 'Joining trip failed';
       });
@@ -54,7 +65,7 @@ class _JoinTripScreenState extends State<JoinTripScreen> {
             children: [
               const Text('Tu as été invité?'),
               const Text('S\'il te plait, entre le code PIN ci-dessous'),
-              Icon(Icons.groups_rounded, size: 100, color: Color(0xFF79D0BF)),
+              const Icon(Icons.groups_rounded, size: 100, color: Color(0xFF79D0BF)),
               TextField(
                 controller: _tripCodeController,
                 decoration: const InputDecoration(
@@ -79,12 +90,13 @@ class _JoinTripScreenState extends State<JoinTripScreen> {
                 style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.resolveWith<Color>(
                     (Set<WidgetState> states) {
-                      if (_tripCodeController.text.length == 10) {
-                        return const Color(0xFF79D0BF); // Change to your desired color
+                      if (_tripCodeController.text.length == 8) {
+                        return const Color(0xFF79D0BF);
                       }
                       return const Color(0xFFb2e4da);
                     },
-                  ),                  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                  ),                  
+                  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
                   padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
                     const EdgeInsets.symmetric(horizontal: 70.0),
                   ),
