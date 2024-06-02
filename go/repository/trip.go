@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/models"
 	"crypto/rand"
 	"encoding/base64"
@@ -19,7 +20,6 @@ type TripRepository struct {
 // The owner of the trip will be added as an editor in participants
 func (t *TripRepository) Create(trip models.Trip) (createdTrip models.Trip, err error) {
 	result := t.Database.Create(&trip)
-	t.AddParticipant(trip, trip.Owner, models.TripParticipantRoleEditor)
 
 	// Generate a random string for the invite code
 	randomBytes := make([]byte, 8)
@@ -29,47 +29,108 @@ func (t *TripRepository) Create(trip models.Trip) (createdTrip models.Trip, err 
 	}
 	randomString := base64.URLEncoding.EncodeToString(randomBytes)[:8]
 	trip.InviteCode = strconv.Itoa(int(trip.ID)) + randomString
+
 	t.Database.Save(&trip)
 
 	return trip, result.Error
 }
 
 func (t *TripRepository) Get(id string) (trip models.Trip, err error) {
-	err = t.Database.Preload(clause.Associations).Preload("Participants").First(&trip, id).Error
+	err = t.Database.Preload(clause.Associations).First(&trip, id).Error
 	return
 }
 
 func (t *TripRepository) GetByInviteCode(invitecode string) (trip models.Trip, err error) {
-	err = t.Database.Where("invite_code = ?", invitecode).Preload("Participants").First(&trip).Error
+	err = t.Database.Where("invite_code = ?", invitecode).Preload(clause.Associations).First(&trip).Error
 	return trip, err
 }
 
-// Add a participant to a trip with	 the given role
-func (t *TripRepository) AddParticipant(trip models.Trip, user models.User, role models.TripParticipantRole) (err error) {
-	//Petit hack pour éviter de rajouter un participant déjà existant
-	var count int64
-	t.Database.Model(&models.TripParticipant{}).Where("trip_id = ? AND user_id = ?", trip.ID, user.ID).Count(&count)
-	if count > 0 {
-		return nil
-	}
-
-	participant := models.TripParticipant{
-		TripID: trip.ID,
-		UserID: user.ID,
-		Role:   role,
-	}
-
-	result := t.Database.Create(&participant)
-	return result.Error
+func (t *TripRepository) AddEditor(trip models.Trip, user models.User) {
+	t.Database.Model(&trip).Association("Editors").Append(&user)
 }
 
-// Get all the participants of a trip with their role
-func (t *TripRepository) GetParticipants(trip models.Trip) (participants []models.TripParticipant, err error) {
-	err = t.Database.Model(&models.TripParticipant{}).Where("trip_id = ?", trip.ID).Find(&participants).Error
+func (t *TripRepository) AddViewer(trip models.Trip, user models.User) {
+	t.Database.Model(&trip).Association("Viewers").Append(&user)
+}
+
+func (t *TripRepository) RemoveEditor(trip models.Trip, user models.User) {
+	t.Database.Model(&trip).Association("Editors").Delete(&user)
+}
+
+func (t *TripRepository) RemoveViewer(trip models.Trip, user models.User) {
+	t.Database.Model(&trip).Association("Viewers").Delete(&user)
+}
+
+// Get all the trips that the user is an editor, a viewer or the owner
+func (t *TripRepository) GetAllJoined(user models.User) (trips []models.Trip, err error) {
+	err = t.Database.Preload("Owner").
+		Preload("Viewers").
+		Preload("Editors").
+		Joins("LEFT JOIN trip_viewers ON trip_viewers.trip_id = trips.id").
+		Joins("LEFT JOIN trip_editors ON trip_editors.trip_id = trips.id").
+		Where("trips.owner_id = ? OR trip_viewers.user_id = ? OR trip_editors.user_id = ?", user.ID, user.ID, user.ID).
+		Find(&trips).Error
 	return
 }
 
-func (t *TripRepository) GetAllJoined(user models.User) (trips []models.Trip, err error) {
-	err = t.Database.Model(&user).Where("owner_id = ?", user.ID).Preload("Owner").Association("Trips").Find(&trips)
+// If the user is the owner or an editor of the trip
+//
+// If the user is not in the editors list, it will return false
+func (t *TripRepository) HasEditRight(trip models.Trip, user models.User) (isEditor bool) {
+	isOwner := trip.OwnerID == user.ID
+	isEditor = false
+	err := t.Database.Preload("Editors").First(&trip, "id = ?", trip.ID).Error
+	if err == nil {
+		for _, editor := range trip.Editors {
+			if editor.ID == user.ID {
+				isEditor = true
+			}
+		}
+	}
+	return isOwner || isEditor
+}
+
+// If the user is a viewer of the trip
+//
+// If the user is not in the viewers list, it will return false
+func (t *TripRepository) HasViewRight(trip models.Trip, user models.User) (isViewer bool) {
+	isViewer = false
+	err := t.Database.Preload("Viewers").First(&trip, "id = ?", trip.ID).Error
+	if err == nil {
+		for _, viewer := range trip.Viewers {
+			if viewer.ID == user.ID {
+				isViewer = true
+			}
+		}
+	}
+	return isViewer
+}
+
+func (t *TripRepository) GetUserTripRole(trip models.Trip, user models.User) (role responses.ParticipantTripRole) {
+	if trip.OwnerID == user.ID {
+		return responses.ParticipantTripRoleOwner
+	}
+	if t.HasEditRight(trip, user) {
+		return responses.ParticipantTripRoleEditor
+	}
+	if t.HasViewRight(trip, user) {
+		return responses.ParticipantTripRoleViewer
+	}
+	return responses.ParticipantTripRoleNone
+}
+
+// Get all the users who has access to the trip
+func (t *TripRepository) GetParticipants(trip models.Trip) (participants []models.User, err error) {
+	var participantsBuffer []models.User
+	var associatedTrip = t.Database.Model(&trip).Association(clause.Associations)
+	associatedTrip.Find(&participantsBuffer, "Editors")
+	participants = append(participants, participantsBuffer...)
+	participantsBuffer = []models.User{}
+	associatedTrip.Find(&participantsBuffer, "Viewers")
+	participants = append(participants, participantsBuffer...)
+	participantsBuffer = []models.User{}
+	// Retrieve the owner
+	associatedTrip.Find(&participantsBuffer, "Owner")
+	participants = append(participants, participantsBuffer...)
 	return
 }

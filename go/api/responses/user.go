@@ -1,14 +1,29 @@
 package responses
 
+import "challenge-flutter-go/models"
+
 type UserResponse struct {
 	ID       uint   `json:"id"`
 	Username string `json:"username"`
-	Role     string `json:"role"`
 }
 
-type UserInfoResponse struct {
-	ID       uint           `json:"id"`
-	Username string         `json:"username"`
-	Role     string         `json:"role"`
-	Trips    []TripResponse `json:"trips"`
+type UserRoleReponse struct {
+	ID       uint            `json:"id"`
+	Username string          `json:"username"`
+	Role     models.UserRole `json:"role"`
+}
+
+type ParticipantTripRole string
+
+const (
+	ParticipantTripRoleOwner  ParticipantTripRole = "OWNER"
+	ParticipantTripRoleEditor ParticipantTripRole = "EDITOR"
+	ParticipantTripRoleViewer ParticipantTripRole = "VIEWER"
+	ParticipantTripRoleNone   ParticipantTripRole = "NONE"
+)
+
+type ParticipantResponse struct {
+	ID       uint                `json:"id"`
+	Username string              `json:"user"`
+	TripRole ParticipantTripRole `json:"tripRole"`
 }

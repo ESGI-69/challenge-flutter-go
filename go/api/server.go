@@ -55,13 +55,18 @@ func setRoutes() {
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	router.POST("/login", authHandler.Login)
+
 	router.GET("/users/:id", middlewares.AuthorizationsMiddleware, userHandler.Get)
 	router.POST("/users", userHandler.Create)
-	router.POST("/login", authHandler.Login)
+
 	router.POST("/trips", middlewares.AuthorizationsMiddleware, tripHandler.Create)
 	router.GET("/trips", middlewares.AuthorizationsMiddleware, tripHandler.GetAllJoined)
 	router.GET("/trips/:id", middlewares.AuthorizationsMiddleware, tripHandler.Get)
-	router.POST("/trips/:id/join", middlewares.AuthorizationsMiddleware, tripHandler.Join)
+	router.POST("/trips/join", middlewares.AuthorizationsMiddleware, tripHandler.Join)
+	router.POST("/trips/:id/leave", middlewares.AuthorizationsMiddleware, tripHandler.Leave)
+
 	router.POST("/trips/:id/transport", middlewares.AuthorizationsMiddleware, transportHandler.AddTransportToTrip)
 	router.DELETE("/trips/:id/transport/:transportID", middlewares.AuthorizationsMiddleware, transportHandler.DeleteTransportFromTrip)
 }

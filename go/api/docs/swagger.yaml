@@ -1,5 +1,22 @@
-basePath: /
 definitions:
+  models.TransportType:
+    enum:
+    - car
+    - plane
+    - bus
+    type: string
+    x-enum-varnames:
+    - TransportTypeCar
+    - TransportTypePlane
+    - TransportTypeBus
+  models.UserRole:
+    enum:
+    - ADMIN
+    - USER
+    type: string
+    x-enum-varnames:
+    - UserRoleAdmin
+    - UserRoleUser
   requests.AuthLoginBody:
     properties:
       password:
@@ -9,6 +26,25 @@ definitions:
     required:
     - password
     - username
+    type: object
+  requests.TransportCreateBody:
+    properties:
+      EndAddress:
+        type: string
+      EndDate:
+        type: string
+      StartAddress:
+        type: string
+      StartDate:
+        type: string
+      TransportType:
+        type: string
+    required:
+    - EndAddress
+    - EndDate
+    - StartAddress
+    - StartDate
+    - TransportType
     type: object
   requests.TripCreateBody:
     properties:
@@ -46,6 +82,42 @@ definitions:
       token:
         type: string
     type: object
+  responses.ParticipantResponse:
+    properties:
+      id:
+        type: integer
+      tripRole:
+        $ref: '#/definitions/responses.ParticipantTripRole'
+      user:
+        type: string
+    type: object
+  responses.ParticipantTripRole:
+    enum:
+    - OWNER
+    - EDITOR
+    - VIEWER
+    - NONE
+    type: string
+    x-enum-varnames:
+    - ParticipantTripRoleOwner
+    - ParticipantTripRoleEditor
+    - ParticipantTripRoleViewer
+    - ParticipantTripRoleNone
+  responses.TransportResponse:
+    properties:
+      endAddress:
+        type: string
+      endDate:
+        type: string
+      id:
+        type: integer
+      startAddress:
+        type: string
+      startDate:
+        type: string
+      transportType:
+        $ref: '#/definitions/models.TransportType'
+    type: object
   responses.TripResponse:
     properties:
       city:
@@ -56,40 +128,26 @@ definitions:
         type: string
       id:
         type: integer
+      inviteCode:
+        type: string
       name:
         type: string
-      owner:
-        $ref: '#/definitions/responses.UserResponse'
       participants:
         items:
-          $ref: '#/definitions/responses.UserResponse'
+          $ref: '#/definitions/responses.ParticipantResponse'
         type: array
       startDate:
         type: string
     type: object
-  responses.UserInfoResponse:
+  responses.UserRoleReponse:
     properties:
       id:
         type: integer
       role:
-        type: string
-      trips:
-        items:
-          $ref: '#/definitions/responses.TripResponse'
-        type: array
+        $ref: '#/definitions/models.UserRole'
       username:
         type: string
     type: object
-  responses.UserResponse:
-    properties:
-      id:
-        type: integer
-      role:
-        type: string
-      username:
-        type: string
-    type: object
-host: localhost:8080
 info:
   contact:
     name: Challenge Flutter Go
@@ -100,7 +158,6 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: https://challenge-flutter-go.com/terms
   title: Challenge Flutter Go API
-  version: "1.0"
 paths:
   /login:
     post:
@@ -216,7 +273,95 @@ paths:
       summary: Get a trip
       tags:
       - trips
-  /trips/join/{id}:
+  /trips/{id}/leave:
+    post:
+      consumes:
+      - application/json
+      description: Leave a trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Leave a trip
+      tags:
+      - trips
+  /trips/{id}/transports:
+    post:
+      consumes:
+      - application/json
+      description: Create a new transport & associate it with the trip
+      parameters:
+      - description: Body of the transport
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.TransportCreateBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.TransportResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new transport on trip
+      tags:
+      - transport
+  /trips/{id}/transports/{transportID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a transport from a trip
+      parameters:
+      - description: ID of the transport
+        in: path
+        name: transportID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a transport from a trip
+      tags:
+      - transport
+  /trips/join:
     post:
       consumes:
       - application/json
@@ -224,8 +369,8 @@ paths:
         the current user
       parameters:
       - description: Invite code of the trip
-        in: path
-        name: id
+        in: query
+        name: inviteCode
         required: true
         type: string
       produces:
@@ -264,7 +409,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/responses.UserInfoResponse'
+            $ref: '#/definitions/responses.UserRoleReponse'
         "400":
           description: Bad Request
           schema: {}
@@ -288,7 +433,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.UserInfoResponse'
+            $ref: '#/definitions/responses.UserRoleReponse'
         "400":
           description: Bad Request
           schema: {}

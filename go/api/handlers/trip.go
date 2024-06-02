@@ -9,6 +9,7 @@ import (
 	"challenge-flutter-go/repository"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -74,18 +75,14 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	}
 
 	responseTrip := responses.TripResponse{
-		ID:        createdTrip.ID,
-		Name:      createdTrip.Name,
-		Country:   createdTrip.Country,
-		City:      createdTrip.City,
-		StartDate: createdTrip.StartDate.Format(time.RFC3339),
-		EndDate:   createdTrip.EndDate.Format(time.RFC3339),
-		Owner: responses.UserResponse{
-			ID:       createdTrip.Owner.ID,
-			Username: createdTrip.Owner.Username,
-			Role:     string(createdTrip.Owner.Role),
-		},
-		Participants: []responses.UserResponse{},
+		ID:           createdTrip.ID,
+		Name:         createdTrip.Name,
+		Country:      createdTrip.Country,
+		City:         createdTrip.City,
+		StartDate:    createdTrip.StartDate.Format(time.RFC3339),
+		EndDate:      createdTrip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(createdTrip.Viewers, createdTrip.Editors, createdTrip.Owner),
+		InviteCode:   createdTrip.InviteCode,
 	}
 
 	context.JSON(http.StatusCreated, responseTrip)
@@ -124,8 +121,8 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 			City:         trip.City,
 			StartDate:    trip.StartDate.Format(time.RFC3339),
 			EndDate:      trip.EndDate.Format(time.RFC3339),
-			Owner:        responses.UserResponse{ID: trip.Owner.ID, Username: trip.Owner.Username, Role: string(trip.Owner.Role)},
-			Participants: []responses.UserResponse{},
+			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
+			InviteCode:   trip.InviteCode,
 		}
 	}
 
@@ -161,28 +158,25 @@ func (handler *TripHandler) Get(context *gin.Context) {
 
 	trip, err := handler.Repository.Get(id)
 
-	if trip.OwnerID != currentUser.ID {
-		context.AbortWithStatus(http.StatusUnauthorized)
-	}
-
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
 	}
 
+	if trip.OwnerID != currentUser.ID {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	responseTrip := responses.TripResponse{
-		ID:        trip.ID,
-		Name:      trip.Name,
-		Country:   trip.Country,
-		City:      trip.City,
-		StartDate: trip.StartDate.Format(time.RFC3339),
-		EndDate:   trip.EndDate.Format(time.RFC3339),
-		Owner: responses.UserResponse{
-			ID:       trip.Owner.ID,
-			Username: trip.Owner.Username,
-			Role:     string(trip.Owner.Role),
-		},
-		Participants: []responses.UserResponse{},
+		ID:           trip.ID,
+		Name:         trip.Name,
+		Country:      trip.Country,
+		City:         trip.City,
+		StartDate:    trip.StartDate.Format(time.RFC3339),
+		EndDate:      trip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
+		InviteCode:   trip.InviteCode,
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
@@ -196,12 +190,72 @@ func (handler *TripHandler) Get(context *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Security		BearerAuth
-//	@Param			id	path		string	true	"Invite code of the trip"
+//	@Param			inviteCode	query	string	true	"Invite code of the trip"
 //	@Success		200	{object}	responses.TripResponse
 //	@Failure		400	{object}	error
 //	@Failure		401	{object}	error
-//	@Router			/trips/join/{id} [post]
+//	@Router			/trips/join [post]
 func (handler *TripHandler) Join(context *gin.Context) {
+	// Retrive the invite code from the query parameters
+	inviteCode := context.Query("inviteCode")
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		return
+	}
+
+	trip, err := handler.Repository.GetByInviteCode(inviteCode)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	currentUserRole := handler.Repository.GetUserTripRole(trip, currentUser)
+
+	if currentUserRole == responses.ParticipantTripRoleOwner {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Owner cannot join the trip"})
+		return
+	}
+
+	if currentUserRole != responses.ParticipantTripRoleNone {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "User is already part of the trip"})
+		return
+	}
+
+	handler.Repository.AddViewer(trip, currentUser)
+
+	updatedTrip, err := handler.Repository.Get(strconv.FormatUint(uint64(trip.ID), 10))
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	responseTrip := responses.TripResponse{
+		ID:           updatedTrip.ID,
+		Name:         updatedTrip.Name,
+		Country:      updatedTrip.Country,
+		City:         updatedTrip.City,
+		StartDate:    updatedTrip.StartDate.Format(time.RFC3339),
+		EndDate:      updatedTrip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(updatedTrip.Viewers, updatedTrip.Editors, updatedTrip.Owner),
+		InviteCode:   updatedTrip.InviteCode,
+	}
+
+	context.JSON(http.StatusOK, responseTrip)
+}
+
+// @Summary Leave a trip
+// @Description Leave a trip
+// @Tags trips
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "ID of the trip"
+// @Success 204
+// @Failure 400 {object} error
+// @Failure 401 {object} error
+// @Router /trips/{id}/leave [post]
+func (handler *TripHandler) Leave(context *gin.Context) {
 	id := context.Param("id")
 
 	if id == "" {
@@ -214,39 +268,32 @@ func (handler *TripHandler) Join(context *gin.Context) {
 		return
 	}
 
-	trip, err := handler.Repository.GetByInviteCode(id)
+	trip, err := handler.Repository.Get(id)
 
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
 	}
 
-	err = handler.Repository.AddParticipant(trip, currentUser, models.TripParticipantRoleGuest)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
+	currentUserRole := handler.Repository.GetUserTripRole(trip, currentUser)
+
+	if currentUserRole == responses.ParticipantTripRoleOwner {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "Owner cannot leave the trip"})
 		return
 	}
 
-	updatedTrip, err := handler.Repository.GetByInviteCode(id)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
+	if currentUserRole == responses.ParticipantTripRoleNone {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "User is not part of the trip"})
 		return
 	}
 
-	responseTrip := responses.TripResponse{
-		ID:        updatedTrip.ID,
-		Name:      updatedTrip.Name,
-		Country:   updatedTrip.Country,
-		City:      updatedTrip.City,
-		StartDate: updatedTrip.StartDate.Format(time.RFC3339),
-		EndDate:   updatedTrip.EndDate.Format(time.RFC3339),
-		Owner: responses.UserResponse{
-			ID:       updatedTrip.Owner.ID,
-			Username: updatedTrip.Owner.Username,
-			Role:     string(updatedTrip.Owner.Role),
-		},
-		Participants: []responses.UserResponse{},
+	if currentUserRole == responses.ParticipantTripRoleEditor {
+		handler.Repository.RemoveEditor(trip, currentUser)
 	}
 
-	context.JSON(http.StatusOK, responseTrip)
+	if currentUserRole == responses.ParticipantTripRoleViewer {
+		handler.Repository.RemoveViewer(trip, currentUser)
+	}
+
+	context.Status(http.StatusNoContent)
 }

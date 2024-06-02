@@ -149,7 +149,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/trips/join/{id}": {
+        "/trips/join": {
             "post": {
                 "security": [
                     {
@@ -171,8 +171,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Invite code of the trip",
-                        "name": "id",
-                        "in": "path",
+                        "name": "inviteCode",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -243,6 +243,142 @@ const docTemplate = `{
                 }
             }
         },
+        "/trips/{id}/leave": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Leave a trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trips"
+                ],
+                "summary": "Leave a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/transports": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new transport \u0026 associate it with the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transport"
+                ],
+                "summary": "Create a new transport on trip",
+                "parameters": [
+                    {
+                        "description": "Body of the transport",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.TransportCreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.TransportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/transports/{transportID}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a transport from a trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transport"
+                ],
+                "summary": "Delete a transport from a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the transport",
+                        "name": "transportID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "description": "Register a new user with a username and a password",
@@ -271,7 +407,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/responses.UserInfoResponse"
+                            "$ref": "#/definitions/responses.UserRoleReponse"
                         }
                     },
                     "400": {
@@ -312,7 +448,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.UserInfoResponse"
+                            "$ref": "#/definitions/responses.UserRoleReponse"
                         }
                     },
                     "400": {
@@ -332,6 +468,30 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.TransportType": {
+            "type": "string",
+            "enum": [
+                "car",
+                "plane",
+                "bus"
+            ],
+            "x-enum-varnames": [
+                "TransportTypeCar",
+                "TransportTypePlane",
+                "TransportTypeBus"
+            ]
+        },
+        "models.UserRole": {
+            "type": "string",
+            "enum": [
+                "ADMIN",
+                "USER"
+            ],
+            "x-enum-varnames": [
+                "UserRoleAdmin",
+                "UserRoleUser"
+            ]
+        },
         "requests.AuthLoginBody": {
             "type": "object",
             "required": [
@@ -343,6 +503,33 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.TransportCreateBody": {
+            "type": "object",
+            "required": [
+                "EndAddress",
+                "EndDate",
+                "StartAddress",
+                "StartDate",
+                "TransportType"
+            ],
+            "properties": {
+                "EndAddress": {
+                    "type": "string"
+                },
+                "EndDate": {
+                    "type": "string"
+                },
+                "StartAddress": {
+                    "type": "string"
+                },
+                "StartDate": {
+                    "type": "string"
+                },
+                "TransportType": {
                     "type": "string"
                 }
             }
@@ -399,6 +586,58 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.ParticipantResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "tripRole": {
+                    "$ref": "#/definitions/responses.ParticipantTripRole"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ParticipantTripRole": {
+            "type": "string",
+            "enum": [
+                "OWNER",
+                "EDITOR",
+                "VIEWER",
+                "NONE"
+            ],
+            "x-enum-varnames": [
+                "ParticipantTripRoleOwner",
+                "ParticipantTripRoleEditor",
+                "ParticipantTripRoleViewer",
+                "ParticipantTripRoleNone"
+            ]
+        },
+        "responses.TransportResponse": {
+            "type": "object",
+            "properties": {
+                "endAddress": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "startAddress": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "transportType": {
+                    "$ref": "#/definitions/models.TransportType"
+                }
+            }
+        },
         "responses.TripResponse": {
             "type": "object",
             "properties": {
@@ -414,16 +653,16 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "inviteCode": {
                     "type": "string"
                 },
-                "owner": {
-                    "$ref": "#/definitions/responses.UserResponse"
+                "name": {
+                    "type": "string"
                 },
                 "participants": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/responses.UserResponse"
+                        "$ref": "#/definitions/responses.ParticipantResponse"
                     }
                 },
                 "startDate": {
@@ -431,34 +670,14 @@ const docTemplate = `{
                 }
             }
         },
-        "responses.UserInfoResponse": {
+        "responses.UserRoleReponse": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "integer"
                 },
                 "role": {
-                    "type": "string"
-                },
-                "trips": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.TripResponse"
-                    }
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.UserResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "role": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.UserRole"
                 },
                 "username": {
                     "type": "string"
@@ -477,9 +696,9 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8080",
-	BasePath:         "/",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Challenge Flutter Go API",
 	Description:      "This is the API for the Challenge Flutter Go project",
