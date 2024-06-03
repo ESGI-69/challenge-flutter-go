@@ -21,13 +21,13 @@ type ParticipantHandler struct {
 // @Accept		json
 // @Produce		json
 // @Security	BearerAuth
-// @Param		tripId	path	string	true	"ID of the trip"
+// @Param		id	path	string	true	"ID of the trip"
 // @Param		participantId	path	string	true	"ID of the participant"
 // @Param		role	query	string	true	"Role of the participant"
 // @Success	204
 // @Failure	400	{object} error
 // @Failure	401	{object} error
-// @Router		/trips/{tripId}/participants/{participantId}/role [patch]
+// @Router		/trips/{id}/participants/{participantId}/role [patch]
 func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 	tripId := context.Param("id")
 	participantId := context.Param("participantId")
