@@ -29,7 +29,7 @@ type ParticipantHandler struct {
 // @Failure	401	{object} error
 // @Router		/trips/{tripId}/participants/{participantId}/role [patch]
 func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
-	tripId := context.Param("tripId")
+	tripId := context.Param("id")
 	participantId := context.Param("participantId")
 	role := context.Query("role")
 
