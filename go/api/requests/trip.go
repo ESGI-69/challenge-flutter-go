@@ -8,6 +8,14 @@ type TripCreateBody struct {
 	EndDate   string `json:"endDate" binding:"required"`
 }
 
+type TripUpdateBody struct {
+	Name      string `json:"name"`
+	Country   string `json:"country"`
+	City      string `json:"city"`
+	StartDate string `json:"startDate"`
+	EndDate   string `json:"endDate"`
+}
+
 type TripAddTransportBody struct {
 	StartDate     string `json:"StartDate" binding:"required"`
 	EndDate       string `json:"EndDate" binding:"required"`
