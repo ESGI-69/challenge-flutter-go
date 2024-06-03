@@ -61,5 +61,18 @@ jobs:
     steps:
       - name: Check availability
         run: |
-          curl -s -o /dev/null -w "%{http_code}" ${{ vars.URL }}/health -m 10
-          echo "Deployment successful"
+          END=$((SECONDS+10))
+          SUCCESS=false
+          while [ $SECONDS -lt $END ]; do
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${{ vars.URL }}/health)
+            if [ "$HTTP_STATUS" -eq 200 ]; then
+              SUCCESS=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$SUCCESS" = false ]; then
+            echo "HTTP Status is not 200. Deployment failed."
+            exit 1
+          fi
+          echo "Deployment successful. HTTP Status is 200."
