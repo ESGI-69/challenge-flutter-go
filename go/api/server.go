@@ -7,6 +7,7 @@ import (
 	"challenge-flutter-go/config"
 	"challenge-flutter-go/database"
 	"challenge-flutter-go/repository"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -78,6 +79,10 @@ func setRoutes() {
 
 	router.PATCH("/trips/:id/participants/:participantId/role", middlewares.AuthorizationsMiddleware, participantHandler.ChangeRole)
 	router.DELETE("/trips/:id/participants/:participantId/", middlewares.AuthorizationsMiddleware, participantHandler.RemoveParticipant)
+
+	router.GET("/health", func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
 }
 
 func Start() {

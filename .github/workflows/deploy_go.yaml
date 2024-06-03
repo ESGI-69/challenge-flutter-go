@@ -51,3 +51,15 @@ jobs:
         run: |
           kubectl set image deployment/challenge-flutter-go-backend-deployment challenge-flutter-go-backend-deployment=${{ env.DOCKERHUB_REPO }}:${{ github.sha }} -n challenge-flutter-go
           kubectl rollout status deployment/challenge-flutter-go-backend-deployment -n challenge-flutter-go
+  check_availability:
+    runs-on: ubuntu-latest
+    name: Check availability
+    needs:
+      - deploy
+    environment:
+      name: production
+    steps:
+      - name: Check availability
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" ${{ vars.URL }}/health -m 10
+          echo "Deployment successful"
