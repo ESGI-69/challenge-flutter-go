@@ -1,6 +1,8 @@
 name: Deploy Go
 run-name: ${{ github.actor }} deployed Go (${{ github.sha }})
 
+concurrency: deploy-go
+
 on:
   push:
     branches: [ "main" ]
