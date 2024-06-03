@@ -341,6 +341,60 @@ const docTemplate = `{
                 }
             }
         },
+        "/trips/{id}/notes": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new note \u0026 associate it with the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Create a new note on trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Body of the note",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.NoteCreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.NoteResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/trips/{id}/participants/{participantId}": {
             "delete": {
                 "security": [
@@ -372,6 +426,62 @@ const docTemplate = `{
                         "description": "ID of the participant",
                         "name": "participantId",
                         "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/participants/{participantId}/role": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Only the owner of the trip can change the role of a participant",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "participants"
+                ],
+                "summary": "Change the role of a participant in a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID of the participant",
+                        "name": "participantId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Role of the participant",
+                        "name": "role",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -479,62 +589,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {}
-                    }
-                }
-            }
-        },
-        "/trips/{tripId}/participants/{participantId}/role": {
-            "patch": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Only the owner of the trip can change the role of a participant",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "participants"
-                ],
-                "summary": "Change the role of a participant in a trip",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID of the trip",
-                        "name": "tripId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "ID of the participant",
-                        "name": "participantId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Role of the participant",
-                        "name": "role",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "401": {
-                        "description": "Unauthorized",
                         "schema": {}
                     }
                 }
@@ -668,6 +722,21 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.NoteCreateBody": {
+            "type": "object",
+            "required": [
+                "Content",
+                "Title"
+            ],
+            "properties": {
+                "Content": {
+                    "type": "string"
+                },
+                "Title": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.TransportCreateBody": {
             "type": "object",
             "required": [
@@ -763,6 +832,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.NoteResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
                     "type": "string"
                 }
             }

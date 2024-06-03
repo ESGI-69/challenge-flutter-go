@@ -38,6 +38,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	noteRepository := repository.NoteRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -60,6 +64,11 @@ func setRoutes() {
 		UserRepository: userRepository,
 	}
 
+	noteHandler := handlers.NoteHandler{
+		Repository:     noteRepository,
+		TripRepository: tripRepository,
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.POST("/login", authHandler.Login)
@@ -79,6 +88,8 @@ func setRoutes() {
 
 	router.PATCH("/trips/:id/participants/:participantId/role", middlewares.AuthorizationsMiddleware, participantHandler.ChangeRole)
 	router.DELETE("/trips/:id/participants/:participantId/", middlewares.AuthorizationsMiddleware, participantHandler.RemoveParticipant)
+
+	router.POST("/trips/:id/notes", middlewares.AuthorizationsMiddleware, noteHandler.AddNoteToTrip)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
