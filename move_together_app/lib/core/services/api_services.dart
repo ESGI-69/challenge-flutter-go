@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:move_together_app/core/models/user.dart';
+import 'package:move_together_app/core/models/trip.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiServices {
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   static Future<String> loginUser(String username, String password) async {
     final response = await http.post(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/login'),
@@ -44,4 +47,22 @@ class ApiServices {
       throw Exception('Failed to register user');
     }
   }
+
+  Future<Trip> joinTrip(String inviteCode) async {
+    final response = await http.post(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/join?inviteCode=$inviteCode'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+    );
+    
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      return Trip.fromJson(responseData);
+    } else {
+      throw Exception('Failed to join trip');
+    }
+  }
+  
 }

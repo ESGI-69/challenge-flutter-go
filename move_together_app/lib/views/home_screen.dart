@@ -56,7 +56,9 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.go('/join-trip');
+                },
                 style: ButtonStyle(
                   backgroundColor:
                   WidgetStateProperty.all<Color>(Colors.white),

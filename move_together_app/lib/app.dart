@@ -5,6 +5,8 @@ import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
 import 'package:move_together_app/views/home_screen.dart';
+import 'package:move_together_app/views/trip/join_screen.dart';
+import 'package:move_together_app/views/trip/trip_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,6 +18,8 @@ class App extends StatelessWidget {
     const FlutterSecureStorage secureStorage = FlutterSecureStorage();
     List<String> loggedRoutes = [
       '/home',
+      '/join-trip',
+      '/trip'
     ];
     List<String> unloggedRoutes = [
       '/login',
@@ -45,6 +49,14 @@ class App extends StatelessWidget {
         GoRoute(
           path: '/home',
           builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: '/join-trip',
+          builder: (context, state) => const JoinTripScreen(),
+        ),
+        GoRoute(
+          path: '/trip',
+          builder: (context, state) => const TripScreen(),
         ),
       ],
       redirect: (context, state) async {
