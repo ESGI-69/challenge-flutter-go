@@ -39,22 +39,26 @@ definitions:
     type: object
   requests.TransportCreateBody:
     properties:
-      EndAddress:
+      endAddress:
         type: string
-      EndDate:
+      endDate:
         type: string
-      StartAddress:
+      meetingAddress:
         type: string
-      StartDate:
+      meetingTime:
         type: string
-      TransportType:
+      startAddress:
+        type: string
+      startDate:
+        type: string
+      transportType:
         type: string
     required:
-    - EndAddress
-    - EndDate
-    - StartAddress
-    - StartDate
-    - TransportType
+    - endAddress
+    - endDate
+    - startAddress
+    - startDate
+    - transportType
     type: object
   requests.TripCreateBody:
     properties:
@@ -143,6 +147,10 @@ definitions:
         type: string
       id:
         type: integer
+      meetingAddress:
+        type: string
+      meetingTime:
+        type: string
       startAddress:
         type: string
       startDate:
@@ -565,37 +573,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Create a new transport on trip
-      tags:
-      - transport
-  /trips/{id}/transports/{transportID}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a transport from a trip
-      parameters:
-      - description: ID of the transport
-        in: path
-        name: transportID
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-          schema: {}
-        "400":
-          description: Bad Request
-          schema: {}
-        "401":
-          description: Unauthorized
-          schema: {}
-        "404":
-          description: Not Found
-          schema: {}
-      security:
-      - BearerAuth: []
-      summary: Delete a transport from a trip
       tags:
       - transport
   /trips/join:

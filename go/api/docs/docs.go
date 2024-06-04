@@ -644,53 +644,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/trips/{id}/transports/{transportID}": {
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Delete a transport from a trip",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "transport"
-                ],
-                "summary": "Delete a transport from a trip",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID of the transport",
-                        "name": "transportID",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content",
-                        "schema": {}
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {}
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {}
-                    }
-                }
-            }
-        },
         "/users": {
             "post": {
                 "description": "Register a new user with a username and a password",
@@ -837,26 +790,32 @@ const docTemplate = `{
         "requests.TransportCreateBody": {
             "type": "object",
             "required": [
-                "EndAddress",
-                "EndDate",
-                "StartAddress",
-                "StartDate",
-                "TransportType"
+                "endAddress",
+                "endDate",
+                "startAddress",
+                "startDate",
+                "transportType"
             ],
             "properties": {
-                "EndAddress": {
+                "endAddress": {
                     "type": "string"
                 },
-                "EndDate": {
+                "endDate": {
                     "type": "string"
                 },
-                "StartAddress": {
+                "meetingAddress": {
                     "type": "string"
                 },
-                "StartDate": {
+                "meetingTime": {
                     "type": "string"
                 },
-                "TransportType": {
+                "startAddress": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "transportType": {
                     "type": "string"
                 }
             }
@@ -987,6 +946,12 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "meetingAddress": {
+                    "type": "string"
+                },
+                "meetingTime": {
+                    "type": "string"
                 },
                 "startAddress": {
                     "type": "string"

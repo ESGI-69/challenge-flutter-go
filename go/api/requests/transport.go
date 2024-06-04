@@ -1,9 +1,11 @@
 package requests
 
 type TransportCreateBody struct {
-	StartDate     string `json:"StartDate" binding:"required"`
-	EndDate       string `json:"EndDate" binding:"required"`
-	TransportType string `json:"TransportType" binding:"required"`
-	StartAddress  string `json:"StartAddress" binding:"required"`
-	EndAddress    string `json:"EndAddress" binding:"required"`
+	StartDate      string `json:"startDate" binding:"required"`
+	EndDate        string `json:"endDate" binding:"required"`
+	TransportType  string `json:"transportType" binding:"required"`
+	StartAddress   string `json:"startAddress" binding:"required"`
+	EndAddress     string `json:"endAddress" binding:"required"`
+	MeetingAddress string `json:"meetingAddress"`
+	MeetingTime    string `json:"meetingTime"`
 }

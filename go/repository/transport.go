@@ -23,14 +23,10 @@ func (t *TransportRepository) AddTransport(trip models.Trip, transport models.Tr
 	return transport, nil
 }
 
-// Get all the transports of a trip
-func (t *TransportRepository) GetTransports(trip models.Trip) (transports []models.Transport, err error) {
-	err = t.Database.Model(&models.Transport{}).Where("trip_id = ?", trip.ID).Find(&transports).Error
-	return
-}
-
 // Delete a transport from a trip
 func (t *TransportRepository) DeleteTransport(trip models.Trip, transportID uint) (err error) {
 	result := t.Database.Delete(&models.Transport{}, transportID)
 	return result.Error
 }
+
+// Retrive all transports from a trip
