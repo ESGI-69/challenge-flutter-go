@@ -29,6 +29,22 @@ spec:
       - name: challenge-flutter-go-backend-deployment
         image: gatien1/challenge-flutter-go-backend:latest
         imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          periodSeconds: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          failureThreshold: 45
+          periodSeconds: 1
         env:
         - name: PORT
           valueFrom:
