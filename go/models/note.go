@@ -14,4 +14,6 @@ type Note struct {
 	Trip      Trip      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CreatedAt time.Time `gorm:"not null"`
 	UpdatedAt time.Time `gorm:"not null"`
+	AuthorId  uint
+	Author    User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

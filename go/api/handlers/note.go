@@ -42,6 +42,11 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 		return
 	}
 
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+	}
+
 	trip, err := handler.TripRepository.Get(id)
 
 	if err != nil {
@@ -49,9 +54,18 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 		return
 	}
 
+	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
+	isUserHasViewRights := handler.TripRepository.HasViewRight(trip, currentUser)
+
+	if !isUserHasEditRights && !isUserHasViewRights && trip.OwnerID != currentUser.ID {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	var note = models.Note{
 		Title:   requestBody.Title,
 		Content: requestBody.Content,
+		Author:  currentUser,
 	}
 
 	var noteCreated, errNote = handler.Repository.AddNote(trip, note)
