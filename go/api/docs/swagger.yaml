@@ -164,10 +164,6 @@ definitions:
         type: string
       name:
         type: string
-      notes:
-        items:
-          $ref: '#/definitions/responses.NoteResponse'
-        type: array
       participants:
         items:
           $ref: '#/definitions/responses.ParticipantResponse'

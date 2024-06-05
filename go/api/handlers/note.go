@@ -61,7 +61,14 @@ func (handler *NoteHandler) GetNotesOfTrip(context *gin.Context) {
 		return
 	}
 
-	noteResponses := utils.NotesToNoteResponse(notes)
+	noteResponses := make([]responses.NoteResponse, len(notes))
+	for i, note := range notes {
+		noteResponses[i] = responses.NoteResponse{
+			ID:      note.ID,
+			Title:   note.Title,
+			Content: note.Content,
+		}
+	}
 	context.JSON(http.StatusOK, noteResponses)
 }
 

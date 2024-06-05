@@ -1020,12 +1020,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "notes": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.NoteResponse"
-                    }
-                },
                 "participants": {
                     "type": "array",
                     "items": {
