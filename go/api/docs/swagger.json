@@ -386,6 +386,60 @@
                 }
             }
         },
+        "/trips/{id}/notes/{noteID}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a note from the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Delete a note from trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID of the note",
+                        "name": "noteID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/trips/{id}/participants/{participantId}": {
             "delete": {
                 "security": [
@@ -913,6 +967,12 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "notes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.NoteResponse"
+                    }
                 },
                 "participants": {
                     "type": "array",

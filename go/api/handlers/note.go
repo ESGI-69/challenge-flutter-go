@@ -54,12 +54,13 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 		return
 	}
 
-	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
 	isUserHasViewRights := handler.TripRepository.HasViewRight(trip, currentUser)
 
-	if !isUserHasEditRights && !isUserHasViewRights && trip.OwnerID != currentUser.ID {
-		context.AbortWithStatus(http.StatusUnauthorized)
-		return
+	if !isUserHasViewRights {
+		if trip.OwnerID != currentUser.ID {
+			context.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
 	}
 
 	var note = models.Note{
@@ -82,4 +83,65 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusCreated, noteResponse)
+}
+
+// @Summary		Delete a note from trip
+// @Description	Delete a note from the trip
+// @Tags			note
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Param			id		path		string	true	"ID of the trip"
+// @Param			noteID	path		string	true	"ID of the note"
+// @Success		204		{object}	error
+// @Failure		400		{object}	error
+// @Failure		401		{object}	error
+// @Failure		404		{object}	error
+// @Router			/trips/{id}/notes/{noteID} [delete]
+func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
+	id := context.Param("id")
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	noteID := context.Param("noteID")
+	if noteID == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	trip, errTrip := handler.TripRepository.Get(id)
+	if errTrip != nil {
+		errorHandlers.HandleGormErrors(errTrip, context)
+		return
+	}
+
+	note, errNote := handler.Repository.Get(noteID)
+	if errNote != nil {
+		errorHandlers.HandleGormErrors(errNote, context)
+		return
+	}
+
+	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
+	isUserAuthor := handler.Repository.IsAuthor(note, currentUser)
+
+	if !isUserHasEditRights && !isUserAuthor && trip.OwnerID != currentUser.ID {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	errDelete := handler.Repository.DeleteNote(trip, note.ID)
+	if errDelete != nil {
+		errorHandlers.HandleGormErrors(errDelete, context)
+		return
+	}
+
+	context.JSON(http.StatusNoContent, nil)
 }

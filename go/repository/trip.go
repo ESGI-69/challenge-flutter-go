@@ -103,7 +103,7 @@ func (t *TripRepository) HasViewRight(trip models.Trip, user models.User) (isVie
 			}
 		}
 	}
-	return isViewer
+	return isViewer || t.HasEditRight(trip, user)
 }
 
 func (t *TripRepository) GetUserTripRole(trip models.Trip, user models.User) (role responses.ParticipantTripRole) {

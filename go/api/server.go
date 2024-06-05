@@ -90,6 +90,7 @@ func setRoutes() {
 	router.DELETE("/trips/:id/participants/:participantId/", middlewares.AuthorizationsMiddleware, participantHandler.RemoveParticipant)
 
 	router.POST("/trips/:id/notes", middlewares.AuthorizationsMiddleware, noteHandler.AddNoteToTrip)
+	router.DELETE("/trips/:id/notes/:noteID", middlewares.AuthorizationsMiddleware, noteHandler.DeleteNoteFromTrip)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
