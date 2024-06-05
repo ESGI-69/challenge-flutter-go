@@ -1,0 +1,61 @@
+name: Flutter
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths: 
+      - 'move_together_app/**'
+      - '.github/workflows/flutter.yaml'
+
+defaults:
+  run:
+    working-directory: move_together_app
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - name: Copy .env file
+      run: cp .env.release .env
+    - name: Retrive dependencies
+      run: flutter pub get
+    - name: Format code
+      run: flutter analyze .
+
+  bluidios:
+    name: Build iOS
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - name: Copy .env file
+      run: cp .env.release .env
+    - name: Retrive dependencies
+      run: flutter pub get
+    - name: Build iOS
+      run: flutter build ios --release --no-codesign
+
+  buildandroid:
+    name: Build Android
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - name: Copy .env file
+      run: cp .env.release .env
+    - name: Retrive dependencies
+      run: flutter pub get
+    - name: Build Android
+      run: flutter build apk --release
