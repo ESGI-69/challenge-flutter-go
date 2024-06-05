@@ -29,6 +29,7 @@ func autoMigrate() {
 		&models.User{},
 		&models.Trip{},
 		&models.Transport{},
+		&models.Note{},
 	)
 	if err != nil {
 		log.Fatalln(err)

@@ -163,11 +163,14 @@ func (handler *TripHandler) Get(context *gin.Context) {
 		return
 	}
 
-	if trip.OwnerID != currentUser.ID {
-		context.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
+	isUserHasRights := handler.Repository.HasViewRight(trip, currentUser)
 
+	if !isUserHasRights {
+		if trip.OwnerID != currentUser.ID {
+			context.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+	}
 	responseTrip := responses.TripResponse{
 		ID:           trip.ID,
 		Name:         trip.Name,
