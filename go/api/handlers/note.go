@@ -109,9 +109,9 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 		return
 	}
 
-	isUserHasViewRights := handler.TripRepository.HasViewRight(trip, currentUser)
+	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
 
-	if !isUserHasViewRights {
+	if !isUserHasEditRights {
 		if trip.OwnerID != currentUser.ID {
 			context.AbortWithStatus(http.StatusUnauthorized)
 			return
