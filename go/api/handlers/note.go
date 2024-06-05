@@ -17,6 +17,54 @@ type NoteHandler struct {
 	TripRepository repository.TripRepository
 }
 
+// @Summary		Get all notes of a trip
+// @Description	Get all notes of a trip
+// @Tags			note
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Param			id		path		string	true	"ID of the trip"
+// @Success		200		{object}	responses.NoteResponse
+// @Failure		400		{object}	error
+// @Failure		401		{object}	error
+// @Router			/trips/{id}/notes [get]
+func (handler *NoteHandler) GetNotesOfTrip(context *gin.Context) {
+	id := context.Param("id")
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	trip, err := handler.TripRepository.Get(id)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+	}
+
+	isUserHasViewRights := handler.TripRepository.HasViewRight(trip, currentUser)
+
+	if !isUserHasViewRights {
+		if trip.OwnerID != currentUser.ID {
+			context.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+	}
+
+	notes, err := handler.Repository.GetNotes(trip)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	noteResponses := utils.NotesToNoteResponse(notes)
+	context.JSON(http.StatusOK, noteResponses)
+}
+
 // @Summary		Create a new note on trip
 // @Description	Create a new note & associate it with the trip
 // @Tags			note

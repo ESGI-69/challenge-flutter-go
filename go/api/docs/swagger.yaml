@@ -374,6 +374,34 @@ paths:
       tags:
       - trips
   /trips/{id}/notes:
+    get:
+      consumes:
+      - application/json
+      description: Get all notes of a trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.NoteResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all notes of a trip
+      tags:
+      - note
     post:
       consumes:
       - application/json
