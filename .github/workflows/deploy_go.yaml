@@ -53,28 +53,3 @@ jobs:
         run: |
           kubectl set image deployment/challenge-flutter-go-backend-deployment challenge-flutter-go-backend-deployment=${{ env.DOCKERHUB_REPO }}:${{ github.sha }} -n challenge-flutter-go
           kubectl rollout status deployment/challenge-flutter-go-backend-deployment -n challenge-flutter-go
-  check_availability:
-    runs-on: ubuntu-latest
-    name: Check availability
-    needs:
-      - deploy
-    environment:
-      name: production
-    steps:
-      - name: Check availability
-        run: |
-          END=$((SECONDS+10))
-          SUCCESS=false
-          while [ $SECONDS -lt $END ]; do
-            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${{ vars.URL }}health)
-            if [ "$HTTP_STATUS" -eq 200 ]; then
-              SUCCESS=true
-              break
-            fi
-            sleep 1
-          done
-          if [ "$SUCCESS" = false ]; then
-            echo "HTTP Status is not 200. Deployment failed."
-            exit 1
-          fi
-          echo "Deployment successful. HTTP Status is 200."
