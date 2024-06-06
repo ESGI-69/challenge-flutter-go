@@ -8,6 +8,7 @@ import (
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -67,6 +68,12 @@ func (handler *NoteHandler) GetNotesOfTrip(context *gin.Context) {
 			ID:      note.ID,
 			Title:   note.Title,
 			Content: note.Content,
+			Author: responses.UserRoleReponse{
+				Username: note.Author.Username,
+				Role:     note.Author.Role,
+			},
+			CreatedAt: note.CreatedAt.Format(time.RFC3339),
+			UpdateAt:  note.UpdatedAt.Format(time.RFC3339),
 		}
 	}
 	context.JSON(http.StatusOK, noteResponses)
@@ -132,9 +139,11 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 	}
 
 	noteResponse := responses.NoteResponse{
-		ID:      noteCreated.ID,
-		Title:   noteCreated.Title,
-		Content: noteCreated.Content,
+		ID:        noteCreated.ID,
+		Title:     noteCreated.Title,
+		Content:   noteCreated.Content,
+		CreatedAt: noteCreated.CreatedAt.Format(time.RFC3339),
+		UpdateAt:  noteCreated.UpdatedAt.Format(time.RFC3339),
 	}
 
 	context.JSON(http.StatusCreated, noteResponse)

@@ -299,6 +299,110 @@ const docTemplate = `{
                 }
             }
         },
+        "/trips/{id}/chatMessages": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all chat messages of the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatMessage"
+                ],
+                "summary": "Get all chat messages of trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.ChatMessageResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new chat message \u0026 associate it with the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatMessage"
+                ],
+                "summary": "Create a new chat message on trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Body of the chat message",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.ChatMessageCreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ChatMessageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/trips/{id}/leave": {
             "post": {
                 "security": [
@@ -819,6 +923,17 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.ChatMessageCreateBody": {
+            "type": "object",
+            "required": [
+                "Content"
+            ],
+            "properties": {
+                "Content": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.NoteCreateBody": {
             "type": "object",
             "required": [
@@ -925,6 +1040,23 @@ const docTemplate = `{
                 }
             }
         },
+        "responses.ChatMessageResponse": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/responses.UserResponse"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "responses.LoginResponse": {
             "type": "object",
             "properties": {
@@ -936,13 +1068,22 @@ const docTemplate = `{
         "responses.NoteResponse": {
             "type": "object",
             "properties": {
+                "author": {
+                    "$ref": "#/definitions/responses.UserRoleReponse"
+                },
                 "content": {
+                    "type": "string"
+                },
+                "createdAt": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "updateAt": {
                     "type": "string"
                 }
             }
@@ -1027,6 +1168,17 @@ const docTemplate = `{
                     }
                 },
                 "startDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.UserResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }

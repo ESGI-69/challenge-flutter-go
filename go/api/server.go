@@ -42,6 +42,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	chatMessageRepository := repository.ChatMessageRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -69,6 +73,11 @@ func setRoutes() {
 		TripRepository: tripRepository,
 	}
 
+	chatMessageHandler := handlers.ChatMessageHandler{
+		Repository:     chatMessageRepository,
+		TripRepository: tripRepository,
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.POST("/login", authHandler.Login)
@@ -92,6 +101,9 @@ func setRoutes() {
 	router.GET("/trips/:id/notes", middlewares.AuthorizationsMiddleware, noteHandler.GetNotesOfTrip)
 	router.POST("/trips/:id/notes", middlewares.AuthorizationsMiddleware, noteHandler.AddNoteToTrip)
 	router.DELETE("/trips/:id/notes/:noteID", middlewares.AuthorizationsMiddleware, noteHandler.DeleteNoteFromTrip)
+
+	router.GET("/trips/:id/chatMessages", middlewares.AuthorizationsMiddleware, chatMessageHandler.GetChatMessagesOfTrip)
+	router.POST("/trips/:id/chatMessages", middlewares.AuthorizationsMiddleware, chatMessageHandler.AddChatMessageToTrip)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)

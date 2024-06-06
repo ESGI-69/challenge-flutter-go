@@ -27,6 +27,13 @@ definitions:
     - password
     - username
     type: object
+  requests.ChatMessageCreateBody:
+    properties:
+      Content:
+        type: string
+    required:
+    - Content
+    type: object
   requests.NoteCreateBody:
     properties:
       Content:
@@ -100,6 +107,17 @@ definitions:
     - password
     - username
     type: object
+  responses.ChatMessageResponse:
+    properties:
+      author:
+        $ref: '#/definitions/responses.UserResponse'
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+    type: object
   responses.LoginResponse:
     properties:
       token:
@@ -107,11 +125,17 @@ definitions:
     type: object
   responses.NoteResponse:
     properties:
+      author:
+        $ref: '#/definitions/responses.UserRoleReponse'
       content:
+        type: string
+      createdAt:
         type: string
       id:
         type: integer
       title:
+        type: string
+      updateAt:
         type: string
     type: object
   responses.ParticipantResponse:
@@ -169,6 +193,13 @@ definitions:
           $ref: '#/definitions/responses.ParticipantResponse'
         type: array
       startDate:
+        type: string
+    type: object
+  responses.UserResponse:
+    properties:
+      id:
+        type: integer
+      username:
         type: string
     type: object
   responses.UserRoleReponse:
@@ -342,6 +373,74 @@ paths:
       summary: Update a trip
       tags:
       - trips
+  /trips/{id}/chatMessages:
+    get:
+      consumes:
+      - application/json
+      description: Get all chat messages of the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.ChatMessageResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all chat messages of trip
+      tags:
+      - chatMessage
+    post:
+      consumes:
+      - application/json
+      description: Create a new chat message & associate it with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Body of the chat message
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ChatMessageCreateBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ChatMessageResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new chat message on trip
+      tags:
+      - chatMessage
   /trips/{id}/leave:
     post:
       consumes:

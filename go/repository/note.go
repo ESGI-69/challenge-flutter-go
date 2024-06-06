@@ -31,7 +31,7 @@ func (n *NoteRepository) AddNote(trip models.Trip, note models.Note) (models.Not
 
 // Get all the notes of a trip
 func (n *NoteRepository) GetNotes(trip models.Trip) (notes []models.Note, err error) {
-	err = n.Database.Model(&models.Note{}).Where("trip_id = ?", trip.ID).Find(&notes).Error
+	err = n.Database.Preload("Author").Model(&models.Note{}).Where("trip_id = ?", trip.ID).Find(&notes).Error
 	return
 }
 
