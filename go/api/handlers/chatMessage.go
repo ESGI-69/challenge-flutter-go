@@ -7,6 +7,7 @@ import (
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -52,8 +53,8 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 		return
 	}
 
-	isUserHasViewRights := handler.TripRepository.HasViewRight(trip, currentUser)
-	if !isUserHasViewRights {
+	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
+	if !isUserHasEditRights {
 		if trip.OwnerID != currentUser.ID {
 			context.AbortWithStatus(http.StatusUnauthorized)
 			return
@@ -73,13 +74,12 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 
 	response := responses.ChatMessageResponse{
 		ID: chatMessageCreated.ID,
-		Author: responses.UserRoleReponse{
+		Author: responses.UserResponse{
 			ID:       chatMessageCreated.Author.ID,
 			Username: chatMessageCreated.Author.Username,
-			Role:     chatMessageCreated.Author.Role,
 		},
 		Content:   chatMessage.Content,
-		CreatedAt: chatMessageCreated.CreatedAt.Format("2006-01-02 15:04:05"),
+		CreatedAt: chatMessageCreated.CreatedAt.Format(time.RFC3339),
 	}
 
 	context.JSON(http.StatusCreated, response)
@@ -115,8 +115,8 @@ func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
 		return
 	}
 
-	isUserHasViewRights := handler.TripRepository.HasViewRight(trip, currentUser)
-	if !isUserHasViewRights {
+	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
+	if !isUserHasEditRights {
 		if trip.OwnerID != currentUser.ID {
 			context.AbortWithStatus(http.StatusUnauthorized)
 			return
@@ -133,12 +133,12 @@ func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
 	for i, chatMessage := range chatMessages {
 		chatMessageResponse[i] = responses.ChatMessageResponse{
 			ID: chatMessage.ID,
-			Author: responses.UserRoleReponse{
+			Author: responses.UserResponse{
+				ID:       chatMessage.Author.ID,
 				Username: chatMessage.Author.Username,
-				Role:     chatMessage.Author.Role,
 			},
 			Content:   chatMessage.Content,
-			CreatedAt: chatMessage.CreatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt: chatMessage.CreatedAt.Format(time.RFC3339),
 		}
 	}
 	context.JSON(http.StatusOK, chatMessageResponse)

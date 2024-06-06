@@ -1035,7 +1035,7 @@
             "type": "object",
             "properties": {
                 "author": {
-                    "$ref": "#/definitions/responses.UserRoleReponse"
+                    "$ref": "#/definitions/responses.UserResponse"
                 },
                 "content": {
                     "type": "string"
@@ -1065,10 +1065,16 @@
                 "content": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "updateAt": {
                     "type": "string"
                 }
             }
@@ -1153,6 +1159,17 @@
                     }
                 },
                 "startDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.UserResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }

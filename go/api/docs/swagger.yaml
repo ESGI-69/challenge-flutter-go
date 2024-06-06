@@ -110,7 +110,7 @@ definitions:
   responses.ChatMessageResponse:
     properties:
       author:
-        $ref: '#/definitions/responses.UserRoleReponse'
+        $ref: '#/definitions/responses.UserResponse'
       content:
         type: string
       createdAt:
@@ -129,9 +129,13 @@ definitions:
         $ref: '#/definitions/responses.UserRoleReponse'
       content:
         type: string
+      createdAt:
+        type: string
       id:
         type: integer
       title:
+        type: string
+      updateAt:
         type: string
     type: object
   responses.ParticipantResponse:
@@ -189,6 +193,13 @@ definitions:
           $ref: '#/definitions/responses.ParticipantResponse'
         type: array
       startDate:
+        type: string
+    type: object
+  responses.UserResponse:
+    properties:
+      id:
+        type: integer
+      username:
         type: string
     type: object
   responses.UserRoleReponse:

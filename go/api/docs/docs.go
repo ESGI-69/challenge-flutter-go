@@ -1044,7 +1044,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "author": {
-                    "$ref": "#/definitions/responses.UserRoleReponse"
+                    "$ref": "#/definitions/responses.UserResponse"
                 },
                 "content": {
                     "type": "string"
@@ -1074,10 +1074,16 @@ const docTemplate = `{
                 "content": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "updateAt": {
                     "type": "string"
                 }
             }
@@ -1162,6 +1168,17 @@ const docTemplate = `{
                     }
                 },
                 "startDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.UserResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }
