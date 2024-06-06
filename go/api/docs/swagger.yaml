@@ -125,6 +125,8 @@ definitions:
     type: object
   responses.NoteResponse:
     properties:
+      author:
+        $ref: '#/definitions/responses.UserRoleReponse'
       content:
         type: string
       id:
@@ -361,6 +363,39 @@ paths:
       tags:
       - trips
   /trips/{id}/chatMessages:
+    get:
+      consumes:
+      - application/json
+      description: Get all chat messages of the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.ChatMessageResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all chat messages of trip
+      tags:
+      - chatMessage
     post:
       consumes:
       - application/json

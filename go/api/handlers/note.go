@@ -67,6 +67,10 @@ func (handler *NoteHandler) GetNotesOfTrip(context *gin.Context) {
 			ID:      note.ID,
 			Title:   note.Title,
 			Content: note.Content,
+			Author: responses.UserRoleReponse{
+				Username: note.Author.Username,
+				Role:     note.Author.Role,
+			},
 		}
 	}
 	context.JSON(http.StatusOK, noteResponses)

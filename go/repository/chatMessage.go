@@ -25,7 +25,7 @@ func (c *ChatMessageRepository) AddChatMessage(trip models.Trip, chatMessage mod
 
 // Get all the chat messages of a trip
 func (c *ChatMessageRepository) GetChatMessages(trip models.Trip) (chatMessages []models.ChatMessage, err error) {
-	err = c.Database.Model(&models.ChatMessage{}).Where("trip_id = ?", trip.ID).Find(&chatMessages).Error
+	err = c.Database.Preload("Author").Model(&models.ChatMessage{}).Where("trip_id = ?", trip.ID).Find(&chatMessages).Error
 	return
 }
 

@@ -102,6 +102,7 @@ func setRoutes() {
 	router.POST("/trips/:id/notes", middlewares.AuthorizationsMiddleware, noteHandler.AddNoteToTrip)
 	router.DELETE("/trips/:id/notes/:noteID", middlewares.AuthorizationsMiddleware, noteHandler.DeleteNoteFromTrip)
 
+	router.GET("/trips/:id/chatMessages", middlewares.AuthorizationsMiddleware, chatMessageHandler.GetChatMessagesOfTrip)
 	router.POST("/trips/:id/chatMessages", middlewares.AuthorizationsMiddleware, chatMessageHandler.AddChatMessageToTrip)
 
 	router.GET("/health", func(c *gin.Context) {
