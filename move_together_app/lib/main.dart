@@ -3,6 +3,6 @@ import 'package:move_together_app/app.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-  await dotenv.load();
+  await dotenv.load(fileName: ".env");
   runApp(const App());
 }
