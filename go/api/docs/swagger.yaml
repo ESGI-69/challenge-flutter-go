@@ -27,6 +27,13 @@ definitions:
     - password
     - username
     type: object
+  requests.ChatMessageCreateBody:
+    properties:
+      Content:
+        type: string
+    required:
+    - Content
+    type: object
   requests.NoteCreateBody:
     properties:
       Content:
@@ -99,6 +106,17 @@ definitions:
     required:
     - password
     - username
+    type: object
+  responses.ChatMessageResponse:
+    properties:
+      author:
+        $ref: '#/definitions/responses.UserRoleReponse'
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
     type: object
   responses.LoginResponse:
     properties:
@@ -342,6 +360,41 @@ paths:
       summary: Update a trip
       tags:
       - trips
+  /trips/{id}/chatMessages:
+    post:
+      consumes:
+      - application/json
+      description: Create a new chat message & associate it with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Body of the chat message
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ChatMessageCreateBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ChatMessageResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new chat message on trip
+      tags:
+      - chatMessage
   /trips/{id}/leave:
     post:
       consumes:

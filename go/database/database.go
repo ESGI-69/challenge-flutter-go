@@ -30,6 +30,7 @@ func autoMigrate() {
 		&models.Trip{},
 		&models.Transport{},
 		&models.Note{},
+		&models.ChatMessage{},
 	)
 	if err != nil {
 		log.Fatalln(err)

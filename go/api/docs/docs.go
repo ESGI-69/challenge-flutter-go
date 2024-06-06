@@ -299,6 +299,60 @@ const docTemplate = `{
                 }
             }
         },
+        "/trips/{id}/chatMessages": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new chat message \u0026 associate it with the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatMessage"
+                ],
+                "summary": "Create a new chat message on trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Body of the chat message",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.ChatMessageCreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ChatMessageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/trips/{id}/leave": {
             "post": {
                 "security": [
@@ -819,6 +873,17 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.ChatMessageCreateBody": {
+            "type": "object",
+            "required": [
+                "Content"
+            ],
+            "properties": {
+                "Content": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.NoteCreateBody": {
             "type": "object",
             "required": [
@@ -922,6 +987,23 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.ChatMessageResponse": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/responses.UserRoleReponse"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },
