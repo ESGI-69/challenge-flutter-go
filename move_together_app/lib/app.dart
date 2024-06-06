@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';

@@ -34,7 +34,6 @@ class JoinTripScreenState extends State<JoinTripScreen> {
 
   Future<void> _joinTrip() async {
     try {
-      String? errorMessage;
       final apiServices = ApiServices();
       await apiServices.joinTrip(
         _tripCodeController.text,
