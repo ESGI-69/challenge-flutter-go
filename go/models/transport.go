@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -25,4 +26,16 @@ type Transport struct {
 	EndAddress     string    `gorm:"not null"`
 	MeetingAddress string
 	MeetingTime    time.Time
+}
+
+func (t *Transport) IsTransportTypeValid(context *gin.Context) (isValid bool) {
+	isValid = t.TransportType == TransportTypeCar || t.TransportType == TransportTypePlane || t.TransportType == TransportTypeBus
+	if !isValid {
+		// Auto create a list of valid transport types
+		context.AbortWithStatusJSON(400, gin.H{
+			"error": "Invalid transport type",
+			"valid": []string{"car", "plane", "bus"},
+		})
+	}
+	return
 }

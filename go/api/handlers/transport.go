@@ -77,8 +77,8 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 	context.JSON(http.StatusOK, transportsResponse)
 }
 
-// @Summary		Create a new transport on trip
-// @Description	Create a new transport & associate it with the trip
+// @Summary		CreateOnTrip a new transport on trip
+// @Description	CreateOnTrip a new transport & associate it with the trip
 // @Tags			transport
 // @Accept			json
 // @Produce		json
@@ -88,10 +88,16 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 // @Failure		400		{object}	error
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/transports [post]
-func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
+func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 	id := context.Param("id")
 	if id == "" {
 		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
@@ -114,21 +120,24 @@ func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
+	var meetingTime time.Time
+
+	if requestBody.MeetingTime != "" {
+		var meetingTimeParseError error
+		meetingTime, meetingTimeParseError = time.Parse(time.RFC3339, requestBody.MeetingTime)
+		if meetingTimeParseError != nil {
+			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid meeting time"})
+			return
+		}
 	}
 
 	trip, err := handler.TripRepository.Get(id)
-
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
 	}
 
 	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
-
 	if !isUserHasRights {
 		if trip.OwnerID != currentUser.ID {
 			context.AbortWithStatus(http.StatusUnauthorized)
@@ -136,21 +145,23 @@ func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
 		}
 	}
 
-	if requestBody.TransportType != string(models.TransportTypeCar) {
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid transport type"})
+	var transport = models.Transport{
+		TripID:         trip.ID,
+		TransportType:  models.TransportType(requestBody.TransportType),
+		StartDate:      startDate,
+		EndDate:        endDate,
+		StartAddress:   requestBody.StartAddress,
+		EndAddress:     requestBody.EndAddress,
+		MeetingAddress: requestBody.MeetingAddress,
+		MeetingTime:    meetingTime,
+	}
+
+	isValid := transport.IsTransportTypeValid(context)
+	if !isValid {
 		return
 	}
 
-	var transport = models.Transport{
-		TripID:        trip.ID,
-		TransportType: models.TransportTypeCar,
-		StartDate:     startDate,
-		EndDate:       endDate,
-		StartAddress:  requestBody.StartAddress,
-		EndAddress:    requestBody.EndAddress,
-	}
-
-	var transportCreated, errTransport = handler.Repository.AddTransport(trip, transport)
+	var errTransport = handler.Repository.Create(&transport)
 
 	if errTransport != nil {
 		errorHandlers.HandleGormErrors(errTransport, context)
@@ -158,12 +169,14 @@ func (handler *TransportHandler) AddTransportToTrip(context *gin.Context) {
 	}
 
 	transportResponse := responses.TransportResponse{
-		ID:            transportCreated.ID,
-		TransportType: transportCreated.TransportType,
-		StartDate:     transportCreated.StartDate.Format(time.RFC3339),
-		EndDate:       transportCreated.EndDate.Format(time.RFC3339),
-		StartAddress:  transportCreated.StartAddress,
-		EndAddress:    transportCreated.EndAddress,
+		ID:             transport.ID,
+		TransportType:  transport.TransportType,
+		StartDate:      transport.StartDate.Format(time.RFC3339),
+		EndDate:        transport.EndDate.Format(time.RFC3339),
+		StartAddress:   transport.StartAddress,
+		EndAddress:     transport.EndAddress,
+		MeetingAddress: transport.MeetingAddress,
+		MeetingTime:    transport.MeetingTime.Format(time.RFC3339),
 	}
 
 	context.JSON(http.StatusCreated, transportResponse)

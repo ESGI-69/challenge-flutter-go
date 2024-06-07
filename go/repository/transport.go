@@ -10,17 +10,8 @@ type TransportRepository struct {
 	Database *gorm.DB
 }
 
-// Create a transport & associate it with a trip
-func (t *TransportRepository) AddTransport(trip models.Trip, transport models.Transport) (models.Transport, error) {
-	transport.TripID = trip.ID
-
-	result := t.Database.Create(&transport)
-	if result.Error != nil {
-		return models.Transport{}, result.Error
-	}
-	//add associations
-	t.Database.Model(&transport).Association("Trip").Append(&trip)
-	return transport, nil
+func (t *TransportRepository) Create(transport *models.Transport) error {
+	return t.Database.Create(&transport).Error
 }
 
 // Delete a transport from a trip

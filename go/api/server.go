@@ -84,7 +84,7 @@ func setRoutes() {
 	router.POST("/trips/:id/leave", middlewares.AuthorizationsMiddleware, tripHandler.Leave)
 
 	router.GET("/trips/:id/transports", middlewares.AuthorizationsMiddleware, transportHandler.GetAllFromTrip)
-	// router.POST("/trips/:id/transports", middlewares.AuthorizationsMiddleware, transportHandler.AddTransportToTrip)
+	router.POST("/trips/:id/transports", middlewares.AuthorizationsMiddleware, transportHandler.CreateOnTrip)
 	// router.DELETE("/trips/:id/transports/:transportID", middlewares.AuthorizationsMiddleware, transportHandler.DeleteTransportFromTrip)
 
 	router.PATCH("/trips/:id/participants/:participantId/role", middlewares.AuthorizationsMiddleware, participantHandler.ChangeRole)

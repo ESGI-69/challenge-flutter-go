@@ -604,7 +604,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new transport \u0026 associate it with the trip",
+                "description": "CreateOnTrip a new transport \u0026 associate it with the trip",
                 "consumes": [
                     "application/json"
                 ],
@@ -614,7 +614,7 @@ const docTemplate = `{
                 "tags": [
                     "transport"
                 ],
-                "summary": "Create a new transport on trip",
+                "summary": "CreateOnTrip a new transport on trip",
                 "parameters": [
                     {
                         "description": "Body of the transport",
