@@ -194,66 +194,45 @@ func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 // @Failure		401		{object}	error
 // @Failure		404		{object}	error
 // @Router			/trips/{id}/transports/{transportID} [delete]
-// func (handler *TransportHandler) DeleteTransportFromTrip(context *gin.Context) {
-// 	id := context.Param("id")
-// 	if id == "" {
-// 		context.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
+func (handler *TransportHandler) DeleteTransport(context *gin.Context) {
+	id := context.Param("id")
+	if id == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
-// 	transportID := context.Param("transportID")
-// 	if transportID == "" {
-// 		context.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
+	transportID := context.Param("transportID")
+	if transportID == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
-// 	currentUser, exist := utils.GetCurrentUser(context)
-// 	if !exist {
-// 		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-// 		return
-// 	}
+	currentUser, exist := utils.GetCurrentUser(context)
+	if !exist {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 
-// 	trip, err := handler.TripRepository.Get(id)
-// 	if err != nil {
-// 		errorHandlers.HandleGormErrors(err, context)
-// 		return
-// 	}
+	trip, err := handler.TripRepository.Get(id)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
 
-// 	// Check si l'user à le droit (owner ou editor)
-// 	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
+	// Check si l'user à le droit (owner ou editor)
+	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
+	if !isUserHasRights {
+		if trip.OwnerID != currentUser.ID {
+			context.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+	}
 
-// 	if !isUserHasRights {
-// 		if trip.OwnerID != currentUser.ID {
-// 			context.AbortWithStatus(http.StatusUnauthorized)
-// 			return
-// 		}
-// 	}
+	deleteError := handler.Repository.Delete(transportID)
+	if deleteError != nil {
+		errorHandlers.HandleGormErrors(deleteError, context)
+		return
+	}
 
-// 	transports, err := handler.Repository.GetTransports(trip)
-// 	if err != nil {
-// 		errorHandlers.HandleGormErrors(err, context)
-// 		return
-// 	}
-
-// 	// Delete the transport
-// 	isTransportFound := false
-// 	for _, transport := range transports {
-// 		if fmt.Sprint(transport.ID) == transportID {
-// 			isTransportFound = true
-// 			// Quand on delete un transport, on ne le Delete pas vraiment de la BD, on set le deleted_at à la date actuelle mais il est ignoré dans les requêtes
-// 			err = handler.Repository.DeleteTransport(trip, transport.ID)
-// 			if err != nil {
-// 				errorHandlers.HandleGormErrors(err, context)
-// 				return
-// 			}
-// 			break
-// 		}
-// 	}
-
-// 	if !isTransportFound {
-// 		context.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Transport not found"})
-// 		return
-// 	}
-
-// 	context.Status(http.StatusNoContent)
-// }
+	context.Status(http.StatusNoContent)
+}

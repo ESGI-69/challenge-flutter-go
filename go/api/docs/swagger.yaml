@@ -575,6 +575,37 @@ paths:
       summary: CreateOnTrip a new transport on trip
       tags:
       - transport
+  /trips/{id}/transports/{transportID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a transport from a trip
+      parameters:
+      - description: ID of the transport
+        in: path
+        name: transportID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a transport from a trip
+      tags:
+      - transport
   /trips/join:
     post:
       consumes:
