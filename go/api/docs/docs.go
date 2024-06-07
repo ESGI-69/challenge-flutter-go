@@ -708,7 +708,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new transport \u0026 associate it with the trip",
+                "description": "CreateOnTrip a new transport \u0026 associate it with the trip",
                 "consumes": [
                     "application/json"
                 ],
@@ -718,7 +718,7 @@ const docTemplate = `{
                 "tags": [
                     "transport"
                 ],
-                "summary": "Create a new transport on trip",
+                "summary": "CreateOnTrip a new transport on trip",
                 "parameters": [
                     {
                         "description": "Body of the transport",
@@ -952,26 +952,32 @@ const docTemplate = `{
         "requests.TransportCreateBody": {
             "type": "object",
             "required": [
-                "EndAddress",
-                "EndDate",
-                "StartAddress",
-                "StartDate",
-                "TransportType"
+                "endAddress",
+                "endDate",
+                "startAddress",
+                "startDate",
+                "transportType"
             ],
             "properties": {
-                "EndAddress": {
+                "endAddress": {
                     "type": "string"
                 },
-                "EndDate": {
+                "endDate": {
                     "type": "string"
                 },
-                "StartAddress": {
+                "meetingAddress": {
                     "type": "string"
                 },
-                "StartDate": {
+                "meetingTime": {
                     "type": "string"
                 },
-                "TransportType": {
+                "startAddress": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "transportType": {
                     "type": "string"
                 }
             }
@@ -1128,6 +1134,12 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "meetingAddress": {
+                    "type": "string"
+                },
+                "meetingTime": {
+                    "type": "string"
                 },
                 "startAddress": {
                     "type": "string"

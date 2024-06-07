@@ -92,8 +92,9 @@ func setRoutes() {
 	router.POST("/trips/join", middlewares.AuthorizationsMiddleware, tripHandler.Join)
 	router.POST("/trips/:id/leave", middlewares.AuthorizationsMiddleware, tripHandler.Leave)
 
-	router.POST("/trips/:id/transport", middlewares.AuthorizationsMiddleware, transportHandler.AddTransportToTrip)
-	router.DELETE("/trips/:id/transport/:transportID", middlewares.AuthorizationsMiddleware, transportHandler.DeleteTransportFromTrip)
+	router.GET("/trips/:id/transports", middlewares.AuthorizationsMiddleware, transportHandler.GetAllFromTrip)
+	router.POST("/trips/:id/transports", middlewares.AuthorizationsMiddleware, transportHandler.CreateOnTrip)
+	router.DELETE("/trips/:id/transports/:transportID", middlewares.AuthorizationsMiddleware, transportHandler.DeleteTransport)
 
 	router.PATCH("/trips/:id/participants/:participantId/role", middlewares.AuthorizationsMiddleware, participantHandler.ChangeRole)
 	router.DELETE("/trips/:id/participants/:participantId/", middlewares.AuthorizationsMiddleware, participantHandler.RemoveParticipant)

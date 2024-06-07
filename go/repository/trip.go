@@ -64,8 +64,7 @@ func (t *TripRepository) RemoveViewer(trip models.Trip, user models.User) {
 // Get all the trips that the user is an editor, a viewer or the owner
 func (t *TripRepository) GetAllJoined(user models.User) (trips []models.Trip, err error) {
 	err = t.Database.Preload("Owner").
-		Preload("Viewers").
-		Preload("Editors").
+		Preload(clause.Associations).
 		Joins("LEFT JOIN trip_viewers ON trip_viewers.trip_id = trips.id").
 		Joins("LEFT JOIN trip_editors ON trip_editors.trip_id = trips.id").
 		Where("trips.owner_id = ? OR trip_viewers.user_id = ? OR trip_editors.user_id = ?", user.ID, user.ID, user.ID).

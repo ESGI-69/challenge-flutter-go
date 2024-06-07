@@ -46,22 +46,26 @@ definitions:
     type: object
   requests.TransportCreateBody:
     properties:
-      EndAddress:
+      endAddress:
         type: string
-      EndDate:
+      endDate:
         type: string
-      StartAddress:
+      meetingAddress:
         type: string
-      StartDate:
+      meetingTime:
         type: string
-      TransportType:
+      startAddress:
+        type: string
+      startDate:
+        type: string
+      transportType:
         type: string
     required:
-    - EndAddress
-    - EndDate
-    - StartAddress
-    - StartDate
-    - TransportType
+    - endAddress
+    - endDate
+    - startAddress
+    - startDate
+    - transportType
     type: object
   requests.TripCreateBody:
     properties:
@@ -167,6 +171,10 @@ definitions:
         type: string
       id:
         type: integer
+      meetingAddress:
+        type: string
+      meetingTime:
+        type: string
       startAddress:
         type: string
       startDate:
@@ -640,7 +648,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a new transport & associate it with the trip
+      description: CreateOnTrip a new transport & associate it with the trip
       parameters:
       - description: Body of the transport
         in: body
@@ -663,7 +671,7 @@ paths:
           schema: {}
       security:
       - BearerAuth: []
-      summary: Create a new transport on trip
+      summary: CreateOnTrip a new transport on trip
       tags:
       - transport
   /trips/{id}/transports/{transportID}:
