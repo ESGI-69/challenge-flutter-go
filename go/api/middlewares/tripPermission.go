@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/database"
 	"challenge-flutter-go/models"
@@ -17,7 +18,7 @@ func init() {
 	databaseInstance = database.GetInstance()
 }
 
-func UserIsOwner(context *gin.Context) {
+func UserIsTripOwner(context *gin.Context) {
 	var trip models.Trip
 	var loggedUser models.User
 	retriveTripAndUser(context, &trip, &loggedUser)
@@ -30,15 +31,20 @@ func UserIsOwner(context *gin.Context) {
 	context.Next()
 }
 
-func UserHasEditRight(context *gin.Context) {
+func UserHasTripEditRight(context *gin.Context) {
 	var trip models.Trip
 	var user models.User
 	retriveTripAndUser(context, &trip, &user)
 
+	if !trip.HasEditRight(&user) {
+		context.AbortWithStatusJSON(401, gin.H{"error": "You need to have the right to edit the trip to perform this action"})
+		return
+	}
+
 	context.Next()
 }
 
-func UserHasViewRight(context *gin.Context) {
+func UserHasTripViewRight(context *gin.Context) {
 	var trip models.Trip
 	var user models.User
 	retriveTripAndUser(context, &trip, &user)
@@ -68,9 +74,8 @@ func retriveTripAndUser(context *gin.Context, trip *models.Trip, user *models.Us
 	*trip = models.Trip{Model: gorm.Model{ID: uint(tripIdUint)}}
 
 	databaseErr := databaseInstance.Model(&trip).Preload(clause.Associations).First(&trip).Error
-
 	if databaseErr != nil {
-		context.AbortWithStatusJSON(404, gin.H{"error": "Trip not found"})
+		errorHandlers.HandleGormErrors(databaseErr, context)
 		return
 	}
 
