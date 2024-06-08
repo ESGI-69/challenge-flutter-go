@@ -32,19 +32,9 @@ type TransportHandler struct {
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/transports [post]
 func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.Status(http.StatusUnauthorized)
-		return
-	}
-
-	trip, err := handler.TripRepository.Get(id)
+	trip, err := handler.TripRepository.Get(context.Param("id"))
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

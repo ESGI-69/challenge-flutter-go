@@ -22,3 +22,18 @@ type Trip struct {
 	EndDate     time.Time   `gorm:"not null"`
 	InviteCode  string      `gorm:"default:null;unique"`
 }
+
+func (t *Trip) IsOwner(user *User) bool {
+	return t.OwnerID == user.ID
+}
+
+func (t *Trip) HasEditRight(user *User) bool {
+	isOwner := t.IsOwner(user)
+	isEditor := false
+	for _, editor := range t.Editors {
+		if editor.ID == user.ID {
+			isEditor = true
+		}
+	}
+	return isOwner || isEditor
+}

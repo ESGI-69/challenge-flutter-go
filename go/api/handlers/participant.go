@@ -33,7 +33,7 @@ func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 	participantId := context.Param("participantId")
 	role := context.Query("role")
 
-	if tripId == "" || participantId == "" || role == "" {
+	if participantId == "" || role == "" {
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Missing required parameters"})
 		return
 	}
@@ -45,22 +45,9 @@ func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
-
 	trip, err := handler.TripRepository.Get(tripId)
-
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	currentUserRole := handler.TripRepository.GetUserTripRole(trip, currentUser)
-
-	if currentUserRole != responses.ParticipantTripRoleOwner {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "Only the owner of the trip can change the role of a participant"})
 		return
 	}
 
