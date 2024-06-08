@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type TransportHandler struct {
@@ -52,6 +53,7 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 	currentUserCanViewTrip := handler.TripRepository.HasViewRight(trip, currentUser)
 	if !currentUserCanViewTrip {
 		context.Status(http.StatusUnauthorized)
+		return
 	}
 
 	transports := trip.Transports
@@ -71,6 +73,10 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 			EndAddress:     transport.EndAddress,
 			MeetingAddress: transport.MeetingAddress,
 			MeetingTime:    nullableMeetingTime,
+			Author: responses.UserResponse{
+				ID:       transport.Author.ID,
+				Username: transport.Author.Username,
+			},
 		}
 	}
 
@@ -145,8 +151,9 @@ func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 		}
 	}
 
-	var transport = models.Transport{
-		TripID:         trip.ID,
+	transport := models.Transport{
+		Trip:           models.Trip{Model: gorm.Model{ID: trip.ID}},
+		Author:         models.User{Model: gorm.Model{ID: currentUser.ID}},
 		TransportType:  models.TransportType(requestBody.TransportType),
 		StartDate:      startDate,
 		EndDate:        endDate,
@@ -161,8 +168,7 @@ func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 		return
 	}
 
-	var errTransport = handler.Repository.Create(&transport)
-
+	errTransport := handler.Repository.Create(&transport)
 	if errTransport != nil {
 		errorHandlers.HandleGormErrors(errTransport, context)
 		return
@@ -177,6 +183,10 @@ func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 		EndAddress:     transport.EndAddress,
 		MeetingAddress: transport.MeetingAddress,
 		MeetingTime:    transport.MeetingTime.Format(time.RFC3339),
+		Author: responses.UserResponse{
+			ID:       transport.Author.ID,
+			Username: transport.Author.Username,
+		},
 	}
 
 	context.JSON(http.StatusCreated, transportResponse)

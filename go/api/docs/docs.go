@@ -1126,6 +1126,9 @@ const docTemplate = `{
         "responses.TransportResponse": {
             "type": "object",
             "properties": {
+                "author": {
+                    "$ref": "#/definitions/responses.UserResponse"
+                },
                 "endAddress": {
                     "type": "string"
                 },

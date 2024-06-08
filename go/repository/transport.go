@@ -4,6 +4,7 @@ import (
 	"challenge-flutter-go/models"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type TransportRepository struct {
@@ -11,7 +12,7 @@ type TransportRepository struct {
 }
 
 func (t *TransportRepository) Create(transport *models.Transport) error {
-	return t.Database.Create(&transport).Error
+	return t.Database.Create(&transport).Preload(clause.Associations).First(&transport).Error
 }
 
 // Delete a transport from a trip

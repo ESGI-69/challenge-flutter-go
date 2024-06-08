@@ -165,6 +165,8 @@ definitions:
     - ParticipantTripRoleNone
   responses.TransportResponse:
     properties:
+      author:
+        $ref: '#/definitions/responses.UserResponse'
       endAddress:
         type: string
       endDate:

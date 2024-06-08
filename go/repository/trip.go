@@ -36,7 +36,7 @@ func (t *TripRepository) Create(trip models.Trip) (createdTrip models.Trip, err 
 }
 
 func (t *TripRepository) Get(id string) (trip models.Trip, err error) {
-	err = t.Database.Preload(clause.Associations).First(&trip, id).Error
+	err = t.Database.Preload(clause.Associations).Preload("Transports."+clause.Associations).First(&trip, id).Error
 	return
 }
 

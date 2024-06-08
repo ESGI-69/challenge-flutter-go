@@ -11,4 +11,5 @@ type TransportResponse struct {
 	EndAddress     string               `json:"endAddress"`
 	MeetingAddress string               `json:"meetingAddress"`
 	MeetingTime    string               `json:"meetingTime"`
+	Author         UserResponse         `json:"author"`
 }
