@@ -199,36 +199,15 @@ func (handler *TripHandler) Get(context *gin.Context) {
 // @Failure 404 {object} error
 // @Router /trips/{id} [patch]
 func (handler *TripHandler) Update(context *gin.Context) {
-	id := context.Param("id")
-
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	tripId := context.Param("id")
 
 	var requestBody requests.TripUpdateBody
-
 	isBodyValid := utils.Deserialize(&requestBody, context)
 	if !isBodyValid {
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
-
-	trip, err := handler.Repository.Get(id)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	canEdit := handler.Repository.HasEditRight(trip, currentUser)
-	if !canEdit {
-		context.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
+	trip, _ := handler.Repository.Get(tripId)
 
 	if requestBody.Name != "" {
 		trip.Name = requestBody.Name
@@ -260,21 +239,21 @@ func (handler *TripHandler) Update(context *gin.Context) {
 		trip.EndDate = endDate
 	}
 
-	updatedTrip, err := handler.Repository.Update(trip)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
+	updateError := handler.Repository.Update(&trip)
+	if updateError != nil {
+		errorHandlers.HandleGormErrors(updateError, context)
 		return
 	}
 
 	responseTrip := responses.TripResponse{
-		ID:           updatedTrip.ID,
-		Name:         updatedTrip.Name,
-		Country:      updatedTrip.Country,
-		City:         updatedTrip.City,
-		StartDate:    updatedTrip.StartDate.Format(time.RFC3339),
-		EndDate:      updatedTrip.EndDate.Format(time.RFC3339),
-		Participants: utils.UserToParticipantWithRole(updatedTrip.Viewers, updatedTrip.Editors, updatedTrip.Owner),
-		InviteCode:   updatedTrip.InviteCode,
+		ID:           trip.ID,
+		Name:         trip.Name,
+		Country:      trip.Country,
+		City:         trip.City,
+		StartDate:    trip.StartDate.Format(time.RFC3339),
+		EndDate:      trip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
+		InviteCode:   trip.InviteCode,
 	}
 
 	context.JSON(http.StatusOK, responseTrip)

@@ -135,7 +135,6 @@ func (t *TripRepository) GetParticipants(trip models.Trip) (participants []model
 }
 
 // Update a trip
-func (t *TripRepository) Update(trip models.Trip) (updatedTrip models.Trip, err error) {
-	err = t.Database.Save(&trip).Error
-	return trip, err
+func (t *TripRepository) Update(trip *models.Trip) (err error) {
+	return t.Database.Save(&trip).Preload(clause.Associations).Error
 }
