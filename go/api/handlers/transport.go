@@ -32,21 +32,11 @@ type TransportHandler struct {
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/transports [post]
 func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
-	currentUser, _ := utils.GetCurrentUser(context)
-
-	trip, err := handler.TripRepository.Get(context.Param("id"))
+	transports, err := handler.Repository.GetAllFromTrip(context.Param("id"))
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
 	}
-
-	currentUserCanViewTrip := handler.TripRepository.HasViewRight(trip, currentUser)
-	if !currentUserCanViewTrip {
-		context.Status(http.StatusUnauthorized)
-		return
-	}
-
-	transports := trip.Transports
 
 	var transportsResponse []responses.TransportResponse = make([]responses.TransportResponse, len(transports))
 	for i, transport := range transports {
