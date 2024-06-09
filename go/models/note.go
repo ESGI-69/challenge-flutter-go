@@ -13,3 +13,7 @@ type Note struct {
 	AuthorId uint
 	Author   User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
+
+func (n *Note) UserIsAuthor(user *User) bool {
+	return n.Author.ID == user.ID
+}

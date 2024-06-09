@@ -937,14 +937,14 @@ const docTemplate = `{
         "requests.NoteCreateBody": {
             "type": "object",
             "required": [
-                "Content",
-                "Title"
+                "content",
+                "title"
             ],
             "properties": {
-                "Content": {
+                "content": {
                     "type": "string"
                 },
-                "Title": {
+                "title": {
                     "type": "string"
                 }
             }
@@ -1075,7 +1075,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "author": {
-                    "$ref": "#/definitions/responses.UserRoleReponse"
+                    "$ref": "#/definitions/responses.UserResponse"
                 },
                 "content": {
                     "type": "string"
