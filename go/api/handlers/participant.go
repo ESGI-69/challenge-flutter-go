@@ -3,7 +3,6 @@ package handlers
 import (
 	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/responses"
-	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/repository"
 	"net/http"
 
@@ -57,14 +56,8 @@ func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 		return
 	}
 
-	participantRole := handler.TripRepository.GetUserTripRole(trip, participantUser)
-	if participantRole == responses.ParticipantTripRoleNone {
+	if !trip.UserHasViewRight(&participantUser) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "User is not part of the trip"})
-		return
-	}
-
-	if participantRole == wantedRole {
-		context.Status(http.StatusNoContent)
 		return
 	}
 
@@ -97,29 +90,12 @@ func (handler *ParticipantHandler) RemoveParticipant(context *gin.Context) {
 	tripId := context.Param("id")
 	participantId := context.Param("participantId")
 
-	if tripId == "" || participantId == "" {
+	if participantId == "" {
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Missing required parameters"})
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
-
-	trip, err := handler.TripRepository.Get(tripId)
-
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	currentUserRole := handler.TripRepository.GetUserTripRole(trip, currentUser)
-
-	if currentUserRole != responses.ParticipantTripRoleOwner {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "Only the owner of the trip can remove a participant"})
-		return
-	}
+	trip, _ := handler.TripRepository.Get(tripId)
 
 	participantUser, err := handler.UserRepository.Get(participantId)
 	if err != nil {
@@ -127,22 +103,21 @@ func (handler *ParticipantHandler) RemoveParticipant(context *gin.Context) {
 		return
 	}
 
-	participantRole := handler.TripRepository.GetUserTripRole(trip, participantUser)
-	if participantRole == responses.ParticipantTripRoleNone {
+	if !trip.UserHasViewRight(&participantUser) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "User is not part of the trip"})
 		return
 	}
 
-	if participantRole == responses.ParticipantTripRoleOwner {
+	if trip.UserIsOwner(&participantUser) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Owner cannot be removed from the trip"})
 		return
 	}
 
-	if participantRole == responses.ParticipantTripRoleEditor {
+	if trip.UserIsEditor(&participantUser) {
 		handler.TripRepository.RemoveEditor(&trip, participantUser)
 	}
 
-	if participantRole == responses.ParticipantTripRoleViewer {
+	if trip.UserIsViewer(&participantUser) {
 		handler.TripRepository.RemoveViewer(&trip, participantUser)
 	}
 

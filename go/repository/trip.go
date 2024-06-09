@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/models"
 	"crypto/rand"
 	"encoding/base64"
@@ -70,52 +69,6 @@ func (t *TripRepository) GetAllJoined(user models.User) (trips []models.Trip, er
 		Where("trips.owner_id = ? OR trip_viewers.user_id = ? OR trip_editors.user_id = ?", user.ID, user.ID, user.ID).
 		Find(&trips).Error
 	return
-}
-
-// If the user is the owner or an editor of the trip
-//
-// If the user is not in the editors list, it will return false
-func (t *TripRepository) HasEditRight(trip models.Trip, user models.User) (isEditor bool) {
-	isOwner := trip.OwnerID == user.ID
-	isEditor = false
-	err := t.Database.Preload("Editors").First(&trip, "id = ?", trip.ID).Error
-	if err == nil {
-		for _, editor := range trip.Editors {
-			if editor.ID == user.ID {
-				isEditor = true
-			}
-		}
-	}
-	return isOwner || isEditor
-}
-
-// If the user is a viewer of the trip
-//
-// If the user is not in the viewers list, it will return false
-func (t *TripRepository) HasViewRight(trip models.Trip, user models.User) (isViewer bool) {
-	isViewer = false
-	err := t.Database.Preload("Viewers").First(&trip, "id = ?", trip.ID).Error
-	if err == nil {
-		for _, viewer := range trip.Viewers {
-			if viewer.ID == user.ID {
-				isViewer = true
-			}
-		}
-	}
-	return isViewer || t.HasEditRight(trip, user)
-}
-
-func (t *TripRepository) GetUserTripRole(trip models.Trip, user models.User) (role responses.ParticipantTripRole) {
-	if trip.OwnerID == user.ID {
-		return responses.ParticipantTripRoleOwner
-	}
-	if t.HasEditRight(trip, user) {
-		return responses.ParticipantTripRoleEditor
-	}
-	if t.HasViewRight(trip, user) {
-		return responses.ParticipantTripRoleViewer
-	}
-	return responses.ParticipantTripRoleNone
 }
 
 // Get all the users who has access to the trip

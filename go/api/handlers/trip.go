@@ -253,9 +253,7 @@ func (handler *TripHandler) Join(context *gin.Context) {
 		return
 	}
 
-	currentUserRole := handler.Repository.GetUserTripRole(trip, currentUser)
-
-	if currentUserRole != responses.ParticipantTripRoleNone {
+	if trip.UserHasViewRight(&currentUser) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "User is already part of the trip"})
 		return
 	}
@@ -307,23 +305,21 @@ func (handler *TripHandler) Leave(context *gin.Context) {
 		return
 	}
 
-	currentUserRole := handler.Repository.GetUserTripRole(trip, currentUser)
-
-	if currentUserRole == responses.ParticipantTripRoleOwner {
+	if trip.UserIsOwner(&currentUser) {
 		context.JSON(http.StatusUnauthorized, gin.H{"error": "Owner cannot leave the trip"})
 		return
 	}
 
-	if currentUserRole == responses.ParticipantTripRoleNone {
+	if !trip.UserHasViewRight(&currentUser) {
 		context.JSON(http.StatusUnauthorized, gin.H{"error": "User is not part of the trip"})
 		return
 	}
 
-	if currentUserRole == responses.ParticipantTripRoleEditor {
+	if trip.UserIsEditor(&currentUser) {
 		handler.Repository.RemoveEditor(&trip, currentUser)
 	}
 
-	if currentUserRole == responses.ParticipantTripRoleViewer {
+	if trip.UserIsViewer(&currentUser) {
 		handler.Repository.RemoveViewer(&trip, currentUser)
 	}
 
