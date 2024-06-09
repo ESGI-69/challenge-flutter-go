@@ -23,17 +23,26 @@ type Trip struct {
 	InviteCode  string      `gorm:"default:null;unique"`
 }
 
-func (t *Trip) IsOwner(user *User) bool {
+func (t *Trip) UserIsOwner(user *User) bool {
 	return t.OwnerID == user.ID
 }
 
-func (t *Trip) HasEditRight(user *User) bool {
-	isOwner := t.IsOwner(user)
+func (t *Trip) UserHasEditRight(user *User) bool {
 	isEditor := false
 	for _, editor := range t.Editors {
 		if editor.ID == user.ID {
 			isEditor = true
 		}
 	}
-	return isOwner || isEditor
+	return isEditor || t.UserIsOwner(user)
+}
+
+func (t *Trip) UserHasViewRight(user *User) bool {
+	isViewer := false
+	for _, viewer := range t.Viewers {
+		if viewer.ID == user.ID {
+			isViewer = true
+		}
+	}
+	return isViewer || t.UserHasEditRight(user)
 }

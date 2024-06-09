@@ -89,13 +89,13 @@ func setRoutes() {
 	tripsRoutes := router.Group("/trips", middlewares.AuthorizationsMiddleware)
 	tripsRoutes.POST("/", tripHandler.Create)
 	tripsRoutes.GET("/", tripHandler.GetAllJoined)
-	tripsRoutes.GET("/:id", middlewares.UserHasTripViewRight, tripHandler.Get)
+	tripsRoutes.GET("/:id", middlewares.UserIsTripParticipant, tripHandler.Get)
 	tripsRoutes.PATCH("/:id", middlewares.UserHasTripEditRight, tripHandler.Update)
 	tripsRoutes.POST("/join", tripHandler.Join)
-	tripsRoutes.POST("/:id/leave", middlewares.UserHasTripViewRight, tripHandler.Leave)
+	tripsRoutes.POST("/:id/leave", middlewares.UserIsTripParticipant, tripHandler.Leave)
 
 	tripTransportsRoutes := tripsRoutes.Group("/:id/transports")
-	tripTransportsRoutes.GET("/", middlewares.UserHasTripViewRight, transportHandler.GetAllFromTrip)
+	tripTransportsRoutes.GET("/", middlewares.UserIsTripParticipant, transportHandler.GetAllFromTrip)
 	tripTransportsRoutes.POST("/", middlewares.UserHasTripEditRight, transportHandler.CreateOnTrip)
 	tripTransportsRoutes.DELETE("/:transportID", middlewares.UserHasTripEditRight, transportHandler.DeleteTransport)
 
@@ -104,12 +104,12 @@ func setRoutes() {
 	tripParticipantsRoutes.DELETE("/:participantId/", participantHandler.RemoveParticipant)
 
 	tripNotesRoutes := tripsRoutes.Group("/:id/notes")
-	tripNotesRoutes.GET("/", middlewares.UserHasTripViewRight, noteHandler.GetNotesOfTrip)
+	tripNotesRoutes.GET("/", middlewares.UserIsTripParticipant, noteHandler.GetNotesOfTrip)
 	tripNotesRoutes.POST("/", middlewares.UserHasTripEditRight, noteHandler.AddNoteToTrip)
 	tripNotesRoutes.DELETE("/:noteID", middlewares.UserHasTripEditRight, noteHandler.DeleteNoteFromTrip)
 
 	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages")
-	tripChatMessagesRoutes.GET("/", middlewares.UserHasTripViewRight, chatMessageHandler.GetChatMessagesOfTrip)
+	tripChatMessagesRoutes.GET("/", middlewares.UserIsTripParticipant, chatMessageHandler.GetChatMessagesOfTrip)
 	tripChatMessagesRoutes.POST("/", middlewares.UserHasTripEditRight, chatMessageHandler.AddChatMessageToTrip)
 
 	router.GET("/health", func(c *gin.Context) {

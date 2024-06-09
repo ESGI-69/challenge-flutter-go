@@ -23,7 +23,7 @@ func UserIsTripOwner(context *gin.Context) {
 	var loggedUser models.User
 	retriveTripAndUser(context, &trip, &loggedUser)
 
-	if !trip.IsOwner(&loggedUser) {
+	if !trip.UserIsOwner(&loggedUser) {
 		context.AbortWithStatusJSON(401, gin.H{"error": "You need to be the owner of the trip to perform this action"})
 		return
 	}
@@ -36,7 +36,7 @@ func UserHasTripEditRight(context *gin.Context) {
 	var user models.User
 	retriveTripAndUser(context, &trip, &user)
 
-	if !trip.HasEditRight(&user) {
+	if !trip.UserHasEditRight(&user) {
 		context.AbortWithStatusJSON(401, gin.H{"error": "You need to have the right to edit the trip to perform this action"})
 		return
 	}
@@ -44,10 +44,15 @@ func UserHasTripEditRight(context *gin.Context) {
 	context.Next()
 }
 
-func UserHasTripViewRight(context *gin.Context) {
+func UserIsTripParticipant(context *gin.Context) {
 	var trip models.Trip
 	var user models.User
 	retriveTripAndUser(context, &trip, &user)
+
+	if !trip.UserHasViewRight(&user) {
+		context.AbortWithStatusJSON(401, gin.H{"error": "You need to be a participant of the trip to perform this action"})
+		return
+	}
 
 	context.Next()
 }
