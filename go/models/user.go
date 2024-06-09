@@ -38,3 +38,8 @@ func (user *User) CheckPassword(password string) (isSame bool) {
 	isSame, _ = argon2pw.CompareHashWithPassword(user.Password, password)
 	return
 }
+
+func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
+	user.HashPassword()
+	return
+}

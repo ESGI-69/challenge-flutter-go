@@ -11,10 +11,8 @@ type UserRepository struct {
 	Database *gorm.DB
 }
 
-func (u *UserRepository) Create(user models.User) (createdUser models.User, err error) {
-	user.HashPassword()
-	result := u.Database.Create(&user)
-	return user, result.Error
+func (u *UserRepository) Create(user *models.User) (err error) {
+	return u.Database.Create(&user).Error
 }
 
 // Used to retrive a user from his ID with all this direct relations preloaded
