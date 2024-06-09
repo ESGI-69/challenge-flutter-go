@@ -96,7 +96,7 @@ func setRoutes() {
 
 	tripTransportsRoutes := tripsRoutes.Group("/:id/transports")
 	tripTransportsRoutes.GET("/", middlewares.UserIsTripParticipant, transportHandler.GetAllFromTrip)
-	tripTransportsRoutes.POST("/", middlewares.UserHasTripEditRight, transportHandler.CreateOnTrip)
+	tripTransportsRoutes.POST("/", middlewares.UserHasTripEditRight, transportHandler.Create)
 	tripTransportsRoutes.DELETE("/:transportID", middlewares.UserHasTripEditRight, transportHandler.DeleteTransport)
 
 	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripOwner)
