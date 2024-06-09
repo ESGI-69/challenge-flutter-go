@@ -38,6 +38,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	AccommodationRepository := repository.AccommodationRepository{
+		Database: databaseInstance,
+	}
+
 	noteRepository := repository.NoteRepository{
 		Database: databaseInstance,
 	}
@@ -78,6 +82,11 @@ func setRoutes() {
 		TripRepository: tripRepository,
 	}
 
+	accommodationHandler := handlers.AccommodationHandler{
+		Repository:     AccommodationRepository,
+		TripRepository: tripRepository,
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.POST("/login", authHandler.Login)
@@ -102,6 +111,11 @@ func setRoutes() {
 	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripOwner)
 	tripParticipantsRoutes.PATCH("/:participantId/role", participantHandler.ChangeRole)
 	tripParticipantsRoutes.DELETE("/:participantId/", participantHandler.RemoveParticipant)
+
+	tripAccommodationsRoutes := tripsRoutes.Group("/:id/accommodations")
+	tripAccommodationsRoutes.GET("/", middlewares.UserIsTripParticipant, accommodationHandler.GetAllFromTrip)
+	tripAccommodationsRoutes.POST("/", middlewares.UserHasTripEditRight, accommodationHandler.CreateOnTrip)
+	tripAccommodationsRoutes.DELETE("/:accommodationID", middlewares.UserHasTripEditRight, accommodationHandler.DeleteAccommodation)
 
 	tripNotesRoutes := tripsRoutes.Group("/:id/notes")
 	tripNotesRoutes.GET("/", middlewares.UserIsTripParticipant, noteHandler.GetNotesOfTrip)
