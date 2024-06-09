@@ -288,30 +288,12 @@ func (handler *TripHandler) Join(context *gin.Context) {
 func (handler *TripHandler) Leave(context *gin.Context) {
 	id := context.Param("id")
 
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
-
-	trip, err := handler.Repository.Get(id)
-
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
+	trip, _ := handler.Repository.Get(id)
 
 	if trip.UserIsOwner(&currentUser) {
 		context.JSON(http.StatusUnauthorized, gin.H{"error": "Owner cannot leave the trip"})
-		return
-	}
-
-	if !trip.UserHasViewRight(&currentUser) {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "User is not part of the trip"})
 		return
 	}
 
