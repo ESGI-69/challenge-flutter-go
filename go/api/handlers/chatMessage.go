@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
@@ -30,11 +31,7 @@ type ChatMessageHandler struct {
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/chatMessages [post]
 func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	tripId := context.Param("id")
 
 	var requestBody requests.ChatMessageCreateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
@@ -42,44 +39,30 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
-	trip, errTrip := handler.TripRepository.Get(id)
-	if errTrip != nil {
-		context.AbortWithStatus(http.StatusNotFound)
-		return
-	}
+	trip, _ := handler.TripRepository.Get(tripId)
 
-	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
-	if !isUserHasEditRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-	}
-
-	var chatMessage = models.ChatMessage{
+	chatMessage := models.ChatMessage{
 		Content: requestBody.Content,
 		Author:  currentUser,
+		Trip:    trip,
 	}
 
-	var chatMessageCreated, errChatMessage = handler.Repository.AddChatMessage(trip, chatMessage)
+	errChatMessage := handler.Repository.Create(&chatMessage)
 	if errChatMessage != nil {
 		context.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
 	response := responses.ChatMessageResponse{
-		ID: chatMessageCreated.ID,
+		ID: chatMessage.ID,
 		Author: responses.UserResponse{
-			ID:       chatMessageCreated.Author.ID,
-			Username: chatMessageCreated.Author.Username,
+			ID:       chatMessage.Author.ID,
+			Username: chatMessage.Author.Username,
 		},
 		Content:   chatMessage.Content,
-		CreatedAt: chatMessageCreated.CreatedAt.Format(time.RFC3339),
+		CreatedAt: chatMessage.CreatedAt.Format(time.RFC3339),
 	}
 
 	context.JSON(http.StatusCreated, response)
@@ -98,34 +81,13 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 // @Failure		404		{object}	error
 // @Router			/trips/{id}/chatMessages [get]
 func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	tripId := context.Param("id")
 
-	trip, errTrip := handler.TripRepository.Get(id)
-	if errTrip != nil {
-		context.AbortWithStatus(http.StatusNotFound)
-		return
-	}
+	trip, _ := handler.TripRepository.Get(tripId)
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
-
-	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
-	if !isUserHasEditRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-	}
-
-	chatMessages, errChatMessages := handler.Repository.GetChatMessages(trip)
+	chatMessages, errChatMessages := handler.Repository.GetAllFromTrip(trip)
 	if errChatMessages != nil {
-		context.AbortWithStatus(http.StatusInternalServerError)
+		errorHandlers.HandleGormErrors(errChatMessages, context)
 		return
 	}
 

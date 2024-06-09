@@ -29,10 +29,10 @@ definitions:
     type: object
   requests.ChatMessageCreateBody:
     properties:
-      Content:
+      content:
         type: string
     required:
-    - Content
+    - content
     type: object
   requests.NoteCreateBody:
     properties:

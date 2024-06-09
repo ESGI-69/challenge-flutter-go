@@ -926,10 +926,10 @@ const docTemplate = `{
         "requests.ChatMessageCreateBody": {
             "type": "object",
             "required": [
-                "Content"
+                "content"
             ],
             "properties": {
-                "Content": {
+                "content": {
                     "type": "string"
                 }
             }
