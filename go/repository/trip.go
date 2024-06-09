@@ -45,19 +45,19 @@ func (t *TripRepository) GetByInviteCode(invitecode string) (trip models.Trip, e
 	return trip, err
 }
 
-func (t *TripRepository) AddEditor(trip models.Trip, user models.User) {
+func (t *TripRepository) AddEditor(trip *models.Trip, user models.User) {
 	t.Database.Model(&trip).Association("Editors").Append(&user)
 }
 
-func (t *TripRepository) AddViewer(trip models.Trip, user models.User) {
+func (t *TripRepository) AddViewer(trip *models.Trip, user models.User) {
 	t.Database.Model(&trip).Association("Viewers").Append(&user)
 }
 
-func (t *TripRepository) RemoveEditor(trip models.Trip, user models.User) {
+func (t *TripRepository) RemoveEditor(trip *models.Trip, user models.User) {
 	t.Database.Model(&trip).Association("Editors").Delete(&user)
 }
 
-func (t *TripRepository) RemoveViewer(trip models.Trip, user models.User) {
+func (t *TripRepository) RemoveViewer(trip *models.Trip, user models.User) {
 	t.Database.Model(&trip).Association("Viewers").Delete(&user)
 }
 

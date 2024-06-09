@@ -9,7 +9,6 @@ import (
 	"challenge-flutter-go/repository"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -33,17 +32,13 @@ type TripHandler struct {
 //	@Failure		401		{object}	error
 //	@Router			/trips [post]
 func (handler *TripHandler) Create(context *gin.Context) {
-
 	var requestBody requests.TripCreateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
 	if !isBodyValid {
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
 	startDate, startDateParseError := time.Parse(time.RFC3339, requestBody.StartDate)
 	if startDateParseError != nil {
@@ -101,10 +96,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 //	@Failure		401	{object}	error
 //	@Router			/trips [get]
 func (handler *TripHandler) GetAllJoined(context *gin.Context) {
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
 	trips, err := handler.Repository.GetAllJoined(currentUser)
 	if err != nil {
@@ -144,33 +136,10 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 //	@Failure		404	{object}	error
 //	@Router			/trips/{id} [get]
 func (handler *TripHandler) Get(context *gin.Context) {
-	id := context.Param("id")
+	tripId := context.Param("id")
 
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	trip, _ := handler.Repository.Get(tripId)
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
-
-	trip, err := handler.Repository.Get(id)
-
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	isUserHasRights := handler.Repository.HasViewRight(trip, currentUser)
-
-	if !isUserHasRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-	}
 	responseTrip := responses.TripResponse{
 		ID:           trip.ID,
 		Name:         trip.Name,
@@ -276,10 +245,7 @@ func (handler *TripHandler) Join(context *gin.Context) {
 	// Retrive the invite code from the query parameters
 	inviteCode := context.Query("inviteCode")
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
 	trip, err := handler.Repository.GetByInviteCode(inviteCode)
 	if err != nil {
@@ -289,33 +255,22 @@ func (handler *TripHandler) Join(context *gin.Context) {
 
 	currentUserRole := handler.Repository.GetUserTripRole(trip, currentUser)
 
-	if currentUserRole == responses.ParticipantTripRoleOwner {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Owner cannot join the trip"})
-		return
-	}
-
 	if currentUserRole != responses.ParticipantTripRoleNone {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "User is already part of the trip"})
 		return
 	}
 
-	handler.Repository.AddViewer(trip, currentUser)
-
-	updatedTrip, err := handler.Repository.Get(strconv.FormatUint(uint64(trip.ID), 10))
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
+	handler.Repository.AddViewer(&trip, currentUser)
 
 	responseTrip := responses.TripResponse{
-		ID:           updatedTrip.ID,
-		Name:         updatedTrip.Name,
-		Country:      updatedTrip.Country,
-		City:         updatedTrip.City,
-		StartDate:    updatedTrip.StartDate.Format(time.RFC3339),
-		EndDate:      updatedTrip.EndDate.Format(time.RFC3339),
-		Participants: utils.UserToParticipantWithRole(updatedTrip.Viewers, updatedTrip.Editors, updatedTrip.Owner),
-		InviteCode:   updatedTrip.InviteCode,
+		ID:           trip.ID,
+		Name:         trip.Name,
+		Country:      trip.Country,
+		City:         trip.City,
+		StartDate:    trip.StartDate.Format(time.RFC3339),
+		EndDate:      trip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
+		InviteCode:   trip.InviteCode,
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
@@ -365,11 +320,11 @@ func (handler *TripHandler) Leave(context *gin.Context) {
 	}
 
 	if currentUserRole == responses.ParticipantTripRoleEditor {
-		handler.Repository.RemoveEditor(trip, currentUser)
+		handler.Repository.RemoveEditor(&trip, currentUser)
 	}
 
 	if currentUserRole == responses.ParticipantTripRoleViewer {
-		handler.Repository.RemoveViewer(trip, currentUser)
+		handler.Repository.RemoveViewer(&trip, currentUser)
 	}
 
 	context.Status(http.StatusNoContent)

@@ -69,13 +69,13 @@ func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 	}
 
 	if wantedRole == responses.ParticipantTripRoleEditor {
-		handler.TripRepository.AddEditor(trip, participantUser)
-		handler.TripRepository.RemoveViewer(trip, participantUser)
+		handler.TripRepository.AddEditor(&trip, participantUser)
+		handler.TripRepository.RemoveViewer(&trip, participantUser)
 	}
 
 	if wantedRole == responses.ParticipantTripRoleViewer {
-		handler.TripRepository.AddViewer(trip, participantUser)
-		handler.TripRepository.RemoveEditor(trip, participantUser)
+		handler.TripRepository.AddViewer(&trip, participantUser)
+		handler.TripRepository.RemoveEditor(&trip, participantUser)
 	}
 
 	context.Status(http.StatusNoContent)
@@ -139,11 +139,11 @@ func (handler *ParticipantHandler) RemoveParticipant(context *gin.Context) {
 	}
 
 	if participantRole == responses.ParticipantTripRoleEditor {
-		handler.TripRepository.RemoveEditor(trip, participantUser)
+		handler.TripRepository.RemoveEditor(&trip, participantUser)
 	}
 
 	if participantRole == responses.ParticipantTripRoleViewer {
-		handler.TripRepository.RemoveViewer(trip, participantUser)
+		handler.TripRepository.RemoveViewer(&trip, participantUser)
 	}
 
 	context.Status(http.StatusNoContent)
