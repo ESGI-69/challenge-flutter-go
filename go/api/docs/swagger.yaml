@@ -650,7 +650,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: CreateOnTrip a new transport & associate it with the trip
+      description: Create a new transport & associate it with the trip
       parameters:
       - description: Body of the transport
         in: body
@@ -673,7 +673,7 @@ paths:
           schema: {}
       security:
       - BearerAuth: []
-      summary: CreateOnTrip a new transport on trip
+      summary: Create a new transport on trip
       tags:
       - transport
   /trips/{id}/transports/{transportID}:
