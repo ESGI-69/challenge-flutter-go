@@ -84,9 +84,9 @@ func setRoutes() {
 
 	usersRoutes := router.Group("/users")
 	usersRoutes.POST("/", userHandler.Create)
-	usersRoutes.GET("/:id", middlewares.AuthorizationsMiddleware, userHandler.Get)
+	usersRoutes.GET("/:id", middlewares.UserIsLogged, userHandler.Get)
 
-	tripsRoutes := router.Group("/trips", middlewares.AuthorizationsMiddleware)
+	tripsRoutes := router.Group("/trips", middlewares.UserIsLogged)
 	tripsRoutes.POST("/", tripHandler.Create)
 	tripsRoutes.GET("/", tripHandler.GetAllJoined)
 	tripsRoutes.GET("/:id", middlewares.UserIsTripParticipant, tripHandler.Get)

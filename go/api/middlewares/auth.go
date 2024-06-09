@@ -13,7 +13,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func AuthorizationsMiddleware(context *gin.Context) {
+func UserIsLogged(context *gin.Context) {
 	authorizationHeader := context.Request.Header.Get("Authorization")
 
 	token := strings.TrimPrefix(authorizationHeader, "Bearer ")
