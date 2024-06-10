@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:move_together_app/router.dart';
 
 class App extends StatefulWidget {
