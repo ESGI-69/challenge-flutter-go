@@ -15,8 +15,9 @@ class RegisterScreenState extends State<RegisterScreen> {
   String? errorMessage;
 
   Future<void> _register() async {
+    final apiServices = ApiServices();
     try {
-      await ApiServices.registerUser(
+      await apiServices.registerUser(
         _usernameController.text,
         _passwordController.text,
       );

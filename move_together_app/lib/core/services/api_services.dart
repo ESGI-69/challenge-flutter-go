@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:move_together_app/router.dart';
 
 class ApiServices {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  static Future<String> loginUser(String username, String password) async {
+  Future<String> loginUser(String username, String password) async {
     final response = await http.post(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/login'),
       headers: <String, String>{
@@ -28,7 +30,7 @@ class ApiServices {
     }
   }
 
-  static Future<User> registerUser(String username, String password) async {
+  Future<User> registerUser(String username, String password) async {
     final response = await http.post(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/users'),
       headers: <String, String>{
@@ -43,6 +45,10 @@ class ApiServices {
     if (response.statusCode == 201) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       return User.fromJson(responseData);
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
     } else {
       throw Exception('Failed to register user');
     }
@@ -60,6 +66,10 @@ class ApiServices {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       return Trip.fromJson(responseData);
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
     } else {
       throw Exception('Failed to join trip');
     }
@@ -77,8 +87,34 @@ class ApiServices {
     if (response.statusCode == 200) {
       final List<dynamic> responseData = jsonDecode(response.body);
       return responseData.map((trip) => Trip.fromJson(trip)).toList();
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
     } else {
       throw Exception('Failed to get trips');
+    }
+  }
+
+  Future<User> getProfile() async {
+    var jwtPayload = JwtDecoder.decode(await secureStorage.read(key: 'jwt') ?? '');
+    final response = await http.get(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/users/${jwtPayload['id']}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      return User.fromJson(responseData);
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
+    } else {
+      throw Exception('Failed to get profile');
     }
   }
   
