@@ -64,5 +64,22 @@ class ApiServices {
       throw Exception('Failed to join trip');
     }
   }
+
+  Future<List<Trip>> getTrips() async {
+    final response = await http.get(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+      return responseData.map((trip) => Trip.fromJson(trip)).toList();
+    } else {
+      throw Exception('Failed to get trips');
+    }
+  }
   
 }
