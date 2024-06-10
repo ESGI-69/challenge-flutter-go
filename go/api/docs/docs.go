@@ -708,7 +708,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "CreateOnTrip a new transport \u0026 associate it with the trip",
+                "description": "Create a new transport \u0026 associate it with the trip",
                 "consumes": [
                     "application/json"
                 ],
@@ -718,7 +718,7 @@ const docTemplate = `{
                 "tags": [
                     "transport"
                 ],
-                "summary": "CreateOnTrip a new transport on trip",
+                "summary": "Create a new transport on trip",
                 "parameters": [
                     {
                         "description": "Body of the transport",
@@ -926,10 +926,10 @@ const docTemplate = `{
         "requests.ChatMessageCreateBody": {
             "type": "object",
             "required": [
-                "Content"
+                "content"
             ],
             "properties": {
-                "Content": {
+                "content": {
                     "type": "string"
                 }
             }
@@ -937,14 +937,14 @@ const docTemplate = `{
         "requests.NoteCreateBody": {
             "type": "object",
             "required": [
-                "Content",
-                "Title"
+                "content",
+                "title"
             ],
             "properties": {
-                "Content": {
+                "content": {
                     "type": "string"
                 },
-                "Title": {
+                "title": {
                     "type": "string"
                 }
             }
@@ -1075,7 +1075,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "author": {
-                    "$ref": "#/definitions/responses.UserRoleReponse"
+                    "$ref": "#/definitions/responses.UserResponse"
                 },
                 "content": {
                     "type": "string"
@@ -1126,6 +1126,9 @@ const docTemplate = `{
         "responses.TransportResponse": {
             "type": "object",
             "properties": {
+                "author": {
+                    "$ref": "#/definitions/responses.UserResponse"
+                },
                 "endAddress": {
                     "type": "string"
                 },

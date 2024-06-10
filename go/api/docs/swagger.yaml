@@ -29,20 +29,20 @@ definitions:
     type: object
   requests.ChatMessageCreateBody:
     properties:
-      Content:
+      content:
         type: string
     required:
-    - Content
+    - content
     type: object
   requests.NoteCreateBody:
     properties:
-      Content:
+      content:
         type: string
-      Title:
+      title:
         type: string
     required:
-    - Content
-    - Title
+    - content
+    - title
     type: object
   requests.TransportCreateBody:
     properties:
@@ -130,7 +130,7 @@ definitions:
   responses.NoteResponse:
     properties:
       author:
-        $ref: '#/definitions/responses.UserRoleReponse'
+        $ref: '#/definitions/responses.UserResponse'
       content:
         type: string
       createdAt:
@@ -165,6 +165,8 @@ definitions:
     - ParticipantTripRoleNone
   responses.TransportResponse:
     properties:
+      author:
+        $ref: '#/definitions/responses.UserResponse'
       endAddress:
         type: string
       endDate:
@@ -648,7 +650,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: CreateOnTrip a new transport & associate it with the trip
+      description: Create a new transport & associate it with the trip
       parameters:
       - description: Body of the transport
         in: body
@@ -671,7 +673,7 @@ paths:
           schema: {}
       security:
       - BearerAuth: []
-      summary: CreateOnTrip a new transport on trip
+      summary: Create a new transport on trip
       tags:
       - transport
   /trips/{id}/transports/{transportID}:

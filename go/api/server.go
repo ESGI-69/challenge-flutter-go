@@ -82,29 +82,35 @@ func setRoutes() {
 
 	router.POST("/login", authHandler.Login)
 
-	router.GET("/users/:id", middlewares.AuthorizationsMiddleware, userHandler.Get)
-	router.POST("/users", userHandler.Create)
+	usersRoutes := router.Group("/users")
+	usersRoutes.POST("/", userHandler.Create)
+	usersRoutes.GET("/:id", middlewares.UserIsLogged, userHandler.Get)
 
-	router.POST("/trips", middlewares.AuthorizationsMiddleware, tripHandler.Create)
-	router.GET("/trips", middlewares.AuthorizationsMiddleware, tripHandler.GetAllJoined)
-	router.GET("/trips/:id", middlewares.AuthorizationsMiddleware, tripHandler.Get)
-	router.PATCH("/trips/:id", middlewares.AuthorizationsMiddleware, tripHandler.Update)
-	router.POST("/trips/join", middlewares.AuthorizationsMiddleware, tripHandler.Join)
-	router.POST("/trips/:id/leave", middlewares.AuthorizationsMiddleware, tripHandler.Leave)
+	tripsRoutes := router.Group("/trips", middlewares.UserIsLogged)
+	tripsRoutes.POST("/", tripHandler.Create)
+	tripsRoutes.GET("/", tripHandler.GetAllJoined)
+	tripsRoutes.GET("/:id", middlewares.UserIsTripParticipant, tripHandler.Get)
+	tripsRoutes.PATCH("/:id", middlewares.UserHasTripEditRight, tripHandler.Update)
+	tripsRoutes.POST("/join", tripHandler.Join)
+	tripsRoutes.POST("/:id/leave", middlewares.UserIsTripParticipant, tripHandler.Leave)
 
-	router.GET("/trips/:id/transports", middlewares.AuthorizationsMiddleware, transportHandler.GetAllFromTrip)
-	router.POST("/trips/:id/transports", middlewares.AuthorizationsMiddleware, transportHandler.CreateOnTrip)
-	router.DELETE("/trips/:id/transports/:transportID", middlewares.AuthorizationsMiddleware, transportHandler.DeleteTransport)
+	tripTransportsRoutes := tripsRoutes.Group("/:id/transports")
+	tripTransportsRoutes.GET("/", middlewares.UserIsTripParticipant, transportHandler.GetAllFromTrip)
+	tripTransportsRoutes.POST("/", middlewares.UserHasTripEditRight, transportHandler.Create)
+	tripTransportsRoutes.DELETE("/:transportID", middlewares.UserHasTripEditRight, transportHandler.DeleteTransport)
 
-	router.PATCH("/trips/:id/participants/:participantId/role", middlewares.AuthorizationsMiddleware, participantHandler.ChangeRole)
-	router.DELETE("/trips/:id/participants/:participantId/", middlewares.AuthorizationsMiddleware, participantHandler.RemoveParticipant)
+	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripOwner)
+	tripParticipantsRoutes.PATCH("/:participantId/role", participantHandler.ChangeRole)
+	tripParticipantsRoutes.DELETE("/:participantId/", participantHandler.RemoveParticipant)
 
-	router.GET("/trips/:id/notes", middlewares.AuthorizationsMiddleware, noteHandler.GetNotesOfTrip)
-	router.POST("/trips/:id/notes", middlewares.AuthorizationsMiddleware, noteHandler.AddNoteToTrip)
-	router.DELETE("/trips/:id/notes/:noteID", middlewares.AuthorizationsMiddleware, noteHandler.DeleteNoteFromTrip)
+	tripNotesRoutes := tripsRoutes.Group("/:id/notes")
+	tripNotesRoutes.GET("/", middlewares.UserIsTripParticipant, noteHandler.GetNotesOfTrip)
+	tripNotesRoutes.POST("/", middlewares.UserHasTripEditRight, noteHandler.AddNoteToTrip)
+	tripNotesRoutes.DELETE("/:noteID", middlewares.UserHasTripEditRight, noteHandler.DeleteNoteFromTrip)
 
-	router.GET("/trips/:id/chatMessages", middlewares.AuthorizationsMiddleware, chatMessageHandler.GetChatMessagesOfTrip)
-	router.POST("/trips/:id/chatMessages", middlewares.AuthorizationsMiddleware, chatMessageHandler.AddChatMessageToTrip)
+	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages")
+	tripChatMessagesRoutes.GET("/", middlewares.UserIsTripParticipant, chatMessageHandler.GetChatMessagesOfTrip)
+	tripChatMessagesRoutes.POST("/", middlewares.UserHasTripEditRight, chatMessageHandler.AddChatMessageToTrip)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)

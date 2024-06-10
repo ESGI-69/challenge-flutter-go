@@ -9,9 +9,11 @@ import (
 	"challenge-flutter-go/repository"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type TransportHandler struct {
@@ -31,30 +33,11 @@ type TransportHandler struct {
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/transports [post]
 func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.Status(http.StatusUnauthorized)
-		return
-	}
-
-	trip, err := handler.TripRepository.Get(id)
+	transports, err := handler.Repository.GetAllFromTrip(context.Param("id"))
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
 	}
-
-	currentUserCanViewTrip := handler.TripRepository.HasViewRight(trip, currentUser)
-	if !currentUserCanViewTrip {
-		context.Status(http.StatusUnauthorized)
-	}
-
-	transports := trip.Transports
 
 	var transportsResponse []responses.TransportResponse = make([]responses.TransportResponse, len(transports))
 	for i, transport := range transports {
@@ -71,14 +54,18 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 			EndAddress:     transport.EndAddress,
 			MeetingAddress: transport.MeetingAddress,
 			MeetingTime:    nullableMeetingTime,
+			Author: responses.UserResponse{
+				ID:       transport.Author.ID,
+				Username: transport.Author.Username,
+			},
 		}
 	}
 
 	context.JSON(http.StatusOK, transportsResponse)
 }
 
-// @Summary		CreateOnTrip a new transport on trip
-// @Description	CreateOnTrip a new transport & associate it with the trip
+// @Summary		Create a new transport on trip
+// @Description	Create a new transport & associate it with the trip
 // @Tags			transport
 // @Accept			json
 // @Produce		json
@@ -88,18 +75,10 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 // @Failure		400		{object}	error
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/transports [post]
-func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+func (handler *TransportHandler) Create(context *gin.Context) {
+	tripId := context.Param("id")
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
 	var requestBody requests.TransportCreateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
@@ -131,22 +110,11 @@ func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 		}
 	}
 
-	trip, err := handler.TripRepository.Get(id)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
+	tripIdUint, _ := strconv.ParseUint(tripId, 10, 64)
 
-	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
-	if !isUserHasRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-	}
-
-	var transport = models.Transport{
-		TripID:         trip.ID,
+	transport := models.Transport{
+		Trip:           models.Trip{Model: gorm.Model{ID: uint(tripIdUint)}},
+		Author:         currentUser,
 		TransportType:  models.TransportType(requestBody.TransportType),
 		StartDate:      startDate,
 		EndDate:        endDate,
@@ -158,11 +126,11 @@ func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 
 	isValid := transport.IsTransportTypeValid(context)
 	if !isValid {
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid transport type"})
 		return
 	}
 
-	var errTransport = handler.Repository.Create(&transport)
-
+	errTransport := handler.Repository.Create(&transport)
 	if errTransport != nil {
 		errorHandlers.HandleGormErrors(errTransport, context)
 		return
@@ -177,6 +145,10 @@ func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 		EndAddress:     transport.EndAddress,
 		MeetingAddress: transport.MeetingAddress,
 		MeetingTime:    transport.MeetingTime.Format(time.RFC3339),
+		Author: responses.UserResponse{
+			ID:       transport.Author.ID,
+			Username: transport.Author.Username,
+		},
 	}
 
 	context.JSON(http.StatusCreated, transportResponse)
@@ -195,37 +167,10 @@ func (handler *TransportHandler) CreateOnTrip(context *gin.Context) {
 // @Failure		404		{object}	error
 // @Router			/trips/{id}/transports/{transportID} [delete]
 func (handler *TransportHandler) DeleteTransport(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
 	transportID := context.Param("transportID")
 	if transportID == "" {
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
-	}
-
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-
-	trip, err := handler.TripRepository.Get(id)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	// Check si l'user à le droit (owner ou editor)
-	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
-	if !isUserHasRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
 	}
 
 	deleteError := handler.Repository.Delete(transportID)

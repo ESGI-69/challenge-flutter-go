@@ -7,7 +7,6 @@ import (
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -47,13 +46,9 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
 	if currentUser.ID != uint(uintId) {
-		log.Println("User is not authorized to access this resource")
 		context.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
@@ -95,16 +90,16 @@ func (handler *UserHandler) Create(context *gin.Context) {
 	}
 
 	user := models.User{Username: requestBody.Username, Password: requestBody.Password}
-	createdUser, userCreationError := handler.Repository.Create(user)
+	userCreationError := handler.Repository.Create(&user)
 	if userCreationError != nil {
 		errorHandlers.HandleGormErrors(userCreationError, context)
 		return
 	}
 
 	reponse := responses.UserRoleReponse{
-		ID:       createdUser.ID,
-		Username: createdUser.Username,
-		Role:     createdUser.Role,
+		ID:       user.ID,
+		Username: user.Username,
+		Role:     user.Role,
 	}
 	context.JSON(http.StatusCreated, reponse)
 }

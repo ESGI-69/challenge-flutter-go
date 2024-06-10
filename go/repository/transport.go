@@ -4,14 +4,20 @@ import (
 	"challenge-flutter-go/models"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type TransportRepository struct {
 	Database *gorm.DB
 }
 
+func (t *TransportRepository) GetAllFromTrip(tripId string) (transports []models.Transport, err error) {
+	err = t.Database.Where("trip_id = ?", tripId).Find(&transports).Error
+	return
+}
+
 func (t *TransportRepository) Create(transport *models.Transport) error {
-	return t.Database.Create(&transport).Error
+	return t.Database.Create(&transport).Preload(clause.Associations).First(&transport).Error
 }
 
 // Delete a transport from a trip

@@ -30,31 +30,9 @@ type NoteHandler struct {
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/notes [get]
 func (handler *NoteHandler) GetNotesOfTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	tripId := context.Param("id")
 
-	trip, err := handler.TripRepository.Get(id)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-	}
-
-	isUserHasViewRights := handler.TripRepository.HasViewRight(trip, currentUser)
-
-	if !isUserHasViewRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-	}
+	trip, _ := handler.TripRepository.Get(tripId)
 
 	notes, err := handler.Repository.GetNotes(trip)
 	if err != nil {
@@ -68,9 +46,9 @@ func (handler *NoteHandler) GetNotesOfTrip(context *gin.Context) {
 			ID:      note.ID,
 			Title:   note.Title,
 			Content: note.Content,
-			Author: responses.UserRoleReponse{
+			Author: responses.UserResponse{
+				ID:       note.Author.ID,
 				Username: note.Author.Username,
-				Role:     note.Author.Role,
 			},
 			CreatedAt: note.CreatedAt.Format(time.RFC3339),
 			UpdateAt:  note.UpdatedAt.Format(time.RFC3339),
@@ -92,11 +70,7 @@ func (handler *NoteHandler) GetNotesOfTrip(context *gin.Context) {
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/notes [post]
 func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	tripId := context.Param("id")
 
 	var requestBody requests.NoteCreateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
@@ -104,46 +78,33 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
-	trip, err := handler.TripRepository.Get(id)
-
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
-
-	if !isUserHasEditRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-	}
+	trip, _ := handler.TripRepository.Get(tripId)
 
 	var note = models.Note{
 		Title:   requestBody.Title,
 		Content: requestBody.Content,
 		Author:  currentUser,
+		Trip:    trip,
 	}
 
-	var noteCreated, errNote = handler.Repository.AddNote(trip, note)
-
-	if errNote != nil {
-		errorHandlers.HandleGormErrors(errNote, context)
+	err := handler.Repository.Create(&note)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
 		return
 	}
 
 	noteResponse := responses.NoteResponse{
-		ID:        noteCreated.ID,
-		Title:     noteCreated.Title,
-		Content:   noteCreated.Content,
-		CreatedAt: noteCreated.CreatedAt.Format(time.RFC3339),
-		UpdateAt:  noteCreated.UpdatedAt.Format(time.RFC3339),
+		ID:      note.ID,
+		Title:   note.Title,
+		Content: note.Content,
+		Author: responses.UserResponse{
+			ID:       note.Author.ID,
+			Username: note.Author.Username,
+		},
+		CreatedAt: note.CreatedAt.Format(time.RFC3339),
+		UpdateAt:  note.UpdatedAt.Format(time.RFC3339),
 	}
 
 	context.JSON(http.StatusCreated, noteResponse)
@@ -163,11 +124,7 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 // @Failure		404		{object}	error
 // @Router			/trips/{id}/notes/{noteID} [delete]
 func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	tripId := context.Param("id")
 
 	noteID := context.Param("noteID")
 	if noteID == "" {
@@ -175,17 +132,9 @@ func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
+	currentUser, _ := utils.GetCurrentUser(context)
 
-	trip, errTrip := handler.TripRepository.Get(id)
-	if errTrip != nil {
-		errorHandlers.HandleGormErrors(errTrip, context)
-		return
-	}
+	trip, _ := handler.TripRepository.Get(tripId)
 
 	note, errNote := handler.Repository.Get(noteID)
 	if errNote != nil {
@@ -193,11 +142,12 @@ func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
 		return
 	}
 
-	isUserHasEditRights := handler.TripRepository.HasEditRight(trip, currentUser)
-	isUserAuthor := handler.Repository.IsAuthor(note, currentUser)
+	isUserAuthor := note.UserIsAuthor(&currentUser)
 
-	if !isUserHasEditRights && !isUserAuthor && trip.OwnerID != currentUser.ID {
-		context.AbortWithStatus(http.StatusUnauthorized)
+	if !isUserAuthor {
+		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"message": "Only the author of the node can remove them",
+		})
 		return
 	}
 
@@ -207,5 +157,5 @@ func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusNoContent, nil)
+	context.Status(http.StatusNoContent)
 }
