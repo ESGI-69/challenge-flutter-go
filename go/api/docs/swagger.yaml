@@ -1,4 +1,14 @@
 definitions:
+  models.AccommodationType:
+    enum:
+    - hotel
+    - airbnb
+    - other
+    type: string
+    x-enum-varnames:
+    - AccommodationTypeHotel
+    - AccommodationTypeAirbnb
+    - AccommodationTypeOther
   models.TransportType:
     enum:
     - car
@@ -17,6 +27,27 @@ definitions:
     x-enum-varnames:
     - UserRoleAdmin
     - UserRoleUser
+  requests.AccommodationCreateBody:
+    properties:
+      accommodationType:
+        type: string
+      address:
+        type: string
+      bookingURL:
+        type: string
+      endDate:
+        type: string
+      name:
+        type: string
+      startDate:
+        type: string
+    required:
+    - accommodationType
+    - address
+    - endDate
+    - name
+    - startDate
+    type: object
   requests.AuthLoginBody:
     properties:
       password:
@@ -110,6 +141,27 @@ definitions:
     required:
     - password
     - username
+    type: object
+  responses.AccommodationResponse:
+    properties:
+      accommodationType:
+        $ref: '#/definitions/models.AccommodationType'
+      address:
+        type: string
+      bookingURL:
+        type: string
+      endDate:
+        type: string
+      id:
+        type: integer
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      startDate:
+        type: string
     type: object
   responses.ChatMessageResponse:
     properties:
@@ -383,6 +435,103 @@ paths:
       summary: Update a trip
       tags:
       - trips
+  /trips/{id}/accommodations:
+    get:
+      consumes:
+      - application/json
+      description: Get all accommodations associated with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.AccommodationResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all accommodations from a trip
+      tags:
+      - accommodation
+    post:
+      consumes:
+      - application/json
+      description: Create a new accommodation associated with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Accommodation details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.AccommodationCreateBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.AccommodationResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create an accommodation on a trip
+      tags:
+      - accommodation
+  /trips/{id}/accommodations/{accommodationID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an accommodation associated with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the accommodation
+        in: path
+        name: accommodationID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete an accommodation
+      tags:
+      - accommodation
   /trips/{id}/chatMessages:
     get:
       consumes:

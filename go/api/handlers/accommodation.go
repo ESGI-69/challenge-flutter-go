@@ -19,6 +19,17 @@ type AccommodationHandler struct {
 	TripRepository repository.TripRepository
 }
 
+// @Summary		Get all accommodations from a trip
+// @Description	Get all accommodations associated with the trip
+// @Tags			accommodation
+// @Accept		json
+// @Produce		json
+// @Security		BearerAuth
+// @Param		id	path		string	true	"ID of the trip"
+// @Success		200		{object}	[]responses.AccommodationResponse
+// @Failure		400		{object}	error
+// @Failure		401		{object}	error
+// @Router		/trips/{id}/accommodations [get]
 func (handler *AccommodationHandler) GetAllFromTrip(context *gin.Context) {
 	id := context.Param("id")
 	if id == "" {
@@ -55,6 +66,8 @@ func (handler *AccommodationHandler) GetAllFromTrip(context *gin.Context) {
 			EndDate:           accommodation.EndDate.Format(time.RFC3339),
 			BookingURL:        accommodation.BookingURL,
 			AccommodationType: accommodation.AccommodationType,
+			Latitude:          accommodation.Latitude,
+			Longitude:         accommodation.Longitude,
 		}
 	}
 
@@ -62,6 +75,18 @@ func (handler *AccommodationHandler) GetAllFromTrip(context *gin.Context) {
 
 }
 
+// @Summary		Create an accommodation on a trip
+// @Description	Create a new accommodation associated with the trip
+// @Tags			accommodation
+// @Accept		json
+// @Produce		json
+// @Security		BearerAuth
+// @Param		id	path		string	true	"ID of the trip"
+// @Param		body	body		requests.AccommodationCreateBody	true	"Accommodation details"
+// @Success		201		{object}	responses.AccommodationResponse
+// @Failure		400		{object}	error
+// @Failure		401		{object}	error
+// @Router		/trips/{id}/accommodations [post]
 func (handler *AccommodationHandler) CreateOnTrip(context *gin.Context) {
 	id := context.Param("id")
 	if id == "" {
@@ -149,6 +174,18 @@ func (handler *AccommodationHandler) CreateOnTrip(context *gin.Context) {
 	})
 }
 
+// @Summary		Delete an accommodation
+// @Description	Delete an accommodation associated with the trip
+// @Tags			accommodation
+// @Accept		json
+// @Produce		json
+// @Security		BearerAuth
+// @Param		id	path	string	true	"ID of the trip"
+// @Param		accommodationID	path	string	true	"ID of the accommodation"
+// @Success		204		{object}	nil
+// @Failure		400		{object}	error
+// @Failure		401		{object}	error
+// @Router		/trips/{id}/accommodations/{accommodationID} [delete]
 func (handler *AccommodationHandler) DeleteAccommodation(context *gin.Context) {
 	id := context.Param("id")
 	if id == "" {
