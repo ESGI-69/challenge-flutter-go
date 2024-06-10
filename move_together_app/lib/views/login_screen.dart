@@ -17,8 +17,9 @@ class LoginScreenState extends State<LoginScreen> {
   String? errorMessage;
 
   Future<void> _login() async {
+    final apiServices = ApiServices();
     try {
-      final token = await ApiServices.loginUser(
+      final token = await apiServices.loginUser(
         _usernameController.text,
         _passwordController.text,
       );

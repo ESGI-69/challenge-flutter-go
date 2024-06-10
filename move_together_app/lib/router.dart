@@ -3,6 +3,7 @@ import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
 import 'package:move_together_app/Home/home_screen.dart';
+import 'package:move_together_app/Profile/profile_screen.dart';
 import 'package:move_together_app/views/trip/join_screen.dart';
 import 'package:move_together_app/views/trip/trip_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -50,6 +51,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/trip',
       builder: (context, state) => const TripScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
     ),
   ],
   redirect: (context, state) async {

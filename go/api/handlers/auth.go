@@ -5,6 +5,7 @@ import (
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/config"
+	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
 	"time"
@@ -44,7 +45,7 @@ func (handler *AuthHandler) Login(context *gin.Context) {
 		return
 	}
 
-	token, tokenCreationError := createJwt(user.Username)
+	token, tokenCreationError := createJwt(&user)
 
 	if tokenCreationError != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"tokenCreationError": tokenCreationError})
@@ -54,11 +55,13 @@ func (handler *AuthHandler) Login(context *gin.Context) {
 	context.JSON(http.StatusOK, responses.LoginResponse{Token: token})
 }
 
-func createJwt(username string) (string, error) {
+func createJwt(user *models.User) (string, error) {
 	token := jwt.NewWithClaims(
 		jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"username": username,
+			"id":       user.ID,
+			"username": user.Username,
+			"role":     user.Role,
 			"exp":      time.Now().Add(time.Hour * 72).Unix(),
 		},
 	)
