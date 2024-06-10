@@ -9,9 +9,11 @@ import (
 	"challenge-flutter-go/repository"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type AccommodationHandler struct {
@@ -31,30 +33,11 @@ type AccommodationHandler struct {
 // @Failure		401		{object}	error
 // @Router		/trips/{id}/accommodations [get]
 func (handler *AccommodationHandler) GetAllFromTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.Status(http.StatusUnauthorized)
-		return
-	}
-
-	trip, err := handler.TripRepository.Get(id)
+	accommodations, err := handler.Repository.GetAllFromTrip(context.Param("id"))
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
 	}
-
-	currentUserCanViewTrip := handler.TripRepository.HasViewRight(trip, currentUser)
-	if !currentUserCanViewTrip {
-		context.Status(http.StatusUnauthorized)
-	}
-
-	accommodations := trip.Accommodations
 
 	var accommodationsResponse []responses.AccommodationResponse = make([]responses.AccommodationResponse, len(accommodations))
 	for i, accommodation := range accommodations {
@@ -87,18 +70,8 @@ func (handler *AccommodationHandler) GetAllFromTrip(context *gin.Context) {
 // @Failure		400		{object}	error
 // @Failure		401		{object}	error
 // @Router		/trips/{id}/accommodations [post]
-func (handler *AccommodationHandler) CreateOnTrip(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.Status(http.StatusUnauthorized)
-		return
-	}
+func (handler *AccommodationHandler) Create(context *gin.Context) {
+	tripId := context.Param("id")
 
 	var requestBody requests.AccommodationCreateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
@@ -119,19 +92,7 @@ func (handler *AccommodationHandler) CreateOnTrip(context *gin.Context) {
 		return
 	}
 
-	trip, err := handler.TripRepository.Get(id)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
-	if !isUserHasRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-	}
+	tripIdUint, _ := strconv.ParseUint(tripId, 10, 64)
 
 	getLat, getLong, err := utils.GetGeoLocation(requestBody.Address)
 	if err != nil { //A voir si on bloque la creation si l'adresse n'est pas valide
@@ -140,7 +101,7 @@ func (handler *AccommodationHandler) CreateOnTrip(context *gin.Context) {
 	}
 
 	var accommodation = models.Accommodation{
-		TripID:            trip.ID,
+		Trip:              models.Trip{Model: gorm.Model{ID: uint(tripIdUint)}},
 		AccommodationType: models.AccommodationType(requestBody.AccommodationType),
 		StartDate:         startDate,
 		EndDate:           endDate,
@@ -187,39 +148,13 @@ func (handler *AccommodationHandler) CreateOnTrip(context *gin.Context) {
 // @Failure		401		{object}	error
 // @Router		/trips/{id}/accommodations/{accommodationID} [delete]
 func (handler *AccommodationHandler) DeleteAccommodation(context *gin.Context) {
-	id := context.Param("id")
-	if id == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
 	accommodationID := context.Param("accommodationID")
 	if accommodationID == "" {
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	currentUser, exist := utils.GetCurrentUser(context)
-	if !exist {
-		context.Status(http.StatusUnauthorized)
-		return
-	}
-
-	trip, err := handler.TripRepository.Get(id)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	isUserHasRights := handler.TripRepository.HasEditRight(trip, currentUser)
-	if !isUserHasRights {
-		if trip.OwnerID != currentUser.ID {
-			context.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-	}
-
-	err = handler.Repository.Delete(accommodationID)
+	err := handler.Repository.Delete(accommodationID)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

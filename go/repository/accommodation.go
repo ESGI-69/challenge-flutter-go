@@ -21,3 +21,8 @@ func (t *AccommodationRepository) Delete(id string) error {
 	}
 	return result.Error
 }
+
+func (t *AccommodationRepository) GetAllFromTrip(tripId string) (accommodations []models.Accommodation, err error) {
+	err = t.Database.Where("trip_id = ?", tripId).Find(&accommodations).Error
+	return
+}
