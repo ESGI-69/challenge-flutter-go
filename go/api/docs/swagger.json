@@ -290,6 +290,155 @@
                 }
             }
         },
+        "/trips/{id}/accommodations": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all accommodations associated with the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accommodation"
+                ],
+                "summary": "Get all accommodations from a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.AccommodationResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new accommodation associated with the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accommodation"
+                ],
+                "summary": "Create an accommodation on a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Accommodation details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.AccommodationCreateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.AccommodationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/accommodations/{accommodationID}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete an accommodation associated with the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accommodation"
+                ],
+                "summary": "Delete an accommodation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID of the accommodation",
+                        "name": "accommodationID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/trips/{id}/chatMessages": {
             "get": {
                 "security": [
@@ -875,6 +1024,19 @@
         }
     },
     "definitions": {
+        "models.AccommodationType": {
+            "type": "string",
+            "enum": [
+                "hotel",
+                "airbnb",
+                "other"
+            ],
+            "x-enum-varnames": [
+                "AccommodationTypeHotel",
+                "AccommodationTypeAirbnb",
+                "AccommodationTypeOther"
+            ]
+        },
         "models.TransportType": {
             "type": "string",
             "enum": [
@@ -898,6 +1060,36 @@
                 "UserRoleAdmin",
                 "UserRoleUser"
             ]
+        },
+        "requests.AccommodationCreateBody": {
+            "type": "object",
+            "required": [
+                "accommodationType",
+                "address",
+                "endDate",
+                "name",
+                "startDate"
+            ],
+            "properties": {
+                "accommodationType": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "bookingURL": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                }
+            }
         },
         "requests.AuthLoginBody": {
             "type": "object",
@@ -1033,6 +1225,38 @@
                     "minLength": 8
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.AccommodationResponse": {
+            "type": "object",
+            "properties": {
+                "accommodationType": {
+                    "$ref": "#/definitions/models.AccommodationType"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "bookingURL": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "startDate": {
                     "type": "string"
                 }
             }
