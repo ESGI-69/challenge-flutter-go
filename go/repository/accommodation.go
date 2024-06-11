@@ -26,3 +26,8 @@ func (t *AccommodationRepository) GetAllFromTrip(tripId string) (accommodations 
 	err = t.Database.Where("trip_id = ?", tripId).Find(&accommodations).Error
 	return
 }
+
+func (t *AccommodationRepository) Get(id string) (accommodation models.Accommodation, err error) {
+	err = t.Database.First(&accommodation, id).Error
+	return
+}

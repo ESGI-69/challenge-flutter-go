@@ -154,7 +154,30 @@ func (handler *AccommodationHandler) DeleteAccommodation(context *gin.Context) {
 		return
 	}
 
-	err := handler.Repository.Delete(accommodationID)
+	accommodation, err := handler.Repository.Get(accommodationID)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	tripId := context.Param("id")
+	if tripId == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	parsedTripId, err := strconv.ParseUint(tripId, 10, 10)
+	if err != nil {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if accommodation.TripID != uint(parsedTripId) {
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Accommodation not in the trip"})
+		return
+	}
+
+	err = handler.Repository.Delete(accommodationID)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
