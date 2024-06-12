@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Home/blocs/home_bloc.dart';
 import 'package:move_together_app/Home/empty_home.dart';
+import 'package:move_together_app/Home/trip_card.dart';
 import 'package:move_together_app/router.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const EmptyHome();
                 }
                 return Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Flex(
                     direction: Axis.vertical,
                     children: <Widget>[
@@ -55,14 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: PageView(
                       onPageChanged: changePage,
                       children: state.trips.map((trip) {
-                        return Padding(
-                        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                        child: Container(
-                          color: Colors.blue,
-                          child: Center(
-                          child: Text(trip.name),
-                          ),
-                        ),
+                        return TripCard(
+                          imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
+                          city: trip.city,
+                          date: trip.startDate.toString(),
+                          participants: trip.participants,
                         );
                       }).toList(),
                       ),
@@ -107,7 +105,7 @@ class _PageIndicatorState extends State<PageIndicator> {
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: widget.currentIndex == index ? Colors.blue : Colors.grey,
+            color: widget.currentIndex == index ? Theme.of(context).primaryColor : Colors.grey,
           ),
         );
       }),

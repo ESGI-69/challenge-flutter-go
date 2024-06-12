@@ -19,6 +19,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       } on ApiException catch (error) {
         emit(HomeDataLoadingError(errorMessage: error.message));
       } catch (error) {
+        print(error);
         emit(HomeDataLoadingError(errorMessage: 'Unhandled error'));
       }
     });
