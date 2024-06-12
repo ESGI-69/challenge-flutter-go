@@ -57,9 +57,9 @@ class _AppState extends State<App> {
                         _currentIndex = index;
                       });
                       if (index == 0) {
-                        router.go('/home');
+                        router.replace('/home');
                       } else if (index == 1) {
-                        router.go('/profile');
+                        router.replace('/profile');
                       }
                     },
                   )
