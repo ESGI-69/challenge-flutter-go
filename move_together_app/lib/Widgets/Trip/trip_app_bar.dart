@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:move_together_app/Widgets/Buttons/button_back.dart';
+import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
 
 class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
