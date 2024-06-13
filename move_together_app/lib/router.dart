@@ -1,11 +1,12 @@
 import 'package:go_router/go_router.dart';
+import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
 import 'package:move_together_app/Home/home_screen.dart';
 import 'package:move_together_app/Profile/profile_screen.dart';
 import 'package:move_together_app/views/trip/join_screen.dart';
-import 'package:move_together_app/views/trip/trip_screen.dart';
+import 'package:move_together_app/Trip/trip_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -50,7 +51,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/trip/:tripId',
-      builder: (context, state) => const TripScreen(),
+      builder: (context, state) => TripScreen(trip: state.extra! as Trip),
     ),
     GoRoute(
       path: '/profile',

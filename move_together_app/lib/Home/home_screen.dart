@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Home/blocs/home_bloc.dart';
 import 'package:move_together_app/Home/empty_home.dart';
 import 'package:move_together_app/Widgets/Trip/trip_card.dart';
-import 'package:move_together_app/router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-          router.go('/join-trip');
+          context.go('/join-trip');
           },
           child: const Icon(Icons.add),
         ),
@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPageChanged: changePage,
                       children: state.trips.map((trip) {
                         return TripCard(
+                          onTap: () => context.push('/trip/${trip.id}', extra: trip),
                           imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
                           city: trip.city,
                           date: trip.startDate.toString(),
