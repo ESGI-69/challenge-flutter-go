@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
 
@@ -53,23 +54,7 @@ class TripCard extends StatelessWidget {
                 right: 10,
                 child: Row(
                   children: [
-                    Row(
-                      children: participants.map((participant) {
-                        return Container(
-                          margin: const EdgeInsets.only(right: 4),
-                          child: CircleAvatar(
-                            child: Center(
-                              child: Text(
-                                participant.username[0].toUpperCase(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
+                    ParticipantIcons(participants: participants),
                     const SizedBox(width: 10),
                     Container(
                       height: 40,
