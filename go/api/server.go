@@ -50,6 +50,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	documentRepository := repository.DocumentRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -84,6 +88,11 @@ func setRoutes() {
 
 	accommodationHandler := handlers.AccommodationHandler{
 		Repository:     AccommodationRepository,
+		TripRepository: tripRepository,
+	}
+
+	documentHandler := handlers.DocumentHandler{
+		Repository:     documentRepository,
 		TripRepository: tripRepository,
 	}
 
@@ -125,6 +134,12 @@ func setRoutes() {
 	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages")
 	tripChatMessagesRoutes.GET("/", middlewares.UserIsTripParticipant, chatMessageHandler.GetChatMessagesOfTrip)
 	tripChatMessagesRoutes.POST("/", middlewares.UserHasTripEditRight, chatMessageHandler.AddChatMessageToTrip)
+
+	// Document's trip routes
+	// post and check if user has edit right and the route should accept a file (multipart/form-data)
+	tripDocumentsRoutes := tripsRoutes.Group("/:id/documents")
+	tripDocumentsRoutes.GET("/", middlewares.UserIsTripParticipant, documentHandler.GetDocumentsOfTrip)
+	tripDocumentsRoutes.POST("/", middlewares.UserHasTripEditRight, documentHandler.CreateDocument)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
