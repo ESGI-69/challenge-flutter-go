@@ -14,6 +14,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.transparent,
       leading: const BackButton(),
       // Ajoutez des styles ou des widgets personnalisés ici
       flexibleSpace: Container(
