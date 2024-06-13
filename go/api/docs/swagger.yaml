@@ -200,7 +200,7 @@ definitions:
         type: integer
       tripRole:
         $ref: '#/definitions/responses.ParticipantTripRole'
-      user:
+      username:
         type: string
     type: object
   responses.ParticipantTripRole:

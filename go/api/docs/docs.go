@@ -1327,7 +1327,7 @@ const docTemplate = `{
                 "tripRole": {
                     "$ref": "#/definitions/responses.ParticipantTripRole"
                 },
-                "user": {
+                "username": {
                     "type": "string"
                 }
             }

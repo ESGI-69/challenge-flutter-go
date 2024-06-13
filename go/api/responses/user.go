@@ -39,6 +39,6 @@ func StringToParticipantTripRole(role string) ParticipantTripRole {
 
 type ParticipantResponse struct {
 	ID       uint                `json:"id"`
-	Username string              `json:"user"`
+	Username string              `json:"username"`
 	TripRole ParticipantTripRole `json:"tripRole"`
 }

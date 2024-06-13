@@ -1,3 +1,5 @@
+import 'package:move_together_app/core/models/participant.dart';
+
 class Trip {
   final int id;
   final String name;
@@ -5,7 +7,7 @@ class Trip {
   final String city;
   final DateTime startDate;
   final DateTime endDate;
-  // final List<Participant> participants;
+  final List<Participant> participants;
   final String inviteCode;
 
   Trip({
@@ -15,7 +17,7 @@ class Trip {
     required this.city,
     required this.startDate,
     required this.endDate,
-    // required this.participants,
+    required this.participants,
     required this.inviteCode,
   });
 
@@ -27,7 +29,7 @@ class Trip {
       city: json['city'],
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
-      // participants: json['participants'].map((e) => Participant.fromJson(e)).toList(),
+      participants: json['participants'].map<Participant>((e) => Participant.fromJson(e)).toList(),
       inviteCode: json['inviteCode'],
     );
   }
@@ -40,7 +42,7 @@ class Trip {
       'city': city,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
-      // 'participants': participants.map((e) => e.toJson()).toList(),
+      'participants': participants.map((e) => e.toJson()).toList(),
       'inviteCode': inviteCode,
     };
   }

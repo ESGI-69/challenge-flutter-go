@@ -17,6 +17,7 @@ class _AppState extends State<App> {
     return MaterialApp.router(
       debugShowCheckedModeBanner: true,
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.grey[50],
         primaryColor: const Color(0xFF55C0A8),
         colorScheme: const ColorScheme.light(
           primary: Color(0xFF55C0A8),
