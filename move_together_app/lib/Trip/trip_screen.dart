@@ -16,6 +16,7 @@ class TripScreen extends StatelessWidget {
       appBar: TripAppBar(
         city: trip.city,
         date: trip.startDate.toString(),
+        participants: trip.participants,
       ),
       body: const Text(
         'Welcome to the trip!(placeholder page)',
