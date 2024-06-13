@@ -17,11 +17,9 @@ class TripScreen extends StatelessWidget {
         city: trip.city,
         date: trip.startDate.toString(),
       ),
-      body: const Center(
-        child: Text(
-          'Welcome to the trip!(placeholder page)',
-          style: TextStyle(fontSize: 24),
-        ),
+      body: const Text(
+        'Welcome to the trip!(placeholder page)',
+        style: TextStyle(fontSize: 24),
       ),
     );
   }
