@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
 
 class TripCard extends StatelessWidget {
@@ -85,35 +86,9 @@ class TripCard extends StatelessWidget {
           // Text at the Bottom
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    city,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    date,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
+            child: TripQuickInfo(
+              city: city,
+              date: date,
             ),
           ),
         ],

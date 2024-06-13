@@ -49,7 +49,7 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const JoinTripScreen(),
     ),
     GoRoute(
-      path: '/trip',
+      path: '/trip/:tripId',
       builder: (context, state) => const TripScreen(),
     ),
     GoRoute(

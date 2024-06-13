@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Home/blocs/home_bloc.dart';
 import 'package:move_together_app/Home/empty_home.dart';
-import 'package:move_together_app/Home/trip_card.dart';
+import 'package:move_together_app/Widgets/Trip/trip_card.dart';
 import 'package:move_together_app/router.dart';
 
 class HomeScreen extends StatefulWidget {
