@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:move_together_app/Widgets/Buttons/button_back.dart';
 import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
 
 class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -14,11 +15,17 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.transparent,
-      leading: const BackButton(),
+      leading: const Padding(
+        padding: EdgeInsets.only(left: 16.0),
+        child: Row(
+          children: [
+            ButtonBack(),
+          ],
+        ),
+      ),
       // Ajoutez des styles ou des widgets personnalisés ici
       flexibleSpace: Container(
-        height: preferredSize.height,
+        height: preferredSize.height + 10,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg'),

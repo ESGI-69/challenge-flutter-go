@@ -6,12 +6,19 @@ class ButtonBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      color: Colors.red,
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         context.pop();
       },
+      child: Container(
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white.withOpacity(0.3),
+        ),
+        child: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+      ),
     );
   }
 }
