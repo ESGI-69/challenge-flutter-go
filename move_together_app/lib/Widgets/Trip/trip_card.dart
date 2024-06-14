@@ -15,6 +15,7 @@ class TripCard extends StatelessWidget {
   final List<Participant> participants;
   final Function() onTap;
   final Function() onRemove;
+  final bool isCurrentUserOwner;
 
   TripCard({
     super.key,
@@ -25,6 +26,7 @@ class TripCard extends StatelessWidget {
     required this.participants,
     required this.onTap,
     required this.onRemove,
+    required this.isCurrentUserOwner,
   });
 
   final apiServices = ApiServices();
@@ -65,33 +67,35 @@ class TripCard extends StatelessWidget {
                 child: Row(
                   children: [
                     ParticipantIcons(participants: participants),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 40,
-                      width: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.2),
-                        borderRadius: const BorderRadius.all(Radius.circular(2)),
+                    ...isCurrentUserOwner ? [
+                      const SizedBox(width: 10),
+                      Container(
+                        height: 40,
+                        width: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.2),
+                          borderRadius: const BorderRadius.all(Radius.circular(2)),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    ButtonLeave(
-                      onTap: () => showUnifiedDialog(
-                        context: context,
-                        title: 'Quitter $name?',
-                        content: 'Etes-vous sûr de vouloir quitter ce voyage?',
-                        cancelButtonText: 'Annuler',
-                        okButtonText: 'Quitter',
-                        okButtonTextStyle: TextStyle(color: Theme.of(context).colorScheme.error),
-                        onCancelPressed: () {
-                          context.pop();
-                        },
-                        onOkPressed: () async {
-                          context.pop();
-                          onRemove();
-                        },
+                      const SizedBox(width: 10),
+                      ButtonLeave(
+                        onTap: () => showUnifiedDialog(
+                          context: context,
+                          title: 'Quitter $name?',
+                          content: 'Etes-vous sûr de vouloir quitter ce voyage?',
+                          cancelButtonText: 'Annuler',
+                          okButtonText: 'Quitter',
+                          okButtonTextStyle: TextStyle(color: Theme.of(context).colorScheme.error),
+                          onCancelPressed: () {
+                            context.pop();
+                          },
+                          onOkPressed: () async {
+                            context.pop();
+                            onRemove();
+                          },
+                        ),
                       ),
-                    ),
+                    ] : [],
                   ],
                 ),
               ),
