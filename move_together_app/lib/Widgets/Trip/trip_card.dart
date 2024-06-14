@@ -4,6 +4,7 @@ import 'package:move_together_app/Widgets/Button/button_leave.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
+import 'package:move_together_app/core/services/api_services.dart';
 import 'package:move_together_app/utils/show_unified_dialog.dart';
 
 class TripCard extends StatelessWidget {
@@ -13,8 +14,9 @@ class TripCard extends StatelessWidget {
   final DateTime endDate;
   final List<Participant> participants;
   final Function() onTap;
+  final Function() onRemove;
 
-  const TripCard({
+  TripCard({
     super.key,
     required this.imageUrl,
     required this.name,
@@ -22,7 +24,10 @@ class TripCard extends StatelessWidget {
     required this.endDate,
     required this.participants,
     required this.onTap,
+    required this.onRemove,
   });
+
+  final apiServices = ApiServices();
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +86,9 @@ class TripCard extends StatelessWidget {
                         onCancelPressed: () {
                           context.pop();
                         },
-                        onOkPressed: () {
+                        onOkPressed: () async {
                           context.pop();
+                          onRemove();
                         },
                       ),
                     ),

@@ -9,11 +9,25 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
-    on<HomeDataLoaded>((event, emit) async {
+    on<HomeDataFetch>((event, emit) async {
       emit(HomeDataLoading());
       final apiServices = ApiServices();
 
       try {
+        final trips = await apiServices.getTrips();
+        emit(HomeDataLoadingSuccess(trips: trips));
+      } on ApiException catch (error) {
+        emit(HomeDataLoadingError(errorMessage: error.message));
+      } catch (error) {
+        emit(HomeDataLoadingError(errorMessage: 'Unhandled error'));
+      }
+    });
+
+    on<HomeDataLeaveTrip>((event, emit) async {
+      emit(HomeDataLoading());
+      final apiServices = ApiServices();
+      try {
+        await apiServices.leaveTrip(event.trip.id.toString());
         final trips = await apiServices.getTrips();
         emit(HomeDataLoadingSuccess(trips: trips));
       } on ApiException catch (error) {

@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.add),
       ),
       body: BlocProvider(
-        create: (context) => HomeBloc()..add(HomeDataLoaded()),
+        create: (context) => HomeBloc()..add(HomeDataFetch()),
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             if (state is HomeDataLoading) {
@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: state.trips.map((trip) {
                       return TripCard(
                         onTap: () => context.push('/trip/${trip.id}', extra: trip),
+                        onRemove: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
                         imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
                         name: trip.name,
                         startDate: trip.startDate,
