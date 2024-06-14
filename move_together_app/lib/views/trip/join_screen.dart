@@ -35,14 +35,14 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   Future<void> _joinTrip() async {
     try {
       final apiServices = ApiServices();
-      await apiServices.joinTrip(
+      final joinedTrip = await apiServices.joinTrip(
         _tripCodeController.text,
       );
       if (mounted) {
         setState(() {
           errorMessage = null;
         });
-        context.go('/trip');
+        context.go('/trip/${joinedTrip.id}');
       }
     } catch (e) {
       setState(() {
