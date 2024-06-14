@@ -51,6 +51,7 @@ func (t *TripRepository) GetAllJoined(user models.User) (trips []models.Trip, er
 		Joins("LEFT JOIN trip_viewers ON trip_viewers.trip_id = trips.id").
 		Joins("LEFT JOIN trip_editors ON trip_editors.trip_id = trips.id").
 		Where("trips.owner_id = ? OR trip_viewers.user_id = ? OR trip_editors.user_id = ?", user.ID, user.ID, user.ID).
+		Order("trips.start_date asc").
 		Find(&trips).Error
 	return
 }
