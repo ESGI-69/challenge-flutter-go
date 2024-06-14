@@ -67,7 +67,7 @@ class TripCard extends StatelessWidget {
                 child: Row(
                   children: [
                     ParticipantIcons(participants: participants),
-                    ...isCurrentUserOwner ? [
+                    ...!isCurrentUserOwner ? [
                       const SizedBox(width: 10),
                       Container(
                         height: 40,
