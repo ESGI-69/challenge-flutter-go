@@ -178,10 +178,6 @@ func (handler *TripHandler) Update(context *gin.Context) {
 
 	trip, _ := handler.Repository.Get(tripId)
 
-	if requestBody.Name != "" {
-		trip.Name = requestBody.Name
-	}
-
 	if requestBody.Country != "" {
 		trip.Country = requestBody.Country
 	}

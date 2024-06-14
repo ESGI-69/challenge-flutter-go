@@ -34,6 +34,13 @@ func (t *Trip) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
+func (t *Trip) BeforeUpdate(tx *gorm.DB) error {
+	if t.Name == "" {
+		t.Name = t.City
+	}
+	return nil
+}
+
 func (t *Trip) generateInviteCode() string {
 	randomBytes := make([]byte, 8)
 	_, err := rand.Read(randomBytes)
