@@ -1171,7 +1171,6 @@
                 "city",
                 "country",
                 "endDate",
-                "name",
                 "startDate"
             ],
             "properties": {
@@ -1185,7 +1184,8 @@
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 64
                 },
                 "startDate": {
                     "type": "string"

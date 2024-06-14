@@ -62,7 +62,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		EndDate:   endDate,
 	}
 
-	createdTrip, err := handler.Repository.Create(trip)
+	err := handler.Repository.Create(&trip)
 
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
@@ -70,14 +70,14 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	}
 
 	responseTrip := responses.TripResponse{
-		ID:           createdTrip.ID,
-		Name:         createdTrip.Name,
-		Country:      createdTrip.Country,
-		City:         createdTrip.City,
-		StartDate:    createdTrip.StartDate.Format(time.RFC3339),
-		EndDate:      createdTrip.EndDate.Format(time.RFC3339),
-		Participants: utils.UserToParticipantWithRole(createdTrip.Viewers, createdTrip.Editors, createdTrip.Owner),
-		InviteCode:   createdTrip.InviteCode,
+		ID:           trip.ID,
+		Name:         trip.Name,
+		Country:      trip.Country,
+		City:         trip.City,
+		StartDate:    trip.StartDate.Format(time.RFC3339),
+		EndDate:      trip.EndDate.Format(time.RFC3339),
+		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
+		InviteCode:   trip.InviteCode,
 	}
 
 	context.JSON(http.StatusCreated, responseTrip)
@@ -177,10 +177,6 @@ func (handler *TripHandler) Update(context *gin.Context) {
 	}
 
 	trip, _ := handler.Repository.Get(tripId)
-
-	if requestBody.Name != "" {
-		trip.Name = requestBody.Name
-	}
 
 	if requestBody.Country != "" {
 		trip.Country = requestBody.Country

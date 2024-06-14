@@ -14,8 +14,9 @@ class TripScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: TripAppBar(
-        city: trip.city,
-        date: trip.startDate.toString(),
+        name: trip.name,
+        startDate: trip.startDate,
+        endDate: trip.endDate,
         participants: trip.participants,
       ),
       body: const Text(
