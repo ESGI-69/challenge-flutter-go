@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Widgets/Button/button_leave.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
+import 'package:move_together_app/utils/show_unified_dialog.dart';
 
 class TripCard extends StatelessWidget {
   final String imageUrl;
@@ -67,9 +70,21 @@ class TripCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withOpacity(0.2),
-                      child: const Icon(Icons.exit_to_app, color: Colors.white),
+                    ButtonLeave(
+                      onTap: () => showUnifiedDialog(
+                        context: context,
+                        title: 'Quitter $name?',
+                        content: 'Etes-vous sûr de vouloir quitter ce voyage?',
+                        cancelButtonText: 'Annuler',
+                        okButtonText: 'Quitter',
+                        okButtonTextStyle: TextStyle(color: Theme.of(context).colorScheme.error),
+                        onCancelPressed: () {
+                          context.pop();
+                        },
+                        onOkPressed: () {
+                          context.pop();
+                        },
+                      ),
                     ),
                   ],
                 ),
