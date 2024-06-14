@@ -1,7 +1,7 @@
 package requests
 
 type TripCreateBody struct {
-	Name      string `json:"name" binding:"required"`
+	Name      string `json:"name" validate:"max=64"`
 	Country   string `json:"country" binding:"required"`
 	City      string `json:"city" binding:"required"`
 	StartDate string `json:"startDate" binding:"required"`

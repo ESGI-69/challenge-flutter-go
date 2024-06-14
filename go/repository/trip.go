@@ -2,9 +2,6 @@ package repository
 
 import (
 	"challenge-flutter-go/models"
-	"crypto/rand"
-	"encoding/base64"
-	"strconv"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -17,21 +14,8 @@ type TripRepository struct {
 // Create a trip.
 //
 // The owner of the trip will be added as an editor in participants
-func (t *TripRepository) Create(trip models.Trip) (createdTrip models.Trip, err error) {
-	result := t.Database.Create(&trip)
-
-	// Generate a random string for the invite code
-	randomBytes := make([]byte, 8)
-	_, err = rand.Read(randomBytes)
-	if err != nil {
-		return trip, err
-	}
-	randomString := base64.URLEncoding.EncodeToString(randomBytes)[:8]
-	trip.InviteCode = strconv.Itoa(int(trip.ID)) + randomString
-
-	t.Database.Save(&trip)
-
-	return trip, result.Error
+func (t *TripRepository) Create(trip *models.Trip) error {
+	return t.Database.Create(&trip).Error
 }
 
 func (t *TripRepository) Get(id string) (trip models.Trip, err error) {

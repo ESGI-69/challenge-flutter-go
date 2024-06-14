@@ -1,6 +1,8 @@
 package models
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"time"
 
 	"gorm.io/gorm"
@@ -8,7 +10,7 @@ import (
 
 type Trip struct {
 	gorm.Model
-	Name           string `gorm:"not null"`
+	Name           string `gorm:"not null;max:64"`
 	Description    string
 	OwnerID        uint
 	Owner          User            `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
@@ -21,7 +23,24 @@ type Trip struct {
 	City           string          `gorm:"not null"`
 	StartDate      time.Time       `gorm:"not null"`
 	EndDate        time.Time       `gorm:"not null"`
-	InviteCode     string          `gorm:"default:null;unique"`
+	InviteCode     string          `gorm:"unique;min:8;max:8;not null"`
+}
+
+func (t *Trip) BeforeCreate(tx *gorm.DB) error {
+	t.InviteCode = t.generateInviteCode()
+	if t.Name == "" {
+		t.Name = t.City
+	}
+	return nil
+}
+
+func (t *Trip) generateInviteCode() string {
+	randomBytes := make([]byte, 8)
+	_, err := rand.Read(randomBytes)
+	if err != nil {
+		return ""
+	}
+	return base64.URLEncoding.EncodeToString(randomBytes)[:8]
 }
 
 func (t *Trip) UserIsOwner(user *User) bool {

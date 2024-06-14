@@ -1180,7 +1180,6 @@ const docTemplate = `{
                 "city",
                 "country",
                 "endDate",
-                "name",
                 "startDate"
             ],
             "properties": {
@@ -1194,7 +1193,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 64
                 },
                 "startDate": {
                     "type": "string"
