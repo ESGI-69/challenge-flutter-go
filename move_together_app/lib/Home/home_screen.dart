@@ -66,8 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       return TripCard(
                         onTap: () => context.push('/trip/${trip.id}', extra: trip),
                         imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
-                        city: trip.city,
-                        date: trip.startDate.toString(),
+                        name: trip.name,
+                        startDate: trip.startDate,
+                        endDate: trip.endDate,
                         participants: trip.participants,
                       );
                     }).toList(),

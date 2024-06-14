@@ -5,14 +5,16 @@ import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
 
 class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String city;
-  final String date;
+  final String name;
+  final DateTime startDate;
+  final DateTime endDate;
   final List<Participant> participants;
 
   const TripAppBar({
     super.key, 
-    required this.city,
-    required this.date,
+    required this.name,
+    required this.startDate,
+    required this.endDate,
     required this.participants,
   });
 
@@ -43,8 +45,9 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             Center(
               heightFactor: BorderSide.strokeAlignCenter,
               child: TripQuickInfo(
-                city: city,
-                date: date,
+                name: name,
+                startDate: startDate,
+                endDate: endDate,
               )
             ),
           ],

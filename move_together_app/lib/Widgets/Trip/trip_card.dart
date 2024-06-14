@@ -5,16 +5,18 @@ import 'package:move_together_app/core/models/participant.dart';
 
 class TripCard extends StatelessWidget {
   final String imageUrl;
-  final String city;
-  final String date;
+  final String name;
+  final DateTime startDate;
+  final DateTime endDate;
   final List<Participant> participants;
   final Function() onTap;
 
   const TripCard({
     super.key,
     required this.imageUrl,
-    required this.city,
-    required this.date,
+    required this.name,
+    required this.startDate,
+    required this.endDate,
     required this.participants,
     required this.onTap,
   });
@@ -75,8 +77,9 @@ class TripCard extends StatelessWidget {
               Center(
                 heightFactor: BorderSide.strokeAlignCenter,
                 child: TripQuickInfo(
-                  city: city,
-                  date: date,
+                  name: name,
+                  startDate: startDate,
+                  endDate: endDate,
                 ),
               ),
             ],
