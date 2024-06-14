@@ -135,11 +135,10 @@ func setRoutes() {
 	tripChatMessagesRoutes.GET("/", middlewares.UserIsTripParticipant, chatMessageHandler.GetChatMessagesOfTrip)
 	tripChatMessagesRoutes.POST("/", middlewares.UserHasTripEditRight, chatMessageHandler.AddChatMessageToTrip)
 
-	// Document's trip routes
-	// post and check if user has edit right and the route should accept a file (multipart/form-data)
 	tripDocumentsRoutes := tripsRoutes.Group("/:id/documents")
 	tripDocumentsRoutes.GET("/", middlewares.UserIsTripParticipant, documentHandler.GetDocumentsOfTrip)
 	tripDocumentsRoutes.POST("/", middlewares.UserHasTripEditRight, documentHandler.CreateDocument)
+	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, documentHandler.DownloadDocument)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)

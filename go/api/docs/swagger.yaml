@@ -683,6 +683,43 @@ paths:
       summary: Create a new document on trip
       tags:
       - document
+  /trips/{id}/documents/{documentID}/download:
+    get:
+      consumes:
+      - application/json
+      description: Download a document
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the document
+        in: path
+        name: documentID
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: A file stream of the document
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Download a document
+      tags:
+      - document
   /trips/{id}/leave:
     post:
       consumes:
