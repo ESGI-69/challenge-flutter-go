@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Widgets/Button/button_leave.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
+import 'package:move_together_app/core/services/api_services.dart';
+import 'package:move_together_app/utils/show_unified_dialog.dart';
 
 class TripCard extends StatelessWidget {
   final String imageUrl;
@@ -10,8 +14,10 @@ class TripCard extends StatelessWidget {
   final DateTime endDate;
   final List<Participant> participants;
   final Function() onTap;
+  final Function() onRemove;
+  final bool isCurrentUserOwner;
 
-  const TripCard({
+  TripCard({
     super.key,
     required this.imageUrl,
     required this.name,
@@ -19,7 +25,11 @@ class TripCard extends StatelessWidget {
     required this.endDate,
     required this.participants,
     required this.onTap,
+    required this.onRemove,
+    required this.isCurrentUserOwner,
   });
+
+  final apiServices = ApiServices();
 
   @override
   Widget build(BuildContext context) {
@@ -57,20 +67,35 @@ class TripCard extends StatelessWidget {
                 child: Row(
                   children: [
                     ParticipantIcons(participants: participants),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 40,
-                      width: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.2),
-                        borderRadius: const BorderRadius.all(Radius.circular(2)),
+                    ...!isCurrentUserOwner ? [
+                      const SizedBox(width: 10),
+                      Container(
+                        height: 40,
+                        width: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.2),
+                          borderRadius: const BorderRadius.all(Radius.circular(2)),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    CircleAvatar(
-                      backgroundColor: Colors.black.withOpacity(0.2),
-                      child: const Icon(Icons.exit_to_app, color: Colors.white),
-                    ),
+                      const SizedBox(width: 10),
+                      ButtonLeave(
+                        onTap: () => showUnifiedDialog(
+                          context: context,
+                          title: 'Quitter $name?',
+                          content: 'Etes-vous sûr de vouloir quitter ce voyage?',
+                          cancelButtonText: 'Annuler',
+                          okButtonText: 'Quitter',
+                          okButtonTextStyle: TextStyle(color: Theme.of(context).colorScheme.error),
+                          onCancelPressed: () {
+                            context.pop();
+                          },
+                          onOkPressed: () async {
+                            context.pop();
+                            onRemove();
+                          },
+                        ),
+                      ),
+                    ] : [],
                   ],
                 ),
               ),

@@ -21,7 +21,7 @@ class ApiServices {
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData['token'];
       return token;
@@ -63,7 +63,7 @@ class ApiServices {
       },
     );
     
-    if (response.statusCode == 200) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       return Trip.fromJson(responseData);
     } else if (response.statusCode == 401) {
@@ -84,7 +84,7 @@ class ApiServices {
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       final List<dynamic> responseData = jsonDecode(response.body);
       return responseData.map((trip) => Trip.fromJson(trip)).toList();
     } else if (response.statusCode == 401) {
@@ -106,7 +106,7 @@ class ApiServices {
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       return User.fromJson(responseData);
     } else if (response.statusCode == 401) {
@@ -115,6 +115,26 @@ class ApiServices {
       throw Exception('Unauthorized');
     } else {
       throw Exception('Failed to get profile');
+    }
+  }
+
+  Future<void> leaveTrip(String tripId) async {
+    final response = await http.post(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId/leave'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return;
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
+    } else {
+      throw Exception('Failed to leave trip');
     }
   }
   

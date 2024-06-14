@@ -21,6 +21,12 @@ class _AppState extends State<App> {
         primaryColor: const Color(0xFF55C0A8),
         colorScheme: const ColorScheme.light(
           primary: Color(0xFF55C0A8),
+          inversePrimary: Color(0xFFBF7054),
+          secondary: Color(0xFF54BF6B),
+          tertiary: Color(0xFF526A65),
+          error: Color(0xFFD32F2F),
+          surface: Colors.white,
+          inverseSurface: Colors.black,
         ),
         textTheme: const TextTheme(
           displayLarge: TextStyle(
