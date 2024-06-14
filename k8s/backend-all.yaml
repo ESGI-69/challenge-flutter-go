@@ -11,6 +11,38 @@ spec:
 
 ---
 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: challenge-flutter-go-backend-pv
+  namespace: challenge-flutter-go
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/challenge-flutter-go-backend-pv/uploads"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: challenge-flutter-go-backend-pvc
+  namespace: challenge-flutter-go
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,6 +57,10 @@ spec:
       labels:
         app: challenge-flutter-go-backend-deployment
     spec:
+      volumes:
+      - name: challenge-flutter-go-backend-pv
+        persistentVolumeClaim:
+          claimName: challenge-flutter-go-backend-pvc
       containers:
       - name: challenge-flutter-go-backend-deployment
         image: gatien1/challenge-flutter-go-backend:latest
@@ -89,3 +125,6 @@ spec:
 
         ports:
         - containerPort: 8080
+        volumeMounts:
+        - name: challenge-flutter-go-backend-pv
+          mountPath: /app/uploads
