@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
@@ -14,7 +15,9 @@ const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 List<String> loggedRoutes = [
   '/home',
   '/join-trip',
-  '/trip'
+  '/trip',
+  '/profile',
+  '/trip/:tripId',
 ];
 List<String> unloggedRoutes = [
   '/login',
@@ -24,7 +27,9 @@ List<String> unloggedRoutes = [
 
 Future<bool> isAuthenticated() async {
   final token = await secureStorage.read(key: 'jwt');
-  return token != null;
+  if (token == null) return false;
+  final isExpired = JwtDecoder.isExpired(token);
+  return !isExpired;
 }
 
 final GoRouter router = GoRouter(
@@ -42,6 +47,7 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const RegisterScreen(),
     ),
     GoRoute(
+      name: 'home',
       path: '/home',
       builder: (context, state) => const HomeScreen(),
     ),
@@ -52,6 +58,11 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/trip/:tripId',
       builder: (context, state) => TripScreen(trip: state.extra! as Trip),
+      redirect: (context, state) {
+        final Trip? trip = state.extra as Trip?;
+        if (trip == null) return '/home';
+        return null;
+      },
     ),
     GoRoute(
       path: '/profile',
@@ -59,12 +70,19 @@ final GoRouter router = GoRouter(
     ),
   ],
   redirect: (context, state) async {
-    final bool loggedIn = await isAuthenticated();
-    final bool goingToUnlogged = unloggedRoutes.contains(state.uri.toString());
+    final topRoutePath = state.topRoute?.path;
+    final bool userIsAuthenticated = await isAuthenticated();
+    final bool routeIsPublic = unloggedRoutes.contains(topRoutePath);
+    final bool routeRequireAuthentication = loggedRoutes.contains(topRoutePath);
 
-    if (loggedIn && goingToUnlogged) return '/home';
-    if (!loggedRoutes.contains(state.uri.toString())) return null;
-    if (!loggedIn && !goingToUnlogged) return '/';
+    if (!userIsAuthenticated && routeRequireAuthentication) {
+      secureStorage.delete(key: 'jwt');
+      return '/';
+    }
+
+    if (userIsAuthenticated && routeIsPublic) {
+      return '/home';
+    }
 
     return null;
   },
