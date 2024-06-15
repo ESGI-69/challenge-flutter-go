@@ -8,6 +8,7 @@ import (
 	"challenge-flutter-go/repository"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -31,9 +32,7 @@ type DocumentHandler struct {
 func (handler *DocumentHandler) GetDocumentsOfTrip(context *gin.Context) {
 	tripId := context.Param("id")
 
-	trip, _ := handler.TripRepository.Get(tripId)
-
-	documents, err := handler.Repository.GetDocuments(trip)
+	documents, err := handler.Repository.GetDocuments(tripId)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
@@ -70,7 +69,12 @@ func (handler *DocumentHandler) GetDocumentsOfTrip(context *gin.Context) {
 func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 	context.Request.Body = http.MaxBytesReader(context.Writer, context.Request.Body, 10<<20)
 
-	tripId := context.Param("id")
+	tripIdStr := context.Param("id")
+	tripId, errTripId := strconv.ParseUint(tripIdStr, 10, 32)
+	if errTripId != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid trip ID"})
+		return
+	}
 
 	title := context.PostForm("title")
 	description := context.PostForm("description")
@@ -92,11 +96,10 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 		return
 	}
 
-	trip, _ := handler.TripRepository.Get(tripId)
 	var document = models.Document{
 		Title:       title,
 		Description: description,
-		TripID:      trip.ID,
+		TripID:      uint(tripId),
 		Path:        filePath,
 	}
 
@@ -163,23 +166,12 @@ func (handler *DocumentHandler) DownloadDocument(context *gin.Context) {
 // @Failure		404			{object}	error
 // @Router			/trips/{id}/documents/{documentID} [delete]
 func (handler *DocumentHandler) DeleteDocumentFromTrip(context *gin.Context) {
-	tripId := context.Param("id")
-
 	documentID := context.Param("documentID")
 	if documentID == "" {
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-
-	trip, _ := handler.TripRepository.Get(tripId)
-
-	document, errDoc := handler.Repository.Get(documentID)
-	if errDoc != nil {
-		errorHandlers.HandleGormErrors(errDoc, context)
-		return
-	}
-
-	err := handler.Repository.DeleteDocument(trip, document.ID)
+	err := handler.Repository.DeleteDocument(documentID)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

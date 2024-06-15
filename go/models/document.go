@@ -1,7 +1,7 @@
 package models
 
 import (
-	// "challenge-flutter-go/api/utils"
+	"errors"
 	"log"
 	"os"
 	"path/filepath"
@@ -18,12 +18,18 @@ type Document struct {
 	Trip        Trip `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
-func (document *Document) AfterDelete(tx *gorm.DB) (err error) {
+func (document *Document) BeforeDelete(tx *gorm.DB) (err error) {
+	if document.Path == "" {
+		err = errors.New("document path is empty")
+		return err
+	}
+
 	baseDir := "uploads"
 	specificDir := filepath.Join(baseDir, "documents")
 	filePath := filepath.Join(specificDir, document.Path)
 
 	err = os.Remove(filePath)
+
 	if err != nil {
 		log.Println(err)
 		return err
