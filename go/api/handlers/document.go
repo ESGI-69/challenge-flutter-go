@@ -68,6 +68,8 @@ func (handler *DocumentHandler) GetDocumentsOfTrip(context *gin.Context) {
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/documents [post]
 func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
+	context.Request.Body = http.MaxBytesReader(context.Writer, context.Request.Body, 10<<20)
+
 	tripId := context.Param("id")
 
 	title := context.PostForm("title")
@@ -76,6 +78,11 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 	file, errFile := context.FormFile("document")
 	if errFile != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Document is required"})
+	}
+
+	if file.Size > 5<<20 {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "File size exceeds limit of 5 MB"})
+		return
 	}
 
 	filePath, errFilePath := utils.SaveUploadedFile(file, "document", title)
@@ -89,7 +96,7 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 	var document = models.Document{
 		Title:       title,
 		Description: description,
-		Trip:        trip,
+		TripID:      trip.ID,
 		Path:        filePath,
 	}
 
@@ -140,4 +147,43 @@ func (handler *DocumentHandler) DownloadDocument(context *gin.Context) {
 	}
 	context.Header("Content-Disposition", "attachment; filename=\""+document.Path+"\"")
 	context.File(filepath)
+}
+
+// @Summary		Delete a document from trip
+// @Description	Delete a document from the trip
+// @Tags			document
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Param			id			path		string	true	"ID of the trip"
+// @Param			documentID	path		string	true	"ID of the document"
+// @Success		204			{object}	error
+// @Failure		400			{object}	error
+// @Failure		401			{object}	error
+// @Failure		404			{object}	error
+// @Router			/trips/{id}/documents/{documentID} [delete]
+func (handler *DocumentHandler) DeleteDocumentFromTrip(context *gin.Context) {
+	tripId := context.Param("id")
+
+	documentID := context.Param("documentID")
+	if documentID == "" {
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	trip, _ := handler.TripRepository.Get(tripId)
+
+	document, errDoc := handler.Repository.Get(documentID)
+	if errDoc != nil {
+		errorHandlers.HandleGormErrors(errDoc, context)
+		return
+	}
+
+	err := handler.Repository.DeleteDocument(trip, document.ID)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	context.JSON(http.StatusNoContent, gin.H{})
 }

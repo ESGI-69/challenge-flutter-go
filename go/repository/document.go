@@ -30,6 +30,10 @@ func (d *DocumentRepository) GetDocuments(trip models.Trip) (documents []models.
 
 // Delete a document from a trip
 func (d *DocumentRepository) DeleteDocument(trip models.Trip, documentID uint) (err error) {
-	result := d.Database.Delete(&models.Document{}, documentID)
-	return result.Error
+	var document models.Document
+	// il faut load les details du doc pour le hook, sinon le dans le hook le document est empty
+	if err = d.Database.Where("id = ?", documentID).First(&document).Error; err != nil {
+		return err
+	}
+	return d.Database.Delete(&document).Error
 }

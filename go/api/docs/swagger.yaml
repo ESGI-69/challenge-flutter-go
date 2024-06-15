@@ -683,6 +683,42 @@ paths:
       summary: Create a new document on trip
       tags:
       - document
+  /trips/{id}/documents/{documentID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a document from the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the document
+        in: path
+        name: documentID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a document from trip
+      tags:
+      - document
   /trips/{id}/documents/{documentID}/download:
     get:
       consumes:
