@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Home/blocs/home_bloc.dart';
 import 'package:move_together_app/Home/empty_home.dart';
-import 'package:move_together_app/Widgets/Trip/trip_card.dart';
+import 'package:move_together_app/Trip/trip_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -68,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context, AsyncSnapshot<bool> snapshot) {
                           return TripCard(
                             onTap: () => context.push('/trip/${trip.id}', extra: trip),
-                            onRemove: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
+                            onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
+                            onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
                             imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
                             name: trip.name,
                             startDate: trip.startDate,

@@ -76,3 +76,12 @@ func (t *TripRepository) GetParticipants(trip models.Trip) (participants []model
 func (t *TripRepository) Update(trip *models.Trip) (err error) {
 	return t.Database.Save(&trip).Preload(clause.Associations).Error
 }
+
+// Delete a trip
+func (t *TripRepository) Delete(id string) error {
+	result := t.Database.Delete(&models.Trip{}, id)
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return result.Error
+}

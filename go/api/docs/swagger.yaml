@@ -367,6 +367,32 @@ paths:
       tags:
       - trips
   /trips/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a trip
+      tags:
+      - trips
     get:
       consumes:
       - application/json

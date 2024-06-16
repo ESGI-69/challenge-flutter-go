@@ -137,5 +137,24 @@ class ApiServices {
       throw Exception('Failed to leave trip');
     }
   }
-  
+
+  Future<void> deleteTrip(String tripID) async {
+    final response = await http.delete(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripID'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return;
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
+    } else {
+      throw Exception('Failed to delete trip');
+    }
+  }
 }
