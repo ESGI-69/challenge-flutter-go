@@ -102,6 +102,7 @@ func setRoutes() {
 	tripsRoutes.PATCH("/:id", middlewares.UserHasTripEditRight, tripHandler.Update)
 	tripsRoutes.POST("/join", tripHandler.Join)
 	tripsRoutes.POST("/:id/leave", middlewares.UserIsTripParticipant, tripHandler.Leave)
+	tripsRoutes.DELETE("/:id", middlewares.UserIsTripOwner, tripHandler.Delete)
 
 	tripTransportsRoutes := tripsRoutes.Group("/:id/transports")
 	tripTransportsRoutes.GET("/", middlewares.UserIsTripParticipant, transportHandler.GetAllFromTrip)

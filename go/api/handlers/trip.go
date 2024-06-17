@@ -303,3 +303,26 @@ func (handler *TripHandler) Leave(context *gin.Context) {
 
 	context.Status(http.StatusNoContent)
 }
+
+// @Summary Delete a trip
+// @Description Delete a trip
+// @Tags trips
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "ID of the trip"
+// @Success 204
+// @Failure 400 {object} error
+// @Failure 401 {object} error
+// @Router /trips/{id} [delete]
+func (handler *TripHandler) Delete(context *gin.Context) {
+	tripId := context.Param("id")
+
+	deleteError := handler.Repository.Delete(tripId)
+	if deleteError != nil {
+		errorHandlers.HandleGormErrors(deleteError, context)
+		return
+	}
+
+	context.Status(http.StatusNoContent)
+}

@@ -10,3 +10,9 @@ final class HomeDataLeaveTrip extends HomeEvent {
 
   HomeDataLeaveTrip(this.trip);
 }
+
+final class HomeDataDeleteTrip extends HomeEvent {
+  final Trip trip;
+
+  HomeDataDeleteTrip(this.trip);
+}

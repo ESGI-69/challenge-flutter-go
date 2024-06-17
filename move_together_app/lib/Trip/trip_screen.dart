@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:move_together_app/Widgets/Trip/trip_app_bar.dart';
+import 'package:move_together_app/Trip/trip_app_bar.dart';
 import 'package:move_together_app/core/models/trip.dart';
 
 class TripScreen extends StatelessWidget {

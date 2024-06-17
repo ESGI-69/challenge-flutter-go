@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
-import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
+import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
 
 class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -21,6 +21,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.transparent,
       leading: const Padding(
         padding: EdgeInsets.only(left: 16.0),
         child: Row(

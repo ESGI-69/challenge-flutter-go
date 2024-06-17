@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Widgets/Button/button_leave.dart';
+import 'package:move_together_app/Widgets/Button/button_delete.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
-import 'package:move_together_app/Widgets/Trip/trip_quick_info.dart';
+import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
 import 'package:move_together_app/core/services/api_services.dart';
 import 'package:move_together_app/utils/show_unified_dialog.dart';
@@ -14,7 +15,8 @@ class TripCard extends StatelessWidget {
   final DateTime endDate;
   final List<Participant> participants;
   final Function() onTap;
-  final Function() onRemove;
+  final Function() onLeave;
+  final Function() onDelete;
   final bool isCurrentUserOwner;
 
   TripCard({
@@ -25,7 +27,8 @@ class TripCard extends StatelessWidget {
     required this.endDate,
     required this.participants,
     required this.onTap,
-    required this.onRemove,
+    required this.onLeave,
+    required this.onDelete,
     required this.isCurrentUserOwner,
   });
 
@@ -91,11 +94,39 @@ class TripCard extends StatelessWidget {
                           },
                           onOkPressed: () async {
                             context.pop();
-                            onRemove();
+                            onLeave();
                           },
                         ),
                       ),
-                    ] : [],
+                    ] : [
+                      const SizedBox(width: 10),
+                      Container(
+                        height: 40,
+                        width: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.2),
+                          borderRadius: const BorderRadius.all(Radius.circular(2)),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      ButtonDelete(
+                        onTap: () => showUnifiedDialog(
+                          context: context,
+                          title: 'Supprimer $name?',
+                          content: 'Etes-vous sûr de vouloir supprimer ce voyage?',
+                          cancelButtonText: 'Annuler',
+                          okButtonText: 'Supprimer',
+                          okButtonTextStyle: TextStyle(color: Theme.of(context).colorScheme.error),
+                          onCancelPressed: () {
+                            context.pop();
+                          },
+                          onOkPressed: () async {
+                            context.pop();
+                            onDelete();
+                          },
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
