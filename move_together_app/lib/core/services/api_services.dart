@@ -6,7 +6,7 @@ import 'package:move_together_app/core/models/trip.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:move_together_app/router.dart';
-import 'package:move_together_app/Provider/AuthProvider.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 
 
 class ApiServices {
