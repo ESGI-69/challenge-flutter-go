@@ -31,7 +31,7 @@ class Participant {
   
   bool isMe(BuildContext context) {
     final userId = context.read<AuthProvider>().userId;
-    return userId == id.toString();
+    return userId == id;
   }
 
   @override
