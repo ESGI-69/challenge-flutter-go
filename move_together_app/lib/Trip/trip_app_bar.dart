@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/Dialog/edit_trip_name.dart';
+import 'package:move_together_app/Widgets/Button/button_chat.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
@@ -14,9 +15,10 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String) onNameUpdate;
   final Function(DateTime, DateTime) onDateUpdate;
   final String imageUrl;
+  final int tripId;
 
   const TripAppBar({
-    super.key, 
+    super.key,
     this.isLoading = false,
     required this.name,
     required this.startDate,
@@ -25,6 +27,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onNameUpdate,
     required this.onDateUpdate,
     required this.imageUrl,
+    required this.tripId,
   });
 
   @override
@@ -73,6 +76,14 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: ButtonChat(
+              tripId: tripId,
+            ),
+          ),
+        ],
         title: ParticipantIcons(participants: participants),
         flexibleSpace: Padding(
           padding: const EdgeInsets.only(bottom: 10),
@@ -90,32 +101,32 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: TripQuickInfo(
-                  name: name,
-                  startDate: startDate,
-                  endDate: endDate,
-                  onNameTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => EditTripNameDialog(
-                        onNameUpdate: onNameUpdate,
-                      )
-                    );
-                  },
-                  onDateTap: () async {
-                    final DateTimeRange? newDateRange = await showDateRangePicker(
-                      context: context,
-                      initialDateRange: DateTimeRange(
-                        start: startDate.toLocal(),
-                        end: endDate.toLocal(),
-                      ),
-                      firstDate: DateTime(DateTime.now().year - 5).toLocal(),
-                      lastDate: DateTime(DateTime.now().year + 5).toLocal(),
-                    );
-                    if (newDateRange != null) {
-                      onDateUpdate(newDateRange.start.toLocal(), newDateRange.end.toLocal());
-                    }
-                  }
-                ),
+                    name: name,
+                    startDate: startDate,
+                    endDate: endDate,
+                    onNameTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => EditTripNameDialog(
+                                onNameUpdate: onNameUpdate,
+                              ));
+                    },
+                    onDateTap: () async {
+                      final DateTimeRange? newDateRange =
+                          await showDateRangePicker(
+                        context: context,
+                        initialDateRange: DateTimeRange(
+                          start: startDate.toLocal(),
+                          end: endDate.toLocal(),
+                        ),
+                        firstDate: DateTime(DateTime.now().year - 5).toLocal(),
+                        lastDate: DateTime(DateTime.now().year + 5).toLocal(),
+                      );
+                      if (newDateRange != null) {
+                        onDateUpdate(newDateRange.start.toLocal(),
+                            newDateRange.end.toLocal());
+                      }
+                    }),
               )
             ],
           ),

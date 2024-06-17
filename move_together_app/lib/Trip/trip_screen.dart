@@ -15,25 +15,37 @@ class TripScreen extends StatelessWidget {
     final tripId = GoRouterState.of(context).uri.pathSegments[1];
 
     return BlocProvider(
-      create: (context) => TripBloc(context)..add(TripDataFetch(tripId)),
-      child: BlocBuilder<TripBloc, TripState>(
-        builder: (context, state) {
+        create: (context) => TripBloc(context)..add(TripDataFetch(tripId)),
+        child: BlocBuilder<TripBloc, TripState>(builder: (context, state) {
           if (state is TripDataLoading) {
             return Scaffold(
-              appBar: TripAppBar(
-                isLoading: true,
-                name: '',
-                startDate: DateTime.now(),
-                endDate: DateTime.now(),
-                participants: const [],
-                onNameUpdate: (newName) {},
-                onDateUpdate: (firstDate, secondDate) {},
-                imageUrl: '',
-              ),
-              body: const Center(
-                child: CircularProgressIndicator.adaptive(),
-              )
-            );
+                appBar: TripAppBar(
+                  isLoading: true,
+                  name: '',
+                  startDate: DateTime.now(),
+                  endDate: DateTime.now(),
+                  participants: const [],
+                  onNameUpdate: (newName) {},
+                  onDateUpdate: (firstDate, secondDate) {},
+                  imageUrl: '',
+                  tripId: 0,
+                ),
+                body: const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ));
+            // appBar: TripAppBar(
+            //   isLoading: true,
+            //   name: '',
+            //   startDate: DateTime.now(),
+            //   endDate: DateTime.now(),
+            //   participants: const [],
+            //   onNameUpdate: (newName) {},
+            //   imageUrl: '',
+            //   tripId: 0,
+            // ),
+            // body: const Center(
+            //   child: CircularProgressIndicator.adaptive(),
+            // ));
           } else if (state is TripDataLoadingError) {
             return Center(
               child: Text(state.errorMessage),
@@ -46,28 +58,29 @@ class TripScreen extends StatelessWidget {
                 startDate: state.trip.startDate,
                 endDate: state.trip.endDate,
                 participants: state.trip.participants,
+                tripId: state.trip.id,
                 onNameUpdate: (newName) {
                   context.read<TripBloc>().add(TripEdit(
-                    tripId,
-                    name: newName,
-                  ));
+                        tripId,
+                        name: newName,
+                      ));
                 },
                 onDateUpdate: (firstDate, secondDate) {
                   context.read<TripBloc>().add(TripEdit(
-                    tripId,
-                    startDate: firstDate,
-                    endDate: secondDate,
-                  ));
+                        tripId,
+                        startDate: firstDate,
+                        endDate: secondDate,
+                      ));
                 },
-                imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg',
+                imageUrl:
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg',
               ),
               body: TripBody(tripId: tripId),
             );
-          } {
+          }
+          {
             return const Text('Unhandled state');
           }
-        }
-      )
-    );
+        }));
   }
 }
