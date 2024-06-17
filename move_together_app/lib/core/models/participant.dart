@@ -1,4 +1,6 @@
-import '../../Provider/auth_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 
 class Participant {
   final int id;
@@ -27,10 +29,9 @@ class Participant {
     };
   }
   
-  bool isMe(context) {
+  bool isMe(BuildContext context) {
     final userId = context.read<AuthProvider>().userId;
-    if (userId == null) return false;
-    return userId == id;
+    return userId == id.toString();
   }
 
   @override
