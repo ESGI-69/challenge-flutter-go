@@ -8,6 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:move_together_app/router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:intl/intl.dart';
+
 
 class ApiServices {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
@@ -241,6 +243,36 @@ class ApiServices {
       throw Exception('Unauthorized');
     } else {
       throw Exception('Failed to get transport');
+    }
+  }
+
+  Future<Trip> createTrip(Trip trip) async {
+    String formattedStartDate = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(trip.startDate.toUtc());
+    String formattedEndDate = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(trip.endDate.toUtc());
+    final response = await http.post(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': trip.name,
+        'country': trip.country,
+        'city': trip.city,
+        'startDate': formattedStartDate,
+        'endDate': formattedEndDate,
+      }),
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      return Trip.fromJson(responseData);
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
+    } else {
+      throw Exception('Failed to create trip');
     }
   }
 }
