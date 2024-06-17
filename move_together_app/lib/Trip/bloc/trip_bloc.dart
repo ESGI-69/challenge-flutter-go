@@ -1,7 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:move_together_app/core/exceptions/api_exception.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/core/services/api_services.dart';

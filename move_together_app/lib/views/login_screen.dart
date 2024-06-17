@@ -32,7 +32,6 @@ class LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       context.go('/home');
     } catch (e) {
-      print("DBG SGGGGG: $e");
       if (mounted) {
         setState(() {
           errorMessage = 'Login failed';
