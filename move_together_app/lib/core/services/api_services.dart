@@ -32,7 +32,7 @@ class ApiServices {
       final String token = responseData['token'];
 
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-      authProvider.login(decodedToken['id'].toString());
+      authProvider.login(decodedToken['id']);
 
       return token;
     } else {
