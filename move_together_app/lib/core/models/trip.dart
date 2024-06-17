@@ -47,8 +47,8 @@ class Trip {
     };
   }
 
-  Future<bool> isCurrentUserOwner() async {
+  bool isCurrentUserOwner(context) {
     final Participant owner = participants.firstWhere((participant) => participant.tripRole == "OWNER");
-    return await owner.isMe();
+    return owner.isMe(context);
   }
 }

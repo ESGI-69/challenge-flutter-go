@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Profile/bloc/profile_bloc.dart';
 import 'package:move_together_app/router.dart';
 
+import '../Provider/auth_provider.dart';
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -12,10 +14,10 @@ class ProfileScreen extends StatelessWidget {
       top: false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Profil'),
+          title: const Text('Profile'),
         ),
         body: BlocProvider(
-          create: (context) => ProfileBloc()..add(ProfileDataLoaded()),
+          create: (context) => ProfileBloc(context)..add(ProfileDataLoaded()),
           child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
               if (state is ProfileDataLoading) {
@@ -30,6 +32,7 @@ class ProfileScreen extends StatelessWidget {
                       ElevatedButton(
                         child: const Text('Logout'),
                         onPressed: () {
+                          context.read<AuthProvider>().logout();
                           secureStorage.delete(key: 'jwt');
                           router.go('/home');
                         },

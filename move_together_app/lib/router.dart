@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
@@ -8,6 +8,9 @@ import 'package:move_together_app/Profile/profile_screen.dart';
 import 'package:move_together_app/views/trip/join_screen.dart';
 import 'package:move_together_app/Trip/trip_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
+
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
@@ -24,11 +27,9 @@ List<String> unloggedRoutes = [
   '/',
 ];
 
-Future<bool> isAuthenticated() async {
-  final token = await secureStorage.read(key: 'jwt');
-  if (token == null) return false;
-  final isExpired = JwtDecoder.isExpired(token);
-  return !isExpired;
+Future<bool> isAuthenticated(BuildContext context) async {
+  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  return await authProvider.isAuthenticated();
 }
 
 final GoRouter router = GoRouter(
@@ -65,19 +66,16 @@ final GoRouter router = GoRouter(
   ],
   redirect: (context, state) async {
     final topRoutePath = state.topRoute?.path;
-    final bool userIsAuthenticated = await isAuthenticated();
+    final bool userIsAuthenticated = await isAuthenticated(context);
     final bool routeIsPublic = unloggedRoutes.contains(topRoutePath);
     final bool routeRequireAuthentication = loggedRoutes.contains(topRoutePath);
-
     if (!userIsAuthenticated && routeRequireAuthentication) {
       secureStorage.delete(key: 'jwt');
       return '/';
     }
-
     if (userIsAuthenticated && routeIsPublic) {
       return '/home';
     }
-
     return null;
   },
 );

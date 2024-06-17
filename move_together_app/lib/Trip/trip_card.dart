@@ -5,7 +5,6 @@ import 'package:move_together_app/Widgets/Button/button_delete.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
-import 'package:move_together_app/core/services/api_services.dart';
 import 'package:move_together_app/utils/show_unified_dialog.dart';
 
 class TripCard extends StatelessWidget {
@@ -19,7 +18,7 @@ class TripCard extends StatelessWidget {
   final Function() onDelete;
   final bool isCurrentUserOwner;
 
-  TripCard({
+  const TripCard({
     super.key,
     required this.imageUrl,
     required this.name,
@@ -31,8 +30,6 @@ class TripCard extends StatelessWidget {
     required this.onDelete,
     required this.isCurrentUserOwner,
   });
-
-  final apiServices = ApiServices();
 
   @override
   Widget build(BuildContext context) {
