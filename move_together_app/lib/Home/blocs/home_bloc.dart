@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:move_together_app/core/exceptions/api_exception.dart';
 import 'package:move_together_app/core/models/trip.dart';

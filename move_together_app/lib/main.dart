@@ -6,7 +6,6 @@ import 'package:move_together_app/router.dart';
 import 'package:provider/provider.dart';
 
 class AuthProvider extends ChangeNotifier {
-  bool _isAuthenticated = false;
   String _userId = '';
 
   String get userId => _userId;
@@ -19,13 +18,11 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void login(String userId) {
-    _isAuthenticated = true;
     _userId = userId;
     notifyListeners();
   }
 
   void logout() {
-    _isAuthenticated = false;
     _userId = '';
     notifyListeners();
   }
