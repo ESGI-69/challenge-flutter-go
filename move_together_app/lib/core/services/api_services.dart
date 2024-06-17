@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:move_together_app/core/models/Transport.dart';
+import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

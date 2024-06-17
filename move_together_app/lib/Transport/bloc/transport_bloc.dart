@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/exceptions/api_exception.dart';
-import 'package:move_together_app/core/models/Transport.dart';
+import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/services/api_services.dart';
 
 part 'transport_event.dart';
