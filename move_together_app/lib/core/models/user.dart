@@ -1,7 +1,10 @@
+// ignore: constant_identifier_names
+enum Role { USER, ADMIN }
+
 class User {
   final int id;
   final String name;
-  final String role;
+  final Role role;
 
   User({
     required this.id,
@@ -13,7 +16,7 @@ class User {
     return User(
       id: json['id'],
       name: json['username'],
-      role: json['role'],
+      role: json['role'] != null ? Role.values.firstWhere((e) => e.toString().split('.').last == json['role']) : Role.USER,
     );
   }
 

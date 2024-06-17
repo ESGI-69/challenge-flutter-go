@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:move_together_app/core/models/Transport.dart';
 import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -219,6 +220,28 @@ class ApiServices {
       throw Exception('Unauthorized');
     } else {
       throw Exception('Failed to delete trip');
+    }
+  }
+
+  Future<List<Transport>> getTransports(String tripId) async {
+    await Future.delayed(const Duration(seconds: 3));
+    final response = await http.get(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId/transports'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+    );
+    
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+      return responseData.map((transport) => Transport.fromJson(transport)).toList();
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
+    } else {
+      throw Exception('Failed to get transport');
     }
   }
 }

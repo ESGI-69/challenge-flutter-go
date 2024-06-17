@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/Dialog/edit_trip_name.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
