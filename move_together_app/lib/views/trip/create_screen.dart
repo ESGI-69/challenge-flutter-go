@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:move_together_app/core/services/api_services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
-import 'package:move_together_app/Widgets/Popup/pop_up.dart';
+
 
 class CreateTripScreen extends StatefulWidget {
   @override
@@ -12,7 +12,11 @@ class CreateTripScreen extends StatefulWidget {
 class _CreateTripScreenState extends State<CreateTripScreen> {
   final TextEditingController _destinationController = TextEditingController();
   final TextEditingController _departureController = TextEditingController();
+  final TextEditingController _voyageurController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+
   int _voyageurCount = 1;
+  List<String> _voyageurs = [];
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +61,7 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
                   const SizedBox(height: 5),
                     const Text('Quelle est la ville de départ (optionnel) ?', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextField(
-                      controller: _destinationController,
+                      controller: _departureController,
                       decoration: const InputDecoration(
                       hintText: 'Adresse, gare ou aéroport...',
                       prefixIcon: Icon(Icons.home, color: Color(0xFF79D0BF)),
@@ -82,12 +86,18 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
                   Expanded(
                     flex: 10,
                     child: ElevatedButton.icon(
-                       onPressed: () {
-                          showDialog(context: context, builder: 
-                            (BuildContext context) {
-                             return Text('Saisir la date de départ et de retour de ton voyage');
-                            },
+                       onPressed: () async {
+                          final DateTimeRange? selectedDateRange = await showDateRangePicker(
+                            context: context,
+                            firstDate: DateTime(2024, 6, 15),
+                            lastDate: DateTime(2025, 6, 16),
                           );
+
+                          if (selectedDateRange != null) {
+                            print(selectedDateRange.start);
+                            print(selectedDateRange.end);
+                            _dateController.text = '${selectedDateRange.start} - ${selectedDateRange.end}';
+                          }
                         },
                       icon: Icon(Icons.calendar_month),
                       label: Text('Date', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -110,11 +120,50 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return PopupWidget(
-                                content: Container(
-                                  child: 
-                                    Text('Saisir le nom d\'utilisateur ou l\'adresse e-mail du voyageur de la personne que tu souhaites inviter'),
-                                ),
+                              return AlertDialog(
+                                content: SingleChildScrollView( // Ajoutez ce widget
+                                          child: Column(
+                                            children: [
+                                              Text('Saisir le nom d\'utilisateur ou l\'adresse e-mail du voyageur de la personne que tu souhaites inviter \n\n Si le participant n\a pas de compte, une invitation sera envoyée.'),
+                                              TextField(
+                                                controller: _voyageurController,
+                                                decoration: InputDecoration(
+                                                  hintText: 'Nom d\'utilisateur ou adresse e-mail',
+                                                  filled: true,
+                                                  fillColor: Colors.white,
+                                                  enabledBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide.none,
+                                                  ),
+                                                  focusedBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide.none,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('Annuler'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF79D0BF)),
+                                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                    ),
+                                    child: const Text('Ajouter'),
+                                    onPressed: () {
+                                      setState(() { // Utilisation de setState pour mettre à jour l'interface utilisateur
+                                        _voyageurs.add(_voyageurController.text); // Ajout du voyageur à la liste
+                                        _voyageurCount = _voyageurs.length; // Mise à jour du compteur de voyageurs
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
                               );
                             },
                           );
