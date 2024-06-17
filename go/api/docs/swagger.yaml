@@ -174,6 +174,21 @@ definitions:
       id:
         type: integer
     type: object
+  responses.DocumentResponse:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      path:
+        type: string
+      title:
+        type: string
+      updateAt:
+        type: string
+    type: object
   responses.LoginResponse:
     properties:
       token:
@@ -626,6 +641,147 @@ paths:
       summary: Create a new chat message on trip
       tags:
       - chatMessage
+  /trips/{id}/documents:
+    get:
+      consumes:
+      - application/json
+      description: Get all documents of a trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all documents of a trip
+      tags:
+      - document
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new document on trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Title of the document
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: Description of the document
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Document file
+        in: formData
+        name: document
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.DocumentResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new document on trip
+      tags:
+      - document
+  /trips/{id}/documents/{documentID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a document from the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the document
+        in: path
+        name: documentID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a document from trip
+      tags:
+      - document
+  /trips/{id}/documents/{documentID}/download:
+    get:
+      consumes:
+      - application/json
+      description: Download a document
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the document
+        in: path
+        name: documentID
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: A file stream of the document
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Download a document
+      tags:
+      - document
   /trips/{id}/leave:
     post:
       consumes:

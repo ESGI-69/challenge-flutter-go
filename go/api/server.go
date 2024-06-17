@@ -50,6 +50,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	documentRepository := repository.DocumentRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -84,6 +88,11 @@ func setRoutes() {
 
 	accommodationHandler := handlers.AccommodationHandler{
 		Repository:     AccommodationRepository,
+		TripRepository: tripRepository,
+	}
+
+	documentHandler := handlers.DocumentHandler{
+		Repository:     documentRepository,
 		TripRepository: tripRepository,
 	}
 
@@ -126,6 +135,12 @@ func setRoutes() {
 	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages")
 	tripChatMessagesRoutes.GET("/", middlewares.UserIsTripParticipant, chatMessageHandler.GetChatMessagesOfTrip)
 	tripChatMessagesRoutes.POST("/", middlewares.UserHasTripEditRight, chatMessageHandler.AddChatMessageToTrip)
+
+	tripDocumentsRoutes := tripsRoutes.Group("/:id/documents")
+	tripDocumentsRoutes.GET("/", middlewares.UserIsTripParticipant, documentHandler.GetDocumentsOfTrip)
+	tripDocumentsRoutes.POST("/", middlewares.UserHasTripEditRight, documentHandler.CreateDocument)
+	tripDocumentsRoutes.DELETE("/:documentID", middlewares.UserHasTripEditRight, documentHandler.DeleteDocumentFromTrip)
+	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, documentHandler.DownloadDocument)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
