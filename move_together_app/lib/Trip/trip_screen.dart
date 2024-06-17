@@ -38,6 +38,7 @@ class TripScreen extends StatelessWidget {
             );
           } else if (state is TripDataLoadingSuccess) {
             return Scaffold(
+              extendBodyBehindAppBar: true,
               appBar: TripAppBar(
                 name: state.trip.name,
                 startDate: state.trip.startDate,

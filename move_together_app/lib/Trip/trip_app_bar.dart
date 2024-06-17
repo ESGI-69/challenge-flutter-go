@@ -30,8 +30,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     if (isLoading) {
       return AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         leading: const Padding(
           padding: EdgeInsets.only(left: 16.0),
           child: Row(
@@ -63,7 +62,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
     } else {
       return AppBar(
-        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         leading: const Padding(
           padding: EdgeInsets.only(left: 16.0),
           child: Row(
