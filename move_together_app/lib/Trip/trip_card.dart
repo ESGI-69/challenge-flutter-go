@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Widgets/Button/button_leave.dart';
 import 'package:move_together_app/Widgets/Button/button_delete.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
-import 'package:move_together_app/core/services/api_services.dart';
 import 'package:move_together_app/utils/show_unified_dialog.dart';
-
-import '../../main.dart';
 
 class TripCard extends StatelessWidget {
   final String imageUrl;
