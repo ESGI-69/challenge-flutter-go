@@ -16,12 +16,10 @@ class TransportBloc extends Bloc<TransportEvent, TransportState> {
 
       try {
         final transports = await apiServices.getTransports(event.tripId);
-        print(transports);
         emit(TransportsDataLoadingSuccess(transports: transports));
       } on ApiException catch (error) {
         emit(TransportsDataLoadingError(errorMessage: error.message));
       } catch (error) {
-        print(error);
         emit(TransportsDataLoadingError(errorMessage: 'Unhandled error'));
       }
     });
