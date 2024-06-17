@@ -60,7 +60,7 @@ func (handler *DocumentHandler) GetDocumentsOfTrip(context *gin.Context) {
 // @Security		BearerAuth
 // @Param			id		path		string	true	"ID of the trip"
 // @Param			title		formData	string	true	"Title of the document"
-// @Param			description	formData	string	true	"Description of the document"
+// @Param			description	formData	string	false	"Description of the document"
 // @Param			document	formData	file	true	"Document file"
 // @Success		200		{object}	responses.DocumentResponse
 // @Failure		400		{object}	error
