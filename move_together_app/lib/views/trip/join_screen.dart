@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/core/services/api_services.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../main.dart';
+import 'package:move_together_app/Provider/AuthProvider.dart';
 
 
 class JoinTripScreen extends StatefulWidget {

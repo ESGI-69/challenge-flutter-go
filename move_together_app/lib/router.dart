@@ -11,7 +11,7 @@ import 'package:move_together_app/views/trip/join_screen.dart';
 import 'package:move_together_app/Trip/trip_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:move_together_app/main.dart';
+import 'package:move_together_app/Provider/AuthProvider.dart';
 
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();

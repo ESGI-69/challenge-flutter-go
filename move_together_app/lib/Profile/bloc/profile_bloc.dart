@@ -2,8 +2,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/core/services/api_services.dart';
-
-import '../../main.dart';
+import 'package:move_together_app/Provider/AuthProvider.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';

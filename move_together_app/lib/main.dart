@@ -4,29 +4,7 @@ import 'package:move_together_app/app.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:move_together_app/router.dart';
 import 'package:provider/provider.dart';
-
-class AuthProvider extends ChangeNotifier {
-  String _userId = '';
-
-  String get userId => _userId;
-
-  Future<bool> isAuthenticated() async {
-    final token = await secureStorage.read(key: 'jwt');
-    if (token == null) return false;
-    final isExpired = JwtDecoder.isExpired(token);
-    return !isExpired;
-  }
-
-  void login(String userId) {
-    _userId = userId;
-    notifyListeners();
-  }
-
-  void logout() {
-    _userId = '';
-    notifyListeners();
-  }
-}
+import 'package:move_together_app/Provider/AuthProvider.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
