@@ -63,21 +63,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: PageView(
                     onPageChanged: changePage,
                     children: state.trips.map((trip) {
-                      return FutureBuilder<bool>(
-                        future: trip.isCurrentUserOwner(),
-                        builder: (context, AsyncSnapshot<bool> snapshot) {
-                          return TripCard(
-                            onTap: () => context.push('/trip/${trip.id}'),
-                            onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
-                            onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
-                            imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
-                            name: trip.name,
-                            startDate: trip.startDate,
-                            endDate: trip.endDate,
-                            participants: trip.participants,
-                            isCurrentUserOwner: snapshot.data ?? true,
-                          );
-                        },
+                      return TripCard(
+                        onTap: () => context.push('/trip/${trip.id}', extra: trip),
+                        onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
+                        onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
+                        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
+                        name: trip.name,
+                        startDate: trip.startDate,
+                        endDate: trip.endDate,
+                        participants: trip.participants,
+                        isCurrentUserOwner: trip.isCurrentUserOwner(context),
                       );
                     }).toList(),
                     ),

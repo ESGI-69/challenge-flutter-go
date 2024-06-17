@@ -1,5 +1,4 @@
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:move_together_app/router.dart';
+import '../../Provider/auth_provider.dart';
 
 class Participant {
   final int id;
@@ -28,11 +27,10 @@ class Participant {
     };
   }
   
-  Future<bool> isMe() async {
-    final token = await secureStorage.read(key: 'jwt');
-    if (token == null) return false;
-    final Map<String, dynamic> payload = JwtDecoder.decode(token);
-    return payload['id'] == id;
+  bool isMe(context) {
+    final userId = context.read<AuthProvider>().userId;
+    if (userId == null) return false;
+    return userId == id;
   }
 
   @override
