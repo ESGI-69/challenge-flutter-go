@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:move_together_app/core/services/api_services.dart';
 import 'package:go_router/go_router.dart';
+
+import '../main.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,7 +20,7 @@ class LoginScreenState extends State<LoginScreen> {
   String? errorMessage;
 
   Future<void> _login() async {
-    final apiServices = ApiServices();
+    final apiServices = ApiServices(context.read<AuthProvider>());
     try {
       final token = await apiServices.loginUser(
         _usernameController.text,
@@ -30,6 +33,8 @@ class LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       context.go('/home');
     } catch (e) {
+      print("DBG SG : $e");
+
       if (mounted) {
         setState(() {
           errorMessage = 'Login failed';

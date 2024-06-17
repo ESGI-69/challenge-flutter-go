@@ -6,9 +6,15 @@ import 'package:move_together_app/core/models/trip.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:move_together_app/router.dart';
+import 'package:move_together_app/main.dart';
+
 
 class ApiServices {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  final AuthProvider authProvider;
+
+  ApiServices(this.authProvider);
+
   Future<String> loginUser(String username, String password) async {
     final response = await http.post(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/login'),
@@ -24,6 +30,7 @@ class ApiServices {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData['token'];
+
       return token;
     } else {
       throw Exception('Failed to login user');
@@ -32,7 +39,7 @@ class ApiServices {
 
   Future<User> registerUser(String username, String password) async {
     final response = await http.post(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/users'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/users/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

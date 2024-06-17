@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.add),
       ),
       body: BlocProvider(
-        create: (context) => HomeBloc()..add(HomeDataFetch()),
+        create: (context) => HomeBloc(context)..add(HomeDataFetch()),
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             if (state is HomeDataLoading) {

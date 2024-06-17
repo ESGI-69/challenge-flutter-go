@@ -12,10 +12,10 @@ class ProfileScreen extends StatelessWidget {
       top: false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Profil'),
+          title: const Text('Profile'),
         ),
         body: BlocProvider(
-          create: (context) => ProfileBloc()..add(ProfileDataLoaded()),
+          create: (context) => ProfileBloc(context)..add(ProfileDataLoaded()),
           child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
               if (state is ProfileDataLoading) {
