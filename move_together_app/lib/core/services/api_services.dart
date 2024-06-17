@@ -17,7 +17,7 @@ class ApiServices {
 
   Future<String> loginUser(String username, String password) async {
     final response = await http.post(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/login'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/login/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -66,7 +66,7 @@ class ApiServices {
 
   Future<Trip> joinTrip(String inviteCode) async {
     final response = await http.post(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/join?inviteCode=$inviteCode'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/join?inviteCode=$inviteCode/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
@@ -87,7 +87,7 @@ class ApiServices {
 
   Future<List<Trip>> getTrips() async {
     final response = await http.get(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
@@ -109,7 +109,7 @@ class ApiServices {
   Future<User> getProfile() async {
     var userId = authProvider.userId;
     final response = await http.get(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/users/$userId'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/users/$userId/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
@@ -130,7 +130,7 @@ class ApiServices {
 
   Future<Trip> getTrip(String tripId) async {
     final response = await http.get(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
@@ -159,7 +159,7 @@ class ApiServices {
     }
   ) async {
     final response = await http.patch(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
@@ -187,7 +187,7 @@ class ApiServices {
 
   Future<void> leaveTrip(String tripId) async {
     final response = await http.post(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId/leave'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId/leave/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
@@ -207,7 +207,7 @@ class ApiServices {
 
   Future<void> deleteTrip(String tripID) async {
     final response = await http.delete(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripID'),
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripID/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
