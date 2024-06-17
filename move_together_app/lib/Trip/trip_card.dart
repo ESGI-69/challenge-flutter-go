@@ -37,8 +37,6 @@ class TripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final apiServices = ApiServices(context.read<AuthProvider>());
-
     return GestureDetector(
       onTap: onTap,
       child: Padding(
