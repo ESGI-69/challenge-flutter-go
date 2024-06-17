@@ -666,8 +666,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Description of the document",
                         "name": "description",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "type": "file",
