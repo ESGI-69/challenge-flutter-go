@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:move_together_app/core/models/participant.dart';
 
 class Trip {
@@ -47,7 +48,7 @@ class Trip {
     };
   }
 
-  bool isCurrentUserOwner(context) {
+  bool isCurrentUserOwner(BuildContext context) {
     final Participant owner = participants.firstWhere((participant) => participant.tripRole == "OWNER");
     return owner.isMe(context);
   }
