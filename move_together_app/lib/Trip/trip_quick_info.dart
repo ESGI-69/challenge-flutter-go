@@ -5,6 +5,7 @@ class TripQuickInfo extends StatelessWidget {
   final DateTime startDate;
   final DateTime endDate;
   final bool isLoading;
+  final Function()? onNameTap;
 
   const TripQuickInfo({
     super.key,
@@ -12,6 +13,7 @@ class TripQuickInfo extends StatelessWidget {
     required this.name,
     required this.startDate,
     required this.endDate,
+    this.onNameTap,
   });
 
   @override
@@ -46,12 +48,15 @@ class TripQuickInfo extends StatelessWidget {
             const CircularProgressIndicator.adaptive(),
           ]
           : [
-            Text(
-              name,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            GestureDetector(
+              onTap: onNameTap ?? () {},
+              child: Text(
+                name,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 4),
             Row(

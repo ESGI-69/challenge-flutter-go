@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
+import 'package:move_together_app/Widgets/Dialog/edit_trip_name.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
@@ -53,6 +54,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                   name: '',
                   startDate: DateTime.now(),
                   endDate: DateTime.now(),
+                  onNameTap: () {},
                 ),
               )
             ],
@@ -86,13 +88,18 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: GestureDetector(
-                  onTap: () => onNameUpdate('New name'),
-                  child: TripQuickInfo(
-                    name: name,
-                    startDate: startDate,
-                    endDate: endDate,
-                  ),
+                child: TripQuickInfo(
+                  name: name,
+                  startDate: startDate,
+                  endDate: endDate,
+                  onNameTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => EditTripNameDialog(
+                        onNameUpdate: onNameUpdate,
+                      )
+                    );
+                  }
                 ),
               )
             ],
