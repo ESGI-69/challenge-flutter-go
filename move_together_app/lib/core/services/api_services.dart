@@ -118,6 +118,63 @@ class ApiServices {
     }
   }
 
+  Future<Trip> getTrip(String tripId) async {
+    final response = await http.get(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return Trip.fromJson(jsonDecode(response.body));
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
+    } else {
+      throw Exception('Failed to get trip');
+    }
+  }
+
+  Future<Trip> editTrip(
+    String tripId,
+    {
+      String? name,
+      String? country,
+      String? city,
+      String? startDate,
+      String? endDate,
+    }
+  ) async {
+    final response = await http.patch(
+      Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': name,
+        'country': country,
+        'city': city,
+        'startDate': startDate,
+        'endDate': endDate,
+      }),
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return Trip.fromJson(jsonDecode(response.body));
+    } else if (response.statusCode == 401) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/home');
+      throw Exception('Unauthorized');
+    } else {
+      throw Exception('Failed to edit trip');
+    }
+  }
+  
+
   Future<void> leaveTrip(String tripId) async {
     final response = await http.post(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId/leave'),

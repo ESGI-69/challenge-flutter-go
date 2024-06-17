@@ -4,12 +4,16 @@ class TripQuickInfo extends StatelessWidget {
   final String name;
   final DateTime startDate;
   final DateTime endDate;
+  final bool isLoading;
+  final Function()? onNameTap;
 
   const TripQuickInfo({
     super.key,
+    this.isLoading = false,
     required this.name,
     required this.startDate,
     required this.endDate,
+    this.onNameTap,
   });
 
   @override
@@ -17,7 +21,6 @@ class TripQuickInfo extends StatelessWidget {
     return FractionallySizedBox(
       widthFactor: 0.7,
       child: Container(
-        // 70% de la largeur de l'écran
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           color: Colors.white,
@@ -34,13 +37,26 @@ class TripQuickInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              name,
+          children: isLoading
+          ? [
+            const Text(
+              'Chargement...',
               textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            const CircularProgressIndicator.adaptive(),
+          ]
+          : [
+            GestureDetector(
+              onTap: onNameTap ?? () {},
+              child: Text(
+                name,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 4),
             Row(
