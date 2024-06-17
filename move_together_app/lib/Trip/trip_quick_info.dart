@@ -19,7 +19,6 @@ class TripQuickInfo extends StatelessWidget {
     return FractionallySizedBox(
       widthFactor: 0.7,
       child: Container(
-        // 70% de la largeur de l'écran
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           color: Colors.white,
