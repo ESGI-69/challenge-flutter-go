@@ -4,9 +4,11 @@ class TripQuickInfo extends StatelessWidget {
   final String name;
   final DateTime startDate;
   final DateTime endDate;
+  final bool isLoading;
 
   const TripQuickInfo({
     super.key,
+    this.isLoading = false,
     required this.name,
     required this.startDate,
     required this.endDate,
@@ -34,7 +36,17 @@ class TripQuickInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: isLoading
+          ? [
+            const Text(
+              'Chargement...',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            const CircularProgressIndicator.adaptive(),
+          ]
+          : [
             Text(
               name,
               textAlign: TextAlign.center,
