@@ -25,6 +25,8 @@ class TripScreen extends StatelessWidget {
                 startDate: DateTime.now(),
                 endDate: DateTime.now(),
                 participants: const [],
+                onNameUpdate: (newName) {},
+                imageUrl: '',
               ),
               body: const Center(
                 child: CircularProgressIndicator.adaptive(),
@@ -41,6 +43,13 @@ class TripScreen extends StatelessWidget {
                 startDate: state.trip.startDate,
                 endDate: state.trip.endDate,
                 participants: state.trip.participants,
+                onNameUpdate: (newName) {
+                  context.read<TripBloc>().add(TripEdit(
+                    tripId,
+                    name: newName,
+                  ));
+                },
+                imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg',
               ),
               body: const Text(
                 'Welcome to the trip!(qsdsqdqsdqsd)',

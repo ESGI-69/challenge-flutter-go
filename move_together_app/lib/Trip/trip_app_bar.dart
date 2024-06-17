@@ -11,6 +11,8 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final DateTime endDate;
   final List<Participant> participants;
   final bool isLoading;
+  final Function(String) onNameUpdate;
+  final String imageUrl;
 
   const TripAppBar({
     super.key, 
@@ -19,6 +21,8 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.startDate,
     required this.endDate,
     required this.participants,
+    required this.onNameUpdate,
+    required this.imageUrl,
   });
 
   @override
@@ -27,24 +31,32 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
       return AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
-        title: const CircularProgressIndicator.adaptive(),
-        // Ajoutez des styles ou des widgets personnalisés ici
-        flexibleSpace: SizedBox(
-          height: preferredSize.height + 10,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 16.0),
+          child: Row(
             children: [
-              Center(
-                heightFactor: BorderSide.strokeAlignCenter,
+              ButtonBack(),
+            ],
+          ),
+        ),
+        title: const CircularProgressIndicator.adaptive(),
+        flexibleSpace: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.centerLeft,
+            children: [
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: TripQuickInfo(
                   isLoading: true,
                   name: '',
                   startDate: DateTime.now(),
                   endDate: DateTime.now(),
-                )
-              ),
+                ),
+              )
             ],
-          )
+          ),
         ),
       );
     } else {
@@ -59,33 +71,37 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         title: ParticipantIcons(participants: participants),
-        // Ajoutez des styles ou des widgets personnalisés ici
-        flexibleSpace: Container(
-          height: preferredSize.height + 10,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+        flexibleSpace: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.centerLeft,
             children: [
-              Center(
-                heightFactor: BorderSide.strokeAlignCenter,
-                child: TripQuickInfo(
-                  name: name,
-                  startDate: startDate,
-                  endDate: endDate,
-                )
+              Padding(
+                padding: const EdgeInsets.only(bottom: 35),
+                child: Image(
+                  image: NetworkImage(imageUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () => onNameUpdate('New name'),
+                  child: TripQuickInfo(
+                    name: name,
+                    startDate: startDate,
+                    endDate: endDate,
+                  ),
+                ),
+              )
             ],
-          )
+          ),
         ),
       );
     }
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 100);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 90);
 }
