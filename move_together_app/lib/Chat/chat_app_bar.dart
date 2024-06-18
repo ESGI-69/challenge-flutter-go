@@ -12,8 +12,6 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-
     return DecoratedBox(
       decoration: const BoxDecoration(
         border: Border(
@@ -24,6 +22,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       child: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         leading: const Padding(
           padding: EdgeInsets.only(left: 16.0),
