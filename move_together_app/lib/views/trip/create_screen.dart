@@ -112,15 +112,17 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
                               onPressed: () async {
                                 final DateTimeRange? selectedDateRange = await showDateRangePicker(
                                   context: context,
-                                  firstDate: DateTime(2024, 6, 15),
-                                  lastDate: DateTime(2025, 6, 16),
+                                  firstDate: DateTime(DateTime.now().month - 1),
+                                  lastDate: DateTime(DateTime.now().year + 1),
                                 );
 
                                 if (selectedDateRange != null) {
-                                  dateTimeStart = selectedDateRange.start;
-                                  dateTimeEnd = selectedDateRange.end;
-                                  _dateController.text = '${selectedDateRange.start.day}/${selectedDateRange.start.month} - ${selectedDateRange.end.day}/${selectedDateRange.end.month}';
-                                }
+                                  setState(() {
+                                    dateTimeStart = selectedDateRange.start;
+                                    dateTimeEnd = selectedDateRange.end;
+                                    _dateController.text = '${selectedDateRange.start.day}/${selectedDateRange.start.month} - ${selectedDateRange.end.day}/${selectedDateRange.end.month}';
+                                  });
+                                 }
                               },
                               icon: const Icon(Icons.calendar_month),
                               label: Text(_dateController.text.isNotEmpty ? _dateController.text : 'Date', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -157,6 +159,9 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
                       const SizedBox(height: 5),
                       ElevatedButton(
                         onPressed: () {
+                          if(_destinationController.text.isEmpty || _dateController.text.isEmpty || _nameController.text.isEmpty) {
+                            return;
+                          }
                           final String destination = _destinationController.text;
                           final String nameTrip = _nameController.text;
                           //TODO coté backend, on recuperera le pays/ville selon la destination
@@ -171,9 +176,14 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
                             inviteCode: "null",
                           );
                           context.read<TripBloc>().add(TripDataCreateTrip(newTrip));
+                            setState(() {});
                         },
                         style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFF79D0BF)),
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                            _destinationController.text.isEmpty || _dateController.text.isEmpty || _nameController.text.isEmpty
+                                ? Colors.grey
+                                : const Color(0xFF79D0BF),
+                          ),
                           foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
                           padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
                             const EdgeInsets.symmetric(vertical: 10.0)
