@@ -60,7 +60,17 @@ class TripFeatureCard extends StatelessWidget {
                     )
                   : length == 0
                       ? Center(
-                          child: Text(emptyMessage!),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 48),
+                            child: Text(
+                              emptyMessage,
+                              style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 12,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         )
                       : child,
             ),

@@ -20,6 +20,7 @@ class TransportCard extends StatelessWidget {
           if (state is TransportsDataLoading || state is TransportsDataLoadingSuccess) {
             return TripFeatureCard(
               title: 'Transports',
+              emptyMessage: 'Comment voyagerons-nous ? Appuie sur le + pour ajouter un moyen de transport',
               icon: Icons.directions_car,
               isLoading: state is TransportsDataLoading,
               length: state is TransportsDataLoadingSuccess ? state.transports.length : 0,
