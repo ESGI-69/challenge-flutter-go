@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/Dialog/edit_trip_name.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
@@ -30,8 +29,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     if (isLoading) {
       return AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         leading: const Padding(
           padding: EdgeInsets.only(left: 16.0),
           child: Row(
@@ -63,7 +61,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
     } else {
       return AppBar(
-        backgroundColor: Colors.transparent,
+        forceMaterialTransparency: true,
         leading: const Padding(
           padding: EdgeInsets.only(left: 16.0),
           child: Row(

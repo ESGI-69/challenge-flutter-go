@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Trip/bloc/trip_bloc.dart';
 import 'package:move_together_app/Trip/trip_app_bar.dart';
+import 'package:move_together_app/Trip/trip_body.dart';
 
 class TripScreen extends StatelessWidget {
   const TripScreen({
@@ -38,6 +39,7 @@ class TripScreen extends StatelessWidget {
             );
           } else if (state is TripDataLoadingSuccess) {
             return Scaffold(
+              extendBodyBehindAppBar: true,
               appBar: TripAppBar(
                 name: state.trip.name,
                 startDate: state.trip.startDate,
@@ -51,10 +53,7 @@ class TripScreen extends StatelessWidget {
                 },
                 imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg',
               ),
-              body: const Text(
-                'Welcome to the trip!(qsdsqdqsdqsd)',
-                style: TextStyle(fontSize: 24),
-              ),
+              body: TripBody(tripId: tripId),
             );
           } {
             return const Text('Unhandled state');
