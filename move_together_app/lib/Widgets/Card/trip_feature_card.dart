@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TripFeatureCard extends StatelessWidget {
-  final bool? isLoading;
-  final int? length;
-  final String? emptyMessage;
+  final bool isLoading;
+  final int length;
+  final String emptyMessage;
   final Widget child;
   final IconData icon;
   final String title;
+  final Function? onAddTap;
+  final Function? onTitleTap;
 
   const TripFeatureCard({
     super.key,
@@ -16,6 +18,8 @@ class TripFeatureCard extends StatelessWidget {
     required this.child,
     required this.icon,
     required this.title,
+    this.onAddTap,
+    this.onTitleTap,
   });
 
   @override
@@ -41,6 +45,9 @@ class TripFeatureCard extends StatelessWidget {
             _Header(
               icon: icon,
               title: title,
+              isLoading: isLoading,
+              onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
+              onAddTap: onAddTap != null ? () => onAddTap!() : null,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -60,21 +67,6 @@ class TripFeatureCard extends StatelessWidget {
           ],
         ),
       ),
-      // child: Padding(
-      //   padding: const EdgeInsets.symmetric(
-      //     vertical: 8,
-      //     horizontal: 12,
-      //   ),
-      //   child: isLoading!
-      //       ? const Center(
-      //           child: CircularProgressIndicator.adaptive(),
-      //         )
-      //       : length == 0
-      //           ? Center(
-      //               child: Text(emptyMessage!),
-      //             )
-      //           : child,
-      // ),
     );
   }
 }
@@ -82,10 +74,16 @@ class TripFeatureCard extends StatelessWidget {
 class _Header extends StatelessWidget {
   final IconData icon;
   final String title;
+  final Function? onTitleTap;
+  final Function? onAddTap;
+  final bool isLoading;
 
   const _Header({
     required this.icon,
     required this.title,
+    this.onTitleTap,
+    this.onAddTap,
+    this.isLoading = false,
   });
 
   @override
@@ -105,30 +103,90 @@ class _Header extends StatelessWidget {
           horizontal: 16,
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    icon,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                _HeaderTitle(
+                  isLoading: isLoading,
+                  title: title,
+                  onTitleTap: !isLoading && onTitleTap != null ? () => onTitleTap!() : () {},
+                ),
+              ],
+            ),
+            ...isLoading ? [] : [
+              GestureDetector(
+                onTap: onAddTap != null ? () => onAddTap!() : null,
+                child: const Icon(
+                  Icons.add,
+                  size: 24,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HeaderTitle extends StatelessWidget {
+  final bool isLoading;
+  final String title;
+  final Function onTitleTap;
+
+  const _HeaderTitle({
+    this.isLoading = false,
+    required this.title,
+    required this.onTitleTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => onTitleTap(),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          ...isLoading ? [] : [
+            const SizedBox(width: 4),
             Container(
-              width: 28,
-              height: 28,
+              width: 16,
+              height: 16,
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: Colors.black12,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                size: 12,
+                color: Colors.black54,
               ),
             ),
           ],
-        ),
+        ]
       ),
     );
   }

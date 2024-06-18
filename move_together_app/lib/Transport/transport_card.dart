@@ -23,6 +23,10 @@ class TransportCard extends StatelessWidget {
               icon: Icons.directions_car,
               isLoading: state is TransportsDataLoading,
               length: state is TransportsDataLoadingSuccess ? state.transports.length : 0,
+              // ignore: avoid_print
+              onAddTap: () {print('add tap');},
+              // ignore: avoid_print
+              onTitleTap: () {print('title tap');},
               child: state is TransportsDataLoadingSuccess
                 ? Column(
                   children: [

@@ -224,7 +224,6 @@ class ApiServices {
   }
 
   Future<List<Transport>> getTransports(String tripId) async {
-    await Future.delayed(const Duration(seconds: 3));
     final response = await http.get(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/$tripId/transports'),
       headers: <String, String>{
