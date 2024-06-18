@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:move_together_app/router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:intl/intl.dart';
 
 
 class ApiServices {

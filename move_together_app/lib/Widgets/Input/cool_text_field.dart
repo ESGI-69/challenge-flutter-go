@@ -17,7 +17,7 @@ class CoolTextField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        prefixIcon: Icon(prefixIcon, color: Color(0xFF79D0BF)),
+        prefixIcon: Icon(prefixIcon, color: const Color(0xFF79D0BF)),
         filled: true,
         fillColor: Colors.white,
         enabledBorder: const OutlineInputBorder(
