@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/core/models/trip.dart';
-import 'package:move_together_app/Trip/blocs/trip_bloc.dart';
+import 'package:move_together_app/Trip/bloc/trip_bloc.dart';
 
 class CreateTripScreen extends StatefulWidget {
   const CreateTripScreen({super.key});
@@ -16,7 +16,6 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
   final TextEditingController _destinationController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final TripBloc _tripBloc = TripBloc();
 
   var dateTimeStart = DateTime.now();
   var dateTimeEnd = DateTime.now();
@@ -36,7 +35,7 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
       ),
       body: 
       BlocProvider(
-        create: (context) => _tripBloc,
+        create: (context) => TripBloc(context),
         child: BlocListener<TripBloc, TripState>(
           listener: (context, state) {
             if (state is TripDataLoadingSuccess) {

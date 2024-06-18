@@ -44,5 +44,18 @@ class TripBloc extends Bloc<TripEvent, TripState> {
         emit(TripDataLoadingError(errorMessage: 'Unhandled error'));
       }
     });
+
+     on<TripDataCreateTrip>((event, emit) async {
+      emit(TripDataLoading());
+      final apiServices = ApiServices(context.read<AuthProvider>());
+      try {
+        final trip =  await apiServices.createTrip(event.trip);
+        emit(TripDataLoadingSuccess(trip: trip));
+      } on ApiException catch (error) {
+        emit(TripDataLoadingError(errorMessage: error.message));
+      } catch (error) {
+        emit(TripDataLoadingError(errorMessage: 'Unhandled error'));
+      }
+    });
   }
 }
