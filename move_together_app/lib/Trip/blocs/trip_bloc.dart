@@ -14,8 +14,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       emit(TripDataLoading());
       final apiServices = ApiServices();
       try {
-        await apiServices.createTrip(event.trip);
-        final trip = event.trip;
+        final trip =  await apiServices.createTrip(event.trip);
         emit(TripDataLoadingSuccess(trip: trip));
       } on ApiException catch (error) {
         emit(TripDataLoadingError(errorMessage: error.message));
