@@ -9,10 +9,10 @@ class CreateTripScreen extends StatefulWidget {
   const CreateTripScreen({super.key});
 
   @override
-  _CreateTripScreenState createState() => _CreateTripScreenState();
+  CreateTripScreenState createState() => CreateTripScreenState();
 }
 
-class _CreateTripScreenState extends State<CreateTripScreen> {
+class CreateTripScreenState extends State<CreateTripScreen> {
   final TextEditingController _destinationController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -124,7 +124,7 @@ class _CreateTripScreenState extends State<CreateTripScreen> {
                                  }
                               },
                               icon: const Icon(Icons.calendar_month),
-                              label: Text(_dateController.text.isNotEmpty ? _dateController.text : 'Date', style: TextStyle(fontWeight: FontWeight.bold)),
+                              label: Text(_dateController.text.isNotEmpty ? _dateController.text : 'Date', style: const TextStyle(fontWeight: FontWeight.bold)),
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(vertical: 4),
                                 shape: RoundedRectangleBorder(

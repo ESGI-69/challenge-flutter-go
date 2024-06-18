@@ -18,8 +18,6 @@ class ApiServices {
   ApiServices(this.authProvider);
 
   Future<String> loginUser(String username, String password) async {
-    print('API_ADDRESS: ${dotenv.env['API_ADDRESS']}');
-    print("endpoint url ${Uri.parse('${dotenv.env['API_ADDRESS']!}/login/')}");
     final response = await http.post(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/login'),
       headers: <String, String>{
@@ -32,7 +30,6 @@ class ApiServices {
     );
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      print("Response 200: ${response.body}");
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData['token'];
 
@@ -41,8 +38,6 @@ class ApiServices {
 
       return token;
     } else {
-      print("Response not 200: ${response.body}");
-      print("Response not 200: ${response.statusCode}");
       throw Exception('Failed to login user');
     }
   }
