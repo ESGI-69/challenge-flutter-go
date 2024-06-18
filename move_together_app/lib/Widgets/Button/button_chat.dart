@@ -13,7 +13,7 @@ class ButtonChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.go('/trip/$tripId/chat');
+        context.push('/trip/$tripId/chat');
       },
       child: Container(
         height: 40,
