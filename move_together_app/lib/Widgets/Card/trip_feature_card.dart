@@ -54,7 +54,7 @@ class TripFeatureCard extends StatelessWidget {
                 vertical: 6,
                 horizontal: 16,
               ),
-              child: isLoading!
+              child: isLoading
                   ? const Center(
                       child: CircularProgressIndicator.adaptive(),
                     )
