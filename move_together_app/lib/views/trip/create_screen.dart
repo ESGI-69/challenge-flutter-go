@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/Trip/bloc/trip_bloc.dart';
+import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 
 class CreateTripScreen extends StatefulWidget {
   const CreateTripScreen({super.key});
@@ -14,6 +15,7 @@ class CreateTripScreen extends StatefulWidget {
 
 class CreateTripScreenState extends State<CreateTripScreen> {
   final TextEditingController _destinationController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
@@ -24,6 +26,7 @@ class CreateTripScreenState extends State<CreateTripScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Nouveau Voyage'),
         leading: const Padding(
           padding: EdgeInsets.only(left: 16.0),
           child: Row(
@@ -62,40 +65,26 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Nouveau Voyage', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                            //const Text('Nouveau Voyage', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 20),
-                            const Text('Où veux-tu aller ?', style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextField(
+                            const Text('Dans quelle ville veux tu aller ?', style: TextStyle(fontWeight: FontWeight.bold)),
+                            CoolTextField(
                               controller: _destinationController,
-                              decoration: const InputDecoration(
-                                hintText: 'Ville, pays, région...',
-                                prefixIcon: Icon(Icons.place, color: Color(0xFF79D0BF)),
-                                filled: true,
-                                fillColor: Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
+                              hintText: 'Paris, Tokyo...',
+                              prefixIcon: Icons.location_city,
+                            ),
+                            const Text('Pays ?', style: TextStyle(fontWeight: FontWeight.bold)),
+                            CoolTextField(
+                              controller: _countryController,
+                              hintText: 'France, Japon...',
+                              prefixIcon: Icons.flag,
                             ),
                             const SizedBox(height: 5),
                             const Text('Nom du voyage ?', style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextField(
+                            CoolTextField(
                               controller: _nameController,
-                              decoration: const InputDecoration(
-                                hintText: 'Paris 2024, JO Tokyo...',
-                                prefixIcon: Icon(Icons.tag, color: Color(0xFF79D0BF)),
-                                filled: true,
-                                fillColor: Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
+                              hintText: 'Vacances de Noël...',
+                              prefixIcon: Icons.card_travel,
                             ),
                             const SizedBox(height: 10),
                             const Text('Plus d\'infos', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -158,16 +147,16 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                       const SizedBox(height: 5),
                       ElevatedButton(
                         onPressed: () {
-                          if(_destinationController.text.isEmpty || _dateController.text.isEmpty || _nameController.text.isEmpty) {
+                          if(_destinationController.text.isEmpty || _dateController.text.isEmpty || _nameController.text.isEmpty || _countryController.text.isEmpty) {
                             return;
                           }
                           final String destination = _destinationController.text;
                           final String nameTrip = _nameController.text;
-                          //TODO coté backend, on recuperera le pays/ville selon la destination
+                          final String country = _countryController.text;
                           final Trip newTrip = Trip(
                             id: 0,
                             name: nameTrip,
-                            country: destination,
+                            country: country,
                             city: destination,
                             startDate: dateTimeStart,
                             endDate: dateTimeEnd,

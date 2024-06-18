@@ -247,8 +247,8 @@ class ApiServices {
   }
 
   Future<Trip> createTrip(Trip trip) async {
-    String formattedStartDate = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(trip.startDate.toUtc());
-    String formattedEndDate = DateFormat("yyyy-MM-ddTHH:mm:ss'Z'").format(trip.endDate.toUtc());
+    String formattedStartDate = trip.startDate.toUtc().toIso8601String();
+    String formattedEndDate = trip.endDate.toUtc().toIso8601String();
     final response = await http.post(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/trips/'),
       headers: <String, String>{
