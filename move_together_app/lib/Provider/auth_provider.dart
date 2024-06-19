@@ -12,8 +12,10 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> _loadUserId() async {
-    var token = (await secureStorage.read(key: 'jwt'))!;
-    _userId = JwtDecoder.decode(token)['id'];
+    final isUserAuthenticated = await isAuthenticated();
+    if (!isUserAuthenticated) return;
+    var token = (await secureStorage.read(key: 'jwt'));
+    _userId = JwtDecoder.decode(token!)['id'];
     notifyListeners();
   }
 
@@ -29,8 +31,9 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() async {
+  logout() async {
     _userId = 0;
+    await secureStorage.delete(key: 'jwt');
     notifyListeners();
   }
 }

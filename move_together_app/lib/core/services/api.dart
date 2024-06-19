@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/router.dart';
 
 class Api {
@@ -29,7 +30,6 @@ class Api {
 class AppInterceptors extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    // add token to headers
     final token = await secureStorage.read(key: 'jwt');
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -38,9 +38,9 @@ class AppInterceptors extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
-      secureStorage.delete(key: 'jwt');
+      await AuthProvider().logout();
       router.go('/');
       handler.reject(err);
     }
