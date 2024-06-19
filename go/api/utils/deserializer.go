@@ -3,7 +3,6 @@ package utils
 import (
 	"challenge-flutter-go/api/errorHandlers"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -31,8 +30,4 @@ func Deserialize(object any, context *gin.Context) (passed bool) {
 		return false
 	}
 	return true
-}
-
-func SpaceTrimmedEmpty(fl validator.FieldLevel) bool {
-	return strings.ReplaceAll(fl.Field().String(), " ", "") != ""
 }
