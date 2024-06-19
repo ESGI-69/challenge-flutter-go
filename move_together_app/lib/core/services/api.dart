@@ -36,4 +36,14 @@ class AppInterceptors extends Interceptor {
     }
     handler.next(options);
   }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
+      secureStorage.delete(key: 'jwt');
+      router.go('/');
+      handler.reject(err);
+    }
+    handler.next(err);
+  }
 }
