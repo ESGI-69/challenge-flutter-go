@@ -28,3 +28,27 @@ class User {
     };
   }
 }
+
+class UserWithoutRole {
+  final int id;
+  final String name;
+
+  UserWithoutRole({
+    required this.id,
+    required this.name,
+  });
+
+  factory UserWithoutRole.fromJson(Map<String, dynamic> json) {
+    return UserWithoutRole(
+      id: json['id'],
+      name: json['username'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
+}

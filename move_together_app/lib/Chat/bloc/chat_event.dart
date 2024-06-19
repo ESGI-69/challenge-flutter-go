@@ -4,7 +4,12 @@ part of 'chat_bloc.dart';
 sealed class ChatEvent {}
 
 final class ChatDataFetch extends ChatEvent {
-  final String chatId;
+  final String tripId;
+  // log in console the tripId
 
-  ChatDataFetch(this.chatId);
+
+  ChatDataFetch(this.tripId){
+    print('ChatDataFetch: $tripId');
+  }
+
 }
