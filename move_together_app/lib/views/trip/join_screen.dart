@@ -4,6 +4,7 @@ import 'package:move_together_app/core/services/api_services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 
+import 'package:move_together_app/Widgets/Button/button_back.dart';
 
 class JoinTripScreen extends StatefulWidget {
   const JoinTripScreen({ super.key });
@@ -57,7 +58,14 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Join Trip'),
+        leading: const Padding(
+        padding: EdgeInsets.only(left: 16.0),
+         child: Row(
+          children: [
+            ButtonBack(),
+          ],
+        ),
+      ),
       ),
       body: Center(
         child: Padding(
@@ -108,6 +116,26 @@ class JoinTripScreenState extends State<JoinTripScreen> {
                   ),
                 ),
                 child: const Text('Rejoindre Maintenant'),
+              ),
+              const SizedBox(height: 16),
+              const Text('Ou alors'),
+              ElevatedButton(
+                onPressed: () {
+                  context.push('/create-trip');
+                },
+                style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFF79D0BF)),               
+                  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                  padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                    const EdgeInsets.symmetric(horizontal: 70.0),
+                  ),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+                child: const Text('Créer un voyage'),
               ),
               if (errorMessage != null)
                 Text(

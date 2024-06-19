@@ -28,3 +28,9 @@ final class TripEdit extends TripEvent {
     }
   );
 }
+
+final class TripDataCreateTrip extends TripEvent {
+  final Trip trip;
+
+  TripDataCreateTrip(this.trip);
+}

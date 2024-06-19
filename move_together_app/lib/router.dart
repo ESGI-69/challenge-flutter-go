@@ -11,6 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 
+import 'package:move_together_app/views/trip/create_screen.dart';
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
@@ -20,6 +21,7 @@ List<String> loggedRoutes = [
   '/trip',
   '/profile',
   '/trip/:tripId',
+  '/create-trip',
 ];
 List<String> unloggedRoutes = [
   '/login',
@@ -54,6 +56,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/join-trip',
       builder: (context, state) => const JoinTripScreen(),
+    ),
+    GoRoute(
+      path: '/create-trip',
+      builder: (context, state) => const CreateTripScreen(),
     ),
     GoRoute(
       path: '/trip/:tripId',

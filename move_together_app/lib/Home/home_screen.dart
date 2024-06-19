@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-        context.go('/join-trip');
+        context.push('/join-trip');
         },
         child: const Icon(Icons.add),
       ),
