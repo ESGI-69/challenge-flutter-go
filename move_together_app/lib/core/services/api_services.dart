@@ -19,30 +19,6 @@ class ApiServices {
     this.authProvider
   );
 
-  Future<User> registerUser(String username, String password) async {
-    final response = await http.post(
-      Uri.parse('${dotenv.env['API_ADDRESS']!}/users/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'username': username,
-        'password': password,
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-      return User.fromJson(responseData);
-    } else if (response.statusCode == 401) {
-      secureStorage.delete(key: 'jwt');
-      router.go('/home');
-      throw Exception('Unauthorized');
-    } else {
-      throw Exception('Failed to register user');
-    }
-  }
-
   Future<Trip> joinTrip(String inviteCode) async {
     final response = await http.post(
       Uri.parse(

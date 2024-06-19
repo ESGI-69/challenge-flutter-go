@@ -29,4 +29,20 @@ class AuthService {
       throw Exception('Failed to login user');
     }
   }
+
+  Future<void> register(String username, String password) async {
+    final response = await api.post(
+      '/register',
+      data: {
+        'username': username,
+        'password': password,
+      },
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return;
+    } else {
+      throw Exception('Failed to register user');
+    }
+  }
 }
