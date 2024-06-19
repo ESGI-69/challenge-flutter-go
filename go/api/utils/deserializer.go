@@ -34,5 +34,5 @@ func Deserialize(object any, context *gin.Context) (passed bool) {
 }
 
 func notTrimmedEmpty(fl validator.FieldLevel) bool {
-	return strings.TrimSpace(fl.Field().String()) != ""
+	return strings.ReplaceAll(fl.Field().String(), " ", "") != ""
 }
