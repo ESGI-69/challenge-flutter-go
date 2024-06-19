@@ -3,6 +3,7 @@ package utils
 import (
 	"challenge-flutter-go/api/errorHandlers"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -23,10 +24,15 @@ func Deserialize(object any, context *gin.Context) (passed bool) {
 		return false
 	}
 	validate := validator.New()
+	_ = validate.RegisterValidation("not_trimmed_empty", notTrimmedEmpty)
 	validatorError := validate.Struct(object)
 	if validatorError != nil {
 		errorHandlers.HandleBodyInvalidFieldsError(validatorError, context)
 		return false
 	}
 	return true
+}
+
+func notTrimmedEmpty(fl validator.FieldLevel) bool {
+	return strings.TrimSpace(fl.Field().String()) != ""
 }
