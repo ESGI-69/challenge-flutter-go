@@ -2,20 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/core/exceptions/api_exception.dart';
 import 'package:move_together_app/core/models/trip.dart';
-import 'package:move_together_app/core/services/api_services.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/core/services/trip_service.dart';
 
 part 'trip_event.dart';
 part 'trip_state.dart';
 
 class TripBloc extends Bloc<TripEvent, TripState> {
   TripBloc(BuildContext context) : super(TripInitial()) {
+    final tripServices = TripService(context.read<AuthProvider>());
+
     on<TripDataFetch>((event, emit) async {
       emit(TripDataLoading());
-      final apiServices = ApiServices(context.read<AuthProvider>());
-
       try {
-        final trip = await apiServices.getTrip(event.tripId);
+        final trip = await tripServices.get(event.tripId);
         emit(TripDataLoadingSuccess(trip: trip));
       } on ApiException catch (error) {
         emit(TripDataLoadingError(errorMessage: error.message));
@@ -26,16 +26,14 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
     on<TripEdit>((event, emit) async {
       emit(TripDataLoading());
-      final apiServices = ApiServices(context.read<AuthProvider>());
-
       try {
-        final trip = await apiServices.editTrip(
+        final trip = await tripServices.edit(
           event.tripId,
           name: event.name,
           country: event.country,
           city: event.city,
-          startDate: event.startDate?.toIso8601String(),
-          endDate: event.endDate?.toIso8601String(),
+          startDate: event.startDate?.toUtc().toIso8601String(),
+          endDate: event.endDate?.toUtc().toIso8601String(),
         );
         emit(TripDataLoadingSuccess(trip: trip));
       } on ApiException catch (error) {
@@ -47,9 +45,8 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
      on<TripDataCreateTrip>((event, emit) async {
       emit(TripDataLoading());
-      final apiServices = ApiServices(context.read<AuthProvider>());
       try {
-        final trip =  await apiServices.createTrip(event.trip);
+        final trip =  await tripServices.create(event.trip);
         emit(TripDataLoadingSuccess(trip: trip));
       } on ApiException catch (error) {
         emit(TripDataLoadingError(errorMessage: error.message));

@@ -41,9 +41,9 @@ class Trip {
       'name': name,
       'country': country,
       'city': city,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String(),
-      'participants': participants.map((e) => e.toJson()).toList(),
+      'startDate': startDate.toUtc().toIso8601String(),
+      'endDate': endDate.toUtc().toIso8601String(),
+      'participants': participants.map((participant) => participant.toJson()).toList(),
       'inviteCode': inviteCode,
     };
   }
