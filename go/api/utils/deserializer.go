@@ -24,7 +24,7 @@ func Deserialize(object any, context *gin.Context) (passed bool) {
 		return false
 	}
 	validate := validator.New()
-	_ = validate.RegisterValidation("not_trimmed_empty", notTrimmedEmpty)
+	_ = validate.RegisterValidation("not_trimmed_empty", SpaceTrimmedEmpty)
 	validatorError := validate.Struct(object)
 	if validatorError != nil {
 		errorHandlers.HandleBodyInvalidFieldsError(validatorError, context)
