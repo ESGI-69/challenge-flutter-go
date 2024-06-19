@@ -30,11 +30,11 @@ class ProfileScreen extends StatelessWidget {
                       Text(state.errorMessage),
                       ElevatedButton(
                         child: const Text('Logout'),
-                        onPressed: () {
-                          context.read<AuthProvider>().logout();
-                          secureStorage.delete(key: 'jwt');
-                          router.go('/home');
-                        },
+                        onPressed: () async {
+                        final authProvider = context.read<AuthProvider>();
+                        await authProvider.logout();
+                        router.go('/');
+                      },
                       ),
                     ],
                   ),
@@ -47,9 +47,10 @@ class ProfileScreen extends StatelessWidget {
                     Text(state.profile.role.toString()),
                     ElevatedButton(
                       child: const Text('Logout'),
-                      onPressed: () {
-                        secureStorage.delete(key: 'jwt');
-                        router.go('/home');
+                      onPressed: () async {
+                        final authProvider = context.read<AuthProvider>();
+                        await authProvider.logout();
+                        router.go('/');
                       },
                     ),
                   ],

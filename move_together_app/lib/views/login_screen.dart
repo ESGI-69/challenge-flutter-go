@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:move_together_app/core/services/api_services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/core/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,9 +19,9 @@ class LoginScreenState extends State<LoginScreen> {
   String? errorMessage;
 
   Future<void> _login() async {
-    final apiServices = ApiServices(context.read<AuthProvider>());
+    final authServices = AuthService(context.read<AuthProvider>());
     try {
-      final token = await apiServices.loginUser(
+      final token = await authServices.login(
         _usernameController.text,
         _passwordController.text,
       );

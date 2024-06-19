@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:move_together_app/core/services/api_services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/core/services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -17,9 +17,9 @@ class RegisterScreenState extends State<RegisterScreen> {
   String? errorMessage;
 
   Future<void> _register() async {
-    final apiServices = ApiServices(context.read<AuthProvider>());
+    final authServices = AuthService(context.read<AuthProvider>());
     try {
-      await apiServices.registerUser(
+      await authServices.register(
         _usernameController.text,
         _passwordController.text,
       );
