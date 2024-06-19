@@ -10,6 +10,7 @@ import (
 	"challenge-flutter-go/repository"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -94,20 +95,14 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		return
 	}
 
-	exists, err := handler.Repository.UserExists(requestBody.Username)
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	if exists {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
-		return
-	}
-
 	user := models.User{Username: requestBody.Username, Password: requestBody.Password}
 	userCreationError := handler.Repository.Create(&user)
 	if userCreationError != nil {
-		errorHandlers.HandleGormErrors(userCreationError, context)
+		if strings.Contains(userCreationError.Error(), "uni_users_username") {
+			context.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
+		} else {
+			errorHandlers.HandleGormErrors(userCreationError, context)
+		}
 		return
 	}
 
