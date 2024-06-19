@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 
 import 'package:move_together_app/Widgets/Button/button_back.dart';
+import 'package:move_together_app/core/services/trip_service.dart';
 
 class JoinTripScreen extends StatefulWidget {
   const JoinTripScreen({ super.key });
@@ -37,15 +38,15 @@ class JoinTripScreenState extends State<JoinTripScreen> {
 
   Future<void> _joinTrip() async {
     try {
-      final apiServices = ApiServices(context.read<AuthProvider>());
-      final joinedTrip = await apiServices.joinTrip(
+      final tripServices = TripService(context.read<AuthProvider>());
+      final joinedTrip = await tripServices.joinTrip(
         _tripCodeController.text,
       );
       if (mounted) {
         setState(() {
           errorMessage = null;
         });
-        context.go('/trip/${joinedTrip.id}');
+        context.pushReplacement('/trip/${joinedTrip.id}');
       }
     } catch (e) {
       setState(() {

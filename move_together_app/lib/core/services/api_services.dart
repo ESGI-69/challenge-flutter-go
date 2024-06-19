@@ -19,28 +19,6 @@ class ApiServices {
     this.authProvider
   );
 
-  Future<Trip> joinTrip(String inviteCode) async {
-    final response = await http.post(
-      Uri.parse(
-          '${dotenv.env['API_ADDRESS']!}/trips/join?inviteCode=$inviteCode'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${await secureStorage.read(key: 'jwt') ?? ''}',
-      },
-    );
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-      return Trip.fromJson(responseData);
-    } else if (response.statusCode == 401) {
-      secureStorage.delete(key: 'jwt');
-      router.go('/home');
-      throw Exception('Unauthorized');
-    } else {
-      throw Exception('Failed to join trip');
-    }
-  }
-
   Future<List<Trip>> getTrips() async {
     final response = await http.get(
       Uri.parse('${dotenv.env['API_ADDRESS']!}/trips'),
