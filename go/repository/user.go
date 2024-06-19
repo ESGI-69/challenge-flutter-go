@@ -29,3 +29,15 @@ func (u *UserRepository) FindByUsername(username string) (user models.User, err 
 func (u *UserRepository) ComparePassword(user models.User, password string) (isSame bool) {
 	return user.CheckPassword(password)
 }
+
+func (u *UserRepository) UserExists(username string) (bool, error) {
+	var user models.User
+	err := u.Database.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}

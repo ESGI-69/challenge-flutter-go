@@ -94,6 +94,16 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		return
 	}
 
+	exists, err := handler.Repository.UserExists(requestBody.Username)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if exists {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
+		return
+	}
+
 	user := models.User{Username: requestBody.Username, Password: requestBody.Password}
 	userCreationError := handler.Repository.Create(&user)
 	if userCreationError != nil {
@@ -101,11 +111,11 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		return
 	}
 
-	reponse := responses.UserRoleReponse{
+	response := responses.UserRoleReponse{
 		ID:       user.ID,
 		Username: user.Username,
 		Role:     user.Role,
 	}
-	context.JSON(http.StatusCreated, reponse)
+	context.JSON(http.StatusCreated, response)
 	logger.ApiInfo(context, "User "+string(rune(user.ID))+" created")
 }
