@@ -95,7 +95,7 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Expanded(
-                            flex: 10,
+                            flex: 12,
                             child: ElevatedButton.icon(
                               onPressed: () async {
                                 final DateTimeRange? selectedDateRange = await showDateRangePicker(
@@ -114,26 +114,6 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                               },
                               icon: const Icon(Icons.calendar_month),
                               label: Text(_dateController.text.isNotEmpty ? _dateController.text : 'Date', style: const TextStyle(fontWeight: FontWeight.bold)),
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Expanded(
-                            flex: 1,
-                            child: SizedBox(width: 5),
-                          ),
-                          Expanded(
-                            flex: 10,
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                //removed the old showDialog to pick users, might be used later so we keep it fornow
-                              },
-                              icon: const Icon(Icons.person),
-                              label: const Text('Voyageur (1)', style: TextStyle(fontWeight: FontWeight.bold)),
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(vertical: 4),
                                 shape: RoundedRectangleBorder(

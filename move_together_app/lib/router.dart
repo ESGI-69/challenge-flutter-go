@@ -5,13 +5,13 @@ import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
 import 'package:move_together_app/Home/home_screen.dart';
 import 'package:move_together_app/Profile/profile_screen.dart';
-import 'package:move_together_app/views/trip/join_screen.dart';
+import 'package:move_together_app/Trip/trip_join_screen.dart';
 import 'package:move_together_app/Trip/trip_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 
-import 'package:move_together_app/views/trip/create_screen.dart';
+import 'package:move_together_app/Trip/trip_create_screen.dart';
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
