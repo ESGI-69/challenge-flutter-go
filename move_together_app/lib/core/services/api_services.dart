@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/core/models/trip.dart';
@@ -20,26 +18,6 @@ class ApiServices {
   ApiServices(
     this.authProvider
   );
-
-  Future<String> loginUser(String username, String password) async {
-    final response = await api.dio.post(
-      '/login',
-      data: {
-        'username': username,
-        'password': password,
-      },
-    );
-
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      final String token = response.data['token'];
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-      authProvider.login(decodedToken['id']);
-
-      return token;
-    } else {
-      throw Exception('Failed to login user');
-    }
-  }
 
   Future<User> registerUser(String username, String password) async {
     final response = await http.post(
