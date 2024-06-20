@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Chat/bloc/chat_bloc.dart';
 import 'package:move_together_app/Chat/chat_app_bar.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Chat/chat_body.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 
 class ChatScreen extends StatelessWidget {
 
@@ -14,6 +16,9 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final tripId = GoRouterState.of(context).uri.pathSegments[1];
     final tripName = GoRouterState.of(context).uri.queryParameters['tripName'] ?? '';
+    final authProvider = context.read<AuthProvider>();
+    final currentUserId = authProvider.userId;
+
 
     return BlocProvider(
       create: (context) => ChatBloc(context)..add(ChatDataFetch(tripId)),
@@ -36,10 +41,11 @@ class ChatScreen extends StatelessWidget {
             appBar: ChatAppBar(
               tripName: tripName,
             ),
-            body: Text(
-              state.messages[0].content,
-              style: const TextStyle(fontSize: 24),
-            ),
+            body: ChatBody(
+              messages: state.messages,
+              userId: currentUserId,
+              scrollController: ScrollController(),
+            )
           );
         }
         {
