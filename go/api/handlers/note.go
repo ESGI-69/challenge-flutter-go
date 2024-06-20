@@ -5,6 +5,7 @@ import (
 	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
@@ -55,6 +56,7 @@ func (handler *NoteHandler) GetNotesOfTrip(context *gin.Context) {
 		}
 	}
 	context.JSON(http.StatusOK, noteResponses)
+	logger.ApiInfo(context, "Get all notes from trip "+tripId)
 }
 
 // @Summary		Create a new note on trip
@@ -108,6 +110,7 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusCreated, noteResponse)
+	logger.ApiInfo(context, "Note "+note.Title+" added to trip "+tripId)
 }
 
 // @Summary		Delete a note from trip
@@ -128,6 +131,7 @@ func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
 
 	noteID := context.Param("noteID")
 	if noteID == "" {
+		logger.ApiWarning(context, "No note ID provided")
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -145,6 +149,7 @@ func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
 	isUserAuthor := note.UserIsAuthor(&currentUser)
 
 	if !isUserAuthor {
+		logger.ApiWarning(context, "Only the author of the note "+noteID+" can remove them")
 		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"message": "Only the author of the node can remove them",
 		})
@@ -158,4 +163,5 @@ func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
 	}
 
 	context.Status(http.StatusNoContent)
+	logger.ApiInfo(context, "Note "+noteID+" removed from trip "+tripId)
 }

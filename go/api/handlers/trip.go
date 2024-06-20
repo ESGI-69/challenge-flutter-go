@@ -5,9 +5,9 @@ import (
 	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -42,13 +42,14 @@ func (handler *TripHandler) Create(context *gin.Context) {
 
 	startDate, startDateParseError := time.Parse(time.RFC3339, requestBody.StartDate)
 	if startDateParseError != nil {
-		fmt.Println(startDateParseError)
+		logger.ApiError(context, "Invalid trip start date "+requestBody.StartDate)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid start date"})
 		return
 	}
 
 	endDate, endDateParseError := time.Parse(time.RFC3339, requestBody.EndDate)
 	if endDateParseError != nil {
+		logger.ApiError(context, "Invalid trip end date "+requestBody.EndDate)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid end date"})
 		return
 	}
@@ -81,6 +82,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusCreated, responseTrip)
+	logger.ApiInfo(context, "Trip "+string(rune(trip.ID))+" created")
 }
 
 // Get all trips associated with the current user
@@ -119,6 +121,7 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, responseTrips)
+	logger.ApiInfo(context, "Get all trips")
 }
 
 // Get a trip by its id
@@ -152,6 +155,7 @@ func (handler *TripHandler) Get(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
+	logger.ApiInfo(context, "Get trip "+tripId)
 }
 
 // @Summary Update a trip
@@ -193,6 +197,7 @@ func (handler *TripHandler) Update(context *gin.Context) {
 	if requestBody.StartDate != "" {
 		startDate, startDateParseError := time.Parse(time.RFC3339, requestBody.StartDate)
 		if startDateParseError != nil {
+			logger.ApiError(context, "Invalid trip update start date "+requestBody.StartDate)
 			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid start date"})
 			return
 		}
@@ -202,6 +207,7 @@ func (handler *TripHandler) Update(context *gin.Context) {
 	if requestBody.EndDate != "" {
 		endDate, endDateParseError := time.Parse(time.RFC3339, requestBody.EndDate)
 		if endDateParseError != nil {
+			logger.ApiError(context, "Invalid trip update end date "+requestBody.EndDate)
 			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid end date"})
 			return
 		}
@@ -226,6 +232,7 @@ func (handler *TripHandler) Update(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
+	logger.ApiInfo(context, "Trip "+tripId+" updated")
 }
 
 // Join an existing trip using its inviteCode and associate it with the current user
@@ -254,6 +261,7 @@ func (handler *TripHandler) Join(context *gin.Context) {
 	}
 
 	if trip.UserHasViewRight(&currentUser) {
+		logger.ApiWarning(context, "User "+string(rune(currentUser.ID))+" is already part of the trip")
 		context.JSON(http.StatusBadRequest, gin.H{"error": "User is already part of the trip"})
 		return
 	}
@@ -272,6 +280,7 @@ func (handler *TripHandler) Join(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
+	logger.ApiInfo(context, "User "+string(rune(currentUser.ID))+" joined trip "+string(rune(trip.ID)))
 }
 
 // @Summary Leave a trip
@@ -293,6 +302,7 @@ func (handler *TripHandler) Leave(context *gin.Context) {
 	trip, _ := handler.Repository.Get(id)
 
 	if trip.UserIsOwner(&currentUser) {
+		logger.ApiWarning(context, "User "+string(rune(currentUser.ID))+" cannot leave the trip "+id+" because he is the owner")
 		context.JSON(http.StatusUnauthorized, gin.H{"error": "Owner cannot leave the trip"})
 		return
 	}
@@ -306,6 +316,7 @@ func (handler *TripHandler) Leave(context *gin.Context) {
 	}
 
 	context.Status(http.StatusNoContent)
+	logger.ApiInfo(context, "User "+string(rune(currentUser.ID))+" left trip "+id)
 }
 
 // @Summary Delete a trip
@@ -329,4 +340,5 @@ func (handler *TripHandler) Delete(context *gin.Context) {
 	}
 
 	context.Status(http.StatusNoContent)
+	logger.ApiInfo(context, "Delete trip "+tripId)
 }

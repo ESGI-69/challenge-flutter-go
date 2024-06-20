@@ -26,9 +26,11 @@ func HandleBodyInvalidFieldsError(err error, context *gin.Context) {
 	for _, err := range err.(validator.ValidationErrors) {
 		invalidFields = append(invalidFields, err.Field())
 	}
+	logger.ApiWarning(context, "Invalid body")
 	context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid", "fields": invalidFields})
 }
 
 func HandleMissingBodyError(context *gin.Context) {
+	logger.ApiWarning(context, "Missing body")
 	context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Missing body"})
 }

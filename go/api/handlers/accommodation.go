@@ -5,9 +5,9 @@ import (
 	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -55,7 +55,7 @@ func (handler *AccommodationHandler) GetAllFromTrip(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, accommodationsResponse)
-
+	logger.ApiInfo(context, "Get all accommodations from trip "+context.Param("id"))
 }
 
 // @Summary		Create an accommodation on a trip
@@ -81,13 +81,14 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 
 	startDate, startDateParseError := time.Parse(time.RFC3339, requestBody.StartDate)
 	if startDateParseError != nil {
-		fmt.Println(startDateParseError)
+		logger.ApiWarning(context, "Invalid start date "+requestBody.StartDate)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid start date"})
 		return
 	}
 
 	endDate, endDateParseError := time.Parse(time.RFC3339, requestBody.EndDate)
 	if endDateParseError != nil {
+		logger.ApiWarning(context, "Invalid end date "+requestBody.EndDate)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid end date"})
 		return
 	}
@@ -96,6 +97,7 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 
 	getLat, getLong, err := utils.GetGeoLocation(requestBody.Address)
 	if err != nil { //A voir si on bloque la creation si l'adresse n'est pas valide
+		logger.ApiWarning(context, "Invalid address "+requestBody.Address)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid address"})
 		return
 	}
@@ -113,6 +115,7 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 	}
 
 	if !accommodation.IsAccommodationTypeValid(context) {
+		logger.ApiWarning(context, "Invalid accommodation type "+requestBody.AccommodationType)
 		return
 	}
 
@@ -133,6 +136,7 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 		Latitude:          accommodation.Latitude,
 		Longitude:         accommodation.Longitude,
 	})
+	logger.ApiInfo(context, "Create accommodation "+string(rune(accommodation.ID))+" on trip "+tripId)
 }
 
 // @Summary		Delete an accommodation
@@ -150,6 +154,7 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 func (handler *AccommodationHandler) DeleteAccommodation(context *gin.Context) {
 	accommodationID := context.Param("accommodationID")
 	if accommodationID == "" {
+		logger.ApiWarning(context, "No accommodation ID provided")
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -161,18 +166,11 @@ func (handler *AccommodationHandler) DeleteAccommodation(context *gin.Context) {
 	}
 
 	tripId := context.Param("id")
-	if tripId == "" {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
 
-	parsedTripId, err := strconv.ParseUint(tripId, 10, 10)
-	if err != nil {
-		context.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	parsedTripId, _ := strconv.ParseUint(tripId, 10, 10)
 
 	if accommodation.TripID != uint(parsedTripId) {
+		logger.ApiWarning(context, "Accommodation not in trip "+tripId)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Accommodation not in the trip"})
 		return
 	}
@@ -184,4 +182,5 @@ func (handler *AccommodationHandler) DeleteAccommodation(context *gin.Context) {
 	}
 
 	context.Status(http.StatusNoContent)
+	logger.ApiInfo(context, "Delete accommodation "+accommodationID+" from trip "+tripId)
 }

@@ -5,6 +5,7 @@ import (
 	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
@@ -35,6 +36,7 @@ func (handler *UserHandler) Get(context *gin.Context) {
 	id := context.Param("id")
 
 	if id == "" {
+		logger.ApiError(context, "User ID missing in the get user request")
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -42,6 +44,7 @@ func (handler *UserHandler) Get(context *gin.Context) {
 	uintId, errUintParse := strconv.ParseUint(id, 10, 32)
 
 	if errUintParse != nil {
+		logger.ApiError(context, "User ID must be a number to get the user")
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -49,6 +52,7 @@ func (handler *UserHandler) Get(context *gin.Context) {
 	currentUser, _ := utils.GetCurrentUser(context)
 
 	if currentUser.ID != uint(uintId) {
+		logger.ApiError(context, "User can only get his own information")
 		context.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
@@ -67,6 +71,7 @@ func (handler *UserHandler) Get(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, response)
+	logger.ApiInfo(context, "Get user "+string(rune(user.ID)))
 }
 
 // Register a new user
@@ -102,4 +107,5 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		Role:     user.Role,
 	}
 	context.JSON(http.StatusCreated, reponse)
+	logger.ApiInfo(context, "User "+string(rune(user.ID))+" created")
 }

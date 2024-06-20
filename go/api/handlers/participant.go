@@ -3,6 +3,7 @@ package handlers
 import (
 	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/responses"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/repository"
 	"net/http"
 
@@ -33,6 +34,7 @@ func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 	role := context.Query("role")
 
 	if participantId == "" || role == "" {
+		logger.ApiWarning(context, "Missing required parameters")
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Missing required parameters"})
 		return
 	}
@@ -40,6 +42,7 @@ func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 	wantedRole := responses.StringToParticipantTripRole(role)
 
 	if wantedRole == responses.ParticipantTripRoleNone || wantedRole == responses.ParticipantTripRoleOwner {
+		logger.ApiWarning(context, "Invalid role "+role)
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid role"})
 		return
 	}
@@ -57,6 +60,7 @@ func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 	}
 
 	if !trip.UserHasViewRight(&participantUser) {
+		logger.ApiWarning(context, "User "+participantId+" to change role is not part of the trip")
 		context.JSON(http.StatusBadRequest, gin.H{"error": "User is not part of the trip"})
 		return
 	}
@@ -72,6 +76,7 @@ func (handler *ParticipantHandler) ChangeRole(context *gin.Context) {
 	}
 
 	context.Status(http.StatusNoContent)
+	logger.ApiInfo(context, "Role of participant "+participantId+" in trip "+tripId+" changed to "+role)
 }
 
 // @Summary	Remove a participant from a trip
@@ -91,6 +96,7 @@ func (handler *ParticipantHandler) RemoveParticipant(context *gin.Context) {
 	participantId := context.Param("participantId")
 
 	if participantId == "" {
+		logger.ApiWarning(context, "Missing required parameters")
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Missing required parameters"})
 		return
 	}
@@ -104,11 +110,13 @@ func (handler *ParticipantHandler) RemoveParticipant(context *gin.Context) {
 	}
 
 	if !trip.UserHasViewRight(&participantUser) {
+		logger.ApiWarning(context, "User "+participantId+" to remove is not part of the trip")
 		context.JSON(http.StatusBadRequest, gin.H{"error": "User is not part of the trip"})
 		return
 	}
 
 	if trip.UserIsOwner(&participantUser) {
+		logger.ApiWarning(context, "Owner cannot be removed from the trip")
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Owner cannot be removed from the trip"})
 		return
 	}
@@ -122,4 +130,5 @@ func (handler *ParticipantHandler) RemoveParticipant(context *gin.Context) {
 	}
 
 	context.Status(http.StatusNoContent)
+	logger.ApiInfo(context, "Participant "+participantId+" removed from trip "+tripId)
 }
