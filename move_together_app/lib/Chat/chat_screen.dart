@@ -13,6 +13,7 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tripId = GoRouterState.of(context).uri.pathSegments[1];
+    final tripName = GoRouterState.of(context).uri.queryParameters['tripName'] ?? '';
 
     return BlocProvider(
       create: (context) => ChatBloc(context)..add(ChatDataFetch(tripId)),
@@ -20,7 +21,7 @@ class ChatScreen extends StatelessWidget {
         if (state is ChatDataLoading) {
           return const Scaffold(
             appBar: ChatAppBar(
-              tripName: 'test',
+              tripName: '',
             ),
             body: Center(
               child: CircularProgressIndicator.adaptive(),
@@ -32,13 +33,12 @@ class ChatScreen extends StatelessWidget {
           );
         } else if (state is ChatDataLoadingSuccess) {
           return Scaffold(
-            appBar: const ChatAppBar(
-              tripName: 'tzest',
+            appBar: ChatAppBar(
+              tripName: tripName,
             ),
             body: Text(
               state.messages[0].content,
-              style: TextStyle(fontSize: 24),
-
+              style: const TextStyle(fontSize: 24),
             ),
           );
         }

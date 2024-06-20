@@ -81,6 +81,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             padding: const EdgeInsets.only(right: 16.0),
             child: ButtonChat(
               tripId: tripId,
+              tripName: name,
             ),
           ),
         ],

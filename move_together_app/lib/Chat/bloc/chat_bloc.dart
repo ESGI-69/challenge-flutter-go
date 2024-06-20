@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/core/exceptions/api_exception.dart';
 import 'package:move_together_app/core/models/message.dart';
-import 'package:move_together_app/core/services/api_services.dart';
+import 'package:move_together_app/core/services/chat_service.dart';
 import '../../Provider/auth_provider.dart';
 
 part 'chat_event.dart';
@@ -13,8 +13,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<ChatDataFetch>((event, emit) async {
       print('bloc ChatDataFetch: ${event.tripId}');
       emit(ChatDataLoading());
-      final apiServices = ApiServices(context.read<AuthProvider>());
-      
+      final apiServices = ChatService(context.read<AuthProvider>());
       try {
         final messages = await apiServices.getChatMessages(event.tripId);
         emit(ChatDataLoadingSuccess(messages: messages));
