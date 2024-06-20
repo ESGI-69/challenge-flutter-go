@@ -33,6 +33,7 @@ func autoMigrate() {
 		&models.ChatMessage{},
 		&models.Accommodation{},
 		&models.Document{},
+		&models.LogEntry{},
 	)
 	if err != nil {
 		log.Fatalln(err)
