@@ -21,6 +21,14 @@ type Logger struct {
 	mutex          sync.Mutex
 }
 
+type additionalLogInfo struct {
+	Ip              string
+	Path            string
+	Method          string
+	Username        string
+	EnrichedMessage string
+}
+
 var (
 	logger *Logger
 	once   sync.Once
@@ -79,7 +87,7 @@ func (l *Logger) Close() error {
 	return l.logFile.Close()
 }
 
-func (l *Logger) writeLog(level models.LogLevel, message string) {
+func (l *Logger) writeLog(level models.LogLevel, message string, additionalLogInfo *additionalLogInfo) {
 	l.checkDateChange()
 
 	logEntry := models.LogEntry{
@@ -87,7 +95,21 @@ func (l *Logger) writeLog(level models.LogLevel, message string) {
 		Message: message,
 	}
 
-	pureStringLog := time.Now().Format("2006/01/02 15:04:05") + " - [" + string(level) + "] " + message
+	if additionalLogInfo != nil {
+		logEntry.Ip = additionalLogInfo.Ip
+		logEntry.Path = additionalLogInfo.Path
+		logEntry.Method = additionalLogInfo.Method
+		logEntry.Username = additionalLogInfo.Username
+	}
+
+	var messageToBeUsedInPureStringLog string
+	if additionalLogInfo != nil {
+		messageToBeUsedInPureStringLog = additionalLogInfo.EnrichedMessage
+	} else {
+		messageToBeUsedInPureStringLog = message
+	}
+
+	pureStringLog := time.Now().Format("2006/01/02 15:04:05") + " - [" + string(level) + "] " + messageToBeUsedInPureStringLog
 
 	l.terminalLogger.Println(pureStringLog)
 	l.fileLogger.Println(pureStringLog)
@@ -95,15 +117,15 @@ func (l *Logger) writeLog(level models.LogLevel, message string) {
 }
 
 func Info(message string) {
-	logger.writeLog(models.LogLevelInfo, message)
+	logger.writeLog(models.LogLevelInfo, message, nil)
 }
 
 func Warning(message string) {
-	logger.writeLog(models.LogLevelWarn, message)
+	logger.writeLog(models.LogLevelWarn, message, nil)
 }
 
 func Error(message string) {
-	logger.writeLog(models.LogLevelError, message)
+	logger.writeLog(models.LogLevelError, message, nil)
 }
 
 // verifie si la date a changé et réinitialise le logger de fichier si nécessaire

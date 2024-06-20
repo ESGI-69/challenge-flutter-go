@@ -1,6 +1,7 @@
 package errorHandlers
 
 import (
+	"challenge-flutter-go/logger"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ func HandleBodyMissingFieldsError(err error, context *gin.Context) {
 	for _, err := range err.(validator.ValidationErrors) {
 		missingFields = append(missingFields, err.Field())
 	}
+	logger.ApiWarning(context, "Missing fields in body")
 	context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Missing", "fields": missingFields})
 }
 

@@ -17,4 +17,8 @@ type LogEntry struct {
 	Level     LogLevel  `gorm:"not null"`
 	Message   string    `gorm:"not null"`
 	Timestamp time.Time `gorm:"not null;autoCreateTime"`
+	Ip        string
+	Path      string
+	Method    string
+	Username  string
 }
