@@ -5,6 +5,7 @@ import (
 	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
@@ -51,7 +52,7 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 
 	errChatMessage := handler.Repository.Create(&chatMessage)
 	if errChatMessage != nil {
-		context.AbortWithStatus(http.StatusInternalServerError)
+		errorHandlers.HandleGormErrors(errChatMessage, context)
 		return
 	}
 
@@ -66,6 +67,7 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusCreated, response)
+	logger.ApiInfo(context, "Chat message "+chatMessage.Content+" added to trip "+tripId)
 }
 
 // @Summary		Get all chat messages of trip
@@ -104,4 +106,5 @@ func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
 		}
 	}
 	context.JSON(http.StatusOK, chatMessageResponse)
+	logger.ApiInfo(context, "Get all chat messages from trip "+tripId)
 }

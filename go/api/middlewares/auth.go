@@ -3,9 +3,9 @@ package middlewares
 import (
 	"challenge-flutter-go/config"
 	"challenge-flutter-go/database"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/repository"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 
@@ -19,6 +19,7 @@ func UserIsLogged(context *gin.Context) {
 	token := strings.TrimPrefix(authorizationHeader, "Bearer ")
 
 	if err := isTokenInvalid(token); err != nil {
+		logger.ApiWarning(context, "Invalid token")
 		context.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
@@ -30,16 +31,16 @@ func UserIsLogged(context *gin.Context) {
 	})
 
 	if err != nil {
+		logger.ApiError(context, "Error while parsing token")
 		context.AbortWithStatus(http.StatusUnauthorized)
-		log.Printf("Error while parsing token. AuthorizationsMiddleware")
 		return
 	}
 
 	username := payload["username"].(string)
 
 	if err := populateCurrentUser(username, context); err != nil {
+		logger.ApiError(context, "Error while populating current user")
 		context.AbortWithStatus(http.StatusUnauthorized)
-		log.Printf("Error while populating current user. populateCurrentUser")
 		return
 	}
 
@@ -49,7 +50,6 @@ func UserIsLogged(context *gin.Context) {
 func isTokenInvalid(token string) error {
 	_, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			log.Printf("Error while validating token. isTokenInvalid")
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 		}
 

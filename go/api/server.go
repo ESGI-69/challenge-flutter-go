@@ -6,6 +6,7 @@ import (
 	"challenge-flutter-go/api/middlewares"
 	"challenge-flutter-go/config"
 	"challenge-flutter-go/database"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/repository"
 	"net/http"
 
@@ -148,5 +149,6 @@ func setRoutes() {
 }
 
 func Start() {
+	logger.Info("API server started")
 	router.Run()
 }

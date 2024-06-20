@@ -4,9 +4,9 @@ import (
 	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -50,6 +50,7 @@ func (handler *DocumentHandler) GetDocumentsOfTrip(context *gin.Context) {
 		}
 	}
 	context.JSON(http.StatusOK, documentResponses)
+	logger.ApiInfo(context, "Get all documents from trip "+tripId)
 }
 
 // @Summary		Create a new document on trip
@@ -70,29 +71,27 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 	context.Request.Body = http.MaxBytesReader(context.Writer, context.Request.Body, 10<<20)
 
 	tripIdStr := context.Param("id")
-	tripId, errTripId := strconv.ParseUint(tripIdStr, 10, 32)
-	if errTripId != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid trip ID"})
-		return
-	}
+	tripId, _ := strconv.ParseUint(tripIdStr, 10, 32)
 
 	title := context.PostForm("title")
 	description := context.PostForm("description")
 
 	file, errFile := context.FormFile("document")
 	if errFile != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Document is required"})
+		logger.ApiWarning(context, "Document is missing on request")
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Document is missing on request"})
 	}
 
 	if file.Size > 5<<20 {
+		logger.ApiWarning(context, "File size exceeds limit of 5 MB")
 		context.JSON(http.StatusBadRequest, gin.H{"error": "File size exceeds limit of 5 MB"})
 		return
 	}
 
 	filePath, errFilePath := utils.SaveUploadedFile(file, "document", title)
 	if errFilePath != nil {
-		fmt.Println(errFilePath)
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Error saving file"})
+		logger.ApiError(context, "Error saving file: "+filePath)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving file"})
 		return
 	}
 
@@ -119,6 +118,7 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 	}
 
 	context.JSON(200, documentResponse)
+	logger.ApiInfo(context, "Create a document "+document.Path+" on trip "+tripIdStr)
 }
 
 // @Summary      Download a document
@@ -145,11 +145,13 @@ func (handler *DocumentHandler) DownloadDocument(context *gin.Context) {
 
 	filepath, errFilePath := utils.GetFilePath("document", document.Path)
 	if errFilePath != nil {
+		logger.ApiError(context, "Failed to get file path "+document.Path)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get file path"})
 		return
 	}
 	context.Header("Content-Disposition", "attachment; filename=\""+document.Path+"\"")
 	context.File(filepath)
+	logger.ApiInfo(context, "Download a document "+document.Path)
 }
 
 // @Summary		Delete a document from trip
@@ -168,6 +170,7 @@ func (handler *DocumentHandler) DownloadDocument(context *gin.Context) {
 func (handler *DocumentHandler) DeleteDocumentFromTrip(context *gin.Context) {
 	documentID := context.Param("documentID")
 	if documentID == "" {
+		logger.ApiWarning(context, "No document ID provided")
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -178,4 +181,5 @@ func (handler *DocumentHandler) DeleteDocumentFromTrip(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusNoContent, gin.H{})
+	logger.ApiInfo(context, "Delete a document "+documentID)
 }

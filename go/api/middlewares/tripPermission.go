@@ -4,6 +4,7 @@ import (
 	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/database"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"strconv"
 
@@ -71,18 +72,21 @@ func UserIsTripParticipant(context *gin.Context) {
 func retriveTripAndUser(context *gin.Context, trip *models.Trip, user *models.User) bool {
 	currentUser, exist := utils.GetCurrentUser(context)
 	if !exist {
+		logger.ApiError(context, "User not found")
 		context.AbortWithStatusJSON(401, gin.H{"error": "Unauthorized"})
 		return true
 	}
 
 	tripId := context.Param("id")
 	if tripId == "" {
+		logger.ApiError(context, "Trip ID missing in the request")
 		context.AbortWithStatusJSON(400, gin.H{"error": "Invalid trip ID"})
 		return true
 	}
 
 	tripIdUint, err := strconv.ParseUint(tripId, 10, 64)
 	if err != nil {
+		logger.ApiError(context, "Trip ID must be a number")
 		context.AbortWithStatusJSON(400, gin.H{"error": "Invalid trip ID"})
 		return true
 	}

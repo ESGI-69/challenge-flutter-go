@@ -5,6 +5,7 @@ import (
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/config"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
@@ -31,7 +32,6 @@ type AuthHandler struct {
 //	@Failure		401		{object}	error
 //	@Router			/login [post]
 func (handler *AuthHandler) Login(context *gin.Context) {
-
 	var requestBody requests.AuthLoginBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
 	if !isBodyValid {
@@ -41,6 +41,7 @@ func (handler *AuthHandler) Login(context *gin.Context) {
 	user, databaseError := handler.UserRepository.FindByUsername(requestBody.Username)
 
 	if !handler.UserRepository.ComparePassword(user, requestBody.Password) || databaseError != nil {
+		logger.ApiInfo(context, "Failed login attempt, wrong password")
 		context.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
@@ -48,11 +49,13 @@ func (handler *AuthHandler) Login(context *gin.Context) {
 	token, tokenCreationError := createJwt(&user)
 
 	if tokenCreationError != nil {
+		logger.ApiError(context, "Failed to create token, but credentials are correct")
 		context.JSON(http.StatusInternalServerError, gin.H{"tokenCreationError": tokenCreationError})
 		return
 	}
 
 	context.JSON(http.StatusOK, responses.LoginResponse{Token: token})
+	logger.ApiInfo(context, "User logged in")
 }
 
 func createJwt(user *models.User) (string, error) {

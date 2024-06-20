@@ -5,9 +5,9 @@ import (
 	"challenge-flutter-go/api/requests"
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -62,6 +62,7 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, transportsResponse)
+	logger.ApiInfo(context, "Get all transports from trip "+context.Param("id"))
 }
 
 // @Summary		Create a new transport on trip
@@ -88,13 +89,14 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 
 	startDate, startDateParseError := time.Parse(time.RFC3339, requestBody.StartDate)
 	if startDateParseError != nil {
-		fmt.Println(startDateParseError)
+		logger.ApiWarning(context, "Invalid transport start date "+requestBody.StartDate)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid start date"})
 		return
 	}
 
 	endDate, endDateParseError := time.Parse(time.RFC3339, requestBody.EndDate)
 	if endDateParseError != nil {
+		logger.ApiWarning(context, "Invalid transport end date "+requestBody.EndDate)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid end date"})
 		return
 	}
@@ -105,6 +107,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 		var meetingTimeParseError error
 		meetingTime, meetingTimeParseError = time.Parse(time.RFC3339, requestBody.MeetingTime)
 		if meetingTimeParseError != nil {
+			logger.ApiWarning(context, "Invalid transport meeting time "+requestBody.MeetingTime)
 			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid meeting time"})
 			return
 		}
@@ -126,6 +129,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 
 	isValid := transport.IsTransportTypeValid(context)
 	if !isValid {
+		logger.ApiWarning(context, "Invalid transport type "+requestBody.TransportType)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid transport type"})
 		return
 	}
@@ -152,6 +156,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusCreated, transportResponse)
+	logger.ApiInfo(context, "Create transport "+string(rune(transport.ID))+" on trip "+tripId)
 }
 
 // @Summary		Delete a transport from a trip
@@ -169,6 +174,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 func (handler *TransportHandler) DeleteTransport(context *gin.Context) {
 	transportID := context.Param("transportID")
 	if transportID == "" {
+		logger.ApiWarning(context, "No transport ID provided for deletion")
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -180,4 +186,5 @@ func (handler *TransportHandler) DeleteTransport(context *gin.Context) {
 	}
 
 	context.Status(http.StatusNoContent)
+	logger.ApiInfo(context, "Delete transport "+transportID)
 }
