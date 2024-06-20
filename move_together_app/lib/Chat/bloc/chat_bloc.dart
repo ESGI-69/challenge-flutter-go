@@ -11,7 +11,6 @@ part 'chat_state.dart';
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc(BuildContext context) : super (ChatInitial()) {
     on<ChatDataFetch>((event, emit) async {
-      print('bloc ChatDataFetch: ${event.tripId}');
       emit(ChatDataLoading());
       final apiServices = ChatService(context.read<AuthProvider>());
       try {
@@ -20,7 +19,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       } on ApiException catch (error) {
         emit(ChatDataLoadingError(errorMessage: error.message));
       } catch (error) {
-        print('ChatDataFetch error: $error');
         emit(ChatDataLoadingError(errorMessage: 'Unhandled error'));
       }
     });

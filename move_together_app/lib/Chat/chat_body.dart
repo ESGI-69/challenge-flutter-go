@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/core/models/message.dart';
+import 'package:move_together_app/Chat/chat_bubble.dart';
+import 'package:move_together_app/Chat/chat_input.dart';
 
 class ChatBody extends StatefulWidget {
   final List<Message> messages;
@@ -19,6 +21,46 @@ class ChatBody extends StatefulWidget {
 
 class ChatBodyState extends State<ChatBody> {
   final TextEditingController _controller = TextEditingController();
+  bool _isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_handleTextChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToBottom();
+    });
+  }
+
+  void _handleTextChanged() {
+    setState(() {
+      _isButtonEnabled = _controller.text.isNotEmpty;
+    });
+  }
+
+  void _sendMessage() {
+    if (_isButtonEnabled) {
+      setState(() {
+        _controller.clear();
+      });
+
+      // Scroll to the bottom after the message is sent
+      _scrollToBottom();
+    }
+  }
+
+  void _scrollToBottom() {
+    if (widget.scrollController.hasClients) {
+      widget.scrollController.jumpTo(widget.scrollController.position.minScrollExtent);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_handleTextChanged);
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,48 +69,25 @@ class ChatBodyState extends State<ChatBody> {
         Expanded(
           child: ListView.builder(
             controller: widget.scrollController,
+            reverse: true,
             itemCount: widget.messages.length,
             itemBuilder: (context, index) {
-              final message = widget.messages[index];
+              final message = widget.messages[widget.messages.length - 1 - index];
               final isOwnMessage = message.author.id == widget.userId;
-              return Row(
-                mainAxisAlignment: isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: isOwnMessage ? Colors.blue : Colors.grey,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Text(message.content),
-                  ),
-                ],
+              return ChatBubble(
+                message: message,
+                isOwnMessage: isOwnMessage,
               );
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    hintText: 'Entrez votre message...',
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: () {
-                  // Send the message
-                  // You need to implement this part based on how your app sends messages
-                },
-              ),
-            ],
-          ),
+        ChatInput(
+          controller: _controller,
+          isButtonEnabled: _isButtonEnabled,
+          onSendPressed: _sendMessage,
+          onAttachPressed: () {
+            // Handle attachment
+          },
         ),
       ],
     );

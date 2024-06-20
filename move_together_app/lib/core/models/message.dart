@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:move_together_app/core/models/user.dart';
 
 class Message {
@@ -15,11 +14,6 @@ class Message {
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
-    print('JSON: $json');
-    print('ID: ${json['id']}');
-    print('Content: ${json['content']}');
-    print('Author: ${json['author']}');
-    print('CreatedAt: ${json['createdAt']}');
     return Message(
         id: json['id'],
         content: json['content'],
