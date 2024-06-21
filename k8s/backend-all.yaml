@@ -90,9 +90,12 @@ spec:
         app: challenge-flutter-go-backend-deployment
     spec:
       volumes:
-      - name: challenge-flutter-go-backend-pv
+      - name: uploads
         persistentVolumeClaim:
           claimName: challenge-flutter-go-backend-pvc
+      - name: logs
+        persistentVolumeClaim:
+          claimName: challenge-flutter-go-backend-pvc-log
       containers:
       - name: challenge-flutter-go-backend-deployment
         image: gatien1/challenge-flutter-go-backend:latest
@@ -158,7 +161,7 @@ spec:
         ports:
         - containerPort: 8080
         volumeMounts:
-        - name: challenge-flutter-go-backend-pv
-          mountPath: /app/uploads
-        - name: challenge-flutter-go-backend-pv-log
-          mountPath: /app/log
+        - name: uploads
+          mountPath: /uploads
+        - name: logs
+          mountPath: /logs

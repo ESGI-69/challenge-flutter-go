@@ -1,4 +1,4 @@
-FROM golang:alpine3.19 as builder
+FROM golang:alpine3.20 as builder
 
 WORKDIR /app
 
@@ -15,8 +15,8 @@ RUN swag init -o ./api/docs
 
 RUN go build -o /app/main .
 
-FROM alpine:3.13
+FROM alpine:3.20
 
-COPY --from=builder /app/main /app/main
+COPY --from=builder /app/main /main
 
-CMD ["/app/main"]
+CMD ["/main"]
