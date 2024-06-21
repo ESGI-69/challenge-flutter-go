@@ -1,6 +1,6 @@
-FROM golang:alpine3.19 as builder
+FROM golang:alpine3.20 as builder
 
-WORKDIR /
+WORKDIR /app
 
 COPY go.mod .
 COPY go.sum .
@@ -13,10 +13,10 @@ RUN go install github.com/swaggo/swag/cmd/swag@latest
 
 RUN swag init -o ./api/docs
 
-RUN go build -o /main .
+RUN go build -o /app/main .
 
-FROM alpine:3.13
+FROM alpine:3.20
 
-COPY --from=builder /main /main
+COPY --from=builder /app/main /main
 
 CMD ["/main"]
