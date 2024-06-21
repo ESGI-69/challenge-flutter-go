@@ -6,6 +6,7 @@ class TripQuickInfo extends StatelessWidget {
   final DateTime endDate;
   final bool isLoading;
   final Function()? onNameTap;
+  final Function()? onDateTap;
 
   const TripQuickInfo({
     super.key,
@@ -14,6 +15,7 @@ class TripQuickInfo extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     this.onNameTap,
+    this.onDateTap,
   });
 
   @override
@@ -64,11 +66,14 @@ class TripQuickInfo extends StatelessWidget {
               children: [
                 const Icon(Icons.calendar_month, size: 16),
                 const SizedBox(width: 4),
-                Text(
+                GestureDetector(
+                  onTap: onDateTap ?? () {},
+                  child: Text(
                   '${startDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]} - ${endDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]}',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
+                  ),
                   ),
                 ),
               ],

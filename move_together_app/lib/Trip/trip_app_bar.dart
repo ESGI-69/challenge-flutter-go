@@ -12,6 +12,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Participant> participants;
   final bool isLoading;
   final Function(String) onNameUpdate;
+  final Function(DateTime, DateTime) onDateUpdate;
   final String imageUrl;
 
   const TripAppBar({
@@ -22,6 +23,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.endDate,
     required this.participants,
     required this.onNameUpdate,
+    required this.onDateUpdate,
     required this.imageUrl,
   });
 
@@ -53,6 +55,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                   startDate: DateTime.now(),
                   endDate: DateTime.now(),
                   onNameTap: () {},
+                  onDateTap: () {},
                 ),
               )
             ],
@@ -97,6 +100,20 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                         onNameUpdate: onNameUpdate,
                       )
                     );
+                  },
+                  onDateTap: () async {
+                    final DateTimeRange? newDateRange = await showDateRangePicker(
+                      context: context,
+                      initialDateRange: DateTimeRange(
+                        start: startDate.toLocal(),
+                        end: endDate.toLocal(),
+                      ),
+                      firstDate: DateTime(DateTime.now().year - 5).toLocal(),
+                      lastDate: DateTime(DateTime.now().year + 5).toLocal(),
+                    );
+                    if (newDateRange != null) {
+                      onDateUpdate(newDateRange.start.toLocal(), newDateRange.end.toLocal());
+                    }
                   }
                 ),
               )
