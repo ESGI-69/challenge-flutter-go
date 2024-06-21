@@ -102,17 +102,18 @@ func (l *Logger) writeLog(level models.LogLevel, message string, additionalLogIn
 		logEntry.Username = additionalLogInfo.Username
 	}
 
-	var messageToBeUsedInPureStringLog string
+	var messageToBeUsedLogString string
 	if additionalLogInfo != nil {
-		messageToBeUsedInPureStringLog = additionalLogInfo.EnrichedMessage
+		messageToBeUsedLogString = additionalLogInfo.EnrichedMessage
 	} else {
-		messageToBeUsedInPureStringLog = message
+		messageToBeUsedLogString = message
 	}
 
-	pureStringLog := time.Now().Format("2006/01/02 15:04:05") + " - [" + string(level) + "] " + messageToBeUsedInPureStringLog
+	timeLog := time.Now().Format("2006-01-02 15:04:05") + " - "
+	logString := "[" + string(level) + "] " + messageToBeUsedLogString
 
-	l.terminalLogger.Println(pureStringLog)
-	l.fileLogger.Println(pureStringLog)
+	l.terminalLogger.Println(logString)
+	l.fileLogger.Println(timeLog + logString)
 	l.database.Create(&logEntry)
 }
 
