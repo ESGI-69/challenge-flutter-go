@@ -10,15 +10,28 @@ part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc(BuildContext context) : super (ChatInitial()) {
+    final chatServices = ChatService(context.read<AuthProvider>());
     on<ChatDataFetch>((event, emit) async {
       emit(ChatDataLoading());
-      final apiServices = ChatService(context.read<AuthProvider>());
       try {
-        final messages = await apiServices.getChatMessages(event.tripId);
+        final messages = await chatServices.getChatMessages(event.tripId);
         emit(ChatDataLoadingSuccess(messages: messages));
       } on ApiException catch (error) {
         emit(ChatDataLoadingError(errorMessage: error.message));
       } catch (error) {
+        emit(ChatDataLoadingError(errorMessage: 'Unhandled error'));
+      }
+    });
+
+    on<ChatDataSendMessage>((event, emit) async {
+      emit(ChatDataLoading());
+      try {
+        final message = await chatServices.create(event.tripId, event.message);
+        //todo add message to the list of messages
+      } on ApiException catch (error) {
+        emit(ChatDataLoadingError(errorMessage: error.message));
+      } catch (error) {
+        print(error);
         emit(ChatDataLoadingError(errorMessage: 'Unhandled error'));
       }
     });

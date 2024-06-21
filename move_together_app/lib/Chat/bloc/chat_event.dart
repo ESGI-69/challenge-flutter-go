@@ -8,3 +8,10 @@ final class ChatDataFetch extends ChatEvent {
 
   ChatDataFetch(this.tripId);
 }
+
+final class ChatDataSendMessage extends ChatEvent {
+  final String tripId;
+  final String message;
+
+  ChatDataSendMessage(this.tripId, this.message);
+}

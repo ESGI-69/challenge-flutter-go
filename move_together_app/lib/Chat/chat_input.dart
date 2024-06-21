@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ChatInput extends StatelessWidget {
   final TextEditingController controller;
   final bool isButtonEnabled;
-  final VoidCallback onSendPressed;
+  final Function(String) onSendPressed;
   final VoidCallback onAttachPressed;
 
   const ChatInput({
@@ -49,7 +49,7 @@ class ChatInput extends StatelessWidget {
                 Icons.send,
                 color: Colors.white,
               ),
-              onPressed: isButtonEnabled ? onSendPressed : null,
+              onPressed: isButtonEnabled ? () => onSendPressed(controller.text) : null,
             ),
           ),
         ],

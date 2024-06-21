@@ -43,6 +43,7 @@ class ChatScreen extends StatelessWidget {
             ),
             body: ChatBody(
               messages: state.messages,
+              tripId: tripId,
               userId: currentUserId,
               scrollController: ScrollController(),
             )
