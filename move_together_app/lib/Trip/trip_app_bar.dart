@@ -102,32 +102,32 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: TripQuickInfo(
-                    name: name,
-                    startDate: startDate,
-                    endDate: endDate,
-                    onNameTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => EditTripNameDialog(
-                                onNameUpdate: onNameUpdate,
-                              ));
-                    },
-                    onDateTap: () async {
-                      final DateTimeRange? newDateRange =
-                          await showDateRangePicker(
+                  name: name,
+                  startDate: startDate,
+                  endDate: endDate,
+                  onNameTap: () {
+                    showDialog(
                         context: context,
-                        initialDateRange: DateTimeRange(
-                          start: startDate.toLocal(),
-                          end: endDate.toLocal(),
-                        ),
-                        firstDate: DateTime(DateTime.now().year - 5).toLocal(),
-                        lastDate: DateTime(DateTime.now().year + 5).toLocal(),
-                      );
-                      if (newDateRange != null) {
-                        onDateUpdate(newDateRange.start.toLocal(),
-                            newDateRange.end.toLocal());
-                      }
-                    }),
+                        builder: (context) => EditTripNameDialog(
+                          onNameUpdate: onNameUpdate,
+                        )
+                    );
+                  },
+                  onDateTap: () async {
+                    final DateTimeRange? newDateRange = await showDateRangePicker(
+                      context: context,
+                      initialDateRange: DateTimeRange(
+                        start: startDate.toLocal(),
+                        end: endDate.toLocal(),
+                      ),
+                      firstDate: DateTime(DateTime.now().year - 5).toLocal(),
+                      lastDate: DateTime(DateTime.now().year + 5).toLocal(),
+                    );
+                    if (newDateRange != null) {
+                      onDateUpdate(newDateRange.start.toLocal(), newDateRange.end.toLocal());
+                    }
+                  }
+                ),
               )
             ],
           ),
