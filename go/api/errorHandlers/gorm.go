@@ -6,19 +6,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-sql-driver/mysql"
 	"github.com/jackc/pgx/v5/pgconn"
 	"gorm.io/gorm"
 )
 
 func HandleGormErrors(err error, context *gin.Context) {
 	if err == nil {
-		return
-	}
-
-	var mysqlErr *mysql.MySQLError
-	if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 { // MySQL error code for duplicate entry
-		context.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": "Duplicated key"})
 		return
 	}
 
