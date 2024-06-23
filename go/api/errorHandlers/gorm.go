@@ -6,30 +6,44 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-sql-driver/mysql"
+	"github.com/jackc/pgx/v5/pgconn"
 	"gorm.io/gorm"
 )
 
 func HandleGormErrors(err error, context *gin.Context) {
-	if errors.Is(err, gorm.ErrDuplicatedKey) {
-		logger.ApiWarning(context, "Duplicated key")
+	if err == nil {
+		return
+	}
+
+	var mysqlErr *mysql.MySQLError
+	if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 { // MySQL error code for duplicate entry
 		context.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": "Duplicated key"})
 		return
 	}
+
+	var postgresErr *pgconn.PgError
+	if errors.As(err, &postgresErr) && postgresErr.Code == "23505" { // PostgreSQL error code for unique violation
+		context.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": "Duplicated key"})
+		return
+	}
+
 	if errors.Is(err, gorm.ErrInvalidData) {
 		logger.ApiError(context, "Invalid data")
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid data"})
 		return
 	}
+
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		logger.ApiInfo(context, "Record not found")
 		context.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Record not found"})
 		return
 	}
+
 	if errors.Is(err, gorm.ErrInvalidTransaction) {
 		logger.ApiError(context, "Invalid transaction")
 		context.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
-	logger.ApiError(context, "Unknown GORM error")
 	context.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 }

@@ -1,0 +1,22 @@
+2024/06/23 14:25:57 2024-06-23 14:25:57 - [INFO] API server started
+2024/06/23 14:38:41 2024-06-23 14:38:41 - [INFO] API server started
+2024/06/23 14:40:05 2024-06-23 14:40:05 - [INFO] IP: 127.0.0.1 | Path: /users/ | Method: POST | User  created
+2024/06/23 14:40:54 2024-06-23 14:40:54 - [INFO] IP: ::1 | Path: /users/ | Method: POST | User  created
+2024/06/23 14:41:16 2024-06-23 14:41:16 - [INFO] IP: ::1 | Path: /login | Method: POST | User logged in
+2024/06/23 14:42:12 2024-06-23 14:42:12 - [ERROR] IP: ::1 | Path: /trips/ | Method: POST | Username: user | Invalid trip start date 25-10-2024
+2024/06/23 14:42:56 2024-06-23 14:42:56 - [ERROR] IP: ::1 | Path: /trips/ | Method: POST | Username: user | Invalid trip start date 2024-06-23 14:40:05.647 +0200
+2024/06/23 14:54:44 2024-06-23 14:54:44 - [INFO] API server started
+2024/06/23 14:55:52 2024-06-23 14:55:52 - [INFO] IP: ::1 | Path: /login | Method: POST | Failed login attempt, wrong password
+2024/06/23 14:57:17 2024-06-23 14:57:17 - [INFO] IP: 127.0.0.1 | Path: /users/ | Method: POST | User  created
+2024/06/23 14:57:25 2024-06-23 14:57:25 - [INFO] IP: ::1 | Path: /login | Method: POST | User logged in
+2024/06/23 14:58:38 2024-06-23 14:58:38 - [ERROR] IP: ::1 | Path: /trips/ | Method: POST | Username: user | Invalid trip start date 2024-10-01
+2024/06/23 14:59:02 2024-06-23 14:59:02 - [ERROR] IP: ::1 | Path: /trips/ | Method: POST | Username: user | Invalid trip start date 2024-06-23 14:57:17.348
+2024/06/23 15:04:04 2024-06-23 15:04:04 - [INFO] API server started
+2024/06/23 15:10:09 2024-06-23 15:10:09 - [INFO] IP: 127.0.0.1 | Path: /login | Method: POST | User logged in
+2024/06/23 15:13:54 2024-06-23 15:13:54 - [INFO] IP: ::1 | Path: /login | Method: POST | User logged in
+2024/06/23 15:14:16 2024-06-23 15:14:16 - [INFO] IP: ::1 | Path: /trips/ | Method: GET | Username: user | Get all trips
+2024/06/23 15:14:39 2024-06-23 15:14:39 - [INFO] IP: ::1 | Path: /trips/1/photos/ | Method: GET | Username: user | Get all photos from trip 1
+2024/06/23 15:15:29 2024-06-23 15:15:29 - [INFO] IP: ::1 | Path: /trips/1/photos/ | Method: POST | Username: user | Create a photo prout-88455709.jpeg on trip 1
+2024/06/23 15:16:17 2024-06-23 15:16:17 - [INFO] IP: ::1 | Path: /trips/1/photos/ | Method: GET | Username: user | Get all photos from trip 1
+2024/06/23 15:16:37 2024-06-23 15:16:37 - [INFO] IP: ::1 | Path: /trips/1/photos/1/download | Method: GET | Username: user | Download a photo prout-88455709.jpeg
+2024/06/23 15:16:54 2024-06-23 15:16:54 - [INFO] IP: ::1 | Path: /trips/1/photos/1 | Method: DELETE | Username: user | Delete a photo 1
