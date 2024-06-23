@@ -97,11 +97,6 @@ func (handler *UserHandler) Create(context *gin.Context) {
 	user := models.User{Username: requestBody.Username, Password: requestBody.Password}
 	userCreationError := handler.Repository.Create(&user)
 	if userCreationError != nil {
-		// if strings.Contains(userCreationError.Error(), "uni_users_username") {
-		// 	context.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
-		// } else {
-		// 	errorHandlers.HandleGormErrors(userCreationError, context)
-		// }
 		errorHandlers.HandleGormErrors(userCreationError, context)
 		return
 	}
