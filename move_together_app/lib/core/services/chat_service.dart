@@ -23,9 +23,7 @@ class ChatService {
   }
 
   Future<Message> create(String tripId, MessageToSend message) async {
-    final response = await api.post('/trips/$tripId/chatMessages/', data: {
-      'content': message.content,
-    });
+    final response = await api.post('/trips/$tripId/chatMessages/', data: message.toJson());
 
     if(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       return Message.fromJson(response.data);

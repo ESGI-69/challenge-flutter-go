@@ -21,14 +21,6 @@ var broadcast = make(chan responses.ChatMessageResponse)
 
 type SocketHandler struct{}
 
-// type WebSocketMessage struct {
-// 	ID        uint   `json:"id"`
-// 	Content   string `json:"content"`
-// 	AuthorID  uint   `json:"author_id"`
-// 	Author    string `json:"author"`
-// 	CreatedAt string `json:"created_at"`
-// }
-
 func (handler *SocketHandler) HandleConnections(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
@@ -53,10 +45,7 @@ func (handler *SocketHandler) HandleMessages() {
 	fmt.Println("Handle messages")
 	for {
 		msg := <-broadcast
-		fmt.Println("Received message :", msg)
-		fmt.Println("Broadcasting message")
 		for client := range clients {
-			fmt.Println("Sending message to client")
 			err := client.WriteJSON(msg)
 			if err != nil {
 				client.Close()

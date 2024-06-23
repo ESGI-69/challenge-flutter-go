@@ -1,10 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:move_together_app/core/models/user.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class Message {
   final int id;
   final String content;
   final UserWithoutRole author;
   final DateTime createdAt;
+
 
   Message({
     required this.id,
@@ -29,6 +34,11 @@ class Message {
       'author': author.toJson(),
       'createdAt': createdAt.toIso8601String()
     };
+  }
+
+  bool isCurrentUserAuthor(BuildContext context) {
+    final userId = context.read<AuthProvider>().userId;
+    return author.id == userId;
   }
 }
 

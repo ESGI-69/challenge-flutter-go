@@ -51,7 +51,7 @@ class TripService {
   }
 
   Future<Trip> create(Trip trip) async {
-    final response = await api.post('/trips', data: trip.toJson());
+    final response = await api.post('/trips/', data: trip.toJson());
 
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       return Trip.fromJson(response.data);

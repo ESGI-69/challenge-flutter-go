@@ -25,14 +25,15 @@ class ChatInput extends StatelessWidget {
               controller: controller,
               decoration: InputDecoration(
                 hintText: 'Enter your message',
-                prefixIcon: IconButton(
-                  icon: const Icon(Icons.attach_file),
-                  onPressed: onAttachPressed,
-                ),
+                // prefixIcon: IconButton(
+                //   icon: const Icon(Icons.attach_file),
+                //   onPressed: onAttachPressed,
+                // ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24.0),
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 20.0),
               ),
             ),
           ),
@@ -49,7 +50,8 @@ class ChatInput extends StatelessWidget {
                 Icons.send,
                 color: Colors.white,
               ),
-              onPressed: isButtonEnabled ? () => onSendPressed(controller.text) : null,
+              onPressed:
+                  isButtonEnabled ? () => onSendPressed(controller.text) : null,
             ),
           ),
         ],

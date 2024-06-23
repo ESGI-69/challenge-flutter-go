@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Chat/bloc/chat_bloc.dart';
-import 'package:move_together_app/Chat/chat_app_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Chat/chat_body.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/Widgets/Button/button_back.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -20,11 +20,15 @@ class ChatScreen extends StatelessWidget {
       create: (context) => ChatBloc(context)..add(ChatDataFetch(tripId)),
       child: BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
         if (state is ChatDataLoading) {
-          return const Scaffold(
-            appBar: ChatAppBar(
-              tripName: '',
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text(""),
+              leading: const Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: ButtonBack(),
+              ),
             ),
-            body: Center(
+            body: const Center(
               child: CircularProgressIndicator.adaptive(),
             ),
           );
@@ -34,8 +38,12 @@ class ChatScreen extends StatelessWidget {
           );
         } else if (state is ChatDataLoadingSuccess) {
           return Scaffold(
-            appBar: ChatAppBar(
-              tripName: tripName,
+            appBar: AppBar(
+              title: Text(tripName),
+              leading: const Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: ButtonBack(),
+              ),
             ),
             body: ChatBody(
               messages: state.messages,
@@ -45,7 +53,7 @@ class ChatScreen extends StatelessWidget {
             ),
             bottomNavigationBar: state.sendMessageState is ChatSendMessageLoading
                 ? const LinearProgressIndicator()
-                : null,
+                : const SizedBox(height: 4),
           );
         } else {
           return const Text('Unhandled state');
