@@ -33,6 +33,7 @@ func init() {
 	viper.BindEnv("DB_PASSWORD")
 	viper.BindEnv("JWT_SECRET")
 	viper.BindEnv("FRONTEND_URL")
+	viper.BindEnv("GOOGLE_API_KEY")
 
 	// Check if no missing keys in config
 	validator := validator.New()
