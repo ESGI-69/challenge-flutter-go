@@ -52,11 +52,11 @@ final class ChatSendMessageLoading extends ChatSendMessageState {}
 final class ChatSendMessageSuccess extends ChatSendMessageState {
   final Message message;
 
-  ChatSendMessageSuccess({required this.message});
+  const ChatSendMessageSuccess({required this.message});
 }
 
 final class ChatSendMessageError extends ChatSendMessageState {
   final String errorMessage;
 
-  ChatSendMessageError({required this.errorMessage});
+  const ChatSendMessageError({required this.errorMessage});
 }
