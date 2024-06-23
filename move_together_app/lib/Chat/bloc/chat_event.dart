@@ -1,17 +1,24 @@
 part of 'chat_bloc.dart';
 
 @immutable
-sealed class ChatEvent {}
+abstract class ChatEvent {}
 
-final class ChatDataFetch extends ChatEvent {
+class ChatDataFetch extends ChatEvent {
   final String tripId;
 
   ChatDataFetch(this.tripId);
 }
 
-final class ChatDataSendMessage extends ChatEvent {
+class ChatDataSendMessage extends ChatEvent {
   final String tripId;
   final MessageToSend message;
 
   ChatDataSendMessage(this.tripId, this.message);
 }
+
+class ChatDataReceived extends ChatEvent {
+  final String message;
+
+  ChatDataReceived(this.message);
+}
+

@@ -23,15 +23,11 @@ class ChatService {
   }
 
   Future<Message> create(String tripId, MessageToSend message) async {
-    print('service message: $message');
-    print("tripId: $tripId");
-    print('message.content: ${message.content}');
     final response = await api.post('/trips/$tripId/chatMessages/', data: {
       'content': message.content,
     });
 
     if(response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      print('response.data: ${response.data}');
       return Message.fromJson(response.data);
 
     } else {

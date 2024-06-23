@@ -39,7 +39,7 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
-	AccommodationRepository := repository.AccommodationRepository{
+	accommodationRepository := repository.AccommodationRepository{
 		Database: databaseInstance,
 	}
 
@@ -88,7 +88,7 @@ func setRoutes() {
 	}
 
 	accommodationHandler := handlers.AccommodationHandler{
-		Repository:     AccommodationRepository,
+		Repository:     accommodationRepository,
 		TripRepository: tripRepository,
 	}
 
@@ -143,6 +143,8 @@ func setRoutes() {
 	tripDocumentsRoutes.DELETE("/:documentID", middlewares.UserHasTripEditRight, documentHandler.DeleteDocumentFromTrip)
 	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, documentHandler.DownloadDocument)
 
+	router.GET("/ws", chatMessageHandler.HandleConnections)
+
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
@@ -150,5 +152,11 @@ func setRoutes() {
 
 func Start() {
 	logger.Info("API server started")
+	chatMessageHandler := &handlers.ChatMessageHandler{
+		Repository: repository.ChatMessageRepository{
+			Database: database.GetInstance(),
+		},
+	}
+	go chatMessageHandler.HandleMessages()
 	router.Run()
 }

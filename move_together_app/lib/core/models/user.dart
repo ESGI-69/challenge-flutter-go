@@ -48,7 +48,7 @@ class UserWithoutRole {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
+      'username': name,
     };
   }
 }

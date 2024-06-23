@@ -48,7 +48,6 @@ class ChatBodyState extends State<ChatBody> {
       final messageText = _controller.text;
 
       // Dispatch the ChatDataSendMessage event
-      print('Sending message: $messageText');
       var messageToSend = MessageToSend(
         content: messageText,
       );
