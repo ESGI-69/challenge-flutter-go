@@ -230,6 +230,21 @@ definitions:
     - ParticipantTripRoleEditor
     - ParticipantTripRoleViewer
     - ParticipantTripRoleNone
+  responses.PhotoResponse:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      path:
+        type: string
+      title:
+        type: string
+      updateAt:
+        type: string
+    type: object
   responses.TransportResponse:
     properties:
       author:
@@ -976,6 +991,146 @@ paths:
       summary: Change the role of a participant in a trip
       tags:
       - participants
+  /trips/{id}/photos:
+    get:
+      consumes:
+      - application/json
+      description: Get all photos of a trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all photos of a trip
+      tags:
+      - photo
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new photo on trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Title of the photo
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: Description of the photo
+        in: formData
+        name: description
+        type: string
+      - description: Photo file
+        in: formData
+        name: photo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.PhotoResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new photo on trip
+      tags:
+      - photo
+  /trips/{id}/photos/{photoID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a photo from the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the photo
+        in: path
+        name: photoID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a photo from trip
+      tags:
+      - photo
+  /trips/{id}/photos/{photoID}/download:
+    get:
+      consumes:
+      - application/json
+      description: Download a photo
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the photo
+        in: path
+        name: photoID
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: A file stream of the photo
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Download a photo
+      tags:
+      - photo
   /trips/{id}/transports:
     post:
       consumes:

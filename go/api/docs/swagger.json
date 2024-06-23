@@ -1093,6 +1093,218 @@
                 }
             }
         },
+        "/trips/{id}/photos": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all photos of a trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "photo"
+                ],
+                "summary": "Get all photos of a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new photo on trip",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "photo"
+                ],
+                "summary": "Create a new photo on trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Title of the photo",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description of the photo",
+                        "name": "description",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "Photo file",
+                        "name": "photo",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.PhotoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/photos/{photoID}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a photo from the trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "photo"
+                ],
+                "summary": "Delete a photo from trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID of the photo",
+                        "name": "photoID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/trips/{id}/photos/{photoID}/download": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Download a photo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "photo"
+                ],
+                "summary": "Download a photo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID of the photo",
+                        "name": "photoID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A file stream of the photo",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/trips/{id}/transports": {
             "post": {
                 "security": [
@@ -1612,6 +1824,29 @@
                 "ParticipantTripRoleViewer",
                 "ParticipantTripRoleNone"
             ]
+        },
+        "responses.PhotoResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updateAt": {
+                    "type": "string"
+                }
+            }
         },
         "responses.TransportResponse": {
             "type": "object",
