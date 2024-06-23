@@ -52,7 +52,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       } on ApiException catch (error) {
         emit(currentState.copyWith(sendMessageState: ChatSendMessageError(errorMessage: error.message)));
       } catch (error) {
-        emit(currentState.copyWith(sendMessageState: ChatSendMessageError(errorMessage: 'Unhandled error')));
+        emit(currentState.copyWith(sendMessageState: const ChatSendMessageError(errorMessage: 'Unhandled error')));
       }
     }
   }
