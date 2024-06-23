@@ -97,6 +97,8 @@ func setRoutes() {
 		TripRepository: tripRepository,
 	}
 
+	sockeHandler := handlers.SocketHandler{}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.POST("/login", authHandler.Login)
@@ -143,7 +145,7 @@ func setRoutes() {
 	tripDocumentsRoutes.DELETE("/:documentID", middlewares.UserHasTripEditRight, documentHandler.DeleteDocumentFromTrip)
 	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, documentHandler.DownloadDocument)
 
-	router.GET("/ws", chatMessageHandler.HandleConnections)
+	router.GET("/ws", sockeHandler.HandleConnections)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
@@ -152,11 +154,7 @@ func setRoutes() {
 
 func Start() {
 	logger.Info("API server started")
-	chatMessageHandler := &handlers.ChatMessageHandler{
-		Repository: repository.ChatMessageRepository{
-			Database: database.GetInstance(),
-		},
-	}
-	go chatMessageHandler.HandleMessages()
+	socketHandler := &handlers.SocketHandler{}
+	go socketHandler.HandleMessages()
 	router.Run()
 }

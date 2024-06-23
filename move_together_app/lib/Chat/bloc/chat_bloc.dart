@@ -60,9 +60,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   void _onChatDataReceived(ChatDataReceived event, Emitter<ChatState> emit) {
     final currentState = state;
     if (currentState is ChatDataLoadingSuccess) {
-      print ('Received message: ${event.message}');
       final message = Message.fromJson(jsonDecode(event.message));
-      print ('id: ${message.id}');
       final updatedState = currentState
           .addMessage(message)
           .copyWith(sendMessageState: ChatSendMessageSuccess(message: message));

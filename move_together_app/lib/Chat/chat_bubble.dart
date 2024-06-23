@@ -34,10 +34,13 @@ class ChatBubble extends StatelessWidget {
                   message.author.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-              Text(message.content),
+              Text(message.content, style: TextStyle(color: isOwnMessage ? Colors.white : Colors.black)),
               Text(
                 "${message.createdAt.toLocal().toString().split(' ')[0].replaceAll('-', '/').split('/')[2]}/${message.createdAt.toLocal().toString().split(' ')[0].replaceAll('-', '/').split('/')[1]}, ${message.createdAt.toLocal().toString().split(' ')[1].split('.')[0].split(':').sublist(0, 2).join(':')}",
-                style: const TextStyle(fontSize: 10),
+                style: TextStyle(
+                  fontSize: 10,
+                  color: isOwnMessage ? Colors.white : Colors.black,
+                ),
               ),
             ],
           ),
