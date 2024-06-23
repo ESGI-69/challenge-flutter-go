@@ -11,7 +11,7 @@ final class ChatDataFetch extends ChatEvent {
 
 final class ChatDataSendMessage extends ChatEvent {
   final String tripId;
-  final String message;
+  final MessageToSend message;
 
   ChatDataSendMessage(this.tripId, this.message);
 }

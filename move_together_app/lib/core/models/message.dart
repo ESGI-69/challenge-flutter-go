@@ -31,3 +31,17 @@ class Message {
     };
   }
 }
+
+class MessageToSend {
+  final String content;
+
+  MessageToSend({
+    required this.content,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'content': content,
+    };
+  }
+}

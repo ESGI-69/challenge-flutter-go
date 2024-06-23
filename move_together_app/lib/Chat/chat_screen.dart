@@ -7,10 +7,7 @@ import 'package:move_together_app/Chat/chat_body.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 
 class ChatScreen extends StatelessWidget {
-
-  const ChatScreen({
-    super.key,
-  });
+  const ChatScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +15,6 @@ class ChatScreen extends StatelessWidget {
     final tripName = GoRouterState.of(context).uri.queryParameters['tripName'] ?? '';
     final authProvider = context.read<AuthProvider>();
     final currentUserId = authProvider.userId;
-
 
     return BlocProvider(
       create: (context) => ChatBloc(context)..add(ChatDataFetch(tripId)),
@@ -46,13 +42,15 @@ class ChatScreen extends StatelessWidget {
               tripId: tripId,
               userId: currentUserId,
               scrollController: ScrollController(),
-            )
+            ),
+            bottomNavigationBar: state.sendMessageState is ChatSendMessageLoading
+                ? const LinearProgressIndicator()
+                : null,
           );
-        }
-        {
+        } else {
           return const Text('Unhandled state');
         }
-      })
+      }),
     );
   }
 }

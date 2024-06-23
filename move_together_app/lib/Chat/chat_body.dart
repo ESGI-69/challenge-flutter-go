@@ -49,13 +49,15 @@ class ChatBodyState extends State<ChatBody> {
 
       // Dispatch the ChatDataSendMessage event
       print('Sending message: $messageText');
-      context.read<ChatBloc>().add(ChatDataSendMessage(widget.tripId, messageText));
+      var messageToSend = MessageToSend(
+        content: messageText,
+      );
+      context.read<ChatBloc>().add(ChatDataSendMessage(widget.tripId, messageToSend));
 
       setState(() {
         _controller.clear();
       });
 
-      // Scroll to the bottom after the message is sent
       _scrollToBottom();
     }
   }
