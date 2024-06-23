@@ -44,6 +44,5 @@ class AppInterceptors extends Interceptor {
       router.go('/');
       handler.reject(err);
     }
-    handler.next(err);
   }
 }
