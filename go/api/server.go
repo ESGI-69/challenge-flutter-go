@@ -39,7 +39,7 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
-	AccommodationRepository := repository.AccommodationRepository{
+	accommodationRepository := repository.AccommodationRepository{
 		Database: databaseInstance,
 	}
 
@@ -88,7 +88,7 @@ func setRoutes() {
 	}
 
 	accommodationHandler := handlers.AccommodationHandler{
-		Repository:     AccommodationRepository,
+		Repository:     accommodationRepository,
 		TripRepository: tripRepository,
 	}
 
@@ -96,6 +96,8 @@ func setRoutes() {
 		Repository:     documentRepository,
 		TripRepository: tripRepository,
 	}
+
+	sockeHandler := handlers.SocketHandler{}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -143,6 +145,8 @@ func setRoutes() {
 	tripDocumentsRoutes.DELETE("/:documentID", middlewares.UserHasTripEditRight, documentHandler.DeleteDocumentFromTrip)
 	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, documentHandler.DownloadDocument)
 
+	router.GET("/ws", sockeHandler.HandleConnections)
+
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
@@ -150,5 +154,7 @@ func setRoutes() {
 
 func Start() {
 	logger.Info("API server started")
+	socketHandler := &handlers.SocketHandler{}
+	go socketHandler.HandleMessages()
 	router.Run()
 }

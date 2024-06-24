@@ -43,7 +43,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       }
     });
 
-     on<TripDataCreateTrip>((event, emit) async {
+    on<TripDataCreateTrip>((event, emit) async {
       emit(TripDataLoading());
       try {
         final trip =  await tripServices.create(event.trip);

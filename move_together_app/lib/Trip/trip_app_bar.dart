@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/Dialog/edit_trip_name.dart';
+import 'package:move_together_app/Widgets/Button/button_chat.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
@@ -14,9 +15,10 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String) onNameUpdate;
   final Function(DateTime, DateTime) onDateUpdate;
   final String imageUrl;
+  final int tripId;
 
   const TripAppBar({
-    super.key, 
+    super.key,
     this.isLoading = false,
     required this.name,
     required this.startDate,
@@ -25,6 +27,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onNameUpdate,
     required this.onDateUpdate,
     required this.imageUrl,
+    required this.tripId,
   });
 
   @override
@@ -73,6 +76,15 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: ButtonChat(
+              tripId: tripId,
+              tripName: name,
+            ),
+          ),
+        ],
         title: ParticipantIcons(participants: participants),
         flexibleSpace: Padding(
           padding: const EdgeInsets.only(bottom: 10),
@@ -95,10 +107,10 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                   endDate: endDate,
                   onNameTap: () {
                     showDialog(
-                      context: context,
-                      builder: (context) => EditTripNameDialog(
-                        onNameUpdate: onNameUpdate,
-                      )
+                        context: context,
+                        builder: (context) => EditTripNameDialog(
+                          onNameUpdate: onNameUpdate,
+                        )
                     );
                   },
                   onDateTap: () async {

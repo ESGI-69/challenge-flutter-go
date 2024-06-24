@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Chat/chat_screen.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
@@ -10,7 +11,6 @@ import 'package:move_together_app/Trip/trip_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-
 import 'package:move_together_app/Trip/trip_create_screen.dart';
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -22,6 +22,7 @@ List<String> loggedRoutes = [
   '/profile',
   '/trip/:tripId',
   '/create-trip',
+  '/trip/:tripId/chat',
 ];
 List<String> unloggedRoutes = [
   '/login',
@@ -64,6 +65,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/trip/:tripId',
       builder: (context, state) => const TripScreen(),
+    ),
+    GoRoute(
+      path: '/trip/:tripId/chat',
+      builder: (context, state) => const ChatScreen(),
     ),
     GoRoute(
       path: '/profile',

@@ -108,3 +108,24 @@ func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
 	context.JSON(http.StatusOK, chatMessageResponse)
 	logger.ApiInfo(context, "Get all chat messages from trip "+tripId)
 }
+
+// Handle WebSocket connections
+func (handler *ChatMessageHandler) HandleConnections(c *gin.Context) {
+	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		logger.ApiError(c, "Failed to upgrade to websocket: "+err.Error())
+		return
+	}
+	defer ws.Close()
+	clients[ws] = true
+
+	for {
+		var msg responses.ChatMessageResponse
+		err := ws.ReadJSON(&msg)
+		if err != nil {
+			delete(clients, ws)
+			break
+		}
+		broadcast <- msg
+	}
+}
