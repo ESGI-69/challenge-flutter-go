@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:move_together_app/core/models/user.dart';
-import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class Message {
   final int id;
@@ -37,8 +34,7 @@ class Message {
   }
 
   bool isCurrentUserAuthor(BuildContext context) {
-    final userId = context.read<AuthProvider>().userId;
-    return author.id == userId;
+    return author.isMe(context);
   }
 }
 

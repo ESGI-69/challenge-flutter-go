@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 // ignore: constant_identifier_names
 enum Role { USER, ADMIN }
 
@@ -50,5 +54,10 @@ class UserWithoutRole {
       'id': id,
       'username': name,
     };
+  }
+
+  bool isMe(BuildContext context) {
+    final userId = context.read<AuthProvider>().userId;
+    return userId == id;
   }
 }
