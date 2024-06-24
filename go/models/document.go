@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -31,7 +30,6 @@ func (document *Document) BeforeDelete(tx *gorm.DB) (err error) {
 	err = os.Remove(filePath)
 
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 

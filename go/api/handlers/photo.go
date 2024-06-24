@@ -95,11 +95,14 @@ func (handler *PhotoHandler) CreatePhoto(context *gin.Context) {
 		return
 	}
 
+	currentUser, _ := utils.GetCurrentUser(context)
+
 	var photo = models.Photo{
 		Title:       title,
 		Description: description,
 		TripID:      uint(tripId),
 		Path:        filePath,
+		OwnerID:     currentUser.ID,
 	}
 
 	err := handler.Repository.Create(&photo)
@@ -143,11 +146,12 @@ func (handler *PhotoHandler) DownloadPhoto(context *gin.Context) {
 		return
 	}
 
-	tripIDStr := context.Param("id")
-	tripID, _ := strconv.ParseUint(tripIDStr, 10, 32)
-	if photo.TripID != uint(tripID) {
+	tripID := context.Param("id")
+	tripIDUint, _ := strconv.ParseUint(tripID, 10, 32)
+
+	if photo.TripID != uint(tripIDUint) {
 		logger.ApiError(context, "Photo does not belong to the trip")
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Photo does not belong to the trip"})
+		context.JSON(http.StatusForbidden, gin.H{"error": "Photo does not belong to the trip"})
 		return
 	}
 
@@ -182,6 +186,21 @@ func (handler *PhotoHandler) DeletePhotoFromTrip(context *gin.Context) {
 		context.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
+
+	currentUser, _ := utils.GetCurrentUser(context)
+	photo, errPhoto := handler.Repository.Get(photoID)
+
+	if errPhoto != nil {
+		errorHandlers.HandleGormErrors(errPhoto, context)
+		return
+	}
+
+	if (photo.OwnerID != currentUser.ID) || (photo.Trip.OwnerID != currentUser.ID) {
+		logger.ApiError(context, "User is not the owner of the photo or the trip")
+		context.JSON(http.StatusForbidden, gin.H{"error": "User is not the owner of the photo or the trip"})
+		return
+	}
+
 	err := handler.Repository.DeletePhoto(photoID)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)

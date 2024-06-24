@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -16,6 +15,8 @@ type Photo struct {
 	Path        string `gorm:"not null"`
 	TripID      uint
 	Trip        Trip `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	OwnerID     uint
+	Owner       User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 func (photo *Photo) BeforeDelete(tx *gorm.DB) (err error) {
@@ -31,7 +32,6 @@ func (photo *Photo) BeforeDelete(tx *gorm.DB) (err error) {
 	err = os.Remove(filePath)
 
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 
