@@ -85,10 +85,9 @@ class ChatBodyState extends State<ChatBody> {
             itemCount: widget.messages.length,
             itemBuilder: (context, index) {
               final message = widget.messages[widget.messages.length - 1 - index];
-              final isOwnMessage = message.isCurrentUserAuthor(context);
               return ChatBubble(
                 message: message,
-                isOwnMessage: isOwnMessage
+                isOwnMessage: message.isCurrentUserAuthor(context)
               );
             },
           ),
