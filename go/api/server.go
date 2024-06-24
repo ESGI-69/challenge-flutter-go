@@ -55,6 +55,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	photoRepository := repository.PhotoRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -98,6 +102,11 @@ func setRoutes() {
 	}
 
 	sockeHandler := handlers.SocketHandler{}
+
+	photoHandler := handlers.PhotoHandler{
+		Repository:     photoRepository,
+		TripRepository: tripRepository,
+	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -144,6 +153,12 @@ func setRoutes() {
 	tripDocumentsRoutes.POST("/", middlewares.UserHasTripEditRight, documentHandler.CreateDocument)
 	tripDocumentsRoutes.DELETE("/:documentID", middlewares.UserHasTripEditRight, documentHandler.DeleteDocumentFromTrip)
 	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, documentHandler.DownloadDocument)
+
+	tripPhotosRoutes := tripsRoutes.Group("/:id/photos")
+	tripPhotosRoutes.GET("/", middlewares.UserIsTripParticipant, photoHandler.GetPhotosOfTrip)
+	tripPhotosRoutes.POST("/", middlewares.UserHasTripEditRight, photoHandler.CreatePhoto)
+	tripPhotosRoutes.DELETE("/:photoID", middlewares.UserHasTripEditRight, photoHandler.DeletePhotoFromTrip)
+	tripPhotosRoutes.GET("/:photoID/download", middlewares.UserIsTripParticipant, photoHandler.DownloadPhoto)
 
 	router.GET("/ws", sockeHandler.HandleConnections)
 
