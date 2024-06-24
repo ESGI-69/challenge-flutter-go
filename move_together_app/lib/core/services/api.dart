@@ -29,7 +29,8 @@ class Api {
 
 class AppInterceptors extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     final token = await secureStorage.read(key: 'jwt');
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
