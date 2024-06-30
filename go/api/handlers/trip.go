@@ -8,10 +8,14 @@ import (
 	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
+	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type TripHandler struct {
@@ -54,6 +58,58 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		return
 	}
 
+	//Get an image from google maps api for the trip
+	image, err := utils.GetPhotoURIFromPlaceName(requestBody.City + ", " + requestBody.Country)
+	if err != nil {
+		logger.ApiError(context, "Error getting image from google maps api")
+		//if we have an error, use a placeholder image instead so we dont return an status error
+		//todo
+		return
+	}
+
+	//Download the image from the url and store it on the server
+	response, err := http.Get(image)
+	if err != nil {
+		logger.ApiError(context, "Error downloading image from google maps api")
+		//if we have an error, use a placeholder image instead
+		return
+	}
+	defer response.Body.Close()
+
+	err = os.MkdirAll("banner", os.ModePerm)
+	if err != nil {
+		logger.ApiError(context, "Error creating directory for image")
+		// context.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating directory for image"})
+		//if we have an error, use a placeholder image instead
+		return
+	}
+
+	uniqueTitle, uuidErr := uuid.NewV7()
+	if uuidErr != nil {
+		logger.ApiError(context, "Error generating UUID")
+		//todo
+		//use a anothername
+	}
+	filePath := fmt.Sprintf("banner/%s.jpg", uniqueTitle)
+	file, err := os.Create(filePath)
+	if err != nil {
+		logger.ApiError(context, "Error creating file for image")
+		//if we have an error, use a placeholder image instead
+		// context.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating file for image"})
+		// return
+	}
+	defer file.Close()
+
+	fmt.Println("url is " + image)
+	fmt.Println("----")
+	_, err = io.Copy(file, response.Body)
+	if err != nil {
+		logger.ApiError(context, "Error copying image to file")
+		//if we have an error, use a placeholder image instead
+		// context.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error copying image to file"})
+		// return
+	}
+
 	trip := models.Trip{
 		Name:      requestBody.Name,
 		Country:   requestBody.Country,
@@ -63,7 +119,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		EndDate:   endDate,
 	}
 
-	err := handler.Repository.Create(&trip)
+	err = handler.Repository.Create(&trip)
 
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)

@@ -63,7 +63,7 @@ func SearchPlaces(query string) (string, error) {
 		return result.Places[0].Photos[0].Name, nil
 	}
 
-	return "", nil
+	return "", fmt.Errorf("no photo found")
 }
 
 // function that build the place photo uri from the photo name

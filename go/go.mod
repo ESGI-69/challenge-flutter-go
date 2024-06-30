@@ -27,6 +27,7 @@ require (
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/jackc/pgx v3.6.2+incompatible // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
