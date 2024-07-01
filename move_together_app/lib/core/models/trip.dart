@@ -52,4 +52,11 @@ class Trip {
     final Participant owner = participants.firstWhere((participant) => participant.tripRole == "OWNER");
     return owner.isMe(context);
   }
+
+  bool currentUserHasEditingRights(BuildContext context) {
+    final myRole = participants.firstWhere((participant) => participant.isMe(context)).tripRole;
+    if (myRole == "OWNER") return true;
+    if (myRole == "EDITOR") return true;
+    return false;
+  }
 }

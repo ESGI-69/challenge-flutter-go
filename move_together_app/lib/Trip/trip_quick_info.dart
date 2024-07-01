@@ -26,6 +26,12 @@ class TripQuickInfo extends StatelessWidget {
     onNameTap!();
   }
 
+  void onDateTapHandler() {
+    if (onDateTap == null) return;
+    if (!userHasEditRights) return;
+    onDateTap!();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
@@ -75,7 +81,7 @@ class TripQuickInfo extends StatelessWidget {
                 const Icon(Icons.calendar_month, size: 16),
                 const SizedBox(width: 4),
                 GestureDetector(
-                  onTap: onDateTap ?? () {},
+                  onTap: onDateTapHandler,
                   child: Text(
                   '${startDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]} - ${endDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]}',
                   style: const TextStyle(
