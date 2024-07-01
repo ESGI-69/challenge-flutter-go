@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgconn"
 	"gorm.io/gorm"
 )
 
@@ -15,8 +14,8 @@ func HandleGormErrors(err error, context *gin.Context) {
 		return
 	}
 
-	var postgresErr *pgconn.PgError
-	if errors.As(err, &postgresErr) && postgresErr.Code == "23505" { // PostgreSQL error code for unique violation
+	if errors.Is(err, gorm.ErrDuplicatedKey) {
+		logger.ApiWarning(context, "Duplicated key")
 		context.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": "Duplicated key"})
 		return
 	}

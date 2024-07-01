@@ -15,7 +15,7 @@ func init() {
 	dsn := "host=" + config.GetConfig().DBHost + " user=" + config.GetConfig().DBUser + " password=" + config.GetConfig().DBPassword + " dbname=" + config.GetConfig().DBName + " port=" + config.GetConfig().DBPort + " sslmode=disable"
 
 	var databaseConnectionError error
-	database, databaseConnectionError = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	database, databaseConnectionError = gorm.Open(postgres.Open(dsn), &gorm.Config{TranslateError: true})
 	if databaseConnectionError != nil {
 		log.Fatalln(databaseConnectionError)
 	}
