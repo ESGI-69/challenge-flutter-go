@@ -29,8 +29,7 @@ class Api {
 
 class AppInterceptors extends Interceptor {
   @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     final token = await secureStorage.read(key: 'jwt');
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -40,7 +39,7 @@ class AppInterceptors extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
+    if ((err.response?.statusCode == 401 || err.response?.statusCode == 403) && err.requestOptions.path != '/login' && err.requestOptions.path != '/register') {
       await AuthProvider().logout();
       router.go('/');
       handler.reject(err);

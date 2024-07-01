@@ -16,6 +16,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(DateTime, DateTime) onDateUpdate;
   final String imageUrl;
   final int tripId;
+  final bool userHasEditRights;
 
   const TripAppBar({
     super.key,
@@ -28,6 +29,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onDateUpdate,
     required this.imageUrl,
     required this.tripId,
+    this.userHasEditRights = false,
   });
 
   @override
@@ -126,7 +128,8 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                     if (newDateRange != null) {
                       onDateUpdate(newDateRange.start.toLocal(), newDateRange.end.toLocal());
                     }
-                  }
+                  },
+                  userHasEditRights: userHasEditRights,
                 ),
               )
             ],

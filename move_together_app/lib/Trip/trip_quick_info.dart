@@ -7,16 +7,24 @@ class TripQuickInfo extends StatelessWidget {
   final bool isLoading;
   final Function()? onNameTap;
   final Function()? onDateTap;
+  final bool userHasEditRights;
 
   const TripQuickInfo({
     super.key,
     this.isLoading = false,
+    this.userHasEditRights = false,
     required this.name,
     required this.startDate,
     required this.endDate,
     this.onNameTap,
     this.onDateTap,
   });
+
+  void onNameTapHandler() {
+    if (onNameTap == null) return;
+    if (!userHasEditRights) return;
+    onNameTap!();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +59,7 @@ class TripQuickInfo extends StatelessWidget {
           ]
           : [
             GestureDetector(
-              onTap: onNameTap ?? () {},
+              onTap: onNameTapHandler,
               child: Text(
                 name,
                 textAlign: TextAlign.center,

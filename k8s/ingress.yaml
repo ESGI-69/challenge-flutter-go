@@ -3,10 +3,14 @@ kind: Ingress
 metadata:
   name: nginx
   namespace: challenge-flutter-go
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   tls:
   - hosts:
     - jppduphp.uk
+    secretName: jppduphp-tls
   defaultBackend:
     service:
       name: backend
