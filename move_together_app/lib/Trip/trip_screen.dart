@@ -63,6 +63,7 @@ class TripScreen extends StatelessWidget {
               },
               imageUrl:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg',
+              userHasEditRights: state.trip.currentUserHasEditingRights(context),
             ),
             body: TripBody(tripId: tripId),
           );
