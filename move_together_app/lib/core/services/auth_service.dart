@@ -19,7 +19,9 @@ class AuthService {
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       final String token = response.data['token'];
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       authProvider.login(decodedToken['id']);
@@ -32,14 +34,16 @@ class AuthService {
 
   Future<void> register(String username, String password) async {
     final response = await api.post(
-      '/register',
+      '/users/',
       data: {
         'username': username,
         'password': password,
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to register user');

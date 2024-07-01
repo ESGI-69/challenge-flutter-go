@@ -39,7 +39,7 @@ class AppInterceptors extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
+    if ((err.response?.statusCode == 401 || err.response?.statusCode == 403) && err.requestOptions.path != '/login' && err.requestOptions.path != '/register') {
       await AuthProvider().logout();
       router.go('/');
       handler.reject(err);

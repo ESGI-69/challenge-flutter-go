@@ -3,7 +3,6 @@ package handlers
 import (
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/logger"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +41,6 @@ func (handler *SocketHandler) HandleConnections(c *gin.Context) {
 }
 
 func (handler *SocketHandler) HandleMessages() {
-	fmt.Println("Handle messages")
 	for {
 		msg := <-broadcast
 		for client := range clients {
