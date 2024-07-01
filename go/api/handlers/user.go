@@ -101,11 +101,11 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		return
 	}
 
-	reponse := responses.UserRoleReponse{
+	response := responses.UserRoleReponse{
 		ID:       user.ID,
 		Username: user.Username,
 		Role:     user.Role,
 	}
-	context.JSON(http.StatusCreated, reponse)
+	context.JSON(http.StatusCreated, response)
 	logger.ApiInfo(context, "User "+string(rune(user.ID))+" created")
 }
