@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:move_together_app/core/exceptions/api_exception.dart';
 import 'package:move_together_app/core/models/message.dart';
 import 'package:move_together_app/core/services/chat_service.dart';
-import 'package:move_together_app/core/services/websocket_service.dart'; // Import the WebSocketService
+import 'package:move_together_app/core/services/websocket_service.dart';
 import '../../Provider/auth_provider.dart';
 
 part 'chat_event.dart';
@@ -17,16 +18,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   ChatBloc(BuildContext context)
       : _chatService = ChatService(context.read<AuthProvider>()),
-        _webSocketService = WebSocketService('ws://localhost:8080/ws'),
+      _webSocketService = WebSocketService(dotenv.env['WEBSOCKET_ADDRESS']!),
         super(ChatInitial()) {
     on<ChatDataFetch>(_onChatDataFetch);
     on<ChatDataSendMessage>(_onChatDataSendMessage);
-    on<ChatDataReceived>(_onChatDataReceived); // Register handler for ChatDataReceived event
+    on<ChatDataReceived>(_onChatDataReceived);
 
     // Listen to messages from WebSocketService
     _webSocketService.stream.listen((message) {
       var messageDecoded = message;
-      add(ChatDataReceived(messageDecoded)); // Dispatch ChatDataReceived event
+      add(ChatDataReceived(messageDecoded));
     });
   }
 
