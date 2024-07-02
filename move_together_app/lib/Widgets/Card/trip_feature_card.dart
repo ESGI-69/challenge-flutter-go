@@ -74,7 +74,8 @@ class TripFeatureCard extends StatelessWidget {
                     )
                   : ConstrainedBox(
                     constraints: const BoxConstraints(maxHeight: 125),
-                    child: ListView.builder(
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) => const SizedBox(height: 8),
                       itemCount: length,
                       itemBuilder: itemBuilder,
                       shrinkWrap: true,
