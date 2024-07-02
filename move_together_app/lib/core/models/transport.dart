@@ -7,12 +7,12 @@ enum TransportType {
 class Transport {
   final int id;
   final TransportType transportType;
-  final String startDate;
-  final String endDate;
+  final DateTime startDate;
+  final DateTime endDate;
   final String startAddress;
   final String endAddress;
   final String? meetingAddress;
-  final String? meetingTime;
+  final DateTime? meetingTime;
   final User author;
 
   Transport({
@@ -31,12 +31,12 @@ class Transport {
     return Transport(
       id: json['id'],
       transportType: TransportType.values.firstWhere((e) => e.toString().split('.').last == json['transportType']),
-      startDate: json['startDate'],
-      endDate: json['endDate'],
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
       startAddress: json['startAddress'],
       endAddress: json['endAddress'],
       meetingAddress: json['meetingAddress'],
-      meetingTime: json['meetingTime'],
+      meetingTime: DateTime.parse(json['meetingTime']),
       author: User.fromJson(json['author']),
     );
   }
