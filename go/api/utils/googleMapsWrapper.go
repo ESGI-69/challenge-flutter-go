@@ -77,18 +77,21 @@ func buildPhotoURI(photoName string) string {
 func getPhotoURI(photoName string) (string, error) {
 	url := buildPhotoURI(photoName)
 
-	// Create a new GET request
+	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return "", fmt.Errorf("error creating request: %v", err)
 	}
 
-	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("error sending request: %v", err)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 && resp.StatusCode < 500 {
+		return "", fmt.Errorf("error getting photo URI (probably Google side): %v", resp.Status)
+	}
 
 	// Return the photo URI to make a request to get the photo file from google servers
 	return url, nil
@@ -96,7 +99,8 @@ func getPhotoURI(photoName string) (string, error) {
 
 // function that get the photo uri from the place name and return the final photo file url
 func GetPhotoURIFromPlaceName(placeName string) (string, error) {
-	photoName, err := SearchPlaces(placeName)
+	//L'api de gmap est nulle, obligé de rajouter "rue principale" ou "mairie" pour avoir des résultats
+	photoName, err := SearchPlaces(placeName + " mairie")
 	if err != nil {
 		return "", fmt.Errorf("error searching places: %v", err)
 	}

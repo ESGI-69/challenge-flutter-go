@@ -62,52 +62,42 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	image, err := utils.GetPhotoURIFromPlaceName(requestBody.City + ", " + requestBody.Country)
 	if err != nil {
 		logger.ApiError(context, "Error getting image from google maps api")
-		//if we have an error, use a placeholder image instead so we dont return an status error
-		//todo
-		return
 	}
 
-	//Download the image from the url and store it on the server
-	response, err := http.Get(image)
-	if err != nil {
-		logger.ApiError(context, "Error downloading image from google maps api")
-		//if we have an error, use a placeholder image instead
-		return
-	}
-	defer response.Body.Close()
+	var uniqueTitleString string
 
-	err = os.MkdirAll("banner", os.ModePerm)
-	if err != nil {
-		logger.ApiError(context, "Error creating directory for image")
-		// context.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating directory for image"})
-		//if we have an error, use a placeholder image instead
-		return
-	}
+	if image != "" {
+		//Download the image from the url and store it on the server
+		response, err := http.Get(image)
+		if err != nil {
+			logger.ApiError(context, "Error downloading image from google maps api @response")
+		}
 
-	uniqueTitle, uuidErr := uuid.NewV7()
-	if uuidErr != nil {
-		logger.ApiError(context, "Error generating UUID")
-		//todo
-		//use a anothername
-	}
-	filePath := fmt.Sprintf("banner/%s.jpg", uniqueTitle)
-	file, err := os.Create(filePath)
-	if err != nil {
-		logger.ApiError(context, "Error creating file for image")
-		//if we have an error, use a placeholder image instead
-		// context.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error creating file for image"})
-		// return
-	}
-	defer file.Close()
-
-	fmt.Println("url is " + image)
-	fmt.Println("----")
-	_, err = io.Copy(file, response.Body)
-	if err != nil {
-		logger.ApiError(context, "Error copying image to file")
-		//if we have an error, use a placeholder image instead
-		// context.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error copying image to file"})
-		// return
+		if response != nil && response.StatusCode == http.StatusOK {
+			err = os.MkdirAll("banner", os.ModePerm)
+			if err != nil {
+				logger.ApiError(context, "Error creating directory for image")
+			} else {
+				uniqueTitle, uuidErr := uuid.NewV7()
+				if uuidErr != nil {
+					logger.ApiError(context, "Error generating UUID")
+				} else {
+					filePath := fmt.Sprintf("banner/%s.jpg", uniqueTitle)
+					file, err := os.Create(filePath)
+					if err != nil {
+						logger.ApiError(context, "Error creating file for image")
+					} else {
+						defer file.Close()
+						_, err = io.Copy(file, response.Body)
+						if err != nil {
+							logger.ApiError(context, "Error copying image to file")
+						} else {
+							uniqueTitleString = uniqueTitle.String()
+						}
+					}
+				}
+			}
+		}
 	}
 
 	trip := models.Trip{
@@ -117,6 +107,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		Owner:     currentUser,
 		StartDate: startDate,
 		EndDate:   endDate,
+		PhotoUrl:  uniqueTitleString,
 	}
 
 	err = handler.Repository.Create(&trip)
@@ -394,6 +385,8 @@ func (handler *TripHandler) Delete(context *gin.Context) {
 		errorHandlers.HandleGormErrors(deleteError, context)
 		return
 	}
+
+	//remove
 
 	context.Status(http.StatusNoContent)
 	logger.ApiInfo(context, "Delete trip "+tripId)

@@ -24,6 +24,7 @@ type Trip struct {
 	StartDate      time.Time       `gorm:"not null"`
 	EndDate        time.Time       `gorm:"not null"`
 	InviteCode     string          `gorm:"unique;min:8;max:8;not null"`
+	PhotoUrl       string          `gorm:"null"`
 }
 
 func (t *Trip) BeforeCreate(tx *gorm.DB) error {
