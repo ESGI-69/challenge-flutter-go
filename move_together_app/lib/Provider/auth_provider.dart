@@ -36,7 +36,6 @@ class AuthProvider extends ChangeNotifier {
     final token = await secureStorage.read(key: 'jwt');
     if (token == null) return false;
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    print(decodedToken);
     return decodedToken['role'] == 'ADMIN';
   }
 

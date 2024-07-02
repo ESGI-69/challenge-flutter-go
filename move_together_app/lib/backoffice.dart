@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/router.dart';
+import 'package:provider/provider.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/Backoffice/Widgets/nav_drawer.dart';
 
 class Backoffice extends StatefulWidget {
   const Backoffice({super.key});
@@ -9,6 +12,8 @@ class Backoffice extends StatefulWidget {
 }
 
 class _BackofficeState extends State<Backoffice> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -38,7 +43,13 @@ class _BackofficeState extends State<Backoffice> {
       routeInformationProvider: backOfficeRouter.routeInformationProvider,
       builder: (context, child) {
         return Scaffold(
+          key: _scaffoldKey,
+          drawer: NavDrawer(),
           body: child,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+            child: Icon(Icons.menu),
+          ),
         );
       },
     );

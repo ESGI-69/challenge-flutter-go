@@ -14,6 +14,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Trip/trip_create_screen.dart';
 import 'package:move_together_app/Backoffice/Dashboard/dashboard_screen.dart';
 import 'package:move_together_app/Backoffice/Login/login_screen.dart';
+import 'package:move_together_app/Backoffice/Trip/trip_screen.dart';
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
@@ -35,6 +36,7 @@ List<String> unloggedRoutes = [
 
 List<String> backOfficeRoutes = [
   '/',
+  '/trip',
 ];
 
 Future<bool> isAuthenticated(BuildContext context) async {
@@ -113,6 +115,10 @@ final GoRouter backOfficeRouter = GoRouter(
       path: '/login',
       builder: (context, state) => const BackofficeLoginScreen(),
     ),
+    GoRoute(
+      path: '/trip',
+      builder: (context, state) => const BackofficeTripScreen(),
+    ),
   ],
   redirect: (context, state) async {
     final topRoutePath = state.topRoute?.path;
@@ -127,7 +133,7 @@ final GoRouter backOfficeRouter = GoRouter(
 
     if (userIsAuthenticated && !userIsAdmin) {
       secureStorage.delete(key: 'jwt');
-      return '/login'; // Redirect non-admin users to the login page
+      return '/login';
     }
 
     return null;
