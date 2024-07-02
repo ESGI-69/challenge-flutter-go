@@ -4,22 +4,22 @@ class TripFeatureCard extends StatelessWidget {
   final bool isLoading;
   final int length;
   final String emptyMessage;
-  final Widget child;
   final IconData icon;
   final String title;
   final Function? onAddTap;
   final Function? onTitleTap;
+  final Widget? Function(BuildContext context, int index) itemBuilder;
 
   const TripFeatureCard({
     super.key,
     this.isLoading = false,
     this.length = 0,
     this.emptyMessage = 'No elements',
-    required this.child,
     required this.icon,
     required this.title,
     this.onAddTap,
     this.onTitleTap,
+    required this.itemBuilder,
   });
 
   @override
@@ -55,24 +55,33 @@ class TripFeatureCard extends StatelessWidget {
                 horizontal: 16,
               ),
               child: isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    )
-                  : length == 0
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 48),
-                            child: Text(
-                              emptyMessage,
-                              style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 12,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : length == 0
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 48),
+                        child: Text(
+                          emptyMessage,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 12,
                           ),
-                        )
-                      : child,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  : ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 125),
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) => const SizedBox(height: 8),
+                      itemCount: length,
+                      itemBuilder: itemBuilder,
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                    )
+                  )
             ),
           ],
         ),
