@@ -42,6 +42,11 @@ Future<bool> isAuthenticated(BuildContext context) async {
   return await authProvider.isAuthenticated();
 }
 
+Future<bool> isAdmin(BuildContext context) async {
+  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  return await authProvider.isUserAdmin();
+}
+
 final GoRouter router = GoRouter(
   routes: [
     GoRoute(
@@ -112,12 +117,19 @@ final GoRouter backOfficeRouter = GoRouter(
   redirect: (context, state) async {
     final topRoutePath = state.topRoute?.path;
     final bool userIsAuthenticated = await isAuthenticated(context);
-    final bool routeRequireAuthentication =
-    backOfficeRoutes.contains(topRoutePath);
+    final bool routeRequireAuthentication = backOfficeRoutes.contains(topRoutePath);
+    final bool userIsAdmin = await isAdmin(context);
+
     if (!userIsAuthenticated && routeRequireAuthentication) {
       secureStorage.delete(key: 'jwt');
       return '/login';
     }
+
+    if (userIsAuthenticated && !userIsAdmin) {
+      secureStorage.delete(key: 'jwt');
+      return '/login'; // Redirect non-admin users to the login page
+    }
+
     return null;
   },
 );
