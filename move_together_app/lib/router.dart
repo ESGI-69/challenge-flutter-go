@@ -12,6 +12,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Trip/trip_create_screen.dart';
+import 'package:move_together_app/Backoffice/Dashboard/dashboard_screen.dart';
+import 'package:move_together_app/Backoffice/Login/login_screen.dart';
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
@@ -24,9 +26,14 @@ List<String> loggedRoutes = [
   '/create-trip',
   '/trip/:tripId/chat',
 ];
+
 List<String> unloggedRoutes = [
   '/login',
   '/register',
+  '/',
+];
+
+List<String> backOfficeRoutes = [
   '/',
 ];
 
@@ -86,6 +93,30 @@ final GoRouter router = GoRouter(
     }
     if (userIsAuthenticated && routeIsPublic) {
       return '/home';
+    }
+    return null;
+  },
+);
+
+final GoRouter backOfficeRouter = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const DashboardScreen(),
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const BackofficeLoginScreen(),
+    ),
+  ],
+  redirect: (context, state) async {
+    final topRoutePath = state.topRoute?.path;
+    final bool userIsAuthenticated = await isAuthenticated(context);
+    final bool routeRequireAuthentication =
+    backOfficeRoutes.contains(topRoutePath);
+    if (!userIsAuthenticated && routeRequireAuthentication) {
+      secureStorage.delete(key: 'jwt');
+      return '/login';
     }
     return null;
   },
