@@ -123,13 +123,22 @@ final GoRouter backOfficeRouter = GoRouter(
   redirect: (context, state) async {
     final topRoutePath = state.topRoute?.path;
     final bool userIsAuthenticated = await isAuthenticated(context);
+    if (!context.mounted) {
+      return null;
+    }
+    final bool userIsAdmin = await isAdmin(context);
+
+
     final bool routeIsPublic = unloggedRoutes.contains(topRoutePath);
     final bool routeRequireAuthentication = backOfficeRoutes.contains(topRoutePath);
-    final bool userIsAdmin = await isAdmin(context);
 
     if (!userIsAuthenticated && routeRequireAuthentication) {
       secureStorage.delete(key: 'jwt');
       return '/login';
+    }
+
+    if (userIsAuthenticated && routeIsPublic) {
+      return '/';
     }
 
     if (userIsAuthenticated && !userIsAdmin) {

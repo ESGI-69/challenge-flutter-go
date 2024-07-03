@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/router.dart';
-import 'package:go_router/go_router.dart';
 
 class NavigationBarBackoffice extends StatelessWidget implements PreferredSizeWidget {
+  const NavigationBarBackoffice({super.key});
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text('Backoffice'),
+      title: const Text('Backoffice'),
       actions: [
         TextButton(
-          child: Text('Dashboard', style: TextStyle(color: Colors.black)),
+          child: const Text('Dashboard', style: TextStyle(color: Colors.black)),
           onPressed: () => backOfficeRouter.go('/'),
         ),
         TextButton(
-          child: Text('Trip', style: TextStyle(color: Colors.black)),
+          child: const Text('Trip', style: TextStyle(color: Colors.black)),
           onPressed: () => backOfficeRouter.go('/trip'),
         ),
         TextButton(
@@ -31,5 +32,5 @@ class NavigationBarBackoffice extends StatelessWidget implements PreferredSizeWi
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/router.dart';
-import 'package:provider/provider.dart';
-import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.dart';
 
 class Backoffice extends StatefulWidget {

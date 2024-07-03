@@ -5,9 +5,9 @@ class BackofficeTripScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Trip Screen for Backoffice'),
+    return const Scaffold(
+      body: const Center(
+        child: const Text('Trip Screen for Backoffice'),
       ),
     );
   }
