@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Backoffice/Logs/logs_screen.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
@@ -109,16 +110,24 @@ final GoRouter backOfficeRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
+      name: 'home',
       builder: (context, state) => const DashboardScreen(),
     ),
     GoRoute(
       path: '/login',
+      name: 'login',
       builder: (context, state) => const BackofficeLoginScreen(),
     ),
     GoRoute(
       path: '/trip',
+      name: 'trip',
       builder: (context, state) => const BackofficeTripScreen(),
     ),
+    GoRoute(
+      path: '/logs',
+      name: 'logs',
+      builder: (context, state) => const LogsScreen()
+    )
   ],
   redirect: (context, state) async {
     final topRoutePath = state.topRoute?.path;
