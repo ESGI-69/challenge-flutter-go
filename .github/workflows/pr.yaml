@@ -1,0 +1,153 @@
+name: Flutter
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  flutter-analyze:
+    defaults:
+      run:
+        working-directory: move_together_app
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - name: Copy .env file
+      run: cp .env.release .env
+    - name: Retrive dependencies
+      run: flutter pub get
+    - name: Format code
+      run: flutter analyze .
+
+  flutter-bluid-ios:
+    defaults:
+      run:
+        working-directory: move_together_app
+    name: Build iOS
+    runs-on: macos-latest
+    needs: flutter-analyze
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - name: Copy .env file
+      run: cp .env.release .env
+    - name: Retrive dependencies
+      run: flutter pub get
+    - name: Build iOS
+      run: flutter build ios --release --no-codesign
+
+  flutter-build-android:
+    defaults:
+      run:
+        working-directory: move_together_app
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: flutter-analyze
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - name: Copy .env file
+      run: cp .env.release .env
+    - name: Retrive dependencies
+      run: flutter pub get
+    - name: Build Android
+      run: flutter build apk --release
+
+  flutter-build-web:
+    defaults:
+      run:
+        working-directory: move_together_app
+    name: Build Web
+    runs-on: ubuntu-latest
+    needs: flutter-analyze
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - name: Copy .env file
+      run: cp .env.release .env
+    - name: Retrive dependencies
+      run: flutter pub get
+    - name: Build Web
+      run: flutter build web --release --base-href /backoffice/
+    # Push to artifact
+    - name: Save web build to artifact
+      uses: actions/upload-artifact@v4
+      with:
+        path: move_together_app/build/web
+        name: backoffice
+        if-no-files-found: error
+
+  go-generate_swagger:
+    runs-on: ubuntu-latest
+    name: Generate Swagger (go)
+    defaults:
+      run:
+        working-directory: go
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go/go.mod'
+        cache-dependency-path: go/go.sum
+
+    - name: Install swagger
+      run: go install github.com/swaggo/swag/cmd/swag@latest
+
+    - name: Generate Swagger
+      run: swag init -o ./api/docs
+
+  go-build:
+    runs-on: ubuntu-latest
+    name: Build (go)
+    defaults:
+      run:
+        working-directory: go
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go.mod'
+        cache-dependency-path: go.sum
+
+    - name: Install depencies
+      run: go get .
+
+    - name: Build
+      run: go build -v main.go
+
+  go-docker-build:
+    needs: 
+      - go-build
+      - go-generate_swagger
+      - flutter-build-web
+    runs-on: ubuntu-latest
+    name: Build Docker Image (go)
+    defaults:
+      run:
+        working-directory: go
+    steps:
+      - uses: actions/checkout@v3
+      - name: Retrive artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backoffice
+      - name: Build
+        run: docker build .
