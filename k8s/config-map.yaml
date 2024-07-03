@@ -10,4 +10,4 @@ data:
   database_name: "challenge_flutter_go"
   backend_port: "8080"
   mode: "debug"
-
+  frontend_url: "https://jppduphp.uk"
