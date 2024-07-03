@@ -71,12 +71,12 @@ class TripService {
   }
 
   Future<Trip> edit(
-    String tripId, {
+    int tripId, {
     String? name,
     String? country,
     String? city,
-    String? startDate,
-    String? endDate,
+    DateTime? startDate,
+    DateTime? endDate,
   }) async {
     final response = await api.patch(
       '/trips/$tripId',
@@ -84,8 +84,8 @@ class TripService {
         'name': name,
         'country': country,
         'city': city,
-        'startDate': startDate,
-        'endDate': endDate,
+        'startDate': startDate?.toUtc().toIso8601String(),
+        'endDate': endDate?.toUtc().toIso8601String(),
       },
     );
 

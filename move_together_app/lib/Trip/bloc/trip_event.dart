@@ -9,26 +9,6 @@ final class TripDataFetch extends TripEvent {
   TripDataFetch(this.tripId);
 }
 
-final class TripEdit extends TripEvent {
-  final String tripId;
-  final String? name;
-  final String? country;
-  final String? city;
-  final DateTime? startDate;
-  final DateTime? endDate;
-
-  TripEdit(
-    this.tripId,
-    {
-      this.name,
-      this.country,
-      this.city,
-      this.startDate,
-      this.endDate,
-    }
-  );
-}
-
 final class TripDataCreateTrip extends TripEvent {
   final Trip trip;
 

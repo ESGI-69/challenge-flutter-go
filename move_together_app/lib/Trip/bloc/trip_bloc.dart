@@ -24,25 +24,6 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       }
     });
 
-    on<TripEdit>((event, emit) async {
-      emit(TripDataLoading());
-      try {
-        final trip = await tripServices.edit(
-          event.tripId,
-          name: event.name,
-          country: event.country,
-          city: event.city,
-          startDate: event.startDate?.toUtc().toIso8601String(),
-          endDate: event.endDate?.toUtc().toIso8601String(),
-        );
-        emit(TripDataLoadingSuccess(trip: trip));
-      } on ApiException catch (error) {
-        emit(TripDataLoadingError(errorMessage: error.message));
-      } catch (error) {
-        emit(TripDataLoadingError(errorMessage: 'Unhandled error'));
-      }
-    });
-
     on<TripDataCreateTrip>((event, emit) async {
       emit(TripDataLoading());
       try {

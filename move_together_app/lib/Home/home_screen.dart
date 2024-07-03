@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-        context.push('/join-trip');
+        context.pushNamed('join');
         },
         child: const Icon(Icons.add),
       ),
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPageChanged: changePage,
                     children: state.trips.map((trip) {
                       return TripCard(
-                        onTap: () => context.push('/trip/${trip.id}', extra: trip),
+                        onTap: () => context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()}),
                         onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
                         onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
                         imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",

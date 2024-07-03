@@ -42,7 +42,7 @@ class CreateTripScreenState extends State<CreateTripScreen> {
         child: BlocListener<TripBloc, TripState>(
           listener: (context, state) {
             if (state is TripDataLoadingSuccess) {
-              context.push('/trip/${state.trip.id}', extra: state.trip);
+              context.pushNamed('trip', pathParameters: {'tripId': state.trip.id.toString() });
             }
           },
           child: BlocBuilder<TripBloc, TripState>(

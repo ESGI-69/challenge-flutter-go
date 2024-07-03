@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/Dialog/edit_trip_name.dart';
 import 'package:move_together_app/Widgets/Button/button_chat.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
+import 'package:move_together_app/core/services/trip_service.dart';
 
 class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String name;
@@ -34,6 +37,23 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    void nameEdit(String name) async {
+      await TripService(context.read<AuthProvider>()).edit(
+        tripId,
+        name: name,
+      );
+      onNameUpdate(name);
+    }
+
+    void dateEdit(DateTime startDate, DateTime endDate) async {
+      await TripService(context.read<AuthProvider>()).edit(
+        tripId,
+        startDate: startDate,
+        endDate: endDate,
+      );
+      onDateUpdate(startDate, endDate);
+    }
+
     if (isLoading) {
       return AppBar(
         forceMaterialTransparency: true,
@@ -111,7 +131,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                     showDialog(
                         context: context,
                         builder: (context) => EditTripNameDialog(
-                          onNameUpdate: onNameUpdate,
+                          onNameUpdate: nameEdit,
                         )
                     );
                   },
@@ -126,7 +146,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                       lastDate: DateTime(DateTime.now().year + 5).toLocal(),
                     );
                     if (newDateRange != null) {
-                      onDateUpdate(newDateRange.start.toLocal(), newDateRange.end.toLocal());
+                      dateEdit(newDateRange.start, newDateRange.end);
                     }
                   },
                   userHasEditRights: userHasEditRights,

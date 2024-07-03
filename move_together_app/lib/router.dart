@@ -16,13 +16,12 @@ import 'package:move_together_app/Trip/trip_create_screen.dart';
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
 List<String> loggedRoutes = [
-  '/home',
-  '/join-trip',
-  '/trip',
+  '/trips',
+  '/trips/join',
+  '/trips/create',
+  '/trips/:tripId',
+  '/trips/:tripId/chat',
   '/profile',
-  '/trip/:tripId',
-  '/create-trip',
-  '/trip/:tripId/chat',
 ];
 List<String> unloggedRoutes = [
   '/login',
@@ -51,24 +50,32 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       name: 'home',
-      path: '/home',
+      path: '/trips',
       builder: (context, state) => const HomeScreen(),
-    ),
-    GoRoute(
-      path: '/join-trip',
-      builder: (context, state) => const JoinTripScreen(),
-    ),
-    GoRoute(
-      path: '/create-trip',
-      builder: (context, state) => const CreateTripScreen(),
-    ),
-    GoRoute(
-      path: '/trip/:tripId',
-      builder: (context, state) => const TripScreen(),
-    ),
-    GoRoute(
-      path: '/trip/:tripId/chat',
-      builder: (context, state) => const ChatScreen(),
+      routes: [
+        GoRoute(
+          name: 'join',
+          path: 'join',
+          builder: (context, state) => const JoinTripScreen(),
+        ),
+        GoRoute(
+          name: 'create',
+          path: 'create',
+          builder: (context, state) => const CreateTripScreen(),
+        ),
+        GoRoute(
+          name: 'trip',
+          path: ':tripId',
+          builder: (context, state) => const TripScreen(),
+          routes: [
+            GoRoute(
+              name: 'chat',
+              path: 'chat',
+              builder: (context, state) => const ChatScreen(),
+            ),
+          ],
+        ),
+      ]
     ),
     GoRoute(
       path: '/profile',
@@ -85,7 +92,7 @@ final GoRouter router = GoRouter(
       return '/';
     }
     if (userIsAuthenticated && routeIsPublic) {
-      return '/home';
+      return '/trips';
     }
     return null;
   },
