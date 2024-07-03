@@ -12,7 +12,6 @@ class Backoffice extends StatefulWidget {
 }
 
 class _BackofficeState extends State<Backoffice> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +42,8 @@ class _BackofficeState extends State<Backoffice> {
       routeInformationProvider: backOfficeRouter.routeInformationProvider,
       builder: (context, child) {
         return Scaffold(
-          key: _scaffoldKey,
-          drawer: NavigationBarBackoffice(),
+          appBar: NavigationBarBackoffice(),
           body: child,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            child: Icon(Icons.menu),
-          ),
         );
       },
     );

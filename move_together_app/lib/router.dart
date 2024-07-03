@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
 import 'package:move_together_app/views/landing_screen.dart';
@@ -123,6 +123,7 @@ final GoRouter backOfficeRouter = GoRouter(
   redirect: (context, state) async {
     final topRoutePath = state.topRoute?.path;
     final bool userIsAuthenticated = await isAuthenticated(context);
+    final bool routeIsPublic = unloggedRoutes.contains(topRoutePath);
     final bool routeRequireAuthentication = backOfficeRoutes.contains(topRoutePath);
     final bool userIsAdmin = await isAdmin(context);
 
