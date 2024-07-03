@@ -77,4 +77,4 @@ jobs:
     - name: Retrive dependencies
       run: flutter pub get
     - name: Build Web
-      run: flutter build web --release
+      run: flutter build web --release -o ../go/backoffice --base-href /backoffice/
