@@ -64,7 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPageChanged: changePage,
                     children: state.trips.map((trip) {
                       return TripCard(
-                        onTap: () => context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()}),
+                        onTap: () async {
+                          await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
+                          context.read<HomeBloc>().add(HomeDataFetch());
+                        },
                         onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
                         onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
                         imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
