@@ -1,4 +1,4 @@
-name: Flutter
+name: Pull Request
 
 on:
   pull_request:
@@ -83,7 +83,6 @@ jobs:
       run: flutter pub get
     - name: Build Web
       run: flutter build web --release --base-href /backoffice/
-    # Push to artifact
     - name: Save web build to artifact
       uses: actions/upload-artifact@v4
       with:
