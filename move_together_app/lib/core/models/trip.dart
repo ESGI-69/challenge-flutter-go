@@ -10,6 +10,7 @@ class Trip {
   final DateTime endDate;
   final List<Participant> participants;
   final String inviteCode;
+  final String? photoUrl;
 
   Trip({
     required this.id,
@@ -20,7 +21,8 @@ class Trip {
     required this.endDate,
     required this.participants,
     required this.inviteCode,
-  });
+    this.photoUrl = '',
+    });
 
   factory Trip.fromJson(Map<String, dynamic> json) {
     return Trip(
@@ -32,6 +34,7 @@ class Trip {
       endDate: DateTime.parse(json['endDate']),
       participants: json['participants'].map<Participant>((e) => Participant.fromJson(e)).toList(),
       inviteCode: json['inviteCode'],
+      photoUrl: json['photoUrl'] ?? '',
     );
   }
 
@@ -45,6 +48,7 @@ class Trip {
       'endDate': endDate.toUtc().toIso8601String(),
       'participants': participants.map((participant) => participant.toJson()).toList(),
       'inviteCode': inviteCode,
+      'photoUrl': photoUrl,
     };
   }
 
