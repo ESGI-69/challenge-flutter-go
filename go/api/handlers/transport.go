@@ -130,7 +130,6 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 	isValid := transport.IsTransportTypeValid(context)
 	if !isValid {
 		logger.ApiWarning(context, "Invalid transport type "+requestBody.TransportType)
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid transport type"})
 		return
 	}
 
