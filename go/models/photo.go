@@ -19,10 +19,6 @@ type Photo struct {
 	Owner       User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
-func (photo Photo) GetTripID() uint {
-	return photo.TripID
-}
-
 func (photo *Photo) BeforeDelete(tx *gorm.DB) (err error) {
 	if photo.Path == "" {
 		err = errors.New("photo path is empty")

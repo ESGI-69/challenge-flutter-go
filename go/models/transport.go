@@ -30,10 +30,6 @@ type Transport struct {
 	MeetingTime    time.Time
 }
 
-func (t Transport) GetTripID() uint {
-	return t.TripID
-}
-
 // Checks if the transport type is valid, returns false if it's not & aborts the request
 func (t *Transport) IsTransportTypeValid(context *gin.Context) (isValid bool) {
 	isValid = t.TransportType == TransportTypeCar || t.TransportType == TransportTypePlane || t.TransportType == TransportTypeBus

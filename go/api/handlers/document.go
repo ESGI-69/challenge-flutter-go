@@ -143,12 +143,6 @@ func (handler *DocumentHandler) DownloadDocument(context *gin.Context) {
 		return
 	}
 
-	if !utils.EntityBelongsToTrip(context, document) {
-		logger.ApiWarning(context, "Document not in trip "+context.Param("id"))
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Document not in the trip"})
-		return
-	}
-
 	filepath, errFilePath := utils.GetFilePath("document", document.Path)
 	if errFilePath != nil {
 		logger.ApiError(context, "Failed to get file path "+document.Path)

@@ -196,12 +196,6 @@ func (handler *TransportHandler) DeleteTransport(context *gin.Context) {
 		return
 	}
 
-	if !utils.EntityBelongsToTrip(context, transport) {
-		logger.ApiWarning(context, "Transort not in trip "+context.Param("id"))
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Transport not in the trip"})
-		return
-	}
-
 	deleteError := handler.Repository.Delete(transportID)
 	if deleteError != nil {
 		errorHandlers.HandleGormErrors(deleteError, context)

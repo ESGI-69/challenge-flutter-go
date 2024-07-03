@@ -159,21 +159,9 @@ func (handler *AccommodationHandler) DeleteAccommodation(context *gin.Context) {
 		return
 	}
 
-	accommodation, err := handler.Repository.Get(accommodationID)
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
 	tripId := context.Param("id")
 
-	if !utils.EntityBelongsToTrip(context, accommodation) {
-		logger.ApiWarning(context, "Accommodation not in trip "+tripId)
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Accommodation not in the trip"})
-		return
-	}
-
-	err = handler.Repository.Delete(accommodationID)
+	err := handler.Repository.Delete(accommodationID)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

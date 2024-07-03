@@ -140,22 +140,22 @@ func setRoutes() {
 	tripTransportsRoutes := tripsRoutes.Group("/:id/transports")
 	tripTransportsRoutes.GET("", middlewares.UserIsTripParticipant, transportHandler.GetAllFromTrip)
 	tripTransportsRoutes.POST("", middlewares.UserHasTripEditRight, transportHandler.Create)
-	tripTransportsRoutes.DELETE("/:transportID", middlewares.UserHasTripEditRight, transportHandler.DeleteTransport)
+	tripTransportsRoutes.DELETE("/:transportID", middlewares.UserHasTripEditRight, middlewares.TransportBelongsToTrip, transportHandler.DeleteTransport)
 
-	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripParticipant)
+	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripOwner)
 	tripParticipantsRoutes.GET("", participantHandler.GetAllFromTrip)
-	tripParticipantsRoutes.PATCH("/:participantId/role", middlewares.UserIsTripOwner, participantHandler.ChangeRole)
-	tripParticipantsRoutes.DELETE("/:participantId", middlewares.UserIsTripOwner, participantHandler.RemoveParticipant)
+	tripParticipantsRoutes.PATCH("/:participantId/role", middlewares.ParticipantBelongsToTrip, participantHandler.ChangeRole)
+	tripParticipantsRoutes.DELETE("/:participantId/", middlewares.UserIsTripOwner, middlewares.ParticipantBelongsToTrip, participantHandler.RemoveParticipant)
 
 	tripAccommodationsRoutes := tripsRoutes.Group("/:id/accommodations")
 	tripAccommodationsRoutes.GET("", middlewares.UserIsTripParticipant, accommodationHandler.GetAllFromTrip)
 	tripAccommodationsRoutes.POST("", middlewares.UserHasTripEditRight, accommodationHandler.Create)
-	tripAccommodationsRoutes.DELETE("/:accommodationID", middlewares.UserHasTripEditRight, accommodationHandler.DeleteAccommodation)
+	tripAccommodationsRoutes.DELETE("/:accommodationID", middlewares.UserHasTripEditRight, middlewares.AccommodationBelongsToTrip, accommodationHandler.DeleteAccommodation)
 
 	tripNotesRoutes := tripsRoutes.Group("/:id/notes")
 	tripNotesRoutes.GET("", middlewares.UserIsTripParticipant, noteHandler.GetNotesOfTrip)
 	tripNotesRoutes.POST("", middlewares.UserHasTripEditRight, noteHandler.AddNoteToTrip)
-	tripNotesRoutes.DELETE("/:noteID", middlewares.UserHasTripEditRight, noteHandler.DeleteNoteFromTrip)
+	tripNotesRoutes.DELETE("/:noteID", middlewares.UserHasTripEditRight, middlewares.NoteBelongsToTrip, noteHandler.DeleteNoteFromTrip)
 
 	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages", middlewares.UserIsTripParticipant)
 	tripChatMessagesRoutes.GET("", chatMessageHandler.GetChatMessagesOfTrip)
@@ -164,14 +164,14 @@ func setRoutes() {
 	tripDocumentsRoutes := tripsRoutes.Group("/:id/documents")
 	tripDocumentsRoutes.GET("", middlewares.UserIsTripParticipant, documentHandler.GetDocumentsOfTrip)
 	tripDocumentsRoutes.POST("", middlewares.UserHasTripEditRight, documentHandler.CreateDocument)
-	tripDocumentsRoutes.DELETE("/:documentID", middlewares.UserHasTripEditRight, documentHandler.DeleteDocumentFromTrip)
-	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, documentHandler.DownloadDocument)
+	tripDocumentsRoutes.DELETE("/:documentID", middlewares.UserHasTripEditRight, middlewares.DocumentBelongsToTrip, documentHandler.DeleteDocumentFromTrip)
+	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, middlewares.DocumentBelongsToTrip, documentHandler.DownloadDocument)
 
 	tripPhotosRoutes := tripsRoutes.Group("/:id/photos")
 	tripPhotosRoutes.GET("", middlewares.UserIsTripParticipant, photoHandler.GetPhotosOfTrip)
 	tripPhotosRoutes.POST("", middlewares.UserHasTripEditRight, photoHandler.CreatePhoto)
-	tripPhotosRoutes.DELETE("/:photoID", middlewares.UserHasTripEditRight, photoHandler.DeletePhotoFromTrip)
-	tripPhotosRoutes.GET("/:photoID/download", middlewares.UserIsTripParticipant, photoHandler.DownloadPhoto)
+	tripPhotosRoutes.DELETE("/:photoID", middlewares.UserHasTripEditRight, middlewares.PhotoBelongsToTrip, photoHandler.DeletePhotoFromTrip)
+	tripPhotosRoutes.GET("/:photoID/download", middlewares.UserIsTripParticipant, middlewares.PhotoBelongsToTrip, photoHandler.DownloadPhoto)
 
 	router.GET("/ws", sockeHandler.HandleConnections)
 
