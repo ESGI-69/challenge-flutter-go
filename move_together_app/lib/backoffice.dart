@@ -40,7 +40,7 @@ class _BackofficeState extends State<Backoffice> {
       routeInformationProvider: backOfficeRouter.routeInformationProvider,
       builder: (context, child) {
         return Scaffold(
-          appBar: NavigationBarBackoffice(),
+          appBar: const NavigationBarBackoffice(),
           body: child,
         );
       },

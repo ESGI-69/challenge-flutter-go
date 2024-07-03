@@ -11,7 +11,7 @@ Future<void> main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => AuthProvider(),
-      child: kIsWeb ? Backoffice() : const App(),
+      child: kIsWeb ? const Backoffice() : const App(),
     ),
   );
 }
