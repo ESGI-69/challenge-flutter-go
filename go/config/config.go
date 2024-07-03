@@ -33,7 +33,6 @@ func init() {
 	viper.BindEnv("DB_PASSWORD")
 	viper.BindEnv("JWT_SECRET")
 	viper.BindEnv("FRONTEND_URL")
-	viper.SetDefault("FRONTEND_URL", "http://localhost:51204")
 
 	// Check if no missing keys in config
 	validator := validator.New()
