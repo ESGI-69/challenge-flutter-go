@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/services/transport_service.dart';
 
 Map<TransportType, String> transportTypeString = {
-  TransportType.car: 'car',
-  TransportType.plane: 'plane',
-  TransportType.bus: 'bus',
+  TransportType.car: 'Voiture',
+  TransportType.plane: 'Avion',
+  TransportType.bus: 'Bus',
 };
 
 class TransportInfoModal extends StatelessWidget {
@@ -50,6 +51,17 @@ class TransportInfoModal extends StatelessWidget {
           children: [
             const _Header(),
             const SizedBox(height: 16),
+            Text(
+              'Type de transport : ${transportTypeString[transport.transportType]}',
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Départ : ${transport.startAddress} le ${DateFormat.yMMMd().format(transport.startDate.toLocal())}',
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Arrivée : ${transport.endAddress} le ${DateFormat.yMMMd().format(transport.endDate.toLocal())}',
+            ),
             const SizedBox(height: 16),
               (hasTripEditPermission && transport.author.isMe(context)) || isTripOwner
               ? ElevatedButton(
