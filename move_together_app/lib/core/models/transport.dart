@@ -2,7 +2,7 @@ import 'package:move_together_app/core/models/user.dart';
 
 enum TransportType {
   car,
-  train,
+  plane,
   bus,
 }
 

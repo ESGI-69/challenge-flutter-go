@@ -9,7 +9,7 @@ import 'package:move_together_app/core/services/transport_service.dart';
 
 Map<TransportType, String> transportTypeString = {
   TransportType.car: 'car',
-  TransportType.train: 'train',
+  TransportType.plane: 'plane',
   TransportType.bus: 'bus',
 };
 
@@ -79,7 +79,7 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
                     },
                     children: const <TransportType, Widget>{
                       TransportType.car: Text('Voiture'),
-                      TransportType.train: Text('Train'),
+                      TransportType.plane: Text('Avion'),
                       TransportType.bus: Text('Bus'),
                     },
                   ),
@@ -131,7 +131,7 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: createTransport,
-              style: _selectedTransportType == null || _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDate == DateTime.fromMillisecondsSinceEpoch(0) || _endDate == DateTime.fromMillisecondsSinceEpoch(0)
+              style: _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDate == DateTime.fromMillisecondsSinceEpoch(0) || _endDate == DateTime.fromMillisecondsSinceEpoch(0)
                 ? ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
                 )
