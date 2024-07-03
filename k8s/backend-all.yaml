@@ -162,6 +162,11 @@ spec:
             configMapKeyRef:
               name: challenge-flutter-go-config
               key: frontend_url
+        - name: GOOGLE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: google_api_key
 
         ports:
         - containerPort: 8080
