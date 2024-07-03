@@ -8,14 +8,10 @@ import (
 	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
-	"fmt"
-	"io"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 type TripHandler struct {
@@ -65,39 +61,11 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	}
 
 	var uniqueTitleString string
-
-	if image != "" {
-		//Download the image from the url and store it on the server
-		response, err := http.Get(image)
-		if err != nil {
-			logger.ApiError(context, "Error downloading image from google maps api @response")
-		}
-
-		if response != nil && response.StatusCode == http.StatusOK {
-			err = os.MkdirAll("banner", os.ModePerm)
-			if err != nil {
-				logger.ApiError(context, "Error creating directory for image")
-			} else {
-				uniqueTitle, uuidErr := uuid.NewV7()
-				if uuidErr != nil {
-					logger.ApiError(context, "Error generating UUID")
-				} else {
-					filePath := fmt.Sprintf("banner/%s.jpg", uniqueTitle)
-					file, err := os.Create(filePath)
-					if err != nil {
-						logger.ApiError(context, "Error creating file for image")
-					} else {
-						defer file.Close()
-						_, err = io.Copy(file, response.Body)
-						if err != nil {
-							logger.ApiError(context, "Error copying image to file")
-						} else {
-							uniqueTitleString = uniqueTitle.String()
-						}
-					}
-				}
-			}
-		}
+	filePath, err := utils.DownloadImageFromURL(context, image)
+	if err != nil {
+		logger.ApiError(context, "Error downloading image from URL")
+	} else {
+		uniqueTitleString = filePath + ".jpg"
 	}
 
 	trip := models.Trip{
@@ -385,8 +353,6 @@ func (handler *TripHandler) Delete(context *gin.Context) {
 		errorHandlers.HandleGormErrors(deleteError, context)
 		return
 	}
-
-	//remove
 
 	context.Status(http.StatusNoContent)
 	logger.ApiInfo(context, "Delete trip "+tripId)
