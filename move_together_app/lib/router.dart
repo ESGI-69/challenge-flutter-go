@@ -14,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Trip/trip_create_screen.dart';
 import 'package:move_together_app/Backoffice/Dashboard/dashboard_screen.dart';
-import 'package:move_together_app/Backoffice/Login/login_screen.dart';
 import 'package:move_together_app/Backoffice/Trip/trip_screen.dart';
 
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -116,7 +115,7 @@ final GoRouter backOfficeRouter = GoRouter(
     GoRoute(
       path: '/login',
       name: 'login',
-      builder: (context, state) => const BackofficeLoginScreen(),
+      builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
       path: '/trip',
