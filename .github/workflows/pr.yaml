@@ -124,8 +124,8 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version-file: 'go.mod'
-        cache-dependency-path: go.sum
+        go-version-file: 'go/go.mod'
+        cache-dependency-path: go/go.sum
 
     - name: Install depencies
       run: go get .
