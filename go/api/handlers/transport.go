@@ -130,7 +130,6 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 	isValid := transport.IsTransportTypeValid(context)
 	if !isValid {
 		logger.ApiWarning(context, "Invalid transport type "+requestBody.TransportType)
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid transport type"})
 		return
 	}
 
@@ -176,6 +175,22 @@ func (handler *TransportHandler) DeleteTransport(context *gin.Context) {
 	if transportID == "" {
 		logger.ApiWarning(context, "No transport ID provided for deletion")
 		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	trip, _ := handler.TripRepository.Get(context.Param("id"))
+
+	transport, getError := handler.Repository.Get(transportID)
+	if getError != nil {
+		errorHandlers.HandleGormErrors(getError, context)
+		return
+	}
+
+	currentUser, _ := utils.GetCurrentUser(context)
+
+	if transport.AuthorID != currentUser.ID && !trip.UserIsOwner(&currentUser) {
+		logger.ApiWarning(context, "User "+currentUser.Username+" is not the author of transport "+transportID+" or owner of the trip "+context.Param("id")+", and can't delete it")
+		context.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 

@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:move_together_app/Transport/transport_card.dart';
+import 'package:move_together_app/core/models/trip.dart';
 
 class TripBody extends StatelessWidget {
-  final String tripId;
+  final Trip trip;
 
   const TripBody({
-    required this.tripId,
+    required this.trip,
     super.key
   });
 
@@ -15,7 +16,11 @@ class TripBody extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: ListView(
         children: [
-          TransportCard(tripId: tripId),
+          TransportCard(
+            tripId: trip.id,
+            userHasEditPermission: trip.currentUserHasEditingRights(context),
+            userIsOwner: trip.isCurrentUserOwner(context),
+          ),
         ],
       ),
     );

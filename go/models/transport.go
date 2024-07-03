@@ -30,10 +30,10 @@ type Transport struct {
 	MeetingTime    time.Time
 }
 
+// Checks if the transport type is valid, returns false if it's not & aborts the request
 func (t *Transport) IsTransportTypeValid(context *gin.Context) (isValid bool) {
 	isValid = t.TransportType == TransportTypeCar || t.TransportType == TransportTypePlane || t.TransportType == TransportTypeBus
 	if !isValid {
-		// Auto create a list of valid transport types
 		context.AbortWithStatusJSON(400, gin.H{
 			"error": "Invalid transport type",
 			"valid": []string{"car", "plane", "bus"},

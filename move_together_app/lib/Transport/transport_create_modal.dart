@@ -15,7 +15,7 @@ Map<TransportType, String> transportTypeString = {
 
 class TransportCreateModal extends StatefulWidget {
   final Function(Transport) onTransportCreated;
-  final String tripId;
+  final int tripId;
 
   const TransportCreateModal({
     super.key,

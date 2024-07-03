@@ -144,9 +144,9 @@ func setRoutes() {
 	tripNotesRoutes.POST("/", middlewares.UserHasTripEditRight, noteHandler.AddNoteToTrip)
 	tripNotesRoutes.DELETE("/:noteID", middlewares.UserHasTripEditRight, noteHandler.DeleteNoteFromTrip)
 
-	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages")
-	tripChatMessagesRoutes.GET("/", middlewares.UserIsTripParticipant, chatMessageHandler.GetChatMessagesOfTrip)
-	tripChatMessagesRoutes.POST("/", middlewares.UserHasTripEditRight, chatMessageHandler.AddChatMessageToTrip)
+	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages", middlewares.UserIsTripParticipant)
+	tripChatMessagesRoutes.GET("/", chatMessageHandler.GetChatMessagesOfTrip)
+	tripChatMessagesRoutes.POST("/", chatMessageHandler.AddChatMessageToTrip)
 
 	tripDocumentsRoutes := tripsRoutes.Group("/:id/documents")
 	tripDocumentsRoutes.GET("/", middlewares.UserIsTripParticipant, documentHandler.GetDocumentsOfTrip)

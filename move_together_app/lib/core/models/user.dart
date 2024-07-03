@@ -31,30 +31,6 @@ class User {
       'role': role,
     };
   }
-}
-
-class UserWithoutRole {
-  final int id;
-  final String name;
-
-  UserWithoutRole({
-    required this.id,
-    required this.name,
-  });
-
-  factory UserWithoutRole.fromJson(Map<String, dynamic> json) {
-    return UserWithoutRole(
-      id: json['id'],
-      name: json['username'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'username': name,
-    };
-  }
 
   bool isMe(BuildContext context) {
     final userId = context.read<AuthProvider>().userId;

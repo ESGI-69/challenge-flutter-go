@@ -9,6 +9,7 @@ class TripFeatureCard extends StatelessWidget {
   final Function? onAddTap;
   final Function? onTitleTap;
   final Widget? Function(BuildContext context, int index) itemBuilder;
+  final bool showAddButton;
 
   const TripFeatureCard({
     super.key,
@@ -20,6 +21,7 @@ class TripFeatureCard extends StatelessWidget {
     this.onAddTap,
     this.onTitleTap,
     required this.itemBuilder,
+    this.showAddButton = false,
   });
 
   @override
@@ -45,6 +47,7 @@ class TripFeatureCard extends StatelessWidget {
             _Header(
               icon: icon,
               title: title,
+              showAddButton: showAddButton,
               isLoading: isLoading,
               onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
               onAddTap: onAddTap != null ? () => onAddTap!() : null,
@@ -96,10 +99,12 @@ class _Header extends StatelessWidget {
   final Function? onTitleTap;
   final Function? onAddTap;
   final bool isLoading;
+  final bool showAddButton;
 
   const _Header({
     required this.icon,
     required this.title,
+    required this.showAddButton,
     this.onTitleTap,
     this.onAddTap,
     this.isLoading = false,
@@ -148,7 +153,7 @@ class _Header extends StatelessWidget {
                 ),
               ],
             ),
-            ...isLoading ? [] : [
+            ...isLoading || !showAddButton ? [] : [
               GestureDetector(
                 onTap: onAddTap != null ? () => onAddTap!() : null,
                 child: const Icon(
