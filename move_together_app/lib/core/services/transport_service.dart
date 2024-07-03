@@ -48,10 +48,11 @@ class TransportService {
     }
   }
 
-  Future<void> delete(String transportId) async {
+  Future<void> delete(int tripId, int transportId) async {
     final response = await api.delete(
-      '/transports/$transportId/',
+      '/trips/$tripId/transports/$transportId',
     );
+
 
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       return;
