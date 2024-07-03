@@ -121,7 +121,7 @@ class JoinTripScreenState extends State<JoinTripScreen> {
               const Text('Ou alors'),
               ElevatedButton(
                 onPressed: () {
-                  context.push('/create-trip');
+                  context.pushNamed('create');
                 },
                 style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFF79D0BF)),               

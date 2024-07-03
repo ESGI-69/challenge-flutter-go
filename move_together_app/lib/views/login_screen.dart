@@ -30,7 +30,7 @@ class LoginScreenState extends State<LoginScreen> {
         errorMessage = null;
       });
       if (!mounted) return;
-      context.go('/home');
+      context.goNamed('home');
     } catch (e) {
       if (mounted) {
         setState(() {

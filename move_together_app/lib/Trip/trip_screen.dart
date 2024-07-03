@@ -48,18 +48,14 @@ class TripScreen extends StatelessWidget {
               participants: state.trip.participants,
               tripId: state.trip.id,
               onNameUpdate: (newName) {
-                context.read<TripBloc>().add(TripEdit(
+                context.read<TripBloc>().add(TripDataFetch(
                   tripId,
-                  name: newName,
                 ));
               },
               onDateUpdate: (firstDate, secondDate) {
-                context.read<TripBloc>().add(TripEdit(
+                context.read<TripBloc>().add(TripDataFetch(
                   tripId,
-                  startDate: firstDate,
-                  endDate: secondDate,
-                  )
-                );
+                ));
               },
               imageUrl:
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg',
