@@ -146,6 +146,12 @@ func (handler *NoteHandler) DeleteNoteFromTrip(context *gin.Context) {
 		return
 	}
 
+	if !utils.EntityBelongsToTrip(context, note) {
+		logger.ApiWarning(context, "Document not in trip "+context.Param("id"))
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Document not in the trip"})
+		return
+	}
+
 	isUserAuthor := note.UserIsAuthor(&currentUser)
 
 	if !isUserAuthor {

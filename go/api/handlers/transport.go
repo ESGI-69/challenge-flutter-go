@@ -45,6 +45,7 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 		if (transport.MeetingTime != time.Time{}) {
 			nullableMeetingTime = transport.MeetingTime.Format(time.RFC3339)
 		}
+
 		transportsResponse[i] = responses.TransportResponse{
 			ID:             transport.ID,
 			TransportType:  transport.TransportType,
@@ -164,6 +165,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 // @Accept			json
 // @Produce		json
 // @Security		BearerAuth
+// @Param			id	path	string	true	"ID of the trip"
 // @Param			transportID	path	string	true	"ID of the transport"
 // @Success		204		{object}	error
 // @Failure		400		{object}	error
@@ -191,6 +193,12 @@ func (handler *TransportHandler) DeleteTransport(context *gin.Context) {
 	if transport.AuthorID != currentUser.ID && !trip.UserIsOwner(&currentUser) {
 		logger.ApiWarning(context, "User "+currentUser.Username+" is not the author of transport "+transportID+" or owner of the trip "+context.Param("id")+", and can't delete it")
 		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	if !utils.EntityBelongsToTrip(context, transport) {
+		logger.ApiWarning(context, "Transort not in trip "+context.Param("id"))
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Transport not in the trip"})
 		return
 	}
 

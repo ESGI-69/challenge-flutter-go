@@ -167,9 +167,7 @@ func (handler *AccommodationHandler) DeleteAccommodation(context *gin.Context) {
 
 	tripId := context.Param("id")
 
-	parsedTripId, _ := strconv.ParseUint(tripId, 10, 10)
-
-	if accommodation.TripID != uint(parsedTripId) {
+	if !utils.EntityBelongsToTrip(context, accommodation) {
 		logger.ApiWarning(context, "Accommodation not in trip "+tripId)
 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Accommodation not in the trip"})
 		return

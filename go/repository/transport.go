@@ -11,8 +11,8 @@ type TransportRepository struct {
 	Database *gorm.DB
 }
 
-func (n *TransportRepository) Get(id string) (transport models.Transport, err error) {
-	err = n.Database.Preload("Author").First(&transport, id).Error
+func (t *TransportRepository) Get(id string) (transport models.Transport, err error) {
+	err = t.Database.Preload(clause.Associations).First(&transport, id).Error
 	return
 }
 

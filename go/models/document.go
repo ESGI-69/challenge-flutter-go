@@ -17,6 +17,10 @@ type Document struct {
 	Trip        Trip `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
+func (doc Document) GetTripID() uint {
+	return doc.TripID
+}
+
 func (document *Document) BeforeDelete(tx *gorm.DB) (err error) {
 	if document.Path == "" {
 		err = errors.New("document path is empty")

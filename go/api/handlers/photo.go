@@ -146,6 +146,12 @@ func (handler *PhotoHandler) DownloadPhoto(context *gin.Context) {
 		return
 	}
 
+	if !utils.EntityBelongsToTrip(context, photo) {
+		logger.ApiWarning(context, "Document not in trip "+context.Param("id"))
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Document not in the trip"})
+		return
+	}
+
 	tripID := context.Param("id")
 	tripIDUint, _ := strconv.ParseUint(tripID, 10, 32)
 
@@ -189,6 +195,12 @@ func (handler *PhotoHandler) DeletePhotoFromTrip(context *gin.Context) {
 
 	currentUser, _ := utils.GetCurrentUser(context)
 	photo, errPhoto := handler.Repository.Get(photoID)
+
+	if !utils.EntityBelongsToTrip(context, photo) {
+		logger.ApiWarning(context, "Document not in trip "+context.Param("id"))
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Document not in the trip"})
+		return
+	}
 
 	if errPhoto != nil {
 		errorHandlers.HandleGormErrors(errPhoto, context)

@@ -29,6 +29,10 @@ type Accommodation struct {
 	Longitude         float64   `gorm:"null"`
 }
 
+func (a Accommodation) GetTripID() uint {
+	return a.TripID
+}
+
 func (a *Accommodation) IsAccommodationTypeValid(context *gin.Context) (isValid bool) {
 	isValid = a.AccommodationType == AccommodationTypeHotel || a.AccommodationType == AccommodationTypeAirbnb || a.AccommodationType == AccommodationTypeOther
 	if !isValid {

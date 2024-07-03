@@ -12,3 +12,7 @@ type ChatMessage struct {
 	TripID   uint
 	Trip     Trip `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
+
+func (chatMsg ChatMessage) GetTripID() uint {
+	return chatMsg.TripID
+}
