@@ -178,6 +178,22 @@ func (handler *TransportHandler) DeleteTransport(context *gin.Context) {
 		return
 	}
 
+	trip, _ := handler.TripRepository.Get(context.Param("id"))
+
+	transport, getError := handler.Repository.Get(transportID)
+	if getError != nil {
+		errorHandlers.HandleGormErrors(getError, context)
+		return
+	}
+
+	currentUser, _ := utils.GetCurrentUser(context)
+
+	if transport.AuthorID != currentUser.ID && !trip.UserIsOwner(&currentUser) {
+		logger.ApiWarning(context, "User "+currentUser.Username+" is not the author of transport "+transportID+" or owner of the trip "+context.Param("id")+", and can't delete it")
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	deleteError := handler.Repository.Delete(transportID)
 	if deleteError != nil {
 		errorHandlers.HandleGormErrors(deleteError, context)

@@ -11,6 +11,11 @@ type TransportRepository struct {
 	Database *gorm.DB
 }
 
+func (n *TransportRepository) Get(id string) (transport models.Transport, err error) {
+	err = n.Database.Preload("Author").First(&transport, id).Error
+	return
+}
+
 func (t *TransportRepository) GetAllFromTrip(tripId string) (transports []models.Transport, err error) {
 	err = t.Database.Where("trip_id = ?", tripId).Preload(clause.Associations).Find(&transports).Error
 	return
