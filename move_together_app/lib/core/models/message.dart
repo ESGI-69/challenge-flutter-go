@@ -4,7 +4,7 @@ import 'package:move_together_app/core/models/user.dart';
 class Message {
   final int id;
   final String content;
-  final UserWithoutRole author;
+  final User author;
   final DateTime createdAt;
 
 
@@ -19,7 +19,7 @@ class Message {
     return Message(
         id: json['id'],
         content: json['content'],
-        author: UserWithoutRole.fromJson(json['author']),
+        author: User.fromJson(json['author']),
         createdAt: DateTime.parse(json['createdAt'])
     );
   }
