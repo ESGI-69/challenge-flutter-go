@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/router.dart';
-import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.dart';
 
 class Backoffice extends StatefulWidget {
   const Backoffice({super.key});
@@ -13,6 +12,7 @@ class _BackofficeState extends State<Backoffice> {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: true,
       theme: ThemeData(
@@ -40,7 +40,6 @@ class _BackofficeState extends State<Backoffice> {
       routeInformationProvider: backOfficeRouter.routeInformationProvider,
       builder: (context, child) {
         return Scaffold(
-          appBar: const NavigationBarBackoffice(),
           body: child,
         );
       },

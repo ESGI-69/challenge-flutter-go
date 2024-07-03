@@ -12,15 +12,15 @@ class NavigationBarBackoffice extends StatelessWidget implements PreferredSizeWi
       title: const Text('Backoffice'),
       actions: [
         TextButton(
-          child: const Text('Dashboard', style: TextStyle(color: Colors.black)),
-          onPressed: () => backOfficeRouter.go('/'),
+          child: Text('Dashboard', style: TextStyle(color: Theme.of(context).primaryColor)),
+          onPressed: () => backOfficeRouter.replace('/'),
         ),
         TextButton(
-          child: const Text('Trip', style: TextStyle(color: Colors.black)),
-          onPressed: () => backOfficeRouter.go('/trip'),
+          child: Text('Trip', style: TextStyle(color: Theme.of(context).primaryColor)),
+          onPressed: () => backOfficeRouter.replace('/trip'),
         ),
         TextButton(
-          child: const Text('Logout', style: TextStyle(color: Colors.black)),
+          child: Text('Logout', style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () async {
             final authProvider = context.read<AuthProvider>();
             await authProvider.logout();
