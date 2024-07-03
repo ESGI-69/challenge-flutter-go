@@ -12,7 +12,7 @@ type TransportRepository struct {
 }
 
 func (t *TransportRepository) Get(id string) (transport models.Transport, err error) {
-	err = t.Database.Preload(clause.Associations).First(&transport, id).Error
+	err = t.Database.Preload("Author").First(&transport, id).Error
 	return
 }
 
