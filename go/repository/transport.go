@@ -12,7 +12,7 @@ type TransportRepository struct {
 }
 
 func (t *TransportRepository) GetAllFromTrip(tripId string) (transports []models.Transport, err error) {
-	err = t.Database.Where("trip_id = ?", tripId).Find(&transports).Error
+	err = t.Database.Where("trip_id = ?", tripId).Preload(clause.Associations).Find(&transports).Error
 	return
 }
 
