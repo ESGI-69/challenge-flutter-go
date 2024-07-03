@@ -6,11 +6,15 @@ import 'package:move_together_app/Transport/transport_row.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
 
 class TransportCard extends StatelessWidget {
-  final String tripId;
+  final int tripId;
+  final bool userHasEditPermission;
+  final bool userIsOwner;
 
   const TransportCard({
+    super.key,
     required this.tripId,
-    super.key
+    required this.userHasEditPermission,
+    required this.userIsOwner,
   });
 
   @override
@@ -23,6 +27,7 @@ class TransportCard extends StatelessWidget {
             return TripFeatureCard(
               title: 'Transports',
               emptyMessage: 'Comment voyagerons-nous ? Appuie sur le + pour ajouter un moyen de transport',
+              showAddButton: userHasEditPermission,
               icon: Icons.directions_car,
               isLoading: state is TransportsDataLoading,
               length: state.transports.length,
@@ -49,6 +54,7 @@ class TransportCard extends StatelessWidget {
             return TripFeatureCard(
               title: 'Transports',
               emptyMessage: 'Comment voyagerons-nous ? Appuie sur le + pour ajouter un moyen de transport',
+              showAddButton: false,
               icon: Icons.directions_car,
               isLoading: true,
               length: 0,

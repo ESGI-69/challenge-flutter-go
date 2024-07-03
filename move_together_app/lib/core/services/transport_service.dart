@@ -10,7 +10,7 @@ class TransportService {
     this.authProvider,
   );
 
-  Future<List<Transport>> getAll(String tripId) async {
+  Future<List<Transport>> getAll(int tripId) async {
     final response = await api.get(
       '/trips/$tripId/transports/',
     );
@@ -23,7 +23,7 @@ class TransportService {
   }
 
   Future<Transport> create({
-    required String tripId,
+    required int tripId,
     required TransportType transportType,
     required DateTime startDate,
     required DateTime endDate,
@@ -45,6 +45,18 @@ class TransportService {
       return Transport.fromJson(response.data);
     } else {
       throw Exception('Failed to create transport');
+    }
+  }
+
+  Future<void> delete(String transportId) async {
+    final response = await api.delete(
+      '/transports/$transportId/',
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return;
+    } else {
+      throw Exception('Failed to delete transport');
     }
   }
 }
