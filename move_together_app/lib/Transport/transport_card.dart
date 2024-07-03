@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Transport/bloc/transport_bloc.dart';
+import 'package:move_together_app/Transport/transport_create_modal.dart';
 import 'package:move_together_app/Transport/transport_row.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
 
@@ -26,7 +27,18 @@ class TransportCard extends StatelessWidget {
               isLoading: state is TransportsDataLoading,
               length: state.transports.length,
               // ignore: avoid_print
-              onAddTap: () {print('add tap');},
+              onAddTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) => TransportCreateModal(
+                    tripId: tripId,
+                    onTransportCreated: (createdTransport) {
+                      state.transports.add(createdTransport);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                );
+              },
               // ignore: avoid_print
               onTitleTap: () {print('title tap');},
               itemBuilder: (context, index) {

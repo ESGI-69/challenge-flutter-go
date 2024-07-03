@@ -25,7 +25,7 @@ class _AppState extends State<App> {
           secondary: Color(0xFF54BF6B),
           tertiary: Color(0xFF526A65),
           error: Color(0xFFD32F2F),
-          surface: Colors.white,
+          surface: Color(0xFFF5F5F5),
           inverseSurface: Colors.black,
         ),
         textTheme: const TextTheme(

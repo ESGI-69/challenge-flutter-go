@@ -10,8 +10,14 @@ class TransportRow extends StatelessWidget {
     required this.transport
   });
 
+
   @override
   Widget build(BuildContext context) {
+    final tranportIcon = {
+      TransportType.car: Icons.directions_car,
+      TransportType.bus: Icons.directions_bus,
+      TransportType.plane: Icons.airplanemode_active,
+    };
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -30,7 +36,7 @@ class TransportRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Icon(
-              Icons.directions_car,
+              tranportIcon[transport.transportType],
               color: Theme.of(context).primaryColor,
               size: 18,
             ),

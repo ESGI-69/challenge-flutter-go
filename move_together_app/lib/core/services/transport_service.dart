@@ -21,4 +21,30 @@ class TransportService {
       throw Exception('Failed to get user');
     }
   }
+
+  Future<Transport> create({
+    required String tripId,
+    required TransportType transportType,
+    required DateTime startDate,
+    required DateTime endDate,
+    required String startAddress,
+    required String endAddress,
+  }) async {
+    final response = await api.post(
+      '/trips/$tripId/transports/',
+      data: {
+        'transportType': transportType.toString().split('.').last,
+        'startDate': startDate.toUtc().toIso8601String(),
+        'endDate': endDate.toUtc().toIso8601String(),
+        'startAddress': startAddress,
+        'endAddress': endAddress,
+      },
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return Transport.fromJson(response.data);
+    } else {
+      throw Exception('Failed to create transport');
+    }
+  }
 }
