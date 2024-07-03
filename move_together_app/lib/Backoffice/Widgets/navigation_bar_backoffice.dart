@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 
-class NavDrawer extends StatelessWidget {
+class NavigationBarBackoffice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(

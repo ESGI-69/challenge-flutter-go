@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:move_together_app/router.dart';
 import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:move_together_app/Backoffice/Widgets/nav_drawer.dart';
+import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.dart';
 
 class Backoffice extends StatefulWidget {
   const Backoffice({super.key});
@@ -44,7 +44,7 @@ class _BackofficeState extends State<Backoffice> {
       builder: (context, child) {
         return Scaffold(
           key: _scaffoldKey,
-          drawer: NavDrawer(),
+          drawer: NavigationBarBackoffice(),
           body: child,
           floatingActionButton: FloatingActionButton(
             onPressed: () => _scaffoldKey.currentState?.openDrawer(),
