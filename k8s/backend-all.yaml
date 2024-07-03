@@ -75,6 +75,38 @@ spec:
 
 ---
 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: challenge-flutter-go-backend-pv-banner
+  namespace: challenge-flutter-go
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/challenge-flutter-go-backend-pv/banner"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: challenge-flutter-go-backend-pvc-banner
+  namespace: challenge-flutter-go
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -96,6 +128,9 @@ spec:
       - name: logs
         persistentVolumeClaim:
           claimName: challenge-flutter-go-backend-pvc-log
+      - name: banner
+        persistentVolumeClaim:
+          claimName: challenge-flutter-go-backend-pvc-banner
       containers:
       - name: challenge-flutter-go-backend-deployment
         image: gatien1/challenge-flutter-go-backend:latest
@@ -175,3 +210,5 @@ spec:
           mountPath: /uploads
         - name: logs
           mountPath: /logs
+        - name: banner
+          mountPath: /banner
