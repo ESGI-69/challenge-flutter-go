@@ -10,7 +10,9 @@ import (
 	"challenge-flutter-go/repository"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -21,6 +23,12 @@ func init() {
 	gin.SetMode(config.GetConfig().Mode)
 	router = gin.New()
 	router.SetTrustedProxies([]string{"*"})
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{config.GetConfig().FrontendURL},
+		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
 	setRoutes()
 }
 

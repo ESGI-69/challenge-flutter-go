@@ -6,13 +6,14 @@ import (
 )
 
 type Config struct {
-	DBHost     string `mapstructure:"DB_HOST" validate:"required"`
-	DBPort     string `mapstructure:"DB_PORT" validate:"required"`
-	DBUser     string `mapstructure:"DB_USER" validate:"required"`
-	DBPassword string `mapstructure:"DB_PASSWORD" validate:"required"`
-	DBName     string `mapstructure:"DB_NAME" validate:"required"`
-	Mode       string `mapstructure:"MODE" validate:"required"`
-	JwtSecret  string `mapstructure:"JWT_SECRET" validate:"required"`
+	DBHost      string `mapstructure:"DB_HOST" validate:"required"`
+	DBPort      string `mapstructure:"DB_PORT" validate:"required"`
+	DBUser      string `mapstructure:"DB_USER" validate:"required"`
+	DBPassword  string `mapstructure:"DB_PASSWORD" validate:"required"`
+	DBName      string `mapstructure:"DB_NAME" validate:"required"`
+	Mode        string `mapstructure:"MODE" validate:"required"`
+	JwtSecret   string `mapstructure:"JWT_SECRET" validate:"required"`
+	FrontendURL string `mapstructure:"FRONTEND_URL" validate:"required"`
 }
 
 func init() {
@@ -31,6 +32,7 @@ func init() {
 	viper.SetDefault("MODE", "debug")
 	viper.BindEnv("DB_PASSWORD")
 	viper.BindEnv("JWT_SECRET")
+	viper.BindEnv("FRONTEND_URL")
 
 	// Check if no missing keys in config
 	validator := validator.New()

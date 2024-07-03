@@ -6,9 +6,7 @@ class AuthService {
   final api = Api().dio;
   final AuthProvider authProvider;
 
-  AuthService(
-    this.authProvider,
-  );
+  AuthService(this.authProvider);
 
   Future<String> login(String username, String password) async {
     final response = await api.post(
@@ -24,7 +22,7 @@ class AuthService {
         response.statusCode! < 300) {
       final String token = response.data['token'];
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-      authProvider.login(decodedToken['id']);
+      authProvider.login(decodedToken['id'], decodedToken['role']);
 
       return token;
     } else {

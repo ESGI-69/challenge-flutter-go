@@ -157,6 +157,11 @@ spec:
             secretKeyRef:
               name: app-secrets
               key: jwt_secret
+        - name: FRONTEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: challenge-flutter-go-config
+              key: frontend_url
 
         ports:
         - containerPort: 8080
