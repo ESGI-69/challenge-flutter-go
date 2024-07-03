@@ -9,6 +9,7 @@ type TripResponse struct {
 	EndDate      string                `json:"endDate"`
 	Participants []ParticipantResponse `json:"participants"`
 	InviteCode   string                `json:"inviteCode"`
+	PhotoURL     string                `json:"photoUrl"`
 }
 
 type TripAddTransport struct {

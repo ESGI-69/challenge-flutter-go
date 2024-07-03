@@ -94,6 +94,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		EndDate:      trip.EndDate.Format(time.RFC3339),
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
+		PhotoURL:     trip.PhotoUrl,
 	}
 
 	context.JSON(http.StatusCreated, responseTrip)
