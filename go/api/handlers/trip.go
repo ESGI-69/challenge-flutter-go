@@ -9,6 +9,7 @@ import (
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -94,7 +95,6 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		EndDate:      trip.EndDate.Format(time.RFC3339),
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
-		PhotoURL:     trip.PhotoUrl,
 	}
 
 	context.JSON(http.StatusCreated, responseTrip)
@@ -133,7 +133,6 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 			EndDate:      trip.EndDate.Format(time.RFC3339),
 			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 			InviteCode:   trip.InviteCode,
-			PhotoURL:     trip.PhotoUrl,
 		}
 	}
 
@@ -169,7 +168,6 @@ func (handler *TripHandler) Get(context *gin.Context) {
 		EndDate:      trip.EndDate.Format(time.RFC3339),
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
-		PhotoURL:     trip.PhotoUrl,
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
@@ -382,13 +380,28 @@ func (handler *TripHandler) DownloadTripBanner(context *gin.Context) {
 		return
 	}
 
-	bannerPath, errBannerPath := utils.GetFilePath("banner", trip.PhotoUrl)
-	if errBannerPath != nil {
-		logger.ApiError(context, "Failed to get banner file path "+trip.PhotoUrl)
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get banner file path"})
+	if trip.PhotoUrl == "" {
+		logger.ApiError(context, "Trip "+tripId+" does not have a banner")
+		context.File("assets/default.jpg")
 		return
+	} else {
+
+		bannerPath, errBannerPath := utils.GetFilePath("banner", trip.PhotoUrl)
+		if errBannerPath != nil {
+			logger.ApiError(context, "Failed to get banner file path "+trip.PhotoUrl)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get banner file path"})
+			return
+		}
+
+		if _, err := os.Stat(bannerPath); os.IsNotExist(err) {
+			logger.ApiError(context, "Banner file does not exist "+trip.PhotoUrl)
+			context.JSON(http.StatusNotFound, gin.H{"error": "Banner file does not exist"})
+			return
+		}
+
+		logger.ApiInfo(context, "Download trip banner")
+
+		context.File(bannerPath)
 	}
 
-	context.File(bannerPath)
-	logger.ApiInfo(context, "Download trip banner "+trip.PhotoUrl)
 }

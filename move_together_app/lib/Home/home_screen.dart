@@ -64,10 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: PageView(
                     onPageChanged: changePage,
                     children: state.trips.map((trip) {
-                      var imageUrlToUse =  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg";
-                      if( trip.photoUrl != null && trip.photoUrl != ""){
-                           imageUrlToUse = "${dotenv.env['API_ADDRESS']}trips/${trip.id}/banner/download";
-                      }
                       return TripCard(
                         onTap: () async {
                           await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
@@ -75,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
                         onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
-                        imageUrl: imageUrlToUse,
+                        imageUrl:  "${dotenv.env['API_ADDRESS']}trips/${trip.id}/banner/download",
                         name: trip.name,
                         startDate: trip.startDate,
                         endDate: trip.endDate,

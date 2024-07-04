@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Trip/bloc/trip_bloc.dart';
 import 'package:move_together_app/Trip/trip_app_bar.dart';
 import 'package:move_together_app/Trip/trip_body.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TripScreen extends StatelessWidget {
   const TripScreen({
@@ -57,8 +58,7 @@ class TripScreen extends StatelessWidget {
                   tripId,
                 ));
               },
-              imageUrl:
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg',
+              imageUrl:  "${dotenv.env['API_ADDRESS']}trips/${state.trip.id}/banner/download",
               userHasEditRights: state.trip.currentUserHasEditingRights(context),
             ),
             body: TripBody(trip: state.trip),
