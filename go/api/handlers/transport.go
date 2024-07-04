@@ -45,6 +45,7 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 		if (transport.MeetingTime != time.Time{}) {
 			nullableMeetingTime = transport.MeetingTime.Format(time.RFC3339)
 		}
+
 		transportsResponse[i] = responses.TransportResponse{
 			ID:             transport.ID,
 			TransportType:  transport.TransportType,
@@ -164,6 +165,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 // @Accept			json
 // @Produce		json
 // @Security		BearerAuth
+// @Param			id	path	string	true	"ID of the trip"
 // @Param			transportID	path	string	true	"ID of the transport"
 // @Success		204		{object}	error
 // @Failure		400		{object}	error

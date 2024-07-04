@@ -1235,6 +1235,11 @@ paths:
       - application/json
       description: Delete a transport from a trip
       parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
       - description: ID of the transport
         in: path
         name: transportID
