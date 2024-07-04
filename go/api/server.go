@@ -118,6 +118,8 @@ func setRoutes() {
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	router.Static("/backoffice", "./backoffice")
+
 	router.POST("/login", authHandler.Login)
 
 	usersRoutes := router.Group("/users")

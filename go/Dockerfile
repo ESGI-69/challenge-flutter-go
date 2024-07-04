@@ -17,6 +17,7 @@ RUN go build -o /app/main .
 
 FROM alpine:3.20
 
+COPY backoffice /backoffice
 COPY --from=builder /app/main /main
 
 CMD ["/main"]

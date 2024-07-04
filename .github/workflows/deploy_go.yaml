@@ -14,9 +14,35 @@ env:
   DOCKERHUB_REPO: ${{ vars.DOCKERHUB_USERNAME }}/challenge-flutter-go-backend
 
 jobs:
+  flutter-build-web:
+    defaults:
+      run:
+        working-directory: move_together_app
+    name: Flutter Build Web
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+    - name: Copy .env file
+      run: cp .env.release .env
+    - name: Retrive dependencies
+      run: flutter pub get
+    - name: Build Web
+      run: flutter build web --release --base-href /backoffice/
+    - name: Save web build to artifact
+      uses: actions/upload-artifact@v4
+      with:
+        path: move_together_app/build/web
+        name: backoffice-deploy
+        if-no-files-found: error
+
   publish:
     runs-on: ubuntu-latest
     name: Publish image on Docker Hub
+    needs: flutter-build-web
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -27,6 +53,11 @@ jobs:
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Retrive artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backoffice-deploy
+          path: go/backoffice
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -34,6 +65,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ env.DOCKERHUB_REPO }}:latest, ${{ env.DOCKERHUB_REPO }}:${{ github.sha }}
+
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
