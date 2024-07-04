@@ -13,6 +13,7 @@ class TripCard extends StatelessWidget {
   final String name;
   final DateTime startDate;
   final DateTime endDate;
+  final String inviteCode;
   final List<Participant> participants;
   final Function() onTap;
   final Function() onLeave;
@@ -26,6 +27,7 @@ class TripCard extends StatelessWidget {
     required this.name,
     required this.startDate,
     required this.endDate,
+    required this.inviteCode,
     required this.participants,
     required this.onTap,
     required this.onLeave,
@@ -70,7 +72,15 @@ class TripCard extends StatelessWidget {
                   children: [
                     ParticipantIcons(
                       participants: participants,
-                      onTap: () => context.goNamed('participants', pathParameters: {'tripId': tripId.toString()}),
+                      onTap: () => context.goNamed(
+                        'participants',
+                        pathParameters: {
+                          'tripId': tripId.toString()
+                        },
+                        queryParameters: {
+                          'inviteCode': inviteCode,
+                        },
+                      ),
                     ),
                     ...!isCurrentUserOwner ? [
                       const SizedBox(width: 10),

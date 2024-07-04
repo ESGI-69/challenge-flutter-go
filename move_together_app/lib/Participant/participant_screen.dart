@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Participant/bloc/participant_bloc.dart';
+import 'package:move_together_app/Participant/participant_add_modal.dart';
 import 'package:move_together_app/Participant/participant_row.dart';
 import 'package:move_together_app/core/models/participant.dart';
 
@@ -11,6 +12,7 @@ class ParticipantScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[1]);
+    final inviteCode = GoRouterState.of(context).uri.queryParameters['inviteCode'];
 
     return Scaffold(
       appBar: AppBar(
@@ -18,7 +20,12 @@ class ParticipantScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          GoRouter.of(context).go('/trips/$tripId/join');
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) => ParticipantAddModal(
+              inviteCode: inviteCode ?? '',
+            ),
+          );
         },
         shape: const CircleBorder(),
         child: const Icon(Icons.add),

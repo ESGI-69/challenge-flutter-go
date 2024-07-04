@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         name: trip.name,
                         startDate: trip.startDate,
                         endDate: trip.endDate,
+                        inviteCode: trip.inviteCode,
                         participants: trip.participants,
                         isCurrentUserOwner: trip.isCurrentUserOwner(context),
                       );

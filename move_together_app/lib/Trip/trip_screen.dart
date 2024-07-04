@@ -30,6 +30,7 @@ class TripScreen extends StatelessWidget {
               onDateUpdate: (firstDate, secondDate) {},
               imageUrl: '',
               tripId: 0,
+              inviteCode: '',
             ),
             body: const Center(
               child: CircularProgressIndicator.adaptive(),
@@ -60,6 +61,7 @@ class TripScreen extends StatelessWidget {
               },
               imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${state.trip.id}/banner/download",
               userHasEditRights: state.trip.currentUserHasEditingRights(context),
+              inviteCode: state.trip.inviteCode,
             ),
             body: TripBody(trip: state.trip),
           );

@@ -21,6 +21,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String imageUrl;
   final int tripId;
   final bool userHasEditRights;
+  final String inviteCode;
 
   const TripAppBar({
     super.key,
@@ -34,6 +35,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.imageUrl,
     required this.tripId,
     this.userHasEditRights = false,
+    required this.inviteCode,
   });
 
   @override
@@ -110,7 +112,15 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
         title: ParticipantIcons(
           participants: participants,
-          onTap: () => context.goNamed('participants', pathParameters: {'tripId': tripId.toString()}),
+          onTap: () => context.goNamed(
+            'participants',
+            pathParameters: {
+              'tripId': tripId.toString(),
+            },
+            queryParameters: {
+              'inviteCode': inviteCode,
+            },
+          ),
         ),
         flexibleSpace: Padding(
           padding: const EdgeInsets.only(bottom: 10),
