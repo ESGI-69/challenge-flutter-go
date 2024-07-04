@@ -24,6 +24,11 @@ class Trip {
     this.photoUrl = '',
     });
 
+  @override
+  String toString() {
+    return 'Trip{id: $id, name: $name, country: $country, city: $city, startDate: $startDate, endDate: $endDate, participants: ${participants.toString()}, inviteCode: $inviteCode, photoUrl: $photoUrl}';
+  }
+
   factory Trip.fromJson(Map<String, dynamic> json) {
     return Trip(
       id: json['id'],
@@ -34,7 +39,7 @@ class Trip {
       endDate: DateTime.parse(json['endDate']),
       participants: json['participants'].map<Participant>((e) => Participant.fromJson(e)).toList(),
       inviteCode: json['inviteCode'],
-      photoUrl: json['photoUrl'] ?? '',
+      photoUrl: json['photoUrl'],
     );
   }
 
