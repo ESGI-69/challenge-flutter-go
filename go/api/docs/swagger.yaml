@@ -323,6 +323,31 @@ info:
   termsOfService: https://challenge-flutter-go.com/terms
   title: Challenge Flutter Go API
 paths:
+  /admin/trips:
+    get:
+      consumes:
+      - application/json
+      description: Get all trips as admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.TripResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all trips
+      tags:
+      - admin
   /login:
     post:
       consumes:
