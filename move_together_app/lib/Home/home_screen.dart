@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Home/blocs/home_bloc.dart';
 import 'package:move_together_app/Home/empty_home.dart';
 import 'package:move_together_app/Trip/trip_card.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -70,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
                         onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
-                        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/260px-Tour_Eiffel_Wikimedia_Commons.jpg",
+                        imageUrl:  "${dotenv.env['API_ADDRESS']}trips/${trip.id}/banner/download",
                         name: trip.name,
                         startDate: trip.startDate,
                         endDate: trip.endDate,

@@ -134,6 +134,8 @@ func setRoutes() {
 	tripsRoutes.POST("/join", tripHandler.Join)
 	tripsRoutes.POST("/:id/leave", middlewares.UserIsTripParticipant, tripHandler.Leave)
 	tripsRoutes.DELETE("/:id", middlewares.UserIsTripOwner, tripHandler.Delete)
+	tripBannerRoutes := router.Group("/trips/:id/banner")
+	tripBannerRoutes.GET("/download", tripHandler.DownloadTripBanner)
 
 	tripTransportsRoutes := tripsRoutes.Group("/:id/transports")
 	tripTransportsRoutes.GET("/", middlewares.UserIsTripParticipant, transportHandler.GetAllFromTrip)

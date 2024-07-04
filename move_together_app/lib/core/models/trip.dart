@@ -20,7 +20,7 @@ class Trip {
     required this.endDate,
     required this.participants,
     required this.inviteCode,
-  });
+    });
 
   factory Trip.fromJson(Map<String, dynamic> json) {
     return Trip(

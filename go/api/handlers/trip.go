@@ -9,6 +9,7 @@ import (
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -54,6 +55,20 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		return
 	}
 
+	//Get an image from google maps api for the trip
+	image, err := utils.GetPhotoURIFromPlaceName(requestBody.City + ", " + requestBody.Country)
+	if err != nil {
+		logger.ApiError(context, "Error getting image from google maps api")
+	}
+
+	var uniqueTitleString string
+	filePath, err := utils.DownloadImageFromURL(context, image)
+	if err != nil {
+		logger.ApiError(context, "Error downloading image from URL")
+	} else {
+		uniqueTitleString = filePath + ".jpg"
+	}
+
 	trip := models.Trip{
 		Name:      requestBody.Name,
 		Country:   requestBody.Country,
@@ -61,9 +76,10 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		Owner:     currentUser,
 		StartDate: startDate,
 		EndDate:   endDate,
+		PhotoUrl:  uniqueTitleString,
 	}
 
-	err := handler.Repository.Create(&trip)
+	err = handler.Repository.Create(&trip)
 
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
@@ -341,4 +357,51 @@ func (handler *TripHandler) Delete(context *gin.Context) {
 
 	context.Status(http.StatusNoContent)
 	logger.ApiInfo(context, "Delete trip "+tripId)
+}
+
+// @Summary      Download trip banner
+// @Description  Download the banner image of a trip
+// @Tags         trip
+// @Accept       json
+// @Produce      application/octet-stream
+// @Security     BearerAuth
+// @Param        id          path      string  true  "ID of the trip"
+// @Success      200         {file}    true    "A file stream of the trip banner"
+// @Failure      400         {object}  error
+// @Failure      401         {object}  error
+// @Failure      404         {object}  error
+// @Router       /trips/{id}/banner/download [get]
+func (handler *TripHandler) DownloadTripBanner(context *gin.Context) {
+	tripId := context.Param("id")
+
+	trip, errTrip := handler.Repository.Get(tripId)
+	if errTrip != nil {
+		errorHandlers.HandleGormErrors(errTrip, context)
+		return
+	}
+
+	if trip.PhotoUrl == "" {
+		logger.ApiError(context, "Trip "+tripId+" does not have a banner")
+		context.File("assets/default.jpg")
+		return
+	} else {
+
+		bannerPath, errBannerPath := utils.GetFilePath("banner", trip.PhotoUrl)
+		if errBannerPath != nil {
+			logger.ApiError(context, "Failed to get banner file path "+trip.PhotoUrl)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get banner file path"})
+			return
+		}
+
+		if _, err := os.Stat(bannerPath); os.IsNotExist(err) {
+			logger.ApiError(context, "Banner file does not exist "+trip.PhotoUrl)
+			context.JSON(http.StatusNotFound, gin.H{"error": "Banner file does not exist"})
+			return
+		}
+
+		logger.ApiInfo(context, "Download trip banner")
+
+		context.File(bannerPath)
+	}
+
 }
