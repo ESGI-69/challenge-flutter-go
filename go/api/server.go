@@ -25,7 +25,7 @@ func init() {
 	router.SetTrustedProxies([]string{"*"})
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{config.GetConfig().FrontendURL},
-		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE"},
+		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
