@@ -32,7 +32,7 @@ class AuthService {
 
   Future<void> register(String username, String password) async {
     final response = await api.post(
-      '/users/',
+      '/users',
       data: {
         'username': username,
         'password': password,
