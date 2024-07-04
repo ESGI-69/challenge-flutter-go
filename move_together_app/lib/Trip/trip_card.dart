@@ -8,27 +8,33 @@ import 'package:move_together_app/core/models/participant.dart';
 import 'package:move_together_app/utils/show_unified_dialog.dart';
 
 class TripCard extends StatelessWidget {
+  final int tripId;
   final String imageUrl;
   final String name;
   final DateTime startDate;
   final DateTime endDate;
+  final String inviteCode;
   final List<Participant> participants;
   final Function() onTap;
   final Function() onLeave;
   final Function() onDelete;
   final bool isCurrentUserOwner;
+  final Function() onParticipantsTap;
 
   const TripCard({
     super.key,
+    required this.tripId,
     required this.imageUrl,
     required this.name,
     required this.startDate,
     required this.endDate,
+    required this.inviteCode,
     required this.participants,
     required this.onTap,
     required this.onLeave,
     required this.onDelete,
     required this.isCurrentUserOwner,
+    required this.onParticipantsTap,
   });
 
   @override
@@ -66,7 +72,10 @@ class TripCard extends StatelessWidget {
                 right: 10,
                 child: Row(
                   children: [
-                    ParticipantIcons(participants: participants),
+                    ParticipantIcons(
+                      participants: participants,
+                      onTap: onParticipantsTap,
+                    ),
                     ...!isCurrentUserOwner ? [
                       const SizedBox(width: 10),
                       Container(

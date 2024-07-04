@@ -8,6 +8,7 @@ on:
     branches: [ "main" ]
     paths: 
       - 'go/**'
+      - 'move_together_app/**'
       - '.github/workflows/deploy_go.yaml'
 
 env:

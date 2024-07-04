@@ -30,6 +30,7 @@ class TripScreen extends StatelessWidget {
               onDateUpdate: (firstDate, secondDate) {},
               imageUrl: '',
               tripId: 0,
+              onParticipantsTap: () {},
             ),
             body: const Center(
               child: CircularProgressIndicator.adaptive(),
@@ -58,8 +59,22 @@ class TripScreen extends StatelessWidget {
                   tripId,
                 ));
               },
-              imageUrl:  "${dotenv.env['API_ADDRESS']}trips/${state.trip.id}/banner/download",
+              imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${state.trip.id}/banner/download",
               userHasEditRights: state.trip.currentUserHasEditingRights(context),
+              onParticipantsTap: () async {
+                await context.pushNamed(
+                  'participants',
+                  pathParameters: {
+                    'tripId': tripId.toString(),
+                  },
+                  queryParameters: {
+                    'inviteCode': state.trip.inviteCode,
+                  },
+                );
+                context.read<TripBloc>().add(TripDataFetch(
+                  tripId,
+                ));
+              },
             ),
             body: TripBody(trip: state.trip),
           );

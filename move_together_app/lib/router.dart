@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Backoffice/Logs/logs_screen.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
+import 'package:move_together_app/Participant/participant_screen.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
@@ -24,6 +25,7 @@ List<String> loggedRoutes = [
   '/trips/create',
   '/trips/:tripId',
   '/trips/:tripId/chat',
+  '/trips/:tripId/participants',
   '/profile',
 ];
 
@@ -86,6 +88,11 @@ final GoRouter router = GoRouter(
               name: 'chat',
               path: 'chat',
               builder: (context, state) => const ChatScreen(),
+            ),
+            GoRoute(
+              name: 'participants',
+              path: 'participants',
+              builder: (context, state) => const ParticipantScreen(),
             ),
           ],
         ),

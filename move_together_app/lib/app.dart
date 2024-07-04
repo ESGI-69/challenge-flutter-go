@@ -28,6 +28,14 @@ class _AppState extends State<App> {
           surface: Color(0xFFF5F5F5),
           inverseSurface: Colors.black,
         ),
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: Color(0xFF55C0A8),
+          contentTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         textTheme: const TextTheme(
           displayLarge: TextStyle(
             color: Color(0xFF55C0A8),

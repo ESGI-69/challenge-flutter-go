@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
         context.pushNamed('join');
         },
+        shape: const CircleBorder(),
         child: const Icon(Icons.add),
       ),
       body: BlocProvider(
@@ -65,18 +66,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPageChanged: changePage,
                     children: state.trips.map((trip) {
                       return TripCard(
+                        tripId: trip.id,
                         onTap: () async {
                           await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
                           context.read<HomeBloc>().add(HomeDataFetch());
                         },
                         onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
                         onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
-                        imageUrl:  "${dotenv.env['API_ADDRESS']}trips/${trip.id}/banner/download",
+                        imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
                         name: trip.name,
                         startDate: trip.startDate,
                         endDate: trip.endDate,
+                        inviteCode: trip.inviteCode,
                         participants: trip.participants,
                         isCurrentUserOwner: trip.isCurrentUserOwner(context),
+                        onParticipantsTap: () async {
+                          await context.pushNamed(
+                            'participants',
+                            pathParameters: {
+                              'tripId': trip.id.toString(),
+                            },
+                            queryParameters: {
+                              'inviteCode': trip.inviteCode,
+                            },
+                          );
+                          context.read<HomeBloc>().add(HomeDataFetch());
+                        },
                       );
                     }).toList(),
                     ),
