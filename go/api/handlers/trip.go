@@ -133,6 +133,7 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 			EndDate:      trip.EndDate.Format(time.RFC3339),
 			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 			InviteCode:   trip.InviteCode,
+			PhotoURL:     trip.PhotoUrl,
 		}
 	}
 
@@ -168,6 +169,7 @@ func (handler *TripHandler) Get(context *gin.Context) {
 		EndDate:      trip.EndDate.Format(time.RFC3339),
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
+		PhotoURL:     trip.PhotoUrl,
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
@@ -357,4 +359,36 @@ func (handler *TripHandler) Delete(context *gin.Context) {
 
 	context.Status(http.StatusNoContent)
 	logger.ApiInfo(context, "Delete trip "+tripId)
+}
+
+// @Summary      Download trip banner
+// @Description  Download the banner image of a trip
+// @Tags         trip
+// @Accept       json
+// @Produce      application/octet-stream
+// @Security     BearerAuth
+// @Param        id          path      string  true  "ID of the trip"
+// @Success      200         {file}    true    "A file stream of the trip banner"
+// @Failure      400         {object}  error
+// @Failure      401         {object}  error
+// @Failure      404         {object}  error
+// @Router       /trips/{id}/banner/download [get]
+func (handler *TripHandler) DownloadTripBanner(context *gin.Context) {
+	tripId := context.Param("id")
+
+	trip, errTrip := handler.Repository.Get(tripId)
+	if errTrip != nil {
+		errorHandlers.HandleGormErrors(errTrip, context)
+		return
+	}
+
+	bannerPath, errBannerPath := utils.GetFilePath("banner", trip.PhotoUrl)
+	if errBannerPath != nil {
+		logger.ApiError(context, "Failed to get banner file path "+trip.PhotoUrl)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get banner file path"})
+		return
+	}
+
+	context.File(bannerPath)
+	logger.ApiInfo(context, "Download trip banner "+trip.PhotoUrl)
 }

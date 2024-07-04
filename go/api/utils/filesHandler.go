@@ -66,6 +66,8 @@ func GetFilePath(fileType, fileName string) (string, error) {
 		specificDir = filepath.Join(baseDir, "documents")
 	case "photo":
 		specificDir = filepath.Join(baseDir, "photos")
+	case "banner":
+		specificDir = filepath.Join("banner")
 	default:
 		return "", fmt.Errorf("unsupported file type")
 	}
