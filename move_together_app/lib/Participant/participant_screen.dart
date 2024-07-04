@@ -15,6 +15,13 @@ class ParticipantScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Participants'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          GoRouter.of(context).go('/trips/$tripId/join');
+        },
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add),
+      ),
       body: Center(
         child: BlocProvider(
           create: (context) => ParticipantBloc(context)..add(ParticipantDataFetch(tripId)),
@@ -35,8 +42,21 @@ class ParticipantScreen extends StatelessWidget {
                     final participant = state.participants[index];
                     return ListTile(
                       leading: ParticipantIcon(participant: participant),
-                      title: Text(participant.username),
-                      trailing: Text(participant.tripRole.toString().split('.').last),
+                      title: Row(
+                        textBaseline: TextBaseline.alphabetic,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        children: [
+                          Text(participant.username),
+                          const SizedBox(width: 8),
+                          Text(
+                            participant.tripRole.toString().split('.').last,
+                            style: TextStyle(
+                              color: Theme.of(context).hintColor,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 );

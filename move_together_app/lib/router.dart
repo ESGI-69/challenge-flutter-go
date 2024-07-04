@@ -25,6 +25,7 @@ List<String> loggedRoutes = [
   '/trips/create',
   '/trips/:tripId',
   '/trips/:tripId/chat',
+  '/trips/:tripId/participants',
   '/profile',
 ];
 
