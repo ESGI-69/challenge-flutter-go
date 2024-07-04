@@ -3,6 +3,7 @@ package handlers
 import (
 	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/responses"
+	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/logger"
 	"challenge-flutter-go/repository"
 	"net/http"
@@ -13,6 +14,35 @@ import (
 type ParticipantHandler struct {
 	TripRepository repository.TripRepository
 	UserRepository repository.UserRepository
+}
+
+// @Summary	List all participants of a trip
+// @Description	List all participants of a trip
+// @Tags	participants
+// @Accept	json
+// @Produce	json
+// @Security	BearerAuth
+// @Param	id	path	string	true	"ID of the trip"
+// @Success	200	{object} responses.TripParticipantsResponse
+// @Failure	400	{object} error
+// @Failure	401	{object} error
+// @Router	/trips/{id}/participants [get]
+func (handler *ParticipantHandler) GetAllFromTrip(context *gin.Context) {
+	tripId := context.Param("id")
+
+	trip, err := handler.TripRepository.Get(tripId)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	participantsResponse := responses.TripParticipantsResponse{
+		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
+	}
+
+	context.JSON(http.StatusOK, participantsResponse)
+	logger.ApiInfo(context, "Participants of list of trip "+tripId+" retrieved")
+
 }
 
 // @Summary	Change the role of a participant in a trip

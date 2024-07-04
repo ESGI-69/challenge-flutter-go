@@ -1046,6 +1046,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/trips/{id}/participants": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "List all participants of a trip",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "participants"
+                ],
+                "summary": "List all participants of a trip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.TripParticipantsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/trips/{id}/participants/{participantId}": {
             "delete": {
                 "security": [
@@ -1935,6 +1980,17 @@ const docTemplate = `{
                 },
                 "transportType": {
                     "$ref": "#/definitions/models.TransportType"
+                }
+            }
+        },
+        "responses.TripParticipantsResponse": {
+            "type": "object",
+            "properties": {
+                "participants": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.ParticipantResponse"
+                    }
                 }
             }
         },

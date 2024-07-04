@@ -266,6 +266,13 @@ definitions:
       transportType:
         $ref: '#/definitions/models.TransportType'
     type: object
+  responses.TripParticipantsResponse:
+    properties:
+      participants:
+        items:
+          $ref: '#/definitions/responses.ParticipantResponse'
+        type: array
+    type: object
   responses.TripResponse:
     properties:
       city:
@@ -954,6 +961,35 @@ paths:
       summary: Delete a note from trip
       tags:
       - note
+  /trips/{id}/participants:
+    get:
+      consumes:
+      - application/json
+      description: List all participants of a trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.TripParticipantsResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: List all participants of a trip
+      tags:
+      - participants
   /trips/{id}/participants/{participantId}:
     delete:
       consumes:
