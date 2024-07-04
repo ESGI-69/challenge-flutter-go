@@ -68,7 +68,7 @@ func SearchPlaces(query string) (string, error) {
 
 // function that build the place photo uri from the photo name
 func buildPhotoURI(photoName string) string {
-	url := fmt.Sprintf("https://places.googleapis.com/v1/%s/media?key=%s&maxHeightPx=400&maxWidthPx=400",
+	url := fmt.Sprintf("https://places.googleapis.com/v1/%s/media?key=%s&maxHeightPx=800&maxWidthPx=400",
 		photoName, viper.GetString("GOOGLE_API_KEY"))
 	return url
 }
