@@ -142,10 +142,10 @@ func setRoutes() {
 	tripTransportsRoutes.POST("", middlewares.UserHasTripEditRight, transportHandler.Create)
 	tripTransportsRoutes.DELETE("/:transportID", middlewares.UserHasTripEditRight, transportHandler.DeleteTransport)
 
-	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripOwner)
-	tripParticipantsRoutes.GET("/", participantHandler.GetAllFromTrip)
-	tripParticipantsRoutes.PATCH("/:participantId/role", participantHandler.ChangeRole)
-	tripParticipantsRoutes.DELETE("/:participantId", participantHandler.RemoveParticipant)
+	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripParticipant)
+	tripParticipantsRoutes.GET("", participantHandler.GetAllFromTrip)
+	tripParticipantsRoutes.PATCH("/:participantId/role", middlewares.UserIsTripOwner, participantHandler.ChangeRole)
+	tripParticipantsRoutes.DELETE("/:participantId", middlewares.UserIsTripOwner, participantHandler.RemoveParticipant)
 
 	tripAccommodationsRoutes := tripsRoutes.Group("/:id/accommodations")
 	tripAccommodationsRoutes.GET("", middlewares.UserIsTripParticipant, accommodationHandler.GetAllFromTrip)

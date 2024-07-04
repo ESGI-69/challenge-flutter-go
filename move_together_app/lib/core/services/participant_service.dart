@@ -20,7 +20,7 @@ class ParticipantService {
 
   Future<List<Participant>> getAll(int tripId) async {
     final response = await api.get(
-      '/trips/$tripId/participants/',
+      '/trips/$tripId/participants',
     );
 
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
@@ -50,7 +50,7 @@ class ParticipantService {
 
   Future<void> remove(int tripId, int participantId) async {
     final response = await api.delete(
-      '/trips/$tripId/participants/$participantId/',
+      '/trips/$tripId/participants/$participantId',
     );
 
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
