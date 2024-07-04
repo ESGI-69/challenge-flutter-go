@@ -58,7 +58,7 @@ class TripScreen extends StatelessWidget {
                   tripId,
                 ));
               },
-              imageUrl:  "${dotenv.env['API_ADDRESS']}trips/${state.trip.id}/banner/download",
+              imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${state.trip.id}/banner/download",
               userHasEditRights: state.trip.currentUserHasEditingRights(context),
             ),
             body: TripBody(trip: state.trip),
