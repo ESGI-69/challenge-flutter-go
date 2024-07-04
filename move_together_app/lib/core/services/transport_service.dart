@@ -12,7 +12,7 @@ class TransportService {
 
   Future<List<Transport>> getAll(int tripId) async {
     final response = await api.get(
-      '/trips/$tripId/transports/',
+      '/trips/$tripId/transports',
     );
 
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
@@ -31,7 +31,7 @@ class TransportService {
     required String endAddress,
   }) async {
     final response = await api.post(
-      '/trips/$tripId/transports/',
+      '/trips/$tripId/transports',
       data: {
         'transportType': transportType.toString().split('.').last,
         'startDate': startDate.toUtc().toIso8601String(),

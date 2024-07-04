@@ -588,6 +588,38 @@ paths:
       summary: Delete an accommodation
       tags:
       - accommodation
+  /trips/{id}/banner/download:
+    get:
+      consumes:
+      - application/json
+      description: Download the banner image of a trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: A file stream of the trip banner
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Download trip banner
+      tags:
+      - trip
   /trips/{id}/chatMessages:
     get:
       consumes:
