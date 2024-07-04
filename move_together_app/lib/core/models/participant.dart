@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 
+// ignore: constant_identifier_names
+enum ParticipantTripRole { OWNER, EDITOR, VIEWER }
+
 class Participant {
   final int id;
   final String username;
-  final String tripRole;
+  final ParticipantTripRole tripRole;
 
   Participant({
     required this.id,
@@ -17,7 +20,7 @@ class Participant {
     return Participant(
       id: json['id'],
       username: json['username'],
-      tripRole: json['tripRole'],
+      tripRole: ParticipantTripRole.values.firstWhere((e) => e.toString().split('.').last == json['tripRole']),
     );
   }
 

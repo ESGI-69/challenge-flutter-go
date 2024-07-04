@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
         context.pushNamed('join');
         },
+        shape: const CircleBorder(),
         child: const Icon(Icons.add),
       ),
       body: BlocProvider(
@@ -72,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
                         onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
-                        imageUrl:  "${dotenv.env['API_ADDRESS']}trips/${trip.id}/banner/download",
+                        imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
                         name: trip.name,
                         startDate: trip.startDate,
                         endDate: trip.endDate,
