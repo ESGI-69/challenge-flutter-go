@@ -21,6 +21,7 @@ func init() {
 	}
 	defer log.Print("Database connection established")
 	autoMigrate()
+	createAdminUser()
 }
 
 func autoMigrate() {
@@ -38,6 +39,25 @@ func autoMigrate() {
 	)
 	if err != nil {
 		log.Fatalln(err)
+	}
+}
+
+func createAdminUser() {
+	user := models.User{
+		Username: "admin",
+		Password: "admin",
+		Role:     models.UserRoleAdmin,
+	}
+
+	database.First(&user, "username = ?", user.Username)
+
+	if user.ID == 0 {
+		database.Create(&user)
+	} else {
+		log.Print("Admin user already exists, enforcing password")
+		user.Password = "admin"
+		user.Role = models.UserRoleAdmin
+		database.Save(&user)
 	}
 }
 

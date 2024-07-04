@@ -39,7 +39,7 @@ func (user *User) CheckPassword(password string) (isSame bool) {
 	return
 }
 
-func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
+func (user *User) BeforeSave(tx *gorm.DB) (err error) {
 	user.HashPassword()
 	return
 }
