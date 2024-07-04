@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Participant/bloc/participant_bloc.dart';
-import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:move_together_app/Widgets/Participant/participant_icon.dart';
+import 'package:move_together_app/Participant/participant_row.dart';
 import 'package:move_together_app/core/models/participant.dart';
-import 'package:move_together_app/core/services/participant_service.dart';
 
 class ParticipantScreen extends StatelessWidget {
   const ParticipantScreen({super.key});
@@ -13,7 +11,6 @@ class ParticipantScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[1]);
-    final participantService = ParticipantService(context.read<AuthProvider>());
 
     return Scaffold(
       appBar: AppBar(
@@ -47,69 +44,14 @@ class ParticipantScreen extends StatelessWidget {
                   itemCount: state.participants.length,
                   itemBuilder: (context, index) {
                     final participant = state.participants[index];
-                    return ListTile(
-                      leading: ParticipantIcon(participant: participant),
-                      title: Row(
-                        textBaseline: TextBaseline.alphabetic,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        children: [
-                          Text(participant.username),
-                          const SizedBox(width: 8),
-                          Text(
-                            participant.tripRole.toString().split('.').last,
-                            style: TextStyle(
-                              color: Theme.of(context).hintColor,
-                              fontSize: 10,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          participant.isMe(context)
-                            ? Text(
-                              '(me)',
-                              style: TextStyle(
-                                color: Theme.of(context).hintColor,
-                                fontSize: 10,
-                              ),
-                            )
-                            : const SizedBox(),
-                        ],
-                      ),
-                      trailing: !iAmTheOwner 
-                        ? const SizedBox()
-                        : participant.isMe(context)
-                          ? const SizedBox()
-                          : PopupMenuButton(
-                            itemBuilder: (context) {
-                              return [
-                                participant.tripRole == ParticipantTripRole.VIEWER
-                                  ? const PopupMenuItem(
-                                      value: 'promote',
-                                      child: Text('Accorder les droits d\'édition'),
-                                    )
-                                  : const PopupMenuItem(
-                                      value: 'demote',
-                                      child: Text('Retirer les droits d\'édition'),
-                                    ),
-                                const PopupMenuItem(
-                                  value: 'kick',
-                                  child: Text(
-                                    'Exclure',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                              ];
-                            },
-                            onSelected: (value) async {
-                              if (value == 'kick') {
-                                await participantService.remove(tripId, participant.id);
-                              } else if (value == 'promote') {
-                                await participantService.changeRole(tripId, participant.id, ParticipantTripRole.EDITOR);
-                              } else if (value == 'demote') {
-                                await participantService.changeRole(tripId, participant.id, ParticipantTripRole.VIEWER);
-                              }
-                              context.read<ParticipantBloc>().add(ParticipantDataFetch(tripId));
-                            },
-                          ),
+
+                    return ParticipantRow(
+                      participant: participant,
+                      showTrailingButton: iAmTheOwner,
+                      tripId: tripId,
+                      onAction: () {
+                        context.read<ParticipantBloc>().add(ParticipantDataFetch(tripId));
+                      },
                     );
                   },
                 );
