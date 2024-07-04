@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPageChanged: changePage,
                     children: state.trips.map((trip) {
                       return TripCard(
+                        tripId: trip.id,
                         onTap: () async {
                           await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
                           context.read<HomeBloc>().add(HomeDataFetch());

@@ -8,6 +8,7 @@ import 'package:move_together_app/core/models/participant.dart';
 import 'package:move_together_app/utils/show_unified_dialog.dart';
 
 class TripCard extends StatelessWidget {
+  final int tripId;
   final String imageUrl;
   final String name;
   final DateTime startDate;
@@ -20,6 +21,7 @@ class TripCard extends StatelessWidget {
 
   const TripCard({
     super.key,
+    required this.tripId,
     required this.imageUrl,
     required this.name,
     required this.startDate,
@@ -66,7 +68,10 @@ class TripCard extends StatelessWidget {
                 right: 10,
                 child: Row(
                   children: [
-                    ParticipantIcons(participants: participants),
+                    ParticipantIcons(
+                      participants: participants,
+                      onTap: () => context.goNamed('participants', pathParameters: {'tripId': tripId.toString()}),
+                    ),
                     ...!isCurrentUserOwner ? [
                       const SizedBox(width: 10),
                       Container(
