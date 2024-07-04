@@ -19,6 +19,7 @@ class TripCard extends StatelessWidget {
   final Function() onLeave;
   final Function() onDelete;
   final bool isCurrentUserOwner;
+  final Function() onParticipantsTap;
 
   const TripCard({
     super.key,
@@ -33,6 +34,7 @@ class TripCard extends StatelessWidget {
     required this.onLeave,
     required this.onDelete,
     required this.isCurrentUserOwner,
+    required this.onParticipantsTap,
   });
 
   @override
@@ -72,15 +74,7 @@ class TripCard extends StatelessWidget {
                   children: [
                     ParticipantIcons(
                       participants: participants,
-                      onTap: () => context.goNamed(
-                        'participants',
-                        pathParameters: {
-                          'tripId': tripId.toString()
-                        },
-                        queryParameters: {
-                          'inviteCode': inviteCode,
-                        },
-                      ),
+                      onTap: onParticipantsTap,
                     ),
                     ...!isCurrentUserOwner ? [
                       const SizedBox(width: 10),

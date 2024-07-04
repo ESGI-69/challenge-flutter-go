@@ -80,6 +80,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         inviteCode: trip.inviteCode,
                         participants: trip.participants,
                         isCurrentUserOwner: trip.isCurrentUserOwner(context),
+                        onParticipantsTap: () async {
+                          await context.pushNamed(
+                            'participants',
+                            pathParameters: {
+                              'tripId': trip.id.toString(),
+                            },
+                            queryParameters: {
+                              'inviteCode': trip.inviteCode,
+                            },
+                          );
+                          context.read<HomeBloc>().add(HomeDataFetch());
+                        },
                       );
                     }).toList(),
                     ),
