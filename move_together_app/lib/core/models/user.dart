@@ -28,7 +28,7 @@ class User {
     return {
       'id': id,
       'name': name,
-      'role': role,
+      'role': role.toString().split('.').last,
     };
   }
 
