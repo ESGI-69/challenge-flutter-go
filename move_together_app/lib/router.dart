@@ -123,7 +123,7 @@ final GoRouter backOfficeRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      name: 'home',
+      name: 'dashboard',
       builder: (context, state) => const DashboardScreen(),
     ),
     GoRoute(
