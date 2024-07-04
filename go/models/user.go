@@ -43,3 +43,7 @@ func (user *User) BeforeSave(tx *gorm.DB) (err error) {
 	user.HashPassword()
 	return
 }
+
+func (user *User) IsAdmin() bool {
+	return user.Role == UserRoleAdmin
+}

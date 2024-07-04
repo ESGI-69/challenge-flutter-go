@@ -405,3 +405,28 @@ func (handler *TripHandler) DownloadTripBanner(context *gin.Context) {
 	}
 
 }
+
+func (handler *TripHandler) GetAll(context *gin.Context) {
+	trips, err := handler.Repository.GetAll()
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	responseTrips := make([]responses.TripResponse, len(trips))
+	for i, trip := range trips {
+		responseTrips[i] = responses.TripResponse{
+			ID:           trip.ID,
+			Name:         trip.Name,
+			Country:      trip.Country,
+			City:         trip.City,
+			StartDate:    trip.StartDate.Format(time.RFC3339),
+			EndDate:      trip.EndDate.Format(time.RFC3339),
+			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
+			InviteCode:   trip.InviteCode,
+		}
+	}
+
+	context.JSON(http.StatusOK, responseTrips)
+	logger.ApiInfo(context, "Get all trips")
+}

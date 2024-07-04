@@ -122,6 +122,12 @@ func setRoutes() {
 
 	router.POST("/login", authHandler.Login)
 
+	adminsRoutes := router.Group("/admin", middlewares.UserIsAdmin)
+	adminsTripRoutes := adminsRoutes.Group("/trips")
+	adminsTripRoutes.GET("", tripHandler.GetAll)
+	adminsTripRoutes.GET("/:id", tripHandler.Get)
+	adminsTripRoutes.DELETE("/:id", tripHandler.Delete)
+
 	usersRoutes := router.Group("/users")
 	usersRoutes.POST("", userHandler.Create)
 	usersRoutes.GET("/:id", middlewares.UserIsLogged, userHandler.Get)

@@ -18,6 +18,11 @@ func (t *TripRepository) Create(trip *models.Trip) error {
 	return t.Database.Create(&trip).Error
 }
 
+func (t *TripRepository) GetAll() (trips []models.Trip, err error) {
+	err = t.Database.Preload(clause.Associations).Find(&trips).Error
+	return
+}
+
 func (t *TripRepository) Get(id string) (trip models.Trip, err error) {
 	err = t.Database.Preload(clause.Associations).Preload("Transports."+clause.Associations).First(&trip, id).Error
 	return
