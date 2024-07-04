@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ParticipantAddModal extends StatelessWidget {
   final String inviteCode;
@@ -32,7 +33,7 @@ class ParticipantAddModal extends StatelessWidget {
                 fontSize: 16,
               )
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -43,12 +44,33 @@ class ParticipantAddModal extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Text(
-                  inviteCode,
-                  style: Theme.of(context).textTheme.displayLarge,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      inviteCode,
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                    const SizedBox(width: 16),
+                    GestureDetector(
+                      child: Icon(
+                        Icons.copy,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: inviteCode));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Code copié dans le presse-papier'),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
+            const SizedBox(height: 32),
           ],
         ),
       ),
