@@ -10,6 +10,7 @@ class TripFeatureCard extends StatelessWidget {
   final Function? onTitleTap;
   final Widget? Function(BuildContext context, int index) itemBuilder;
   final bool showAddButton;
+  final bool showTitleArrow;
 
   const TripFeatureCard({
     super.key,
@@ -22,6 +23,7 @@ class TripFeatureCard extends StatelessWidget {
     this.onTitleTap,
     required this.itemBuilder,
     this.showAddButton = false,
+    this.showTitleArrow = false,
   });
 
   @override
@@ -49,6 +51,7 @@ class TripFeatureCard extends StatelessWidget {
               title: title,
               showAddButton: showAddButton,
               isLoading: isLoading,
+              showTitleArrow: showTitleArrow,
               onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
               onAddTap: onAddTap != null ? () => onAddTap!() : null,
             ),
@@ -100,11 +103,13 @@ class _Header extends StatelessWidget {
   final Function? onAddTap;
   final bool isLoading;
   final bool showAddButton;
+  final bool showTitleArrow;
 
   const _Header({
     required this.icon,
     required this.title,
     required this.showAddButton,
+    required this.showTitleArrow,
     this.onTitleTap,
     this.onAddTap,
     this.isLoading = false,
@@ -149,6 +154,7 @@ class _Header extends StatelessWidget {
                 _HeaderTitle(
                   isLoading: isLoading,
                   title: title,
+                  showArrow: showTitleArrow,
                   onTitleTap: !isLoading && onTitleTap != null ? () => onTitleTap!() : () {},
                 ),
               ],
@@ -173,17 +179,25 @@ class _HeaderTitle extends StatelessWidget {
   final bool isLoading;
   final String title;
   final Function onTitleTap;
+  final bool showArrow;
 
   const _HeaderTitle({
     this.isLoading = false,
     required this.title,
     required this.onTitleTap,
+    required this.showArrow,
   });
+
+  _onTap() {
+    if (!isLoading && showArrow) {
+      onTitleTap();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTitleTap(),
+      onTap: _onTap,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -194,7 +208,7 @@ class _HeaderTitle extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          ...isLoading ? [] : [
+          ...isLoading || !showArrow ? [] : [
             const SizedBox(width: 4),
             Container(
               width: 16,

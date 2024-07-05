@@ -32,7 +32,6 @@ class TransportCard extends StatelessWidget {
               icon: Icons.directions_car,
               isLoading: state is TransportsDataLoading,
               length: state.transports.length,
-              // ignore: avoid_print
               onAddTap: () {
                 showModalBottomSheet(
                   context: context,
@@ -45,8 +44,7 @@ class TransportCard extends StatelessWidget {
                   ),
                 );
               },
-              // ignore: avoid_print
-              onTitleTap: () {print('title tap');},
+              onTitleTap: () {},
               itemBuilder: (context, index) {
                 return TransportRow(
                   transport: state.transports[index],
