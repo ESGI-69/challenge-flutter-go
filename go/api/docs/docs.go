@@ -1959,9 +1959,6 @@ const docTemplate = `{
                 "owner": {
                     "$ref": "#/definitions/responses.UserResponse"
                 },
-                "path": {
-                    "type": "string"
-                },
                 "title": {
                     "type": "string"
                 },

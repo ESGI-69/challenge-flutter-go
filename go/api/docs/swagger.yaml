@@ -240,8 +240,6 @@ definitions:
         type: integer
       owner:
         $ref: '#/definitions/responses.UserResponse'
-      path:
-        type: string
       title:
         type: string
       updateAt:
