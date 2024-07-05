@@ -11,12 +11,13 @@ class TripFeatureCard extends StatelessWidget {
   final Widget? Function(BuildContext context, int index) itemBuilder;
   final bool showAddButton;
   final bool showTitleArrow;
+  final bool isFullGridView;
 
   const TripFeatureCard({
     super.key,
     this.isLoading = false,
     this.length = 0,
-    this.emptyMessage = 'No elements',
+    this.emptyMessage = 'Pas d\'éléments',
     required this.icon,
     required this.title,
     this.onAddTap,
@@ -24,11 +25,14 @@ class TripFeatureCard extends StatelessWidget {
     required this.itemBuilder,
     this.showAddButton = false,
     this.showTitleArrow = false,
+    this.isFullGridView = false,
   });
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.hardEdge,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(12)),
         color: Colors.white,
@@ -40,56 +44,141 @@ class TripFeatureCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 6,
-        ),
-        child: Column(
-          children: [
-            _Header(
-              icon: icon,
-              title: title,
-              showAddButton: showAddButton,
+      child: Column(
+        children: [
+          _Header(
+            icon: icon,
+            title: title,
+            showAddButton: showAddButton,
+            isLoading: isLoading,
+            showTitleArrow: showTitleArrow,
+            onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
+            onAddTap: onAddTap != null ? () => onAddTap!() : null,
+          ),
+          isFullGridView
+            ? _GridBody(
               isLoading: isLoading,
-              showTitleArrow: showTitleArrow,
-              onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
-              onAddTap: onAddTap != null ? () => onAddTap!() : null,
+              length: length,
+              emptyMessage: emptyMessage,
+              itemBuilder: itemBuilder,
+            )
+            : _RowBody(
+              isLoading: isLoading,
+              length: length,
+              emptyMessage: emptyMessage,
+              itemBuilder: itemBuilder,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 6,
-                horizontal: 16,
-              ),
-              child: isLoading
-                ? const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : length == 0
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 48),
-                        child: Text(
-                          emptyMessage,
-                          style: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 12,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                  : ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 125),
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(height: 8),
-                      itemCount: length,
-                      itemBuilder: itemBuilder,
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                    )
-                  )
+        ],
+      ),
+    );
+  }
+}
+
+class _RowBody extends StatelessWidget {
+  final bool isLoading;
+  final int length;
+  final String emptyMessage;
+  final Widget? Function(BuildContext context, int index) itemBuilder;
+
+  const _RowBody({
+    this.isLoading = false,
+    this.length = 0,
+    required this.emptyMessage,
+    required this.itemBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 6,
+        bottom: 12,
+        left: 16,
+        right: 16,
+      ),
+      child: isLoading
+        ? const Center(
+            child: CircularProgressIndicator.adaptive(),
+          )
+        : length == 0
+          ? _EmptyBody(message: emptyMessage)
+          : ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 125),
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              itemCount: length,
+              itemBuilder: itemBuilder,
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+            )
+          )
+    );
+  }
+}
+
+class _GridBody extends StatelessWidget {
+  final bool isLoading;
+  final int length;
+  final String emptyMessage;
+  final Widget? Function(BuildContext context, int index) itemBuilder;
+
+  const _GridBody({
+    this.isLoading = false,
+    this.length = 0,
+    this.emptyMessage = 'No elements',
+    required this.itemBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+      ? const Center(
+          child: CircularProgressIndicator.adaptive(),
+        )
+      : length == 0
+        ? Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 6,
+            horizontal: 16,
+          ),
+          child: _EmptyBody(message: emptyMessage),
+        )
+        : ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 200),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 1,
+              mainAxisSpacing: 1,
             ),
-          ],
+            itemCount: length,
+            itemBuilder: itemBuilder,
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+          ),
+        );
+  }
+}
+
+class _EmptyBody extends StatelessWidget {
+  final String message;
+
+  const _EmptyBody({
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Text(
+          message,
+          style: const TextStyle(
+            color: Colors.black54,
+            fontSize: 12,
+          ),
+          textAlign: TextAlign.center,
         ),
       ),
     );
