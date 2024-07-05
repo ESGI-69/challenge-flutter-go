@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Document/bloc/document_bloc.dart';
+import 'package:move_together_app/Document/document_info_modal.dart';
+import 'package:move_together_app/Document/document_row.dart';
 import 'package:move_together_app/Transport/transport_create_modal.dart';
 import 'package:move_together_app/Transport/transport_info_modal.dart';
 import 'package:move_together_app/Transport/transport_row.dart';
@@ -39,16 +41,20 @@ class DocumentCard extends StatelessWidget {
                 print('title tap');
               },
               itemBuilder: (context, index) {
-                return Row(
-                  children: [
-                    Text(state.documents[index].title),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        state.documents.remove(state.documents[index]);
+                return DocumentRow(
+                  document: state.documents[index],
+                  onTap: () => showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) => DocumentInfoModal(
+                      document: state.documents[index],
+                      hasTripEditPermission: userHasEditPermission,
+                      isTripOwner: userIsOwner,
+                      onDocumentDeleted: (document) => {
+                        state.documents.remove(document),
                       },
-                    )
-                  ],
+                      tripId: tripId,
+                    ),
+                  ),
                 );
               }
             );
