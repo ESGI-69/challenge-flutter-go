@@ -153,15 +153,6 @@ func (handler *PhotoHandler) DownloadPhoto(context *gin.Context) {
 		return
 	}
 
-	tripID := context.Param("id")
-	tripIDUint, _ := strconv.ParseUint(tripID, 10, 32)
-
-	if photo.TripID != uint(tripIDUint) {
-		logger.ApiError(context, "Photo does not belong to the trip")
-		context.JSON(http.StatusForbidden, gin.H{"error": "Photo does not belong to the trip"})
-		return
-	}
-
 	filepath, errFilePath := utils.GetFilePath("photo", photo.Path)
 	if errFilePath != nil {
 		logger.ApiError(context, "Failed to get file path "+photo.Path)

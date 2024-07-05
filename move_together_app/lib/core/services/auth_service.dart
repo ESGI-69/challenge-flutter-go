@@ -22,7 +22,7 @@ class AuthService {
         response.statusCode! < 300) {
       final String token = response.data['token'];
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-      authProvider.login(decodedToken['id'], decodedToken['role']);
+      authProvider.login(decodedToken['id'], decodedToken['role'], token);
 
       return token;
     } else {

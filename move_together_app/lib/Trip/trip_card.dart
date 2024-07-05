@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Button/button_leave.dart';
 import 'package:move_together_app/Widgets/Button/button_delete.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
@@ -66,6 +68,9 @@ class TripCard extends StatelessWidget {
                   height: double.infinity,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  headers: {
+                    'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
+                  },
                 ),
               ),
               Positioned(
