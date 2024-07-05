@@ -37,6 +37,7 @@ class PhotoCard extends StatelessWidget {
               isFullGridView: true,
               onAddTap: () async {
                 final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                // ignore: avoid_print
                 print(image);
               },
               itemBuilder: (context, index) => PhotoItem(photoUrl: '${dotenv.env['API_ADDRESS']}/trips/$tripId/photos/${state.photos[index].id}/download'),
@@ -52,6 +53,7 @@ class PhotoCard extends StatelessWidget {
               isFullGridView: true,
               onAddTap: () async {
                 final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                // ignore: avoid_print
                 print(image);
               },
               itemBuilder: (context, index) => const PhotoItem(photoUrl: ''),
@@ -67,6 +69,7 @@ class PhotoCard extends StatelessWidget {
               isFullGridView: true,
               onAddTap: () async {
                 final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                // ignore: avoid_print
                 print(image);
               },
               itemBuilder: (context, index) => const PhotoItem(photoUrl: ''),

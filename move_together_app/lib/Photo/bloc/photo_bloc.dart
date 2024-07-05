@@ -18,7 +18,6 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
         final photos = await photoService.getAll(event.tripId);
         emit(PhotosDataLoadingSuccess(photos: photos));
       } catch (error) {
-        print(error);
         emit(PhotosDataLoadingError(errorMessage: 'Failed to get photos'));
       }
     });
