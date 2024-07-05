@@ -13,7 +13,7 @@ type PhotoRepository struct {
 
 // Get a photo by its ID
 func (d *PhotoRepository) Get(id string) (photo models.Photo, err error) {
-	err = d.Database.First(&photo, id).Error
+	err = d.Database.Preload(clause.Associations).First(&photo, id).Error
 	return
 }
 
@@ -24,7 +24,7 @@ func (d *PhotoRepository) Create(photo *models.Photo) error {
 
 // Get all the photos of a trip
 func (d *PhotoRepository) GetPhotos(tripId string) (photos []models.Photo, err error) {
-	err = d.Database.Model(&models.Photo{}).Where("trip_id = ?", tripId).Find(&photos).Error
+	err = d.Database.Model(&models.Photo{}).Preload(clause.Associations).Where("trip_id = ?", tripId).Find(&photos).Error
 	return
 }
 

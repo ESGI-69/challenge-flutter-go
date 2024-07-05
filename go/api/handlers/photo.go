@@ -48,6 +48,10 @@ func (handler *PhotoHandler) GetPhotosOfTrip(context *gin.Context) {
 			Path:        photo.Path,
 			CreatedAt:   photo.CreatedAt.Format(time.RFC3339),
 			UpdateAt:    photo.UpdatedAt.Format(time.RFC3339),
+			Owner: responses.UserResponse{
+				ID:       photo.Owner.ID,
+				Username: photo.Owner.Username,
+			},
 		}
 	}
 	context.JSON(http.StatusOK, photoResponses)
@@ -119,6 +123,10 @@ func (handler *PhotoHandler) CreatePhoto(context *gin.Context) {
 		Path:        photo.Path,
 		CreatedAt:   photo.CreatedAt.Format(time.RFC3339),
 		UpdateAt:    photo.UpdatedAt.Format(time.RFC3339),
+		Owner: responses.UserResponse{
+			ID:       photo.Owner.ID,
+			Username: photo.Owner.Username,
+		},
 	}
 
 	context.JSON(200, photoResponse)

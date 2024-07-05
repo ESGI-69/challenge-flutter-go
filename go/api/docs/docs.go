@@ -1956,6 +1956,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "owner": {
+                    "$ref": "#/definitions/responses.UserResponse"
+                },
                 "path": {
                     "type": "string"
                 },
