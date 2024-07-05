@@ -63,6 +63,7 @@ class TripCard extends StatelessWidget {
                 ),
                 child: Image.network(
                   imageUrl,
+                  height: double.infinity,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
