@@ -1073,6 +1073,12 @@ paths:
       produces:
       - application/json
       responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.PhotoResponse'
+            type: array
         "400":
           description: Bad Request
           schema: {}

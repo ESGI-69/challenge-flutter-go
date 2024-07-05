@@ -1224,6 +1224,15 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.PhotoResponse"
+                            }
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {}

@@ -26,6 +26,7 @@ type PhotoHandler struct {
 // @Produce		json
 // @Security		BearerAuth
 // @Param			id		path		string	true	"ID of the trip"
+// @Success		200		{object}	[]responses.PhotoResponse
 // @Failure		400		{object}	error
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/photos [get]
