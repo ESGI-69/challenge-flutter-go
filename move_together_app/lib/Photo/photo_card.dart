@@ -4,7 +4,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:move_together_app/Photo/bloc/photo_bloc.dart';
 import 'package:move_together_app/Photo/photo_item.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
+import 'package:move_together_app/core/services/photo_service.dart';
 
 class PhotoCard extends StatelessWidget {
   final int tripId;
@@ -22,6 +24,8 @@ class PhotoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final photoService = PhotoService(context.read<AuthProvider>());
+
     return BlocProvider(
       create: (context) => PhotoBloc(context)..add(PhotosDataFetch(tripId)),
       child: BlocBuilder<PhotoBloc, PhotoState>(
@@ -37,8 +41,10 @@ class PhotoCard extends StatelessWidget {
               isFullGridView: true,
               onAddTap: () async {
                 final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                // ignore: avoid_print
-                print(image);
+                if (image != null) {
+                  await photoService.create(tripId, image);
+                  context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
+                }
               },
               itemBuilder: (context, index) => PhotoItem(photoUrl: '${dotenv.env['API_ADDRESS']}/trips/$tripId/photos/${state.photos[index].id}/download'),
             );
@@ -51,11 +57,7 @@ class PhotoCard extends StatelessWidget {
               isLoading: state is PhotosDataLoading,
               length: 0,
               isFullGridView: true,
-              onAddTap: () async {
-                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                // ignore: avoid_print
-                print(image);
-              },
+              onAddTap: () {},
               itemBuilder: (context, index) => const PhotoItem(photoUrl: ''),
             );
           } else if (state is PhotosDataLoading) {
@@ -67,11 +69,7 @@ class PhotoCard extends StatelessWidget {
               isLoading: true,
               length: 0,
               isFullGridView: true,
-              onAddTap: () async {
-                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                // ignore: avoid_print
-                print(image);
-              },
+              onAddTap: () {},
               itemBuilder: (context, index) => const PhotoItem(photoUrl: ''),
             );
           } else {
