@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Backoffice/Trip/bloc/trips_bloc.dart';
 import 'package:move_together_app/Backoffice/Trip/trip_row.dart';
 import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BackofficeTripsScreen extends StatefulWidget {
   const BackofficeTripsScreen({

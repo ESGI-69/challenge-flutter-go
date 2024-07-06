@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:move_together_app/core/models/participant.dart';
 
 class TripRow extends StatelessWidget {
   final int tripId;
