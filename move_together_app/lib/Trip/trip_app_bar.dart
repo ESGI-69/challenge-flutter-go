@@ -121,9 +121,12 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 35),
-                child: Image(
-                  image: NetworkImage(imageUrl),
+                child: Image.network(
+                  imageUrl,
                   fit: BoxFit.cover,
+                  headers: {
+                    'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
+                  }
                 ),
               ),
               Align(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 
 class PhotoInfo extends StatelessWidget {
   final String photoUrl;
@@ -16,6 +18,9 @@ class PhotoInfo extends StatelessWidget {
         child: Image.network(
           photoUrl,
           fit: BoxFit.contain,
+          headers: {
+            'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
+          },
         ),
       ),
     );
