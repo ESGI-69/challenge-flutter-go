@@ -36,9 +36,9 @@ class Accommodation {
       endDate: DateTime.parse(json['endDate']),
       address: json['address'],
       name: json['name'],
-      bookingUrl: json['bookingUrl'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
+      bookingUrl: json['bookingURL'],
+      latitude: json['latitude'] is int ? (json['latitude'] as int).toDouble() : json['latitude'],
+      longitude: json['longitude'] is int ? (json['longitude'] as int).toDouble() : json['longitude'],
     );
   }
   Map<String, dynamic> toJson() {

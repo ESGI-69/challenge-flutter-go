@@ -30,6 +30,8 @@ class AccommodationCreateModal extends StatefulWidget {
 class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
   AccommodationType _selectedAccommodationType = AccommodationType.hotel;
   final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _bookingUrlController = TextEditingController();
   DateTime _startDate = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _endDate = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -43,8 +45,8 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
       startDate: _startDate,
       endDate: _endDate,
       address: _addressController.text,
-      name: 'name',
-      bookingUrl: 'bookingUrl',
+      name: _nameController.text,
+      bookingUrl: _bookingUrlController.text,
     );
     widget.onAccommodationCreated(createdAccommodation);
   }
@@ -87,7 +89,7 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               CoolTextField(
                 controller: _addressController,
                 hintText: 'Adresse du lieu',
@@ -109,7 +111,6 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
                 },
               ),
               const SizedBox(height: 8),
-              const SizedBox(height: 8),
               CoolDateTimePicker(
                 hintText: 'Date de départ',
                 prefixIcon: Icons.calendar_today,
@@ -123,6 +124,18 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
                     _endDate = DateTime.fromMillisecondsSinceEpoch(0);
                   });
                 },
+              ),
+              const SizedBox(height: 36),
+                CoolTextField(
+                controller: _nameController,
+                hintText: "Nom de l'hébergement",
+                prefixIcon: Icons.tag,
+              ),
+              const SizedBox(height: 8),
+              CoolTextField(
+                controller: _bookingUrlController,
+                hintText: "Url de l'établissement",
+                prefixIcon: Icons.link,
               ),
               const SizedBox(height: 8),
               ElevatedButton(

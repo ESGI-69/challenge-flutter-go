@@ -5,6 +5,7 @@ import 'package:move_together_app/Accommodation/accommodation_create_modal.dart'
 import 'package:move_together_app/Accommodation/accommodation_info_modal.dart';
 import 'package:move_together_app/Accommodation/accommodation_row.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AccommodationCard extends StatelessWidget {
   final int tripId;
@@ -34,7 +35,7 @@ class AccommodationCard extends StatelessWidget {
               length: state.accommodations.length,
               // ignore: avoid_print
               onAddTap: () {
-                showModalBottomSheet(
+                showCupertinoModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) => AccommodationCreateModal(
                     tripId: tripId,
@@ -50,11 +51,10 @@ class AccommodationCard extends StatelessWidget {
               itemBuilder: (context, index) {
                 return AccommodationRow(
                   accommodation: state.accommodations[index],
-                  onTap: () => showModalBottomSheet(
+                  onTap: () => showCupertinoModalBottomSheet(
                     context: context,
-                    isScrollControlled: true,
                     builder: (BuildContext context) => FractionallySizedBox(
-                      heightFactor: 0.7,
+                      heightFactor: 0.8,
                       child: AccommodationInfoModal(
                         accommodation: state.accommodations[index],
                         hasTripEditPermission: userHasEditPermission,

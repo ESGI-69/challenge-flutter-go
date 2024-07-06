@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/accommodation.dart';
 import 'package:move_together_app/core/services/accommodation_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Map<AccommodationType, String> accommodationTypeString = {
   AccommodationType.hotel: 'Hotel',
@@ -36,6 +37,7 @@ class AccommodationInfoModal extends StatelessWidget {
       onAccommodationDeleted(accommodation);
     }
 
+    Uri urlParsed;
     return Container(
       margin: const EdgeInsets.only(bottom: 32),
       decoration: const BoxDecoration(
@@ -61,8 +63,31 @@ class AccommodationInfoModal extends StatelessWidget {
             Text(
               'Départ : le ${DateFormat.yMMMd().format(accommodation.endDate.toLocal())}',
             ),
-            //ajoute un bloc rouge (qui sera remplacé par une carte)
-            Container(color: Colors.red, height: 250, width: double.infinity),
+            (accommodation.bookingUrl != null && accommodation.bookingUrl!.isNotEmpty) ?
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              const Icon(
+                Icons.link,
+                color: Colors.green,
+              ),
+              TextButton(
+                onPressed: () {
+                if (accommodation.bookingUrl != null) {
+                  urlParsed = Uri.parse(accommodation.bookingUrl!);
+                  launchUrl(urlParsed);
+                }
+                },
+                child: Text(
+                'Lien de réservation',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+                ),
+              ),
+              ],
+            ) :
+            const SizedBox(),
             const SizedBox(height: 8),
             const SizedBox(height: 16),
               (hasTripEditPermission) || isTripOwner
