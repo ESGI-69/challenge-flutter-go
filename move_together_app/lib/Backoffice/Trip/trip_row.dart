@@ -105,15 +105,20 @@ class TripRow extends StatelessWidget {
                     ],
                   ),
                 ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    iconColor: WidgetStateProperty.all(Colors.red),
-                    padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        iconColor: WidgetStateProperty.all(Colors.red),
+                        padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+                      ),
+                      onPressed: () {
+                        onDelete();
+                      },
+                      child: const Icon(Icons.delete),
+                    ),
                   ),
-                  onPressed: () {
-                    onDelete();
-                  },
-                  child: const Icon(Icons.delete),
                 ),
               ]
             );

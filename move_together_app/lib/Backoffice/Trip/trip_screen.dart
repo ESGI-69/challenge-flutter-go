@@ -41,26 +41,39 @@ class _BackofficeTripsScreenState extends State<BackofficeTripsScreen> {
                   );
                 } else if (state is TripsDataLoadingSuccess) {
                   return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                     ),
-                    child: Flex(
-                        direction: Axis.vertical,
-                        children: state.trips.map((trip){
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TripRow(
-                              tripId: trip.id,
-                              onDelete: () => context.read<TripBloc>().add(TripDataDeleteTrip(trip)),
-                              name: trip.name,
-                              country: trip.country,
-                              city: trip.city,
-                              nbParticipants: (trip.participants.length),
-                            ),
-                          );
-                        }).toList(),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'LIST OF TRIPS',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF263238),
+                          ),
+                        ),
+                        Flex(
+                            direction: Axis.vertical,
+                            children: state.trips.map((trip){
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TripRow(
+                                  tripId: trip.id,
+                                  onDelete: () => context.read<TripBloc>().add(TripDataDeleteTrip(trip)),
+                                  name: trip.name,
+                                  country: trip.country,
+                                  city: trip.city,
+                                  nbParticipants: (trip.participants.length),
+                                ),
+                              );
+                            }).toList(),
 
-                      ),
+                          ),
+                      ],
+                    ),
                   );
                 }
                 return const SizedBox();
