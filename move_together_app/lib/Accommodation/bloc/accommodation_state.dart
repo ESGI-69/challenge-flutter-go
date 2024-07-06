@@ -5,7 +5,7 @@ sealed class AccommodationState {}
 
 final class AccommodationInitial extends AccommodationState {}
 
-final class AccommodationDataLoading extends AccommodationState {}
+final class AccommodationsDataLoading extends AccommodationState {}
 
 final class AccommodationsDataLoadingSuccess extends AccommodationState {
   final List<Accommodation> accommodations;

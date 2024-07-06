@@ -12,7 +12,7 @@ class AccommodationBloc extends Bloc<AccommodationEvent, AccommodationState> {
   AccommodationBloc(BuildContext context) : super(AccommodationInitial()) {
     final apiServices = AccommodationService(context.read<AuthProvider>());
     on<AccommodationsDataFetch>((event, emit) async {
-      emit(AccommodationDataLoading());
+      emit(AccommodationsDataLoading());
 
       try {
         final accommodations = await apiServices.getAll(event.tripId);

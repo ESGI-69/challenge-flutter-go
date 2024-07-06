@@ -1,5 +1,3 @@
-import 'package:move_together_app/core/models/user.dart';
-
 enum AccommodationType {
   hotel,
   airbnb,
@@ -12,7 +10,6 @@ class Accommodation {
   final DateTime startDate;
   final DateTime endDate;
   final String address;
-  final User author;
   final String name;
   final String? bookingUrl;
   final double? latitude;
@@ -26,7 +23,6 @@ class Accommodation {
     required this.endDate,
     required this.address,
     required this.name,
-    required this.author,
     this.bookingUrl,
     this.latitude,
     this.longitude,
@@ -40,7 +36,6 @@ class Accommodation {
       endDate: DateTime.parse(json['endDate']),
       address: json['address'],
       name: json['name'],
-      author: User.fromJson(json['author']),
       bookingUrl: json['bookingUrl'],
       latitude: json['latitude'],
       longitude: json['longitude'],
@@ -54,7 +49,6 @@ class Accommodation {
       'endDate': endDate,
       'address': address,
       'name': name,
-      'author': author.toJson(),
       'bookingUrl': bookingUrl,
       'latitude': latitude,
       'longitude': longitude,
