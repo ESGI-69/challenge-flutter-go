@@ -1964,6 +1964,9 @@ const docTemplate = `{
                 },
                 "updateAt": {
                     "type": "string"
+                },
+                "uri": {
+                    "type": "string"
                 }
             }
         },

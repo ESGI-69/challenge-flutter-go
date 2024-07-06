@@ -1955,6 +1955,9 @@
                 },
                 "updateAt": {
                     "type": "string"
+                },
+                "uri": {
+                    "type": "string"
                 }
             }
         },

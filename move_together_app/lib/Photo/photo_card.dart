@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:move_together_app/Photo/bloc/photo_bloc.dart';
 import 'package:move_together_app/Photo/photo_item.dart';
@@ -46,7 +45,7 @@ class PhotoCard extends StatelessWidget {
                   context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
                 }
               },
-              itemBuilder: (context, index) => PhotoItem(photoUrl: '${dotenv.env['API_ADDRESS']}/trips/$tripId/photos/${state.photos[index].id}/download'),
+              itemBuilder: (context, index) => PhotoItem(photo: state.photos[index]),
             );
           } else if (state is PhotosDataLoadingError) {
             return TripFeatureCard(
@@ -58,7 +57,7 @@ class PhotoCard extends StatelessWidget {
               length: 0,
               isFullGridView: true,
               onAddTap: () {},
-              itemBuilder: (context, index) => const PhotoItem(photoUrl: ''),
+              itemBuilder: (context, index) => const SizedBox(),
             );
           } else if (state is PhotosDataLoading) {
             return TripFeatureCard(
@@ -70,7 +69,7 @@ class PhotoCard extends StatelessWidget {
               length: 0,
               isFullGridView: true,
               onAddTap: () {},
-              itemBuilder: (context, index) => const PhotoItem(photoUrl: ''),
+              itemBuilder: (context, index) => const SizedBox(),
             );
           } else {
             return const SizedBox.shrink();

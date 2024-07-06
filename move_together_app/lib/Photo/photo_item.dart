@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Photo/photo_info.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/core/models/photo.dart';
 
 class PhotoItem extends StatelessWidget {
-  final String photoUrl;
+  final Photo photo;
 
   const PhotoItem({
     super.key,
-    required this.photoUrl,
+    required this.photo,
   });
 
   @override
@@ -18,11 +20,11 @@ class PhotoItem extends StatelessWidget {
       onTap: () {
         showCupertinoModalBottomSheet(
           context: context,
-          builder: (context) => PhotoInfo(photoUrl: photoUrl)
+          builder: (context) => PhotoInfo(photo: photo)
         );
       },
       child: Image.network(
-        photoUrl,
+        '${dotenv.env['API_ADDRESS']}${photo.uri}',
         fit: BoxFit.cover,
         headers: {
           'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
