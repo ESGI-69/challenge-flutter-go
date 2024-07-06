@@ -40,23 +40,28 @@ class _BackofficeTripsScreenState extends State<BackofficeTripsScreen> {
                     child: Text(state.errorMessage),
                   );
                 } else if (state is TripsDataLoadingSuccess) {
-                  return Flex(
-                      direction: Axis.vertical,
-                      children: state.trips.map((trip){
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TripRow(
-                            tripId: trip.id,
-                            onDelete: () => context.read<TripBloc>().add(TripDataDeleteTrip(trip)),
-                            name: trip.name,
-                            country: trip.country,
-                            city: trip.city,
-                            nbParticipants: (trip.participants.length),
-                          ),
-                        );
-                      }).toList(),
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Flex(
+                        direction: Axis.vertical,
+                        children: state.trips.map((trip){
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TripRow(
+                              tripId: trip.id,
+                              onDelete: () => context.read<TripBloc>().add(TripDataDeleteTrip(trip)),
+                              name: trip.name,
+                              country: trip.country,
+                              city: trip.city,
+                              nbParticipants: (trip.participants.length),
+                            ),
+                          );
+                        }).toList(),
 
-                    );
+                      ),
+                  );
                 }
                 return const SizedBox();
               }
