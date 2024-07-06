@@ -122,7 +122,7 @@ func setRoutes() {
 
 	router.POST("/login", authHandler.Login)
 
-	adminsRoutes := router.Group("/admin", middlewares.UserIsAdmin)
+	adminsRoutes := router.Group("/admin", middlewares.UserIsLogged, middlewares.UserIsAdmin)
 	adminsTripRoutes := adminsRoutes.Group("/trips")
 	adminsTripRoutes.GET("", tripHandler.GetAll)
 	adminsTripRoutes.GET("/:id", tripHandler.Get)

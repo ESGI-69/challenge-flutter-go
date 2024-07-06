@@ -1,15 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Backoffice/Trip/bloc/trips_bloc.dart';
+import 'package:move_together_app/Backoffice/Trip/trip_row.dart';
 import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class BackofficeTripScreen extends StatelessWidget {
-  const BackofficeTripScreen({super.key});
+class BackofficeTripsScreen extends StatefulWidget {
+  const BackofficeTripsScreen({
+    super.key
+  });
+
+  @override
+  State<BackofficeTripsScreen> createState() => _BackofficeTripsScreenState();
+}
+
+class _BackofficeTripsScreenState extends State<BackofficeTripsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: NavigationBarBackoffice(),
-      body: Center(
-        child: Text('Trip Screen for Backoffice'),
+    return Scaffold(
+      appBar: const NavigationBarBackoffice(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.pushNamed('join');
+        },
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add),
+      ),
+      body: BlocProvider(
+          create: (context) => TripBloc(context)..add(TripsDataFetch()),
+          child: BlocBuilder<TripBloc, TripsState>(
+              builder: (context, state) {
+                if (state is TripsDataLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is TripsDataLoadingError) {
+                  return Center(
+                    child: Text(state.errorMessage),
+                  );
+                } else if (state is TripsDataLoadingSuccess) {
+                  return Flex(
+                      direction: Axis.vertical,
+                      children: state.trips.map((trip){
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TripRow(
+                            tripId: trip.id,
+                            onDelete: () => context.read<TripBloc>().add(TripDataDeleteTrip(trip)),
+                            name: trip.name,
+                            country: trip.country,
+                            city: trip.city,
+                            nbParticipants: (trip.participants.length),
+                          ),
+                        );
+                      }).toList(),
+
+                    );
+                }
+                return const SizedBox();
+              }
+          )
       ),
     );
   }
