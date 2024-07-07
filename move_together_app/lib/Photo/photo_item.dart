@@ -7,10 +7,12 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/photo.dart';
 
 class PhotoItem extends StatelessWidget {
+  final int tripId;
   final Photo photo;
 
   const PhotoItem({
     super.key,
+    required this.tripId,
     required this.photo,
   });
 
@@ -20,7 +22,10 @@ class PhotoItem extends StatelessWidget {
       onTap: () {
         showCupertinoModalBottomSheet(
           context: context,
-          builder: (context) => PhotoInfo(photo: photo)
+          builder: (context) => PhotoInfo(
+            tripId: tripId,
+            photo: photo,
+          )
         );
       },
       child: Image.network(

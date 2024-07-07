@@ -45,7 +45,10 @@ class PhotoCard extends StatelessWidget {
                   context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
                 }
               },
-              itemBuilder: (context, index) => PhotoItem(photo: state.photos[index]),
+              itemBuilder: (context, index) => PhotoItem(
+                tripId: tripId,
+                photo: state.photos[index],
+              ),
             );
           } else if (state is PhotosDataLoadingError) {
             return TripFeatureCard(

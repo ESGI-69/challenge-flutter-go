@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
@@ -39,6 +41,31 @@ class PhotoService {
       return Photo.fromJson(response.data);
     } else {
       throw Exception('Failed to create photo');
+    }
+  }
+
+  Future<String> download(int tripId, int photoId) async {
+    final imagePath = '${Directory.systemTemp.path}/${photoId}_moove_together.jpg';
+    final response = await api.download(
+      '/trips/$tripId/photos/$photoId/download',
+      imagePath,
+    );
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return imagePath;
+    } else {
+      throw Exception('Failed to download photo');
+    }
+  }
+
+  Future<void> delete(int tripId, int photoId) async {
+    final response = await api.delete(
+      '/trips/$tripId/photos/$photoId',
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return;
+    } else {
+      throw Exception('Failed to delete photo');
     }
   }
 }
