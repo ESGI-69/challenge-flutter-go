@@ -48,6 +48,9 @@ class PhotoCard extends StatelessWidget {
               itemBuilder: (context, index) => PhotoItem(
                 tripId: tripId,
                 photo: state.photos[index],
+                onDeleteSuccess: (photo) {
+                  state.photos.remove(photo);
+                },
               ),
             );
           } else if (state is PhotosDataLoadingError) {

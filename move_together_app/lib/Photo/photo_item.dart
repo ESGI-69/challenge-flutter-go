@@ -9,11 +9,13 @@ import 'package:move_together_app/core/models/photo.dart';
 class PhotoItem extends StatelessWidget {
   final int tripId;
   final Photo photo;
+  final Function(Photo) onDeleteSuccess;
 
   const PhotoItem({
     super.key,
     required this.tripId,
     required this.photo,
+    required this.onDeleteSuccess,
   });
 
   @override
@@ -25,6 +27,7 @@ class PhotoItem extends StatelessWidget {
           builder: (context) => PhotoInfo(
             tripId: tripId,
             photo: photo,
+            onDeleteSuccess: onDeleteSuccess,
           )
         );
       },
