@@ -57,6 +57,8 @@ dependencies:
   gal: ^2.3.0
   file_picker: ^8.0.6
   open_file: ^3.3.2
+  google_maps_flutter: ^2.7.0
+  flutter_osm_plugin: ^0.70.4
 
 dev_dependencies:
   flutter_test:

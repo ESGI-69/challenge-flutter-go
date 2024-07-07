@@ -6,6 +6,7 @@ import 'package:move_together_app/Document/document_card.dart';
 import 'package:move_together_app/Transport/transport_card.dart';
 import 'package:move_together_app/Note/note_card.dart';
 import 'package:move_together_app/core/models/trip.dart';
+import 'package:move_together_app/Trip/trip_map.dart';
 
 class TripBody extends StatelessWidget {
   final Trip trip;
@@ -53,6 +54,7 @@ class TripBody extends StatelessWidget {
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
+          const TripMap(),
         ],
       ),
     );
