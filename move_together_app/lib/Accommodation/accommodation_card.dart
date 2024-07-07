@@ -33,7 +33,6 @@ class AccommodationCard extends StatelessWidget {
               icon: Icons.home,
               isLoading: state is AccommodationsDataLoading,
               length: state.accommodations.length,
-              // ignore: avoid_print
               onAddTap: () {
                 showCupertinoModalBottomSheet(
                   context: context,
@@ -46,8 +45,7 @@ class AccommodationCard extends StatelessWidget {
                   ),
                 );
               },
-              // ignore: avoid_print
-              onTitleTap: () {print('title tap');},
+              onTitleTap: () {},
               itemBuilder: (context, index) {
                 return AccommodationRow(
                   accommodation: state.accommodations[index],
