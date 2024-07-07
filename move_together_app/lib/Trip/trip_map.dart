@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:move_together_app/Accommodation/bloc/accommodation_bloc.dart';
 
 class TripMap extends StatefulWidget {
-  const TripMap({Key? key}) : super(key: key);
+  final int tripId;
+
+  const TripMap({
+    super.key,
+    required this.tripId,
+  });
 
   @override
   State<TripMap> createState() => _TripMapState();
@@ -10,7 +17,6 @@ class TripMap extends StatefulWidget {
 
 class _TripMapState extends State<TripMap> {
   GoogleMapController? mapController;
-  final LatLng _center = const LatLng(45.521563, -122.677433);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -22,27 +28,48 @@ class _TripMapState extends State<TripMap> {
     super.dispose();
   }
 
+  Set<Marker> _createMarkers(List<dynamic> accommodations) {
+    return accommodations.map((accommodation) {
+      return Marker(
+        markerId: MarkerId(accommodation.id.toString()),
+        position: LatLng(accommodation.latitude, accommodation.longitude),
+        infoWindow: InfoWindow(
+          title: "${accommodation.name} - ${accommodation.address}", 
+          snippet: "${accommodation.latitude}, ${accommodation.longitude}"
+        ),
+      );
+    }).toSet();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 300,
-      width: double.infinity,
-      child: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: _center,
-          zoom: 11.0,
-        ),
-        markers: {
-          Marker(
-            markerId: const MarkerId('1'),
-            position: const LatLng(45.521563, -122.677433),
-            infoWindow: const InfoWindow(
-              title: 'Portland',
-              snippet: 'Oregon',
-            ),
-          ),
-        }
+    return BlocProvider(
+      create: (context) => AccommodationBloc(context)..add(AccommodationsDataFetch(widget.tripId)),
+      child: BlocBuilder<AccommodationBloc, AccommodationState>(
+        builder: (context, state) {
+          if (state is AccommodationsDataLoadingSuccess) {
+            return SizedBox(
+              height: 300,
+              width: double.infinity,
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                    target: state.accommodations.isNotEmpty
+                      ? LatLng(state.accommodations[0].latitude!, state.accommodations[0].longitude!)
+                      : const LatLng(48.866667, 2.333333),
+                  zoom: 11.0,
+                ),
+                markers: _createMarkers(state.accommodations),
+              ),
+            );
+          } else {
+            return Center(
+              child: state is AccommodationsDataLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Error loading accommodations'),
+            );
+          }
+        },
       ),
     );
   }
