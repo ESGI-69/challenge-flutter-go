@@ -7,10 +7,9 @@ class TripFeatureCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final Function? onAddTap;
-  final Function? onTitleTap;
+  final Function()? onTitleTap;
   final Widget? Function(BuildContext context, int index) itemBuilder;
   final bool showAddButton;
-  final bool showTitleArrow;
   final bool isFullGridView;
 
   const TripFeatureCard({
@@ -24,7 +23,6 @@ class TripFeatureCard extends StatelessWidget {
     this.onTitleTap,
     required this.itemBuilder,
     this.showAddButton = false,
-    this.showTitleArrow = false,
     this.isFullGridView = false,
   });
 
@@ -51,7 +49,7 @@ class TripFeatureCard extends StatelessWidget {
             title: title,
             showAddButton: showAddButton,
             isLoading: isLoading,
-            showTitleArrow: showTitleArrow,
+            showTitleArrow: onTitleTap != null,
             onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
             onAddTap: onAddTap != null ? () => onAddTap!() : null,
           ),

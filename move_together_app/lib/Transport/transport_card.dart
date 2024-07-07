@@ -44,7 +44,6 @@ class TransportCard extends StatelessWidget {
                   ),
                 );
               },
-              onTitleTap: () {},
               itemBuilder: (context, index) {
                 return TransportRow(
                   transport: state.transports[index],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:move_together_app/Photo/bloc/photo_bloc.dart';
 import 'package:move_together_app/Photo/photo_item.dart';
@@ -44,6 +45,10 @@ class PhotoCard extends StatelessWidget {
                   await photoService.create(tripId, image);
                   context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
                 }
+              },
+              onTitleTap: () async {
+                await context.pushNamed('photos', pathParameters: { 'tripId': tripId.toString() });
+                context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
               },
               itemBuilder: (context, index) => PhotoItem(
                 tripId: tripId,
