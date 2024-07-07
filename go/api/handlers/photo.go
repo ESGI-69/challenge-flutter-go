@@ -26,6 +26,7 @@ type PhotoHandler struct {
 // @Produce		json
 // @Security		BearerAuth
 // @Param			id		path		string	true	"ID of the trip"
+// @Success		200		{object}	[]responses.PhotoResponse
 // @Failure		400		{object}	error
 // @Failure		401		{object}	error
 // @Router			/trips/{id}/photos [get]
@@ -44,9 +45,13 @@ func (handler *PhotoHandler) GetPhotosOfTrip(context *gin.Context) {
 			ID:          photo.ID,
 			Title:       photo.Title,
 			Description: photo.Description,
-			Path:        photo.Path,
+			Uri:         "/trips/" + tripId + "/photos/" + strconv.FormatUint(uint64(photo.ID), 10) + "/download",
 			CreatedAt:   photo.CreatedAt.Format(time.RFC3339),
 			UpdateAt:    photo.UpdatedAt.Format(time.RFC3339),
+			Owner: responses.UserResponse{
+				ID:       photo.Owner.ID,
+				Username: photo.Owner.Username,
+			},
 		}
 	}
 	context.JSON(http.StatusOK, photoResponses)
@@ -115,9 +120,13 @@ func (handler *PhotoHandler) CreatePhoto(context *gin.Context) {
 		ID:          photo.ID,
 		Title:       photo.Title,
 		Description: photo.Description,
-		Path:        photo.Path,
+		Uri:         "/trips/" + tripIdStr + "/photos/" + strconv.FormatUint(uint64(photo.ID), 10) + "/download",
 		CreatedAt:   photo.CreatedAt.Format(time.RFC3339),
 		UpdateAt:    photo.UpdatedAt.Format(time.RFC3339),
+		Owner: responses.UserResponse{
+			ID:       photo.Owner.ID,
+			Username: photo.Owner.Username,
+		},
 	}
 
 	context.JSON(200, photoResponse)
@@ -143,15 +152,6 @@ func (handler *PhotoHandler) DownloadPhoto(context *gin.Context) {
 	photo, errPhoto := handler.Repository.Get(photoID)
 	if errPhoto != nil {
 		errorHandlers.HandleGormErrors(errPhoto, context)
-		return
-	}
-
-	tripID := context.Param("id")
-	tripIDUint, _ := strconv.ParseUint(tripID, 10, 32)
-
-	if photo.TripID != uint(tripIDUint) {
-		logger.ApiError(context, "Photo does not belong to the trip")
-		context.JSON(http.StatusForbidden, gin.H{"error": "Photo does not belong to the trip"})
 		return
 	}
 

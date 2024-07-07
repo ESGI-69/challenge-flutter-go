@@ -5,8 +5,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class AuthProvider extends ChangeNotifier {
   int _userId = 0;
   String _role = '';
+  String _token = '';
   int get userId => _userId;
   String get role => _role;
+  String get token => _token;
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   AuthProvider() {
@@ -21,6 +23,7 @@ class AuthProvider extends ChangeNotifier {
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       _userId = decodedToken['id'];
       _role = decodedToken['role'];
+      _token = token;
       notifyListeners();
     }
   }
@@ -39,10 +42,15 @@ class AuthProvider extends ChangeNotifier {
     return decodedToken['role'] == 'ADMIN';
   }
 
-  void login(int userId, String role) async {
+  void login(int userId, String role, String token) async {
     _userId = userId;
     _role = role;
+    _token = token;
     notifyListeners();
+  }
+
+  String getAuthorizationHeader() {
+    return 'Bearer $_token';
   }
 
   logout() async {

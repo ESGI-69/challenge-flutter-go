@@ -1215,6 +1215,15 @@
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.PhotoResponse"
+                            }
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {}
@@ -1938,13 +1947,16 @@
                 "id": {
                     "type": "integer"
                 },
-                "path": {
-                    "type": "string"
+                "owner": {
+                    "$ref": "#/definitions/responses.UserResponse"
                 },
                 "title": {
                     "type": "string"
                 },
                 "updateAt": {
+                    "type": "string"
+                },
+                "uri": {
                     "type": "string"
                 }
             }
