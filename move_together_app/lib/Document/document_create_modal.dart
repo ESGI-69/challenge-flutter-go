@@ -6,7 +6,6 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:open_file/open_file.dart';
 
 
 class DocumentCreateModal extends StatefulWidget {
