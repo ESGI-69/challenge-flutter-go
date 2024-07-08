@@ -405,3 +405,40 @@ func (handler *TripHandler) DownloadTripBanner(context *gin.Context) {
 	}
 
 }
+
+// Get all trips as admin
+//
+//	@Summary		Get all trips
+//	@Description	Get all trips as admin
+//	@Tags			admin
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Success		200	{array}		responses.TripResponse
+//	@Failure		400	{object}	error
+//	@Failure		401	{object}	error
+//	@Router			/admin/trips [get]
+func (handler *TripHandler) GetAll(context *gin.Context) {
+	trips, err := handler.Repository.GetAll()
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	responseTrips := make([]responses.TripResponse, len(trips))
+	for i, trip := range trips {
+		responseTrips[i] = responses.TripResponse{
+			ID:           trip.ID,
+			Name:         trip.Name,
+			Country:      trip.Country,
+			City:         trip.City,
+			StartDate:    trip.StartDate.Format(time.RFC3339),
+			EndDate:      trip.EndDate.Format(time.RFC3339),
+			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
+			InviteCode:   trip.InviteCode,
+		}
+	}
+
+	context.JSON(http.StatusOK, responseTrips)
+	logger.ApiInfo(context, "Get all trips")
+}

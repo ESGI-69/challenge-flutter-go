@@ -135,7 +135,7 @@ final GoRouter backOfficeRouter = GoRouter(
     GoRoute(
       path: '/trip',
       name: 'trip',
-      builder: (context, state) => const BackofficeTripScreen(),
+      builder: (context, state) => const BackofficeTripsScreen(),
     ),
     GoRoute(
       path: '/logs',

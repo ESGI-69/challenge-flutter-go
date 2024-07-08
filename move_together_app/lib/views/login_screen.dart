@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -30,7 +31,11 @@ class LoginScreenState extends State<LoginScreen> {
         errorMessage = null;
       });
       if (!mounted) return;
-      context.goNamed('home');
+        if (!kIsWeb) {
+          context.goNamed('home');
+        } else {
+          context.goNamed('dashboard');
+        }
     } catch (e) {
       if (mounted) {
         setState(() {
