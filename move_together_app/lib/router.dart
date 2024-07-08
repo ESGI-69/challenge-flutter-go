@@ -47,6 +47,8 @@ List<String> backOfficeRoutes = [
   '/',
   '/trip',
   '/users',
+  '/trips',
+  '/features',
 ];
 
 Future<bool> isAuthenticated(BuildContext context) async {
@@ -178,9 +180,15 @@ final GoRouter backOfficeRouter = GoRouter(
       builder: (context, state) => const BackofficeTripsScreen(),
     ),
     GoRoute(
-        path: '/logs',
-        name: 'logs',
-        builder: (context, state) => const LogsScreen()),
+      path: '/feature',
+      name: 'feature',
+      builder: (context, state) => const BackofficeFeaturesScreen(),
+    ),
+    GoRoute(
+      path: '/logs',
+      name: 'logs',
+      builder: (context, state) => const LogsScreen()
+    ),
     GoRoute(
         path: '/users',
         name: 'users',
