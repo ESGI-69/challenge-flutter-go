@@ -135,6 +135,7 @@ func setRoutes() {
 	adminsTripRoutes := adminsRoutes.Group("/trips")
 	adminsTripRoutes.GET("", tripHandler.GetAll)
 	adminsTripRoutes.GET("/:id", tripHandler.Get)
+	adminsTripRoutes.DELETE("/:id", tripHandler.Delete)
 
 	adminsFeatureRoutes := adminsRoutes.Group("/app-settings")
 	adminsFeatureRoutes.GET("", featureHandler.GetFeaturesAdmin)
