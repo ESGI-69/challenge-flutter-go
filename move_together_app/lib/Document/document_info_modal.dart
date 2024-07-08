@@ -34,7 +34,6 @@ class DocumentInfoModal extends StatelessWidget {
       final documentPath = await DocumentService(context.read<AuthProvider>()).download(tripId, document.id);
         final result = await OpenFile.open(documentPath);
         if (result.type != ResultType.done) {
-          print('Erreur lors de l\'ouverture du document');
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Erreur lors de l\'ouverture du document')),
           );
