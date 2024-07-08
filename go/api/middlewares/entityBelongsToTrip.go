@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm/clause"
 )
 
 func init() {
@@ -32,7 +33,6 @@ func TransportBelongsToTrip(context *gin.Context) {
 		return
 	}
 
-	logger.Info("Transport " + transportID + " belongs to trip " + tripIDStr)
 	context.Next()
 }
 
@@ -45,16 +45,49 @@ func ParticipantBelongsToTrip(context *gin.Context) {
 		context.Abort()
 	}
 	participantID := context.Param("participantId")
+	participantIdUint, err := strconv.ParseUint(participantID, 10, 32)
 
-	var participant models.User
-	errDB := databaseInstance.Where("trip_id = ? AND id = ?", tripID, participantID).First(&participant).Error
+	if err != nil {
+		logger.Error("Invalid participant ID " + participantID)
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid participant ID"})
+		context.AbortWithStatusJSON(400, gin.H{"error": "Invalid participant ID"})
+	}
+
+	var trip models.Trip
+	var errDB = databaseInstance.Where("id = ?", tripID).Preload(clause.Associations).First(&trip).Error
+
 	if errDB != nil {
-		logger.Error("Participant " + participantID + " not found")
-		context.AbortWithStatusJSON(404, gin.H{"error": "Participant not found"})
+		logger.Error("Trip " + tripIDStr + " not found")
+		context.AbortWithStatusJSON(404, gin.H{"error": "Trip not found"})
 		return
 	}
 
-	logger.Info("Participant " + participantID + " belongs to trip " + tripIDStr)
+	// Check if the user is in a liason table between the trip and the user
+	var isParticipant bool = false
+
+	if trip.OwnerID == uint(participantIdUint) {
+		isParticipant = true
+	} else {
+		for _, viewers := range trip.Viewers {
+			if viewers.ID == uint(participantIdUint) {
+				isParticipant = true
+				break
+			}
+		}
+		for _, editors := range trip.Editors {
+			if editors.ID == uint(participantIdUint) {
+				isParticipant = true
+				break
+			}
+		}
+	}
+
+	if !isParticipant {
+		logger.Error("Participant " + participantID + " not found in trip " + tripIDStr)
+		context.AbortWithStatusJSON(404, gin.H{"error": "Participant not found in trip"})
+		return
+	}
+
 	context.Next()
 }
 
@@ -76,7 +109,6 @@ func AccommodationBelongsToTrip(context *gin.Context) {
 		return
 	}
 
-	logger.Info("Accommodation " + accommodationID + " belongs to trip " + tripIDStr)
 	context.Next()
 }
 
@@ -98,7 +130,6 @@ func NoteBelongsToTrip(context *gin.Context) {
 		return
 	}
 
-	logger.Info("Note " + noteID + " belongs to trip " + tripIDStr)
 	context.Next()
 }
 
@@ -120,7 +151,6 @@ func DocumentBelongsToTrip(context *gin.Context) {
 		return
 	}
 
-	logger.Info("Document " + documentID + " belongs to trip " + tripIDStr)
 	context.Next()
 }
 
@@ -142,6 +172,5 @@ func PhotoBelongsToTrip(context *gin.Context) {
 		return
 	}
 
-	logger.Info("Photo " + photoID + " belongs to trip " + tripIDStr)
 	context.Next()
 }
