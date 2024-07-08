@@ -45,7 +45,6 @@ class AccommodationCard extends StatelessWidget {
                   ),
                 );
               },
-              onTitleTap: () {},
               itemBuilder: (context, index) {
                 return AccommodationRow(
                   accommodation: state.accommodations[index],
