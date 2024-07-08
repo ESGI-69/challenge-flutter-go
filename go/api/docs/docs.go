@@ -1795,6 +1795,29 @@ const docTemplate = `{
                 "AccommodationTypeOther"
             ]
         },
+        "models.FeatureName": {
+            "type": "string",
+            "enum": [
+                "document",
+                "auth",
+                "chat",
+                "trip",
+                "note",
+                "transport",
+                "accommodation",
+                "user"
+            ],
+            "x-enum-varnames": [
+                "FeatureNameDocument",
+                "FeatureNameAuth",
+                "FeatureNameChat",
+                "FeatureNameTrip",
+                "FeatureNameNote",
+                "FeatureNameTransport",
+                "FeatureNameAccommodation",
+                "FeatureNameUser"
+            ]
+        },
         "models.TransportType": {
             "type": "string",
             "enum": [
@@ -2077,7 +2100,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/responses.UserResponse"
                 },
                 "name": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.FeatureName"
                 },
                 "updateAt": {
                     "type": "string"

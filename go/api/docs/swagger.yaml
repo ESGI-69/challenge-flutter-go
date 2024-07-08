@@ -9,6 +9,26 @@ definitions:
     - AccommodationTypeHotel
     - AccommodationTypeAirbnb
     - AccommodationTypeOther
+  models.FeatureName:
+    enum:
+    - document
+    - auth
+    - chat
+    - trip
+    - note
+    - transport
+    - accommodation
+    - user
+    type: string
+    x-enum-varnames:
+    - FeatureNameDocument
+    - FeatureNameAuth
+    - FeatureNameChat
+    - FeatureNameTrip
+    - FeatureNameNote
+    - FeatureNameTransport
+    - FeatureNameAccommodation
+    - FeatureNameUser
   models.TransportType:
     enum:
     - car
@@ -201,7 +221,7 @@ definitions:
       modifedBy:
         $ref: '#/definitions/responses.UserResponse'
       name:
-        type: string
+        $ref: '#/definitions/models.FeatureName'
       updateAt:
         type: string
     type: object

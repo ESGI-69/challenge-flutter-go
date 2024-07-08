@@ -72,42 +72,47 @@ func createFeatures() {
 
 	features := []models.Feature{
 		{
-			Name:       "Transport",
+			Name:       models.FeatureNameDocument,
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
 		{
-			Name:       "Accommodation",
+			Name:       models.FeatureNameAuth,
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
 		{
-			Name:       "Note",
+			Name:       models.FeatureNameChat,
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
 		{
-			Name:       "Document",
+			Name:       models.FeatureNameTrip,
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
 		{
-			Name:       "Photo",
+			Name:       models.FeatureNameNote,
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
 		{
-			Name:       "Chat",
+			Name:       models.FeatureNameTransport,
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
 		{
-			Name:       "Trip",
+			Name:       models.FeatureNameAccommodation,
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
 		{
-			Name:       "User",
+			Name:       models.FeatureNameUser,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNamePhoto,
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
@@ -117,9 +122,8 @@ func createFeatures() {
 		var existingFeature models.Feature
 		result := database.First(&existingFeature, "name = ?", feature.Name)
 		if result.Error != nil {
-			database.Create(&feature)
-		} else {
 			log.Print("Feature " + feature.Name + " already exists")
+			database.Create(&feature)
 		}
 	}
 }

@@ -7,14 +7,15 @@ import (
 type FeatureName string
 
 const (
-	FeatureNameDocument      = "document"
-	FeatureNameAuth          = "auth"
-	FeatureNameChat          = "chat"
-	FeatureNameTrip          = "trip"
-	FeatureNameNote          = "note"
-	FeatureNameTransport     = "transport"
-	FeatureNameAccommodation = "accommodation"
-	FeatureNameUser          = "user"
+	FeatureNameDocument      FeatureName = "document"
+	FeatureNameAuth          FeatureName = "auth"
+	FeatureNameChat          FeatureName = "chat"
+	FeatureNameTrip          FeatureName = "trip"
+	FeatureNameNote          FeatureName = "note"
+	FeatureNameTransport     FeatureName = "transport"
+	FeatureNameAccommodation FeatureName = "accommodation"
+	FeatureNameUser          FeatureName = "user"
+	FeatureNamePhoto         FeatureName = "photo"
 )
 
 type Feature struct {
