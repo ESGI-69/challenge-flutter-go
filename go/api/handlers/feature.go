@@ -29,7 +29,7 @@ type FeatureHandler struct {
 // @Failure 400 {object} error
 // @Failure 401 {object} error
 // @Failure 404 {object} error
-// @Router /admin/features/{id} [patch]
+// @Router /admin/app-settings/{id} [patch]
 func (handler *FeatureHandler) Update(context *gin.Context) {
 	featureId := context.Param("id")
 
@@ -76,7 +76,7 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 //	@Success		200	{array}		responses.FeatureResponse
 //	@Failure		400	{object}	error
 //	@Failure		401	{object}	error
-//	@Router			/features [get]
+//	@Router			/app-settings [get]
 func (handler *FeatureHandler) GetFeatures(context *gin.Context) {
 	features, err := handler.Repository.GetFeatures()
 	if err != nil {
@@ -112,7 +112,7 @@ func (handler *FeatureHandler) GetFeatures(context *gin.Context) {
 //	@Success		200	{array}		responses.FeatureResponse
 //	@Failure		400	{object}	error
 //	@Failure		401	{object}	error
-//	@Router			/admin/features [get]
+//	@Router			/admin/app-settings [get]
 func (handler *FeatureHandler) GetFeaturesAdmin(context *gin.Context) {
 	features, err := handler.Repository.GetFeatures()
 	if err != nil {
