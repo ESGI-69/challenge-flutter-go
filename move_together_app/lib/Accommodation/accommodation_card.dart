@@ -35,6 +35,7 @@ class AccommodationCard extends StatelessWidget {
               length: state.accommodations.length,
               onAddTap: () {
                 showCupertinoModalBottomSheet(
+                  expand: true,
                   context: context,
                   builder: (BuildContext context) => AccommodationCreateModal(
                     tripId: tripId,
@@ -49,6 +50,7 @@ class AccommodationCard extends StatelessWidget {
                 return AccommodationRow(
                   accommodation: state.accommodations[index],
                   onTap: () => showCupertinoModalBottomSheet(
+                    expand: true,
                     context: context,
                     builder: (BuildContext context) => FractionallySizedBox(
                       heightFactor: 0.8,
