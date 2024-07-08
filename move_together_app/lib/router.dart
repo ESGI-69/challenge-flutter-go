@@ -56,6 +56,47 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const LandingScreen(),
+      routes: [
+        GoRoute(
+          name: 'home',
+          path: 'trips',
+          builder: (context, state) => const HomeScreen(),
+          routes: [
+            GoRoute(
+              name: 'join',
+              path: 'join',
+              builder: (context, state) => const JoinTripScreen(),
+            ),
+            GoRoute(
+              name: 'create',
+              path: 'create',
+              builder: (context, state) => const CreateTripScreen(),
+            ),
+            GoRoute(
+              name: 'trip',
+              path: ':tripId',
+              builder: (context, state) => const TripScreen(),
+              routes: [
+                GoRoute(
+                  name: 'chat',
+                  path: 'chat',
+                  builder: (context, state) => const ChatScreen(),
+                ),
+                GoRoute(
+                  name: 'photos',
+                  path: 'photos',
+                  builder: (context, state) => const PhotoScreen(),
+                ),
+              ],
+            ),
+          ]
+        ),
+        GoRoute(
+          name: 'profile',
+          path: 'profile',
+          builder: (context, state) => const ProfileScreen(),
+        ),
+      ],
     ),
     GoRoute(
       path: '/login',
@@ -64,44 +105,6 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/register',
       builder: (context, state) => const RegisterScreen(),
-    ),
-    GoRoute(
-      name: 'home',
-      path: '/trips',
-      builder: (context, state) => const HomeScreen(),
-      routes: [
-        GoRoute(
-          name: 'join',
-          path: 'join',
-          builder: (context, state) => const JoinTripScreen(),
-        ),
-        GoRoute(
-          name: 'create',
-          path: 'create',
-          builder: (context, state) => const CreateTripScreen(),
-        ),
-        GoRoute(
-          name: 'trip',
-          path: ':tripId',
-          builder: (context, state) => const TripScreen(),
-          routes: [
-            GoRoute(
-              name: 'chat',
-              path: 'chat',
-              builder: (context, state) => const ChatScreen(),
-            ),
-            GoRoute(
-              name: 'photos',
-              path: 'photos',
-              builder: (context, state) => const PhotoScreen(),
-            ),
-          ],
-        ),
-      ]
-    ),
-    GoRoute(
-      path: '/profile',
-      builder: (context, state) => const ProfileScreen(),
     ),
   ],
   redirect: (context, state) async {
