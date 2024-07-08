@@ -59,4 +59,18 @@ class DocumentService {
       throw Exception('Failed to delete document');
     }
   }
+
+  Future<String> download(int tripId, int documentId) async {
+    final documentPath = '${Directory.systemTemp.path}/${documentId}_moove_together.pdf';
+    final response = await api.download(
+      '/trips/$tripId/documents/$documentId/download',
+      documentPath,
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return documentPath;
+    } else {
+      throw Exception('Failed to download document');
+    }
+  }
 }

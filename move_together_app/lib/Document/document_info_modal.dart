@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
+import 'package:open_file/open_file.dart';
 
 class DocumentInfoModal extends StatelessWidget {
   final Document document;
@@ -28,6 +29,17 @@ class DocumentInfoModal extends StatelessWidget {
           .delete(tripId, document.id);
       onDocumentDeleted(document);
     }
+
+    void downloadDocument() async {
+      final documentPath = await DocumentService(context.read<AuthProvider>()).download(tripId, document.id);
+        final result = await OpenFile.open(documentPath);
+        if (result.type != ResultType.done) {
+          print('Erreur lors de l\'ouverture du document');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Erreur lors de l\'ouverture du document')),
+          );
+        }
+      }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 32),
@@ -55,7 +67,12 @@ class DocumentInfoModal extends StatelessWidget {
             Text(
               'Créé le : ${DateFormat.yMMMd().format(document.createdAt.toLocal())}',
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: downloadDocument,
+              child: const Text('Voir le document'),
+            ),
+            const SizedBox(height: 32),
             (hasTripEditPermission || isTripOwner)
                 ? ElevatedButton(
                     onPressed: deleteDocument,

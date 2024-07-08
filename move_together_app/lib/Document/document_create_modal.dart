@@ -6,6 +6,8 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:open_file/open_file.dart';
+
 
 class DocumentCreateModal extends StatefulWidget {
   final Function(Document) onDocumentCreated;
@@ -86,8 +88,8 @@ class _DocumentCreateModalState extends State<DocumentCreateModal> {
             ElevatedButton(
               onPressed: createDocument,
               style: _titleDocumentController.text.isEmpty || _descriptionDocumentController.text.isEmpty || _selectedFile == null
-                  ? ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black12))
-                  : ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)),
+                  ? ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.black12))
+                  : ButtonStyle(backgroundColor: WidgetStateProperty.all(Theme.of(context).primaryColor)),
               child: const Text(
                 'Créer le document',
                 style: TextStyle(
