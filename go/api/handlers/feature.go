@@ -6,7 +6,6 @@ import (
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/logger"
-	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
 	"time"
@@ -16,57 +15,6 @@ import (
 
 type FeatureHandler struct {
 	Repository repository.FeatureRepository
-}
-
-// Create a new feature
-//
-//	@Summary		Create a new feature
-//	@Description	Create a new feature
-//	@Tags			admin
-//	@Accept			json
-//	@Produce		json
-//	@Security		BearerAuth
-//	@Param			body	body		requests.FeatureCreateBody	true	"Body of the feature"
-//	@Success		201		{object}	responses.FeatureResponse
-//	@Failure		400		{object}	error
-//	@Failure		401		{object}	error
-//	@Router			/admin/features [post]
-func (handler *FeatureHandler) Create(context *gin.Context) {
-	var requestBody requests.FeatureCreateBody
-	isBodyValid := utils.Deserialize(&requestBody, context)
-	if !isBodyValid {
-		return
-	}
-
-	currentUser, _ := utils.GetCurrentUser(context)
-
-	feature := models.Feature{
-		Name:       requestBody.Name,
-		ModifiedBy: currentUser,
-		Enabled:    false,
-	}
-
-	err := handler.Repository.Create(&feature)
-
-	if err != nil {
-		errorHandlers.HandleGormErrors(err, context)
-		return
-	}
-
-	responseFeature := responses.FeatureResponse{
-		ID:      feature.ID,
-		Name:    feature.Name,
-		Enabled: feature.Enabled,
-		ModifedBy: responses.UserResponse{
-			ID:       feature.ModifiedBy.ID,
-			Username: feature.ModifiedBy.Username,
-		},
-		CreatedAt: feature.CreatedAt.Format(time.RFC3339),
-		UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
-	}
-
-	context.JSON(http.StatusCreated, responseFeature)
-	logger.ApiInfo(context, "Feature "+string(rune(feature.ID))+" created")
 }
 
 // @Summary Update a feature
@@ -94,7 +42,7 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 	feature, _ := handler.Repository.Get(featureId)
 	currentUser, _ := utils.GetCurrentUser(context)
 
-	feature.Enabled = requestBody.Enabled
+	feature.IsEnabled = requestBody.IsEnabled
 	feature.ModifiedBy = currentUser
 
 	updateError := handler.Repository.Update(&feature)
@@ -104,43 +52,17 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 	}
 
 	responseFeature := responses.FeatureResponse{
-		ID:      feature.ID,
-		Name:    feature.Name,
-		Enabled: feature.Enabled,
+		Name:      feature.Name,
+		IsEnabled: feature.IsEnabled,
 		ModifedBy: responses.UserResponse{
 			ID:       feature.ModifiedBy.ID,
 			Username: feature.ModifiedBy.Username,
 		},
-		CreatedAt: feature.CreatedAt.Format(time.RFC3339),
-		UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
+		UpdateAt: feature.UpdatedAt.Format(time.RFC3339),
 	}
 
 	context.JSON(http.StatusOK, responseFeature)
 	logger.ApiInfo(context, "Feature "+featureId+" updated")
-}
-
-// @Summary Delete a feature
-// @Description Delete a feature if the user is admin
-// @Tags admin
-// @Accept json
-// @Produce json
-// @Security BearerAuth
-// @Param id path string true "ID of the feature"
-// @Success 204
-// @Failure 400 {object} error
-// @Failure 401 {object} error
-// @Router /admin/features/{id} [delete]
-func (handler *FeatureHandler) Delete(context *gin.Context) {
-	featureId := context.Param("id")
-
-	deleteError := handler.Repository.Delete(featureId)
-	if deleteError != nil {
-		errorHandlers.HandleGormErrors(deleteError, context)
-		return
-	}
-
-	context.Status(http.StatusNoContent)
-	logger.ApiInfo(context, "Delete feature "+featureId)
 }
 
 // Get all features as Admin
@@ -165,14 +87,12 @@ func (handler *FeatureHandler) GetFeatures(context *gin.Context) {
 	responseFeatures := make([]responses.FeatureResponse, len(features))
 	for i, feature := range features {
 		responseFeatures[i] = responses.FeatureResponse{
-			ID:   feature.ID,
 			Name: feature.Name,
 			ModifedBy: responses.UserResponse{
 				ID:       feature.ModifiedBy.ID,
 				Username: feature.ModifiedBy.Username,
 			},
-			Enabled:   feature.Enabled,
-			CreatedAt: feature.CreatedAt.Format(time.RFC3339),
+			IsEnabled: feature.IsEnabled,
 			UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
 		}
 	}
@@ -203,14 +123,12 @@ func (handler *FeatureHandler) GetFeaturesAdmin(context *gin.Context) {
 	responseFeatures := make([]responses.FeatureResponse, len(features))
 	for i, feature := range features {
 		responseFeatures[i] = responses.FeatureResponse{
-			ID:   feature.ID,
 			Name: feature.Name,
 			ModifedBy: responses.UserResponse{
 				ID:       feature.ModifiedBy.ID,
 				Username: feature.ModifiedBy.Username,
 			},
-			Enabled:   feature.Enabled,
-			CreatedAt: feature.CreatedAt.Format(time.RFC3339),
+			IsEnabled: feature.IsEnabled,
 			UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
 		}
 	}
