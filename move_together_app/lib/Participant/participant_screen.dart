@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Participant/bloc/participant_bloc.dart';
 import 'package:move_together_app/Participant/participant_add_modal.dart';
 import 'package:move_together_app/Participant/participant_row.dart';
@@ -20,7 +21,8 @@ class ParticipantScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
+          showCupertinoModalBottomSheet(
+            expand: true,
             context: context,
             builder: (BuildContext context) => ParticipantAddModal(
               inviteCode: inviteCode ?? '',
