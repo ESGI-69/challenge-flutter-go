@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:dio/dio.dart';
 import 'package:move_together_app/core/services/api.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/document.dart';
@@ -9,8 +9,8 @@ class DocumentService {
   final AuthProvider authProvider;
 
   DocumentService(
-    this.authProvider,
-  );
+      this.authProvider,
+      );
 
   Future<List<Document>> getAll(int tripId) async {
     final response = await api.get(
@@ -20,7 +20,7 @@ class DocumentService {
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       return (response.data as List).map((document) => Document.fromJson(document)).toList();
     } else {
-      throw Exception('Failed to get user');
+      throw Exception('Failed to get documents');
     }
   }
 
@@ -28,16 +28,17 @@ class DocumentService {
     required int tripId,
     required String title,
     required String description,
-    // TODO: Check if this is the correct type
     required File? document,
   }) async {
+    FormData formData = FormData.fromMap({
+      'title': title,
+      'description': description,
+      'document': await MultipartFile.fromFile(document!.path, filename: document.path.split('/').last),
+    });
+
     final response = await api.post(
       '/trips/$tripId/documents',
-      data: {
-        'title': title,
-        'description': description,
-        'document': document,
-      },
+      data: formData,
     );
 
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
@@ -58,5 +59,4 @@ class DocumentService {
       throw Exception('Failed to delete document');
     }
   }
-
 }
