@@ -19,8 +19,8 @@ func (t *FeatureRepository) GetFeatures() (features []models.Feature, err error)
 	return
 }
 
-func (t *FeatureRepository) Get(id string) (feature models.Feature, err error) {
-	err = t.Database.Preload("ModifiedBy").First(&feature, id).Error
+func (t *FeatureRepository) Get(name string) (feature models.Feature, err error) {
+	err = t.Database.Preload("ModifiedBy").First(&feature, "name = ?", name).Error
 	return
 }
 

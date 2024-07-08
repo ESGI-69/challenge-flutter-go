@@ -138,7 +138,7 @@ func setRoutes() {
 
 	adminsFeatureRoutes := adminsRoutes.Group("/app-settings")
 	adminsFeatureRoutes.GET("", featureHandler.GetFeaturesAdmin)
-	adminsFeatureRoutes.PATCH("/:id", featureHandler.Update)
+	adminsFeatureRoutes.PATCH("/:name", featureHandler.Update)
 
 	usersRoutes := router.Group("/users")
 	usersRoutes.POST("", userHandler.Create)

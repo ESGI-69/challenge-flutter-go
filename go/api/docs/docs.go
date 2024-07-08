@@ -23,7 +23,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/features": {
+        "/admin/app-settings": {
             "get": {
                 "security": [
                     {
@@ -62,7 +62,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/features/{id}": {
+        "/admin/app-settings/{name}": {
             "patch": {
                 "security": [
                     {
@@ -83,8 +83,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "ID of the feature",
-                        "name": "id",
+                        "description": "Name of the feature",
+                        "name": "name",
                         "in": "path",
                         "required": true
                     },
@@ -159,7 +159,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/features": {
+        "/app-settings": {
             "get": {
                 "security": [
                     {

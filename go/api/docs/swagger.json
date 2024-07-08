@@ -14,7 +14,7 @@
         }
     },
     "paths": {
-        "/admin/features": {
+        "/admin/app-settings": {
             "get": {
                 "security": [
                     {
@@ -53,7 +53,7 @@
                 }
             }
         },
-        "/admin/features/{id}": {
+        "/admin/app-settings/{name}": {
             "patch": {
                 "security": [
                     {
@@ -74,8 +74,8 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "ID of the feature",
-                        "name": "id",
+                        "description": "Name of the feature",
+                        "name": "name",
                         "in": "path",
                         "required": true
                     },
@@ -150,7 +150,7 @@
                 }
             }
         },
-        "/features": {
+        "/app-settings": {
             "get": {
                 "security": [
                     {

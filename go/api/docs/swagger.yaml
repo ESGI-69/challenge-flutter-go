@@ -339,7 +339,7 @@ info:
   termsOfService: https://challenge-flutter-go.com/terms
   title: Challenge Flutter Go API
 paths:
-  /admin/features:
+  /admin/app-settings:
     get:
       consumes:
       - application/json
@@ -364,15 +364,15 @@ paths:
       summary: Get all features
       tags:
       - admin
-  /admin/features/{id}:
+  /admin/app-settings/{name}:
     patch:
       consumes:
       - application/json
       description: Update a feature if the current is admin
       parameters:
-      - description: ID of the feature
+      - description: Name of the feature
         in: path
-        name: id
+        name: name
         required: true
         type: string
       - description: Body of the feature
@@ -427,7 +427,7 @@ paths:
       summary: Get all trips
       tags:
       - admin
-  /features:
+  /app-settings:
     get:
       consumes:
       - application/json

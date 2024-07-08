@@ -23,15 +23,15 @@ type FeatureHandler struct {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param id path string true "ID of the feature"
+// @Param name path string true "Name of the feature"
 // @Param body body requests.FeatureUpdateBody true "Body of the feature"
 // @Success 200 {object} responses.FeatureResponse
 // @Failure 400 {object} error
 // @Failure 401 {object} error
 // @Failure 404 {object} error
-// @Router /admin/app-settings/{id} [patch]
+// @Router /admin/app-settings/{name} [patch]
 func (handler *FeatureHandler) Update(context *gin.Context) {
-	featureId := context.Param("id")
+	featureName := context.Param("name")
 
 	var requestBody requests.FeatureUpdateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
@@ -39,8 +39,14 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 		return
 	}
 
-	feature, _ := handler.Repository.Get(featureId)
+	feature, _ := handler.Repository.Get(featureName)
 	currentUser, _ := utils.GetCurrentUser(context)
+
+	if feature.Name == "" {
+		logger.ApiError(context, "Invalid feature name :  "+featureName)
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid feature name"})
+		return
+	}
 
 	feature.IsEnabled = requestBody.IsEnabled
 	feature.ModifiedBy = currentUser
@@ -62,7 +68,7 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, responseFeature)
-	logger.ApiInfo(context, "Feature "+featureId+" updated")
+	logger.ApiInfo(context, "Feature "+string(feature.Name)+" updated")
 }
 
 // Get all features as Admin
