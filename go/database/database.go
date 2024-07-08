@@ -36,6 +36,7 @@ func autoMigrate() {
 		&models.Document{},
 		&models.Photo{},
 		&models.LogEntry{},
+		&models.Feature{},
 	)
 	if err != nil {
 		log.Fatalln(err)

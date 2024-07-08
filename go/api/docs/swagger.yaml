@@ -65,6 +65,17 @@ definitions:
     required:
     - content
     type: object
+  requests.FeatureCreateBody:
+    properties:
+      name:
+        maxLength: 64
+        type: string
+    type: object
+  requests.FeatureUpdateBody:
+    properties:
+      enabled:
+        type: boolean
+    type: object
   requests.NoteCreateBody:
     properties:
       content:
@@ -185,6 +196,21 @@ definitions:
       path:
         type: string
       title:
+        type: string
+      updateAt:
+        type: string
+    type: object
+  responses.FeatureResponse:
+    properties:
+      createdAt:
+        type: string
+      enabled:
+        type: boolean
+      id:
+        type: integer
+      modifedBy:
+        $ref: '#/definitions/responses.UserResponse'
+      name:
         type: string
       updateAt:
         type: string
@@ -323,6 +349,100 @@ info:
   termsOfService: https://challenge-flutter-go.com/terms
   title: Challenge Flutter Go API
 paths:
+  /admin/features:
+    post:
+      consumes:
+      - application/json
+      description: Create a new feature
+      parameters:
+      - description: Body of the feature
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.FeatureCreateBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.FeatureResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create a new feature
+      tags:
+      - admin
+  /admin/features/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a feature if the user is admin
+      parameters:
+      - description: ID of the feature
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete a feature
+      tags:
+      - admin
+    patch:
+      consumes:
+      - application/json
+      description: Update a feature if the current is admin
+      parameters:
+      - description: ID of the feature
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Body of the feature
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.FeatureUpdateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.FeatureResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update a feature
+      tags:
+      - admin
   /admin/trips:
     get:
       consumes:
@@ -348,6 +468,31 @@ paths:
       summary: Get all trips
       tags:
       - admin
+  /features:
+    get:
+      consumes:
+      - application/json
+      description: Get all features
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.FeatureResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all features
+      tags:
+      - features
   /login:
     post:
       consumes:
