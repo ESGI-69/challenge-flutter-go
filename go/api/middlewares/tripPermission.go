@@ -29,6 +29,7 @@ func UserIsTripOwner(context *gin.Context) {
 	}
 
 	if !trip.UserIsOwner(&user) {
+		logger.ApiWarning(context, "Access denied, owner of the trip is different from the logged user")
 		context.AbortWithStatusJSON(401, gin.H{"error": "You need to be the owner of the trip to perform this action"})
 		return
 	}
@@ -46,6 +47,7 @@ func UserHasTripEditRight(context *gin.Context) {
 	}
 
 	if !trip.UserHasEditRight(&user) {
+		logger.ApiWarning(context, "Access denied, user does not have the right to edit the trip")
 		context.AbortWithStatusJSON(401, gin.H{"error": "You need to have the right to edit the trip to perform this action"})
 		return
 	}
@@ -62,6 +64,7 @@ func UserIsTripParticipant(context *gin.Context) {
 	}
 
 	if !trip.UserHasViewRight(&user) {
+		logger.ApiWarning(context, "Access denied, user is not a participant of the trip")
 		context.AbortWithStatusJSON(401, gin.H{"error": "You need to be a participant of the trip to perform this action"})
 		return
 	}
