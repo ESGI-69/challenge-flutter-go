@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Backoffice/Logs/logs_screen.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
-import 'package:move_together_app/Participant/participant_screen.dart';
 import 'package:move_together_app/Photo/photo_screen.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
@@ -90,11 +89,6 @@ final GoRouter router = GoRouter(
               name: 'chat',
               path: 'chat',
               builder: (context, state) => const ChatScreen(),
-            ),
-            GoRoute(
-              name: 'participants',
-              path: 'participants',
-              builder: (context, state) => const ParticipantScreen(),
             ),
             GoRoute(
               name: 'photos',

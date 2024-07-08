@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Home/blocs/home_bloc.dart';
 import 'package:move_together_app/Home/empty_home.dart';
+import 'package:move_together_app/Participant/participant_info.dart';
 import 'package:move_together_app/Trip/trip_card.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -81,14 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         participants: trip.participants,
                         isCurrentUserOwner: trip.isCurrentUserOwner(context),
                         onParticipantsTap: () async {
-                          await context.pushNamed(
-                            'participants',
-                            pathParameters: {
-                              'tripId': trip.id.toString(),
-                            },
-                            queryParameters: {
-                              'inviteCode': trip.inviteCode,
-                            },
+                          await showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) => ParticipantInfo(
+                              tripId: trip.id,
+                              inviteCode: trip.inviteCode,
+                            )
                           );
                           context.read<HomeBloc>().add(HomeDataFetch());
                         },

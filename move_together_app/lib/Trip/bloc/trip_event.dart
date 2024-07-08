@@ -4,7 +4,7 @@ part of 'trip_bloc.dart';
 sealed class TripEvent {}
 
 final class TripDataFetch extends TripEvent {
-  final String tripId;
+  final int tripId;
 
   TripDataFetch(this.tripId);
 }
