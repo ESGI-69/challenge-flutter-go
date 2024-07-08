@@ -1869,7 +1869,7 @@
         "requests.FeatureUpdateBody": {
             "type": "object",
             "properties": {
-                "enabled": {
+                "isEnabled": {
                     "type": "boolean"
                 }
             }
@@ -2061,7 +2061,7 @@
         "responses.FeatureResponse": {
             "type": "object",
             "properties": {
-                "enabled": {
+                "isEnabled": {
                     "type": "boolean"
                 },
                 "modifedBy": {

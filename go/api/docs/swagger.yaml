@@ -67,7 +67,7 @@ definitions:
     type: object
   requests.FeatureUpdateBody:
     properties:
-      enabled:
+      isEnabled:
         type: boolean
     type: object
   requests.NoteCreateBody:
@@ -196,7 +196,7 @@ definitions:
     type: object
   responses.FeatureResponse:
     properties:
-      enabled:
+      isEnabled:
         type: boolean
       modifedBy:
         $ref: '#/definitions/responses.UserResponse'

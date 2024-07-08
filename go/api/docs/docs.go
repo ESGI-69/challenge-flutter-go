@@ -1878,7 +1878,7 @@ const docTemplate = `{
         "requests.FeatureUpdateBody": {
             "type": "object",
             "properties": {
-                "enabled": {
+                "isEnabled": {
                     "type": "boolean"
                 }
             }
@@ -2070,7 +2070,7 @@ const docTemplate = `{
         "responses.FeatureResponse": {
             "type": "object",
             "properties": {
-                "enabled": {
+                "isEnabled": {
                     "type": "boolean"
                 },
                 "modifedBy": {
