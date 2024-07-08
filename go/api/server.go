@@ -137,9 +137,9 @@ func setRoutes() {
 	adminsTripRoutes.GET("/:id", tripHandler.Get)
 	adminsTripRoutes.DELETE("/:id", tripHandler.Delete)
 
-	adminsFeatureRoutes := adminsRoutes.Group("/features")
+	adminsFeatureRoutes := adminsRoutes.Group("/app-settings")
 	adminsFeatureRoutes.POST("", featureHandler.Create)
-	adminsFeatureRoutes.GET("", featureHandler.GetFeatures)
+	adminsFeatureRoutes.GET("", featureHandler.GetFeaturesAdmin)
 	adminsFeatureRoutes.PATCH("/:id", featureHandler.Update)
 	adminsFeatureRoutes.DELETE("/:id", featureHandler.Delete)
 
@@ -193,7 +193,7 @@ func setRoutes() {
 	tripPhotosRoutes.DELETE("/:photoID", middlewares.UserHasTripEditRight, middlewares.PhotoBelongsToTrip, photoHandler.DeletePhotoFromTrip)
 	tripPhotosRoutes.GET("/:photoID/download", middlewares.UserIsTripParticipant, middlewares.PhotoBelongsToTrip, photoHandler.DownloadPhoto)
 
-	featuresRoutes := router.Group("/features", middlewares.UserIsLogged)
+	featuresRoutes := router.Group("/app-settings", middlewares.UserIsLogged)
 	featuresRoutes.GET("", featureHandler.GetFeatures)
 
 	router.GET("/ws", sockeHandler.HandleConnections)

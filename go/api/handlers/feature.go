@@ -180,3 +180,41 @@ func (handler *FeatureHandler) GetFeatures(context *gin.Context) {
 	context.JSON(http.StatusOK, responseFeatures)
 	logger.ApiInfo(context, "Get all features")
 }
+
+// Get all features as Admin
+//
+//	@Summary		Get all features
+//	@Description	Get all features as Admin
+//	@Tags			admin
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Success		200	{array}		responses.FeatureResponse
+//	@Failure		400	{object}	error
+//	@Failure		401	{object}	error
+//	@Router			/admin/features [get]
+func (handler *FeatureHandler) GetFeaturesAdmin(context *gin.Context) {
+	features, err := handler.Repository.GetFeatures()
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	responseFeatures := make([]responses.FeatureResponse, len(features))
+	for i, feature := range features {
+		responseFeatures[i] = responses.FeatureResponse{
+			ID:   feature.ID,
+			Name: feature.Name,
+			ModifedBy: responses.UserResponse{
+				ID:       feature.ModifiedBy.ID,
+				Username: feature.ModifiedBy.Username,
+			},
+			Enabled:   feature.Enabled,
+			CreatedAt: feature.CreatedAt.Format(time.RFC3339),
+			UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
+		}
+	}
+
+	context.JSON(http.StatusOK, responseFeatures)
+	logger.ApiInfo(context, "Get all features")
+}

@@ -350,6 +350,30 @@ info:
   title: Challenge Flutter Go API
 paths:
   /admin/features:
+    get:
+      consumes:
+      - application/json
+      description: Get all features as Admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.FeatureResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all features
+      tags:
+      - admin
     post:
       consumes:
       - application/json
