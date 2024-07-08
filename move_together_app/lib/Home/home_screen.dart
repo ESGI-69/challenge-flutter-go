@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -28,11 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(0),
-        child: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
-          backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        leading: IconButton(
+          color: Theme.of(context).primaryColor,
+          onPressed: () {
+            context.pushNamed('profile');
+          },
+          icon: const Icon(
+            Icons.person
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -42,72 +45,74 @@ class _HomeScreenState extends State<HomeScreen> {
         shape: const CircleBorder(),
         child: const Icon(Icons.add),
       ),
-      body: BlocProvider(
-        create: (context) => HomeBloc(context)..add(HomeDataFetch()),
-        child: BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            if (state is HomeDataLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is HomeDataLoadingError) {
-              return Center(
-                child: Text(state.errorMessage),
-              );
-            } else if (state is HomeDataLoadingSuccess) {
-              if (state.trips.isEmpty) {
-                return const EmptyHome();
-              }
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Flex(
-                  direction: Axis.vertical,
-                  children: <Widget>[
-                  Expanded(
-                    child: PageView(
-                    onPageChanged: changePage,
-                    children: state.trips.map((trip) {
-                      return TripCard(
-                        tripId: trip.id,
-                        onTap: () async {
-                          await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
-                          context.read<HomeBloc>().add(HomeDataFetch());
-                        },
-                        onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
-                        onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
-                        imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
-                        name: trip.name,
-                        startDate: trip.startDate,
-                        endDate: trip.endDate,
-                        inviteCode: trip.inviteCode,
-                        participants: trip.participants,
-                        isCurrentUserOwner: trip.isCurrentUserOwner(context),
-                        onParticipantsTap: () async {
-                          await showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) => ParticipantInfo(
-                              tripId: trip.id,
-                              inviteCode: trip.inviteCode,
-                            )
-                          );
-                          context.read<HomeBloc>().add(HomeDataFetch());
-                        },
-                      );
-                    }).toList(),
+      body: SafeArea(
+        child: BlocProvider(
+          create: (context) => HomeBloc(context)..add(HomeDataFetch()),
+          child: BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              if (state is HomeDataLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is HomeDataLoadingError) {
+                return Center(
+                  child: Text(state.errorMessage),
+                );
+              } else if (state is HomeDataLoadingSuccess) {
+                if (state.trips.isEmpty) {
+                  return const EmptyHome();
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Flex(
+                    direction: Axis.vertical,
+                    children: <Widget>[
+                    Expanded(
+                      child: PageView(
+                      onPageChanged: changePage,
+                      children: state.trips.map((trip) {
+                        return TripCard(
+                          tripId: trip.id,
+                          onTap: () async {
+                            await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
+                            context.read<HomeBloc>().add(HomeDataFetch());
+                          },
+                          onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
+                          onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
+                          imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
+                          name: trip.name,
+                          startDate: trip.startDate,
+                          endDate: trip.endDate,
+                          inviteCode: trip.inviteCode,
+                          participants: trip.participants,
+                          isCurrentUserOwner: trip.isCurrentUserOwner(context),
+                          onParticipantsTap: () async {
+                            await showCupertinoModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) => ParticipantInfo(
+                                tripId: trip.id,
+                                inviteCode: trip.inviteCode,
+                              )
+                            );
+                            context.read<HomeBloc>().add(HomeDataFetch());
+                          },
+                        );
+                      }).toList(),
+                      ),
                     ),
+                    const SizedBox(height: 16.0),
+                    PageIndicator(
+                      currentIndex: _currentIndex,
+                      pageCount: state.trips.length,
+                    ),
+                    ],
                   ),
-                  const SizedBox(height: 16.0),
-                  PageIndicator(
-                    currentIndex: _currentIndex,
-                    pageCount: state.trips.length,
-                  ),
-                  ],
-                ),
-              );
+                );
+              }
+              return const SizedBox();
             }
-            return const SizedBox();
-          }
-        )
+          )
+        ),
       ),
     );
   }
