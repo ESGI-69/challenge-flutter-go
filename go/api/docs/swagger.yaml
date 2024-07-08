@@ -9,6 +9,26 @@ definitions:
     - AccommodationTypeHotel
     - AccommodationTypeAirbnb
     - AccommodationTypeOther
+  models.FeatureName:
+    enum:
+    - document
+    - auth
+    - chat
+    - trip
+    - note
+    - transport
+    - accommodation
+    - user
+    type: string
+    x-enum-varnames:
+    - FeatureNameDocument
+    - FeatureNameAuth
+    - FeatureNameChat
+    - FeatureNameTrip
+    - FeatureNameNote
+    - FeatureNameTransport
+    - FeatureNameAccommodation
+    - FeatureNameUser
   models.TransportType:
     enum:
     - car
@@ -64,6 +84,11 @@ definitions:
         type: string
     required:
     - content
+    type: object
+  requests.FeatureUpdateBody:
+    properties:
+      isEnabled:
+        type: boolean
     type: object
   requests.NoteCreateBody:
     properties:
@@ -186,6 +211,17 @@ definitions:
         type: string
       title:
         type: string
+      updateAt:
+        type: string
+    type: object
+  responses.FeatureResponse:
+    properties:
+      isEnabled:
+        type: boolean
+      modifedBy:
+        $ref: '#/definitions/responses.UserResponse'
+      name:
+        $ref: '#/definitions/models.FeatureName'
       updateAt:
         type: string
     type: object
@@ -323,6 +359,69 @@ info:
   termsOfService: https://challenge-flutter-go.com/terms
   title: Challenge Flutter Go API
 paths:
+  /admin/app-settings:
+    get:
+      consumes:
+      - application/json
+      description: Get all features as Admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.FeatureResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all features
+      tags:
+      - admin
+  /admin/app-settings/{name}:
+    patch:
+      consumes:
+      - application/json
+      description: Update a feature if the current is admin
+      parameters:
+      - description: Name of the feature
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Body of the feature
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.FeatureUpdateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.FeatureResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update a feature
+      tags:
+      - admin
   /admin/trips:
     get:
       consumes:
@@ -348,6 +447,31 @@ paths:
       summary: Get all trips
       tags:
       - admin
+  /app-settings:
+    get:
+      consumes:
+      - application/json
+      description: Get all features as Admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.FeatureResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all features
+      tags:
+      - features
   /login:
     post:
       consumes:

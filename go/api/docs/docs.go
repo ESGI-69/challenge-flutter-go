@@ -23,6 +23,103 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/app-settings": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all features as Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Get all features",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.FeatureResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/admin/app-settings/{name}": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update a feature if the current is admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Update a feature",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of the feature",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Body of the feature",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.FeatureUpdateBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.FeatureResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/admin/trips": {
             "get": {
                 "security": [
@@ -48,6 +145,45 @@ const docTemplate = `{
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/responses.TripResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/app-settings": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all features as Admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "features"
+                ],
+                "summary": "Get all features",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.FeatureResponse"
                             }
                         }
                     },
@@ -1659,6 +1795,29 @@ const docTemplate = `{
                 "AccommodationTypeOther"
             ]
         },
+        "models.FeatureName": {
+            "type": "string",
+            "enum": [
+                "document",
+                "auth",
+                "chat",
+                "trip",
+                "note",
+                "transport",
+                "accommodation",
+                "user"
+            ],
+            "x-enum-varnames": [
+                "FeatureNameDocument",
+                "FeatureNameAuth",
+                "FeatureNameChat",
+                "FeatureNameTrip",
+                "FeatureNameNote",
+                "FeatureNameTransport",
+                "FeatureNameAccommodation",
+                "FeatureNameUser"
+            ]
+        },
         "models.TransportType": {
             "type": "string",
             "enum": [
@@ -1736,6 +1895,14 @@ const docTemplate = `{
             "properties": {
                 "content": {
                     "type": "string"
+                }
+            }
+        },
+        "requests.FeatureUpdateBody": {
+            "type": "object",
+            "properties": {
+                "isEnabled": {
+                    "type": "boolean"
                 }
             }
         },
@@ -1917,6 +2084,23 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                },
+                "updateAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.FeatureResponse": {
+            "type": "object",
+            "properties": {
+                "isEnabled": {
+                    "type": "boolean"
+                },
+                "modifedBy": {
+                    "$ref": "#/definitions/responses.UserResponse"
+                },
+                "name": {
+                    "$ref": "#/definitions/models.FeatureName"
                 },
                 "updateAt": {
                     "type": "string"

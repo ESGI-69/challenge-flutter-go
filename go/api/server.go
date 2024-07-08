@@ -67,6 +67,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	featureRepository := repository.FeatureRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -116,6 +120,10 @@ func setRoutes() {
 		TripRepository: tripRepository,
 	}
 
+	featureHandler := handlers.FeatureHandler{
+		Repository: featureRepository,
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.Static("/backoffice", "./backoffice")
@@ -123,10 +131,15 @@ func setRoutes() {
 	router.POST("/login", authHandler.Login)
 
 	adminsRoutes := router.Group("/admin", middlewares.UserIsLogged, middlewares.UserIsAdmin)
+
 	adminsTripRoutes := adminsRoutes.Group("/trips")
 	adminsTripRoutes.GET("", tripHandler.GetAll)
 	adminsTripRoutes.GET("/:id", tripHandler.Get)
 	adminsTripRoutes.DELETE("/:id", tripHandler.Delete)
+
+	adminsFeatureRoutes := adminsRoutes.Group("/app-settings")
+	adminsFeatureRoutes.GET("", featureHandler.GetFeaturesAdmin)
+	adminsFeatureRoutes.PATCH("/:name", featureHandler.Update)
 
 	usersRoutes := router.Group("/users")
 	usersRoutes.POST("", userHandler.Create)
@@ -177,6 +190,9 @@ func setRoutes() {
 	tripPhotosRoutes.POST("", middlewares.UserHasTripEditRight, photoHandler.CreatePhoto)
 	tripPhotosRoutes.DELETE("/:photoID", middlewares.UserHasTripEditRight, middlewares.PhotoBelongsToTrip, photoHandler.DeletePhotoFromTrip)
 	tripPhotosRoutes.GET("/:photoID/download", middlewares.UserIsTripParticipant, middlewares.PhotoBelongsToTrip, photoHandler.DownloadPhoto)
+
+	featuresRoutes := router.Group("/app-settings")
+	featuresRoutes.GET("", featureHandler.GetFeatures)
 
 	router.GET("/ws", sockeHandler.HandleConnections)
 

@@ -22,6 +22,7 @@ func init() {
 	defer log.Print("Database connection established")
 	autoMigrate()
 	createAdminUser()
+	createFeatures()
 }
 
 func autoMigrate() {
@@ -36,6 +37,7 @@ func autoMigrate() {
 		&models.Document{},
 		&models.Photo{},
 		&models.LogEntry{},
+		&models.Feature{},
 	)
 	if err != nil {
 		log.Fatalln(err)
@@ -58,6 +60,71 @@ func createAdminUser() {
 		user.Password = "admin"
 		user.Role = models.UserRoleAdmin
 		database.Save(&user)
+	}
+}
+
+func createFeatures() {
+	user := models.User{
+		Username: "admin",
+	}
+
+	database.First(&user, "username = ?", user.Username)
+
+	features := []models.Feature{
+		{
+			Name:       models.FeatureNameDocument,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNameAuth,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNameChat,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNameTrip,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNameNote,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNameTransport,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNameAccommodation,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNameUser,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+		{
+			Name:       models.FeatureNamePhoto,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
+	}
+
+	for _, feature := range features {
+		var existingFeature models.Feature
+		result := database.First(&existingFeature, "name = ?", feature.Name)
+		if result.Error != nil {
+			log.Print("Feature " + feature.Name + " already exists")
+			database.Create(&feature)
+		}
 	}
 }
 
