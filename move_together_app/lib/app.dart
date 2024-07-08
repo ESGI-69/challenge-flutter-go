@@ -9,9 +9,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-
-  int _currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -54,30 +51,6 @@ class _AppState extends State<App> {
               builder: (context) {
                 return Scaffold(
                   body: child,
-                  bottomNavigationBar: BottomNavigationBar(
-                    currentIndex: _currentIndex,
-                    selectedItemColor: Theme.of(context).primaryColor,
-                    items: const [
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.flight),
-                        label: 'Voyages',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.account_circle),
-                        label: 'Profile',
-                      ),
-                    ],
-                    onTap: (index) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                      if (index == 0) {
-                        router.replaceNamed('home');
-                      } else if (index == 1) {
-                        router.replace('/profile');
-                      }
-                    },
-                  )
                 );
               },
             ),
