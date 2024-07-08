@@ -143,10 +143,10 @@ func (handler *FeatureHandler) Delete(context *gin.Context) {
 	logger.ApiInfo(context, "Delete feature "+featureId)
 }
 
-// Get all features
+// Get all features as Admin
 //
 //	@Summary		Get all features
-//	@Description	Get all features
+//	@Description	Get all features as Admin
 //	@Tags			features
 //	@Accept			json
 //	@Produce		json

@@ -496,7 +496,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get all features
+      description: Get all features as Admin
       produces:
       - application/json
       responses:

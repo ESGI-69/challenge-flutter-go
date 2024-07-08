@@ -251,7 +251,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get all features",
+                "description": "Get all features as Admin",
                 "consumes": [
                     "application/json"
                 ],
