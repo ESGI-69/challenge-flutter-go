@@ -29,7 +29,7 @@ class DocumentService {
     required String title,
     required String description,
     // TODO: Check if this is the correct type
-    required File document,
+    required File? document,
   }) async {
     final response = await api.post(
       '/trips/$tripId/documents',

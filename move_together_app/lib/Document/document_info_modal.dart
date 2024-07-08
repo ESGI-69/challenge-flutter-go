@@ -56,7 +56,29 @@ class DocumentInfoModal extends StatelessWidget {
               'Créé le : ${DateFormat.yMMMd().format(document.createdAt.toLocal())}',
             ),
             const SizedBox(height: 16),
-            //TODO: delete button
+            (hasTripEditPermission || isTripOwner)
+                ? ElevatedButton(
+                    onPressed: deleteDocument,
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.error),
+                    ),
+                    child: const Text(
+                      'Supprimer le document',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                  : !hasTripEditPermission
+            ? Text(
+              'Vous n\'avez pas la permission de supprimer ce document',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).hintColor,
+              ),
+            )
+
+                : const SizedBox(),
           ],
         ),
       )

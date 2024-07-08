@@ -1,0 +1,145 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/core/models/document.dart';
+import 'package:move_together_app/core/services/document_service.dart';
+//import 'package:file_picker/file_picker.dart';
+
+class DocumentCreateModal extends StatefulWidget {
+  final Function(Document) onDocumentCreated;
+
+  final int tripId;
+
+  const DocumentCreateModal({
+    super.key,
+    required this.onDocumentCreated,
+    required this.tripId,
+  });
+
+  @override
+  State<DocumentCreateModal> createState() => _DocumentCreateModalState();
+}
+
+class _DocumentCreateModalState extends State<DocumentCreateModal> {
+  final TextEditingController _titleDocumentController =
+      TextEditingController();
+  final TextEditingController _descriptionDocumentController =
+      TextEditingController();
+
+  // final ?? _document = ??;
+
+  void createDocument() async {
+    if (_titleDocumentController.text.isEmpty ||
+        _descriptionDocumentController.text.isEmpty) {
+      return;
+    }
+    print('_titleDocumentController.text: ${_titleDocumentController.text}');
+    print(
+        '_descriptionDocumentController.text: ${_descriptionDocumentController.text}');
+    final createdDocument =
+        await DocumentService(context.read<AuthProvider>()).create(
+      tripId: widget.tripId,
+      title: _titleDocumentController.text,
+      description: _descriptionDocumentController.text,
+      document: null,
+      //document: _document,
+    );
+    widget.onDocumentCreated(createdDocument);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('_titleDocumentController.text: ${_titleDocumentController.text}');
+    print(
+        '_descriptionDocumentController.text: ${_descriptionDocumentController.text}');
+
+    return Container(
+        margin: const EdgeInsets.only(bottom: 32),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const _Header(),
+              const SizedBox(height: 16),
+              CoolTextField(
+                controller: _titleDocumentController,
+                hintText: 'Titre du document',
+                prefixIcon: Icons.title,
+              ),
+              const SizedBox(height: 8),
+              CoolTextField(
+                controller: _descriptionDocumentController,
+                hintText: 'Description du document',
+                prefixIcon: Icons.description,
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: createDocument,
+                style: _titleDocumentController.text.isEmpty ||
+                        _descriptionDocumentController.text.isEmpty
+                    ? ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.black12),
+                      )
+                    : ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Theme.of(context).primaryColor),
+                      ),
+                child: const Text(
+                  'Créer le document',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: 16,
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 4),
+          Container(
+            height: 4,
+            width: 40,
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Créer un nouveau document',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
