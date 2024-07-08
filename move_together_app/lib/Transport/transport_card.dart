@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Transport/bloc/transport_bloc.dart';
 import 'package:move_together_app/Transport/transport_create_modal.dart';
 import 'package:move_together_app/Transport/transport_info_modal.dart';
@@ -33,7 +34,8 @@ class TransportCard extends StatelessWidget {
               isLoading: state is TransportsDataLoading,
               length: state.transports.length,
               onAddTap: () {
-                showModalBottomSheet(
+                showCupertinoModalBottomSheet(
+                  expand: true,
                   context: context,
                   builder: (BuildContext context) => TransportCreateModal(
                     tripId: tripId,
@@ -47,7 +49,8 @@ class TransportCard extends StatelessWidget {
               itemBuilder: (context, index) {
                 return TransportRow(
                   transport: state.transports[index],
-                  onTap: () => showModalBottomSheet(
+                  onTap: () => showCupertinoModalBottomSheet(
+                    expand: true,
                     context: context,
                     builder: (BuildContext context) => TransportInfoModal(
                       transport: state.transports[index],
