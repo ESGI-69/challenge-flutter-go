@@ -38,7 +38,7 @@ class TripBody extends StatelessWidget {
           DocumentCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
-            userIsOwner: trip.isCurrentUserOwner(context)),
+            userIsOwner: trip.isCurrentUserOwner(context)
           ),
           const SizedBox(height: 16),
           NoteCard(
