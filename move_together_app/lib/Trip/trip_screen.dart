@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:move_together_app/Participant/participant_info.dart';
 import 'package:move_together_app/Trip/bloc/trip_bloc.dart';
 import 'package:move_together_app/Trip/trip_app_bar.dart';
 import 'package:move_together_app/Trip/trip_body.dart';
@@ -16,7 +18,7 @@ class TripScreen extends StatelessWidget {
     final tripId = GoRouterState.of(context).uri.pathSegments[1];
 
     return BlocProvider(
-      create: (context) => TripBloc(context)..add(TripDataFetch(tripId)),
+      create: (context) => TripBloc(context)..add(TripDataFetch(int.parse(tripId))),
       child: BlocBuilder<TripBloc, TripState>(builder: (context, state) {
         if (state is TripDataLoading) {
           return Scaffold(
@@ -51,28 +53,26 @@ class TripScreen extends StatelessWidget {
               tripId: state.trip.id,
               onNameUpdate: (newName) {
                 context.read<TripBloc>().add(TripDataFetch(
-                  tripId,
+                  state.trip.id,
                 ));
               },
               onDateUpdate: (firstDate, secondDate) {
                 context.read<TripBloc>().add(TripDataFetch(
-                  tripId,
+                  state.trip.id,
                 ));
               },
               imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${state.trip.id}/banner/download",
               userHasEditRights: state.trip.currentUserHasEditingRights(context),
               onParticipantsTap: () async {
-                await context.pushNamed(
-                  'participants',
-                  pathParameters: {
-                    'tripId': tripId.toString(),
-                  },
-                  queryParameters: {
-                    'inviteCode': state.trip.inviteCode,
-                  },
+                await showCupertinoModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) => ParticipantInfo(
+                    tripId: state.trip.id,
+                    inviteCode: state.trip.inviteCode,
+                  )
                 );
                 context.read<TripBloc>().add(TripDataFetch(
-                  tripId,
+                  state.trip.id,
                 ));
               },
             ),
