@@ -54,7 +54,6 @@ class TripBody extends StatelessWidget {
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-          TripMap(tripId: trip.id),
         ],
       ),
     );
