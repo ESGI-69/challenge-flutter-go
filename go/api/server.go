@@ -71,6 +71,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	activityRepository := repository.ActivityRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -122,6 +126,11 @@ func setRoutes() {
 
 	featureHandler := handlers.FeatureHandler{
 		Repository: featureRepository,
+	}
+
+	activityHandler := handlers.ActivityHandler{
+		Repository:     activityRepository,
+		TripRepository: tripRepository,
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -190,6 +199,11 @@ func setRoutes() {
 	tripPhotosRoutes.POST("", middlewares.UserHasTripEditRight, photoHandler.CreatePhoto)
 	tripPhotosRoutes.DELETE("/:photoID", middlewares.UserHasTripEditRight, middlewares.PhotoBelongsToTrip, photoHandler.DeletePhotoFromTrip)
 	tripPhotosRoutes.GET("/:photoID/download", middlewares.UserIsTripParticipant, middlewares.PhotoBelongsToTrip, photoHandler.DownloadPhoto)
+
+	tripActivitiesRoutes := tripsRoutes.Group("/:id/activities")
+	tripActivitiesRoutes.GET("", middlewares.UserIsTripParticipant, activityHandler.GetAllFromTrip)
+	tripActivitiesRoutes.POST("", middlewares.UserHasTripEditRight, activityHandler.Create)
+	tripActivitiesRoutes.DELETE("/:activityID", middlewares.UserHasTripEditRight, middlewares.ActivityBelongsToTrip, activityHandler.Delete)
 
 	featuresRoutes := router.Group("/app-settings")
 	featuresRoutes.GET("", featureHandler.GetFeatures)

@@ -5,4 +5,6 @@ type ActivityCreateBody struct {
 	Description string  `json:"description"`
 	Price       float64 `json:"price" binding:"required"`
 	Location    string  `json:"location"`
+	StartDate   string  `json:"startDate" binding:"required"`
+	EndDate     string  `json:"endDate" binding:"required"`
 }

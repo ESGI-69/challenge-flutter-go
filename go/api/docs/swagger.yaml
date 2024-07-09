@@ -70,6 +70,26 @@ definitions:
     - name
     - startDate
     type: object
+  requests.ActivityCreateBody:
+    properties:
+      description:
+        type: string
+      endDate:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      startDate:
+        type: string
+    required:
+    - endDate
+    - name
+    - price
+    - startDate
+    type: object
   requests.AuthLoginBody:
     properties:
       password:
@@ -187,6 +207,29 @@ definitions:
         type: number
       name:
         type: string
+      startDate:
+        type: string
+    type: object
+  responses.ActivityResponse:
+    properties:
+      description:
+        type: string
+      endDate:
+        type: string
+      id:
+        type: integer
+      latitude:
+        type: number
+      location:
+        type: string
+      longitude:
+        type: number
+      name:
+        type: string
+      owner:
+        $ref: '#/definitions/responses.UserResponse'
+      price:
+        type: number
       startDate:
         type: string
     type: object
@@ -748,6 +791,104 @@ paths:
       summary: Delete an accommodation
       tags:
       - accommodation
+  /trips/{id}/activities:
+    get:
+      consumes:
+      - application/json
+      description: Get all activities associated with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.ActivityResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all activities from a trip
+      tags:
+      - activity
+    post:
+      consumes:
+      - application/json
+      description: Create an activity associated with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Activity information
+        in: body
+        name: activity
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ActivityCreateBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ActivityResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Create an activity
+      tags:
+      - activity
+  /trips/{id}/activities/{activityId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an activity associated with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the activity
+        in: path
+        name: activityId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema: {}
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Delete an activity
+      tags:
+      - activity
   /trips/{id}/banner/download:
     get:
       consumes:
