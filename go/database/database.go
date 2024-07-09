@@ -38,6 +38,7 @@ func autoMigrate() {
 		&models.Photo{},
 		&models.LogEntry{},
 		&models.Feature{},
+		&models.Activity{},
 	)
 	if err != nil {
 		log.Fatalln(err)
@@ -122,8 +123,8 @@ func createFeatures() {
 		var existingFeature models.Feature
 		result := database.First(&existingFeature, "name = ?", feature.Name)
 		if result.Error != nil {
-			log.Print("Feature " + feature.Name + " already exists")
 			database.Create(&feature)
+			log.Print("Feature " + feature.Name + " created and enabled")
 		}
 	}
 }
