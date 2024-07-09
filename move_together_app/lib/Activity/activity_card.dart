@@ -28,7 +28,7 @@ class ActivityCard extends StatelessWidget {
               if (state is ActivitiesDataLoadingSuccess) {
                 return TripFeatureCard(
                   title: 'Activities',
-                  emptyMessage: 'Tellement vide ! Appuie sur le + pour ajouter des notes',
+                  emptyMessage: 'Qu\'allons-nous faire ? Appuie sur le + pour ajouter des activités',
                   showAddButton: userHasEditPermission,
                   icon: Icons.note,
                   isLoading: state is ActivitiesDataLoading,
@@ -69,7 +69,7 @@ class ActivityCard extends StatelessWidget {
               } else if (state is ActivitiesDataLoading) {
                 return TripFeatureCard(
                   title: 'Activities',
-                  emptyMessage: 'Tellement vide ! Appuie sur le + pour ajouter des notes',
+                  emptyMessage: 'Qu\'allons-nous faire ? Appuie sur le + pour ajouter des activités',
                   showAddButton: false,
                   icon: Icons.note,
                   isLoading: true,
