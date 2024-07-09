@@ -46,8 +46,6 @@ class _CoolDateTimePickerState extends State<CoolDateTimePicker> {
         lastDate: lastDate,
       );
 
-      print('Selected date $selectedDate');
-
       if (selectedDate == null) return null;
 
       if (!context.mounted) return selectedDate;
@@ -56,8 +54,6 @@ class _CoolDateTimePickerState extends State<CoolDateTimePicker> {
         context: context,
         initialTime: TimeOfDay.fromDateTime(initialDate),
       );
-
-      print('Selected time $selectedTime');
 
       return selectedTime == null
         ? selectedDate
@@ -76,7 +72,6 @@ class _CoolDateTimePickerState extends State<CoolDateTimePicker> {
         firstDate: widget.firstDate,
         lastDate: widget.lastDate,
       ).then((value) {
-        print(value);
         if (value != null) {
           setState(() {
             _selectedDateTime = value;
