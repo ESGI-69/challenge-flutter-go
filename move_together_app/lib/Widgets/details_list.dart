@@ -12,7 +12,7 @@ class DetailItem {
 
   String get stringValue {
     if (value is DateTime) {
-      return DateFormat.yMMMd().add_Hm().format(value as DateTime);
+      return DateFormat.yMMMd().add_Hm().format((value as DateTime).toLocal());
     } else {
       return value.toString();
     }
