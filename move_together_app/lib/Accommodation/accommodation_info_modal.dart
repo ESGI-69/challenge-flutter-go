@@ -39,6 +39,7 @@ class AccommodationInfoModal extends StatelessWidget {
 
     Uri urlParsed;
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       margin: const EdgeInsets.only(bottom: 32),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(

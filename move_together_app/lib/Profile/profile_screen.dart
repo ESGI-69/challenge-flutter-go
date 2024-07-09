@@ -53,7 +53,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    '@${state.profile.name}',
+                    state.profile.formattedUsername,
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 24),

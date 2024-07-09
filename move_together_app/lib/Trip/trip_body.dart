@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:move_together_app/Accommodation/accommodation_card.dart';
+import 'package:move_together_app/Activity/activity_card.dart';
 import 'package:move_together_app/Photo/photo_card.dart';
 import 'package:move_together_app/Document/document_card.dart';
 import 'package:move_together_app/Transport/transport_card.dart';
@@ -42,6 +43,12 @@ class TripBody extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           NoteCard(
+            tripId: trip.id,
+            userHasEditPermission: trip.currentUserHasEditingRights(context),
+            userIsOwner: trip.isCurrentUserOwner(context),
+          ),
+          const SizedBox(height: 16),
+          ActivityCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
