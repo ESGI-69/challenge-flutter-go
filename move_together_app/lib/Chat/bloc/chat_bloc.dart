@@ -16,9 +16,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final ChatService _chatService;
   final WebSocketService _webSocketService;
 
-  ChatBloc(BuildContext context)
+  ChatBloc(BuildContext context, String tripId)
       : _chatService = ChatService(context.read<AuthProvider>()),
-        _webSocketService = WebSocketService(dotenv.env['WEBSOCKET_ADDRESS']!),
+        _webSocketService = WebSocketService(dotenv.env['WEBSOCKET_ADDRESS']!, 'chat_$tripId'),
         super(ChatInitial()) {
     on<ChatDataFetch>(_onChatDataFetch);
     on<ChatDataSendMessage>(_onChatDataSendMessage);
@@ -67,7 +67,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(updatedState);
     }
   }
-
 
   @override
   Future<void> close() {
