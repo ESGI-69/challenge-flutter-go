@@ -10,7 +10,6 @@ import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   initializeDateFormatting('fr_FR');
-  // Set the default locale
   Intl.defaultLocale = 'fr_FR';
   await dotenv.load(fileName: ".env");
   runApp(
