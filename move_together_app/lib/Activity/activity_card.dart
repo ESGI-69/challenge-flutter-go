@@ -30,7 +30,7 @@ class ActivityCard extends StatelessWidget {
                   title: 'Activities',
                   emptyMessage: 'Qu\'allons-nous faire ? Appuie sur le + pour ajouter des activités',
                   showAddButton: userHasEditPermission,
-                  icon: Icons.note,
+                  icon: Icons.kayaking,
                   isLoading: state is ActivitiesDataLoading,
                   length: state.activities.length,
                   onAddTap: () {
@@ -71,7 +71,7 @@ class ActivityCard extends StatelessWidget {
                   title: 'Activities',
                   emptyMessage: 'Qu\'allons-nous faire ? Appuie sur le + pour ajouter des activités',
                   showAddButton: false,
-                  icon: Icons.note,
+                  icon: Icons.kayaking,
                   isLoading: true,
                   length: 0,
                   itemBuilder: (context, index) {
