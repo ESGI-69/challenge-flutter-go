@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:move_together_app/Widgets/Input/cool_date_picker.dart';
+import 'package:move_together_app/Widgets/Input/cool_date_time_picker.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/accommodation.dart';
 import 'package:move_together_app/core/services/accommodation_service.dart';
@@ -32,18 +32,18 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _bookingUrlController = TextEditingController();
-  DateTime _startDate = DateTime.fromMillisecondsSinceEpoch(0);
-  DateTime _endDate = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
 
   void createAccommodation() async {
-    if (_addressController.text.isEmpty || _startDate == DateTime.fromMillisecondsSinceEpoch(0) || _endDate == DateTime.fromMillisecondsSinceEpoch(0)) {
+    if (_addressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)) {
       return;
     }
     final createdAccommodation = await AccommodationService(context.read<AuthProvider>()).create(
       tripId: widget.tripId,
       accommodationType: _selectedAccommodationType,
-      startDate: _startDate,
-      endDate: _endDate,
+      startDate: _startDateTime,
+      endDate: _endDateTime,
       address: _addressController.text,
       name: _nameController.text,
       bookingUrl: _bookingUrlController.text,
@@ -102,12 +102,12 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
                 prefixIcon: Icons.calendar_today,
                 onDateTimeChanged: (DateTime dateTime) {
                   setState(() {
-                    _startDate = dateTime;
+                    _startDateTime = dateTime;
                   });
                 },
                 onDateTimeCleared: () {
                   setState(() {
-                    _startDate = DateTime.fromMillisecondsSinceEpoch(0);
+                    _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
                   });
                 },
               ),
@@ -117,12 +117,12 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
                 prefixIcon: Icons.calendar_today,
                 onDateTimeChanged: (DateTime dateTime) {
                   setState(() {
-                    _endDate = dateTime;
+                    _endDateTime = dateTime;
                   });
                 },
                 onDateTimeCleared: () {
                   setState(() {
-                    _endDate = DateTime.fromMillisecondsSinceEpoch(0);
+                    _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
                   });
                 },
               ),
@@ -141,7 +141,7 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: createAccommodation,
-                style: _addressController.text.isEmpty || _startDate == DateTime.fromMillisecondsSinceEpoch(0) || _endDate == DateTime.fromMillisecondsSinceEpoch(0)
+                style: _addressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
                   ? ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
                   )

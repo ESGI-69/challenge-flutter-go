@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:move_together_app/Widgets/Input/cool_date_picker.dart';
+import 'package:move_together_app/Widgets/Input/cool_date_time_picker.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/services/transport_service.dart';
@@ -31,18 +31,18 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
   TransportType _selectedTransportType = TransportType.car;
   final TextEditingController _startAddressController = TextEditingController();
   final TextEditingController _endAddressController = TextEditingController();
-  DateTime _startDate = DateTime.fromMillisecondsSinceEpoch(0);
-  DateTime _endDate = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
 
   void createTransport() async {
-    if (_startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDate == DateTime.fromMillisecondsSinceEpoch(0) || _endDate == DateTime.fromMillisecondsSinceEpoch(0)) {
+    if (_startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)) {
       return;
     }
     final createdTransport = await TransportService(context.read<AuthProvider>()).create(
       tripId: widget.tripId,
       transportType: _selectedTransportType,
-      startDate: _startDate,
-      endDate: _endDate,
+      startDate: _startDateTime,
+      endDate: _endDateTime,
       startAddress: _startAddressController.text,
       endAddress: _endAddressController.text,
     );
@@ -99,12 +99,12 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
               prefixIcon: Icons.calendar_today,
               onDateTimeChanged: (DateTime dateTime) {
                 setState(() {
-                  _startDate = dateTime;
+                  _startDateTime = dateTime;
                 });
               },
               onDateTimeCleared: () {
                 setState(() {
-                  _startDate = DateTime.fromMillisecondsSinceEpoch(0);
+                  _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
                 });
               },
             ),
@@ -120,19 +120,19 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
               prefixIcon: Icons.calendar_today,
               onDateTimeChanged: (DateTime dateTime) {
                 setState(() {
-                  _endDate = dateTime;
+                  _endDateTime = dateTime;
                 });
               },
               onDateTimeCleared: () {
                 setState(() {
-                  _endDate = DateTime.fromMillisecondsSinceEpoch(0);
+                  _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
                 });
               },
             ),
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: createTransport,
-              style: _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDate == DateTime.fromMillisecondsSinceEpoch(0) || _endDate == DateTime.fromMillisecondsSinceEpoch(0)
+              style: _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
                 ? ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
                 )

@@ -6,6 +6,9 @@ class CoolDateTimePicker extends StatefulWidget {
   final IconData prefixIcon;
   final Function(DateTime)? onDateTimeChanged;
   final Function()? onDateTimeCleared;
+  final DateTime? initialDate;
+  final DateTime? firstDate;
+  final DateTime? lastDate;
 
   const CoolDateTimePicker({
     super.key,
@@ -13,6 +16,9 @@ class CoolDateTimePicker extends StatefulWidget {
     required this.prefixIcon,
     this.onDateTimeChanged,
     this.onDateTimeCleared,
+    this.initialDate,
+    this.firstDate,
+    this.lastDate,
   });
 
   @override
@@ -20,20 +26,60 @@ class CoolDateTimePicker extends StatefulWidget {
 }
 
 class _CoolDateTimePickerState extends State<CoolDateTimePicker> {
-  late DateTime _selectedDate = DateTime.fromMicrosecondsSinceEpoch(0);
+  late DateTime _selectedDateTime = DateTime.fromMicrosecondsSinceEpoch(0);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => showDatePicker(
+    Future<DateTime?> showDateTimePicker({
+      required DateTime? initialDate,
+      required DateTime? firstDate,
+      required DateTime? lastDate,
+    }) async {
+      initialDate ??= DateTime.now();
+      firstDate ??= initialDate.subtract(const Duration(days: 365 * 100));
+      lastDate ??= firstDate.add(const Duration(days: 365 * 200));
+
+      final DateTime? selectedDate = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2100),
+        initialDate: initialDate,
+        firstDate: firstDate,
+        lastDate: lastDate,
+      );
+
+      print('Selected date $selectedDate');
+
+      if (selectedDate == null) return null;
+
+      if (!context.mounted) return selectedDate;
+
+      final TimeOfDay? selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initialDate),
+      );
+
+      print('Selected time $selectedTime');
+
+      return selectedTime == null
+        ? selectedDate
+        : DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
+    }
+    
+    return GestureDetector(
+      onTap: () => showDateTimePicker(
+        initialDate: widget.initialDate,
+        firstDate: widget.firstDate,
+        lastDate: widget.lastDate,
       ).then((value) {
+        print(value);
         if (value != null) {
           setState(() {
-            _selectedDate = value;
+            _selectedDateTime = value;
           });
           widget.onDateTimeChanged?.call(value);
         }
@@ -59,15 +105,15 @@ class _CoolDateTimePickerState extends State<CoolDateTimePicker> {
                   children: [
                     Icon(widget.prefixIcon, color: Theme.of(context).primaryColor),
                     const SizedBox(width: 12),
-                    _Text(hintText: widget.hintText, selectedDate: _selectedDate),
+                    _Text(hintText: widget.hintText, selectedDate: _selectedDateTime),
                   ],
                 ),
               ),
-              _selectedDate != DateTime.fromMicrosecondsSinceEpoch(0)
+              _selectedDateTime != DateTime.fromMicrosecondsSinceEpoch(0)
                 ? GestureDetector(
                   onTap: () {
                     setState(() {
-                      _selectedDate = DateTime.fromMicrosecondsSinceEpoch(0);
+                      _selectedDateTime = DateTime.fromMicrosecondsSinceEpoch(0);
                     });
                     widget.onDateTimeCleared?.call();
                   },
@@ -108,7 +154,7 @@ class _Text extends StatelessWidget {
       );
     } else {
       return Text(
-        DateFormat.yMMMd().format(selectedDate),
+        DateFormat.yMMMd().add_Hm().format(selectedDate.toLocal()),
         style: const TextStyle(
           fontSize: 16,
           color: Colors.black,

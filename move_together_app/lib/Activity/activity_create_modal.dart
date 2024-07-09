@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:move_together_app/Widgets/Input/cool_date_picker.dart';
+import 'package:move_together_app/Widgets/Input/cool_date_time_picker.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/services/activity_service.dart';
@@ -23,14 +23,14 @@ class ActivityCreateModal extends StatefulWidget {
 class _ActivityCreateModalState extends State<ActivityCreateModal> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  DateTime _startDate = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _endDate = DateTime.fromMillisecondsSinceEpoch(0);
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
   bool cantPost() {
     return _nameController.text.isEmpty
-      || _startDate == DateTime.fromMillisecondsSinceEpoch(0)
+      || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0)
       || _endDate == DateTime.fromMillisecondsSinceEpoch(0)
       || _priceController.text.isEmpty;
   }
@@ -43,8 +43,8 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
       tripId: widget.tripId,
       name: _nameController.text,
       description: _descriptionController.text,
-      endDate: DateTime.now(),
-      startDate: DateTime.now(),
+      endDate: _endDate,
+      startDate: _startDateTime,
       location: _locationController.text,
       price: double.parse(_priceController.text),
     );
@@ -86,12 +86,12 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
                 prefixIcon: Icons.calendar_today,
                 onDateTimeChanged: (dateTime) {
                   setState(() {
-                    _startDate = dateTime;
+                    _startDateTime = dateTime;
                   });
                 },
                 onDateTimeCleared: () {
                   setState(() {
-                    _startDate = DateTime.fromMillisecondsSinceEpoch(0);
+                    _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
                   });
                 },
               ),
