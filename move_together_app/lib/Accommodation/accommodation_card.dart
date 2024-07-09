@@ -6,6 +6,7 @@ import 'package:move_together_app/Accommodation/accommodation_info_modal.dart';
 import 'package:move_together_app/Accommodation/accommodation_row.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:move_together_app/Trip/trip_map.dart';
 
 class AccommodationCard extends StatelessWidget {
   final int tripId;
@@ -26,6 +27,7 @@ class AccommodationCard extends StatelessWidget {
       child: BlocBuilder<AccommodationBloc, AccommodationState>(
         builder: (context, state) {
           if (state is AccommodationsDataLoadingSuccess) {
+<<<<<<< HEAD
             return TripFeatureCard(
               title: 'Hébergements',
               emptyMessage: 'Où on dormira ? Appuie sur le + pour ajouter un logement',
@@ -61,13 +63,55 @@ class AccommodationCard extends StatelessWidget {
                         onAccommodationDeleted: (accommodation) => {
                           state.accommodations.remove(accommodation),
                           Navigator.of(context).pop(),
+=======
+            return Column(
+              children: [
+                TripFeatureCard(
+                  title: 'Hébergements',
+                  emptyMessage: 'Où on dormira ? Appuie sur le + pour ajouter un logement',
+                  showAddButton: userHasEditPermission,
+                  icon: Icons.home,
+                  isLoading: state is AccommodationsDataLoading,
+                  length: state.accommodations.length,
+                  onAddTap: () {
+                    showCupertinoModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) => AccommodationCreateModal(
+                        tripId: tripId,
+                        onAccommodationCreated: (createdAccommodation) {
+                          state.accommodations.add(createdAccommodation);
+                          Navigator.of(context).pop();
+>>>>>>> 35e11fd (feat(gmap-flutter): use tripMap into accomodationCard instead so it can access the same state, + add environment variable for google maps flutter)
                         },
-                        tripId: tripId
                       ),
-                    ),
-                  ),
-                );
-              },
+                    );
+                  },
+                  onTitleTap: () {},
+                  itemBuilder: (context, index) {
+                    return AccommodationRow(
+                      accommodation: state.accommodations[index],
+                      onTap: () => showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => FractionallySizedBox(
+                          heightFactor: 0.8,
+                          child: AccommodationInfoModal(
+                            accommodation: state.accommodations[index],
+                            hasTripEditPermission: userHasEditPermission,
+                            isTripOwner: userIsOwner,
+                            onAccommodationDeleted: (accommodation) => {
+                              state.accommodations.remove(accommodation),
+                              Navigator.of(context).pop(),
+                            },
+                            tripId: tripId
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+              TripMap(tripId: tripId),
+              ],
             );
           } else if (state is AccommodationsDataLoading) {
             return TripFeatureCard(

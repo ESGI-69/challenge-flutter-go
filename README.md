@@ -72,6 +72,10 @@ swag init -o ./api/docs
 
 ## flutter 
 To use the google maps api and show the map, please add the api key in `move_together_app/android/app/src/main/AndroidManifest.xml`
+or run the command (flutter run or build)
+```
+flutter run --dart-define GOOGLE_MAPS_API_KEY=<THEGOOGLEAPIKEY>
+```
 
 In some cases, the map might still show a blank map with no terrain textures, if so, use the following command before running the flutter app 
 ```

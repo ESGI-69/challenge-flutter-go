@@ -42,92 +42,92 @@ class _TripMapState extends State<TripMap> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return BlocProvider(
-    create: (context) => AccommodationBloc(context)..add(AccommodationsDataFetch(widget.tripId)),
-    child: BlocBuilder<AccommodationBloc, AccommodationState>(
-      builder: (context, state) {
-        if (state is AccommodationsDataLoadingSuccess && state.accommodations.isNotEmpty) {
-          return Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.black12, width: 1),
-                    ),
+  Widget build(BuildContext context) {
+    return BlocBuilder<AccommodationBloc, AccommodationState>(
+      bloc: BlocProvider.of<AccommodationBloc>(context),
+        builder: (context, state) {
+          Set<Marker> markers = {};
+          if (state is AccommodationsDataLoadingSuccess && state.accommodations.isNotEmpty) {
+            markers = _createMarkers(state.accommodations);
+            return Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 28,
-                              height: 28,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: const Icon(
-                                Icons.map,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            const Text(
-                              "Map",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: GoogleMap(
-                      onMapCreated: _onMapCreated,
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(state.accommodations[0].latitude!, state.accommodations[0].longitude!),
-                        zoom: 11.0,
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.black12, width: 1),
                       ),
-                      markers: _createMarkers(state.accommodations),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: const Icon(
+                                  Icons.map,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                "Map",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        } else if (state is AccommodationsDataLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          return const SizedBox(); // Return an empty widget if there are no accommodations or on error
-        }
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: 300,
+                      width: double.infinity,
+                      child: GoogleMap(
+                        onMapCreated: _onMapCreated,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(state.accommodations[0].latitude!, state.accommodations[0].longitude!),
+                          zoom: 11.0,
+                        ),
+                        markers: markers,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else if (state is AccommodationsDataLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return const SizedBox();
+          }
       },
-    ),
-  );
-}
+    );
+  }
 }
