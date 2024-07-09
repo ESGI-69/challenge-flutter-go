@@ -7,7 +7,7 @@ final class ChatInitial extends ChatState {}
 
 final class ChatDataLoading extends ChatState {}
 
-final class ChatDataLoadingSuccess extends ChatState {
+class ChatDataLoadingSuccess extends ChatState {
   final List<Message> messages;
   final ChatSendMessageState sendMessageState;
 

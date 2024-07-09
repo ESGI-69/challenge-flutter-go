@@ -15,40 +15,61 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-var clients = make(map[*websocket.Conn]bool)
-var broadcast = make(chan responses.ChatMessageResponse)
+var clients = make(map[*websocket.Conn]string)
+var rooms = make(map[string]map[*websocket.Conn]bool)
+var broadcast = make(chan broadcastMessage)
+
+type broadcastMessage struct {
+	Room    string
+	Message responses.ChatMessageResponse
+}
 
 type SocketHandler struct{}
 
-func (handler *SocketHandler) HandleConnections(c *gin.Context) {
+func (handler *SocketHandler) HandleChatConnections(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		logger.ApiError(c, "Failed to upgrade to websocket: "+err.Error())
 		return
 	}
 	defer ws.Close()
-	clients[ws] = true
+
+	roomId := c.Query("roomId")
+	if roomId == "" {
+		logger.ApiError(c, "RoomId query parameter is required")
+		return
+	}
+
+	if rooms[roomId] == nil {
+		rooms[roomId] = make(map[*websocket.Conn]bool)
+	}
+	rooms[roomId][ws] = true
+	clients[ws] = roomId
 
 	for {
-		var msg responses.ChatMessageResponse
-		err := ws.ReadJSON(&msg)
+		_, _, err := ws.ReadMessage()
 		if err != nil {
+			delete(rooms[roomId], ws)
 			delete(clients, ws)
 			break
 		}
-		broadcast <- msg
 	}
 }
 
 func (handler *SocketHandler) HandleMessages() {
 	for {
 		msg := <-broadcast
-		for client := range clients {
-			err := client.WriteJSON(msg)
+		room := msg.Room
+		for client := range rooms[room] {
+			err := client.WriteJSON(msg.Message)
 			if err != nil {
 				client.Close()
-				delete(clients, client)
+				delete(rooms[room], client)
 			}
 		}
 	}
+}
+
+func BroadcastMessage(msg responses.ChatMessageResponse, roomId string) {
+	broadcast <- broadcastMessage{Room: roomId, Message: msg}
 }

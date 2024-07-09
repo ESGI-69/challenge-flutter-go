@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/core/models/message.dart';
 import 'package:move_together_app/Chat/chat_bubble.dart';
 import 'package:move_together_app/Chat/chat_input.dart';
-
 import 'bloc/chat_bloc.dart';
 
 class ChatBody extends StatefulWidget {
@@ -86,8 +85,8 @@ class ChatBodyState extends State<ChatBody> {
             itemBuilder: (context, index) {
               final message = widget.messages[widget.messages.length - 1 - index];
               return ChatBubble(
-                message: message,
-                isOwnMessage: message.isCurrentUserAuthor(context)
+                  message: message,
+                  isOwnMessage: message.isCurrentUserAuthor(context)
               );
             },
           ),

@@ -15,9 +15,18 @@ import (
 
 func UserIsLogged(context *gin.Context) {
 	authorizationHeader := context.Request.Header.Get("Authorization")
-
 	token := strings.TrimPrefix(authorizationHeader, "Bearer ")
 
+	validateAndPopulateUser(token, context)
+}
+
+func UserIsLoggedByParam(context *gin.Context) {
+	token := context.Query("token")
+
+	validateAndPopulateUser(token, context)
+}
+
+func validateAndPopulateUser(token string, context *gin.Context) {
 	if err := isTokenInvalid(token); err != nil {
 		logger.ApiWarning(context, "Invalid token")
 		context.AbortWithStatus(http.StatusUnauthorized)

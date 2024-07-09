@@ -47,7 +47,7 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 	chatMessage := models.ChatMessage{
 		Content: requestBody.Content,
 		Author:  currentUser,
-		Trip:    trip,
+		TripID:  trip.ID,
 	}
 
 	errChatMessage := handler.Repository.Create(&chatMessage)
@@ -58,13 +58,17 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 
 	response := responses.ChatMessageResponse{
 		ID: chatMessage.ID,
-		Author: responses.UserResponse{
+		Author: responses.UserRoleReponse{
 			ID:       chatMessage.Author.ID,
 			Username: chatMessage.Author.Username,
+			Role:     chatMessage.Author.Role,
 		},
 		Content:   chatMessage.Content,
 		CreatedAt: chatMessage.CreatedAt.Format(time.RFC3339),
 	}
+
+	// Broadcast the message
+	BroadcastMessage(response, tripId)
 
 	context.JSON(http.StatusCreated, response)
 	logger.ApiInfo(context, "Chat message "+chatMessage.Content+" added to trip "+tripId)
@@ -97,9 +101,10 @@ func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
 	for i, chatMessage := range chatMessages {
 		chatMessageResponse[i] = responses.ChatMessageResponse{
 			ID: chatMessage.ID,
-			Author: responses.UserResponse{
+			Author: responses.UserRoleReponse{
 				ID:       chatMessage.Author.ID,
 				Username: chatMessage.Author.Username,
+				Role:     chatMessage.Author.Role,
 			},
 			Content:   chatMessage.Content,
 			CreatedAt: chatMessage.CreatedAt.Format(time.RFC3339),
@@ -107,25 +112,4 @@ func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, chatMessageResponse)
 	logger.ApiInfo(context, "Get all chat messages from trip "+tripId)
-}
-
-// Handle WebSocket connections
-func (handler *ChatMessageHandler) HandleConnections(c *gin.Context) {
-	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		logger.ApiError(c, "Failed to upgrade to websocket: "+err.Error())
-		return
-	}
-	defer ws.Close()
-	clients[ws] = true
-
-	for {
-		var msg responses.ChatMessageResponse
-		err := ws.ReadJSON(&msg)
-		if err != nil {
-			delete(clients, ws)
-			break
-		}
-		broadcast <- msg
-	}
 }

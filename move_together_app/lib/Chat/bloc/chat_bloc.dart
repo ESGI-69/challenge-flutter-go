@@ -16,9 +16,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final ChatService _chatService;
   final WebSocketService _webSocketService;
 
-  ChatBloc(BuildContext context)
+  ChatBloc(BuildContext context, String tripId, String token)
       : _chatService = ChatService(context.read<AuthProvider>()),
-      _webSocketService = WebSocketService(dotenv.env['WEBSOCKET_ADDRESS']!),
+        _webSocketService = WebSocketService(dotenv.env['WEBSOCKET_ADDRESS']!, 'chat', tripId, token),
         super(ChatInitial()) {
     on<ChatDataFetch>(_onChatDataFetch);
     on<ChatDataSendMessage>(_onChatDataSendMessage);
@@ -26,8 +26,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     // Listen to messages from WebSocketService
     _webSocketService.stream.listen((message) {
-      var messageDecoded = message;
-      add(ChatDataReceived(messageDecoded));
+      add(ChatDataReceived(message));
     });
   }
 
@@ -48,8 +47,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (currentState is ChatDataLoadingSuccess) {
       emit(currentState.copyWith(sendMessageState: ChatSendMessageLoading()));
       try {
-        final message = await _chatService.create(event.tripId, event.message);
-        _webSocketService.send(message);
+        await _chatService.create(event.tripId, event.message);
       } on ApiException catch (error) {
         emit(currentState.copyWith(sendMessageState: ChatSendMessageError(errorMessage: error.message)));
       } catch (error) {
@@ -61,7 +59,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   void _onChatDataReceived(ChatDataReceived event, Emitter<ChatState> emit) {
     final currentState = state;
     if (currentState is ChatDataLoadingSuccess) {
-      final message = Message.fromJson(jsonDecode(event.message));
+      final messageDecoded = jsonDecode(event.message);
+      final message = Message.fromJson(messageDecoded);
       final updatedState = currentState
           .addMessage(message)
           .copyWith(sendMessageState: ChatSendMessageSuccess(message: message));

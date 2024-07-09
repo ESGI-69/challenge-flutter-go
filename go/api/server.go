@@ -113,7 +113,7 @@ func setRoutes() {
 		TripRepository: tripRepository,
 	}
 
-	sockeHandler := handlers.SocketHandler{}
+	socketHandler := handlers.SocketHandler{}
 
 	photoHandler := handlers.PhotoHandler{
 		Repository:     photoRepository,
@@ -194,7 +194,8 @@ func setRoutes() {
 	featuresRoutes := router.Group("/app-settings")
 	featuresRoutes.GET("", featureHandler.GetFeatures)
 
-	router.GET("/ws", sockeHandler.HandleConnections)
+	socketRoutes := router.Group("/ws", middlewares.UserIsLoggedByParam)
+	socketRoutes.GET("/chat", middlewares.SocketUserIsTripParticipant, socketHandler.HandleChatConnections)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
