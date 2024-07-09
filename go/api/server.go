@@ -195,7 +195,7 @@ func setRoutes() {
 	featuresRoutes.GET("", featureHandler.GetFeatures)
 
 	socketRoutes := router.Group("/ws", middlewares.UserIsLoggedByParam)
-	socketRoutes.GET("/chat", middlewares.SocketUserHasTripEditRight, socketHandler.HandleChatConnections)
+	socketRoutes.GET("/chat", middlewares.SocketUserIsTripParticipant, socketHandler.HandleChatConnections)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)

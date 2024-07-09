@@ -21,9 +21,11 @@ func init() {
 
 // Check if the trip ID is correct, if the trip exist, and if the logged user is the owner of the trip
 func UserIsTripOwner(context *gin.Context) {
+	tripId := context.Param("id")
+
 	var trip models.Trip
 	var user models.User
-	err := retriveTripAndUser(context, &trip, &user)
+	err := retriveTripAndUser(context, &trip, &user, tripId)
 	if err {
 		return
 	}
@@ -39,9 +41,11 @@ func UserIsTripOwner(context *gin.Context) {
 
 // Check if the trip ID is correct, if the trip exist, and if the logged user is the owner of the trip
 func UserHasTripEditRight(context *gin.Context) {
+	tripId := context.Param("id")
+
 	var trip models.Trip
 	var user models.User
-	err := retriveTripAndUser(context, &trip, &user)
+	err := retriveTripAndUser(context, &trip, &user, tripId)
 	if err {
 		return
 	}
@@ -56,9 +60,11 @@ func UserHasTripEditRight(context *gin.Context) {
 }
 
 func UserIsTripParticipant(context *gin.Context) {
+	tripId := context.Param("id")
+
 	var trip models.Trip
 	var user models.User
-	err := retriveTripAndUser(context, &trip, &user)
+	err := retriveTripAndUser(context, &trip, &user, tripId)
 	if err {
 		return
 	}
@@ -71,7 +77,7 @@ func UserIsTripParticipant(context *gin.Context) {
 	context.Next()
 }
 
-func retriveTripAndUser(context *gin.Context, trip *models.Trip, user *models.User) bool {
+func retriveTripAndUser(context *gin.Context, trip *models.Trip, user *models.User, tripId string) bool {
 	currentUser, exist := utils.GetCurrentUser(context)
 	if !exist {
 		logger.ApiError(context, "User not found")
@@ -79,7 +85,6 @@ func retriveTripAndUser(context *gin.Context, trip *models.Trip, user *models.Us
 		return true
 	}
 
-	tripId := context.Param("id")
 	if tripId == "" {
 		logger.ApiError(context, "Trip ID missing in the request")
 		context.AbortWithStatusJSON(400, gin.H{"error": "Invalid trip ID"})
