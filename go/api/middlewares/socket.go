@@ -3,7 +3,6 @@ package middlewares
 import (
 	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/utils"
-	"challenge-flutter-go/database"
 	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"strconv"
@@ -13,35 +12,10 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-var databaseInstance *gorm.DB
-
-func init() {
-	databaseInstance = database.GetInstance()
-}
-
-// Check if the trip ID is correct, if the trip exist, and if the logged user is the owner of the trip
-func UserIsTripOwner(context *gin.Context) {
+func SocketUserHasTripEditRight(context *gin.Context) {
 	var trip models.Trip
 	var user models.User
-	err := retriveTripAndUser(context, &trip, &user)
-	if err {
-		return
-	}
-
-	if !trip.UserIsOwner(&user) {
-		logger.ApiWarning(context, "Access denied, owner of the trip is different from the logged user")
-		context.AbortWithStatusJSON(401, gin.H{"error": "You need to be the owner of the trip to perform this action"})
-		return
-	}
-
-	context.Next()
-}
-
-// Check if the trip ID is correct, if the trip exist, and if the logged user is the owner of the trip
-func UserHasTripEditRight(context *gin.Context) {
-	var trip models.Trip
-	var user models.User
-	err := retriveTripAndUser(context, &trip, &user)
+	err := socketRetriveTripAndUser(context, &trip, &user)
 	if err {
 		return
 	}
@@ -55,23 +29,7 @@ func UserHasTripEditRight(context *gin.Context) {
 	context.Next()
 }
 
-func UserIsTripParticipant(context *gin.Context) {
-	var trip models.Trip
-	var user models.User
-	err := retriveTripAndUser(context, &trip, &user)
-	if err {
-		return
-	}
-
-	if !trip.UserHasViewRight(&user) {
-		logger.ApiWarning(context, "Access denied, user is not a participant of the trip")
-		context.AbortWithStatusJSON(401, gin.H{"error": "You need to be a participant of the trip to perform this action"})
-		return
-	}
-	context.Next()
-}
-
-func retriveTripAndUser(context *gin.Context, trip *models.Trip, user *models.User) bool {
+func socketRetriveTripAndUser(context *gin.Context, trip *models.Trip, user *models.User) bool {
 	currentUser, exist := utils.GetCurrentUser(context)
 	if !exist {
 		logger.ApiError(context, "User not found")
@@ -79,7 +37,7 @@ func retriveTripAndUser(context *gin.Context, trip *models.Trip, user *models.Us
 		return true
 	}
 
-	tripId := context.Param("id")
+	tripId := context.Query("roomId")
 	if tripId == "" {
 		logger.ApiError(context, "Trip ID missing in the request")
 		context.AbortWithStatusJSON(400, gin.H{"error": "Invalid trip ID"})

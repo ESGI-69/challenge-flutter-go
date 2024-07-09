@@ -47,6 +47,38 @@ func UserIsLogged(context *gin.Context) {
 	context.Next()
 }
 
+func UserIsLoggedByParam(context *gin.Context) {
+	token := context.Query("token")
+
+	if err := isTokenInvalid(token); err != nil {
+		logger.ApiWarning(context, "Invalid token")
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	// decode
+	payload := jwt.MapClaims{}
+	_, err := jwt.ParseWithClaims(token, payload, func(t *jwt.Token) (interface{}, error) {
+		return []byte(config.GetConfig().JwtSecret), nil
+	})
+
+	if err != nil {
+		logger.ApiError(context, "Error while parsing token")
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	username := payload["username"].(string)
+
+	if err := populateCurrentUser(username, context); err != nil {
+		logger.ApiError(context, "Error while populating current user")
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	context.Next()
+}
+
 func isTokenInvalid(token string) error {
 	_, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {

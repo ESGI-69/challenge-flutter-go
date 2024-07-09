@@ -3,7 +3,6 @@ package handlers
 import (
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/logger"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +26,7 @@ type broadcastMessage struct {
 
 type SocketHandler struct{}
 
-func (handler *SocketHandler) HandleConnections(c *gin.Context) {
+func (handler *SocketHandler) HandleChatConnections(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		logger.ApiError(c, "Failed to upgrade to websocket: "+err.Error())
@@ -72,7 +71,5 @@ func (handler *SocketHandler) HandleMessages() {
 }
 
 func BroadcastMessage(msg responses.ChatMessageResponse, roomId string) {
-	fmt.Println("Broadcasting message to room:", roomId)
-	fmt.Println(msg)
 	broadcast <- broadcastMessage{Room: roomId, Message: msg}
 }

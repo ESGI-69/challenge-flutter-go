@@ -16,9 +16,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final ChatService _chatService;
   final WebSocketService _webSocketService;
 
-  ChatBloc(BuildContext context, String tripId)
+  ChatBloc(BuildContext context, String tripId, String token)
       : _chatService = ChatService(context.read<AuthProvider>()),
-        _webSocketService = WebSocketService(dotenv.env['WEBSOCKET_ADDRESS']!, 'chat_$tripId'),
+        _webSocketService = WebSocketService(dotenv.env['WEBSOCKET_ADDRESS']!, 'chat', tripId, token),
         super(ChatInitial()) {
     on<ChatDataFetch>(_onChatDataFetch);
     on<ChatDataSendMessage>(_onChatDataSendMessage);

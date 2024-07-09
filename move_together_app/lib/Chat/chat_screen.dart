@@ -15,11 +15,12 @@ class ChatScreen extends StatelessWidget {
     final tripName = GoRouterState.of(context).uri.queryParameters['tripName'] ?? '';
     final authProvider = context.read<AuthProvider>();
     final currentUserId = authProvider.userId;
+    final token = authProvider.token;
 
     return SafeArea(
       top: false,
       child: BlocProvider(
-        create: (context) => ChatBloc(context, tripId)..add(ChatDataFetch(tripId)),
+        create: (context) => ChatBloc(context, tripId, token)..add(ChatDataFetch(tripId)),
         child: BlocBuilder<ChatBloc, ChatState>(
           builder: (context, state) {
             if (state is ChatDataLoading) {

@@ -68,8 +68,7 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 	}
 
 	// Broadcast the message
-	roomId := "chat_" + tripId
-	BroadcastMessage(response, roomId)
+	BroadcastMessage(response, tripId)
 
 	context.JSON(http.StatusCreated, response)
 	logger.ApiInfo(context, "Chat message "+chatMessage.Content+" added to trip "+tripId)
