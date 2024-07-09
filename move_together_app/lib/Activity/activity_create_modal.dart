@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Input/cool_date_time_picker.dart';
+import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/services/activity_service.dart';
@@ -53,95 +54,97 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.only(bottom: 32),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+    return ListView(
+      children: [Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        margin: const EdgeInsets.only(bottom: 32),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const _Header(),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _nameController,
-                hintText: 'Titre',
-                prefixIcon: Icons.title,
-              ),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _descriptionController,
-                hintText: 'Description',
-                prefixIcon: Icons.description,
-              ),
-              const SizedBox(height: 8),
-              CoolDateTimePicker(
-                hintText: 'Date de début',
-                prefixIcon: Icons.calendar_today,
-                onDateTimeChanged: (dateTime) {
-                  setState(() {
-                    _startDateTime = dateTime;
-                  });
-                },
-                onDateTimeCleared: () {
-                  setState(() {
-                    _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              CoolDateTimePicker(
-                hintText: 'Date de fin',
-                prefixIcon: Icons.calendar_today,
-                onDateTimeChanged: (dateTime) {
-                  setState(() {
-                    _endDate = dateTime;
-                  });
-                },
-                onDateTimeCleared: () {
-                  setState(() {
-                    _endDate = DateTime.fromMillisecondsSinceEpoch(0);
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _priceController,
-                hintText: 'Prix',
-                prefixIcon: Icons.euro,
-              ),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _locationController,
-                hintText: 'Lieu',
-                prefixIcon: Icons.location_on,
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: createActivity,
-                style: cantPost()
-                    ? ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                )
-                    : ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const _Header(),
+                const SizedBox(height: 8),
+                CoolTextField(
+                  controller: _nameController,
+                  hintText: 'Titre',
+                  prefixIcon: Icons.title,
                 ),
-                child: const Text(
-                  'Créer',
-                  style: TextStyle(
-                    color: Colors.white,
+                const SizedBox(height: 8),
+                CoolTextField(
+                  controller: _descriptionController,
+                  hintText: 'Description',
+                  prefixIcon: Icons.description,
+                ),
+                const SizedBox(height: 8),
+                CoolDateTimePicker(
+                  hintText: 'Date de début',
+                  prefixIcon: Icons.calendar_today,
+                  onDateTimeChanged: (dateTime) {
+                    setState(() {
+                      _startDateTime = dateTime;
+                    });
+                  },
+                  onDateTimeCleared: () {
+                    setState(() {
+                      _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                CoolDateTimePicker(
+                  hintText: 'Date de fin',
+                  prefixIcon: Icons.calendar_today,
+                  onDateTimeChanged: (dateTime) {
+                    setState(() {
+                      _endDate = dateTime;
+                    });
+                  },
+                  onDateTimeCleared: () {
+                    setState(() {
+                      _endDate = DateTime.fromMillisecondsSinceEpoch(0);
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                CoolNumberField(
+                  controller: _priceController,
+                  hintText: 'Prix',
+                  prefixIcon: Icons.euro,
+                ),
+                const SizedBox(height: 8),
+                CoolTextField(
+                  controller: _locationController,
+                  hintText: 'Lieu',
+                  prefixIcon: Icons.location_on,
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: createActivity,
+                  style: cantPost()
+                      ? ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
+                  )
+                      : ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
+                  ),
+                  child: const Text(
+                    'Créer',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            ]
+              ]
+          ),
         ),
-      ),
+      )],
     );
   }
 }
