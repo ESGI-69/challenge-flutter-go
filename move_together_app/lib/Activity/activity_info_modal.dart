@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:move_together_app/core/models/note.dart';
-import 'package:move_together_app/core/services/note_service.dart';
+import 'package:move_together_app/Widgets/details_list.dart';
+import 'package:move_together_app/core/models/activity.dart';
+import 'package:move_together_app/core/services/activity_service.dart';
 
-class NoteInfoModal extends StatelessWidget {
-  final Note note;
+class ActivityInfoModal extends StatelessWidget {
+  final Activity activity;
   final bool hasTripEditPermission;
   final bool isTripOwner;
-  final Function(Note) onNoteDeleted;
+  final Function(Activity) onActivityDeleted;
   final int tripId;
 
-  const NoteInfoModal({
+  const ActivityInfoModal({
     super.key,
-    required this.note,
+    required this.activity,
     required this.hasTripEditPermission,
     required this.isTripOwner,
-    required this.onNoteDeleted,
+    required this.onActivityDeleted,
     required this.tripId,
   });
 
@@ -24,9 +25,9 @@ class NoteInfoModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    void deleteNote() async {
-      await NoteService(context.read<AuthProvider>()).delete(tripId, note.id);
-      onNoteDeleted(note);
+    void deleteActivity() async {
+      await ActivityService(context.read<AuthProvider>()).delete(tripId, activity.id);
+      onActivityDeleted(activity);
     }
 
     return Container(
@@ -45,17 +46,21 @@ class NoteInfoModal extends StatelessWidget {
             children: [
               const _Header(),
               const SizedBox(height: 16),
-              Text(
-                'Titre : ${note.title}',
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Contenu : ${note.content}',
+              DetailsList(
+                items: [
+                  DetailItem(title: 'Nom', value: activity.name),
+                  DetailItem(title: 'Date et heure de début', value: activity.startDate),
+                  DetailItem(title: 'Date et heure de fin', value: activity.endDate),
+                  DetailItem(title: 'Prix', value: '${activity.price}€'),
+                  DetailItem(title: 'Lieu', value: activity.location),
+                  DetailItem(title: 'Créé par', value: activity.owner.formattedUsername),
+                  DetailItem(title: 'Déscription', value: activity.description),
+                ]
               ),
               const SizedBox(height: 16),
-              (hasTripEditPermission && note.author.isMe(context)) || isTripOwner
+              (hasTripEditPermission && activity.owner.isMe(context)) || isTripOwner
                   ? ElevatedButton(
-                onPressed: deleteNote,
+                onPressed: deleteActivity,
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.error),
                 ),
@@ -68,15 +73,15 @@ class NoteInfoModal extends StatelessWidget {
               )
                   : !hasTripEditPermission
                   ? Text(
-                'Vous n\'avez pas la permission de supprimer cette note car vous ne pouvez pas modifier le voyage',
+                'Vous n\'avez pas la permission de supprimer cette activité car vous ne pouvez pas modifier le voyage',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).hintColor,
                 ),
               )
-                  : !note.author.isMe(context)
+                  : !activity.owner.isMe(context)
                   ? Text(
-                'Vous ne pouvez pas supprimer cette note car vous n\'êtes pas son créateur',
+                'Vous ne pouvez pas supprimer cette activité car vous n\'êtes pas son créateur',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).hintColor,
@@ -114,13 +119,13 @@ class _Header extends StatelessWidget {
           const Row(
             children: [
               Expanded(child:
-              Text(
-                'Informations de la note',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                Text(
+                  'Informations de l\'activité',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
               )
             ],
           ),

@@ -24,6 +24,8 @@ class User {
     );
   }
 
+  String get formattedUsername => '@$name';
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
