@@ -19,6 +19,7 @@ definitions:
     - transport
     - accommodation
     - user
+    - photo
     type: string
     x-enum-varnames:
     - FeatureNameDocument
@@ -29,6 +30,7 @@ definitions:
     - FeatureNameTransport
     - FeatureNameAccommodation
     - FeatureNameUser
+    - FeatureNamePhoto
   models.TransportType:
     enum:
     - car
@@ -191,7 +193,7 @@ definitions:
   responses.ChatMessageResponse:
     properties:
       author:
-        $ref: '#/definitions/responses.UserResponse'
+        $ref: '#/definitions/responses.UserRoleReponse'
       content:
         type: string
       createdAt:

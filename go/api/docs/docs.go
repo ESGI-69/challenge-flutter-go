@@ -1805,7 +1805,8 @@ const docTemplate = `{
                 "note",
                 "transport",
                 "accommodation",
-                "user"
+                "user",
+                "photo"
             ],
             "x-enum-varnames": [
                 "FeatureNameDocument",
@@ -1815,7 +1816,8 @@ const docTemplate = `{
                 "FeatureNameNote",
                 "FeatureNameTransport",
                 "FeatureNameAccommodation",
-                "FeatureNameUser"
+                "FeatureNameUser",
+                "FeatureNamePhoto"
             ]
         },
         "models.TransportType": {
@@ -2054,7 +2056,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "author": {
-                    "$ref": "#/definitions/responses.UserResponse"
+                    "$ref": "#/definitions/responses.UserRoleReponse"
                 },
                 "content": {
                     "type": "string"

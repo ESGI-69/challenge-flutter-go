@@ -3,6 +3,7 @@ package handlers
 import (
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/logger"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -30,13 +31,11 @@ func (handler *SocketHandler) HandleConnections(c *gin.Context) {
 	clients[ws] = true
 
 	for {
-		var msg responses.ChatMessageResponse
-		err := ws.ReadJSON(&msg)
+		_, _, err := ws.ReadMessage()
 		if err != nil {
 			delete(clients, ws)
 			break
 		}
-		broadcast <- msg
 	}
 }
 
@@ -51,4 +50,10 @@ func (handler *SocketHandler) HandleMessages() {
 			}
 		}
 	}
+}
+
+func BroadcastMessage(msg responses.ChatMessageResponse) {
+	fmt.Println("Broadcasting message")
+	fmt.Println(msg)
+	broadcast <- msg
 }
