@@ -47,7 +47,7 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 	chatMessage := models.ChatMessage{
 		Content: requestBody.Content,
 		Author:  currentUser,
-		Trip:    trip,
+		TripID:  trip.ID,
 	}
 
 	errChatMessage := handler.Repository.Create(&chatMessage)
