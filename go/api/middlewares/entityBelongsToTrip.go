@@ -15,21 +15,32 @@ func init() {
 	databaseInstance = database.GetInstance()
 }
 
-func TransportBelongsToTrip(context *gin.Context) {
+func getTripId(context *gin.Context) (uint, error) {
 	tripIDStr := context.Param("id")
+
 	tripID, err := strconv.ParseUint(tripIDStr, 10, 32)
 	if err != nil {
 		logger.Error("Invalid trip ID")
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid trip ID" + tripIDStr})
 		context.Abort()
+		return 0, err
+	}
+
+	return uint(tripID), nil
+}
+
+func TransportBelongsToTrip(context *gin.Context) {
+	tripID, err := getTripId(context)
+	if err != nil {
+		return
 	}
 	transportID := context.Param("transportID")
 
 	var transport models.Transport
 	errDB := databaseInstance.Where("trip_id = ? AND id = ?", tripID, transportID).First(&transport).Error
 	if errDB != nil {
-		logger.Error("Transport not found")
-		context.AbortWithStatusJSON(404, gin.H{"error": "Transport " + transportID + " not found"})
+		logger.Error("Transport " + transportID + " is not in trip " + string(rune(tripID)))
+		context.AbortWithStatusJSON(404, gin.H{"error": "Transport " + transportID + " is not in trip " + string(rune(tripID))})
 		return
 	}
 
@@ -37,12 +48,9 @@ func TransportBelongsToTrip(context *gin.Context) {
 }
 
 func ParticipantBelongsToTrip(context *gin.Context) {
-	tripIDStr := context.Param("id")
-	tripID, err := strconv.ParseUint(tripIDStr, 10, 32)
+	tripID, err := getTripId(context)
 	if err != nil {
-		logger.Error("Invalid trip ID " + tripIDStr)
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid trip ID"})
-		context.Abort()
+		return
 	}
 	participantID := context.Param("participantId")
 	participantIdUint, err := strconv.ParseUint(participantID, 10, 32)
@@ -57,7 +65,7 @@ func ParticipantBelongsToTrip(context *gin.Context) {
 	var errDB = databaseInstance.Where("id = ?", tripID).Preload(clause.Associations).First(&trip).Error
 
 	if errDB != nil {
-		logger.Error("Trip " + tripIDStr + " not found")
+		logger.Error("Trip " + string(rune(tripID)) + " not found")
 		context.AbortWithStatusJSON(404, gin.H{"error": "Trip not found"})
 		return
 	}
@@ -83,8 +91,8 @@ func ParticipantBelongsToTrip(context *gin.Context) {
 	}
 
 	if !isParticipant {
-		logger.Error("Participant " + participantID + " not found in trip " + tripIDStr)
-		context.AbortWithStatusJSON(404, gin.H{"error": "Participant not found in trip"})
+		logger.Error("Participant " + participantID + " is not in trip " + string(rune(tripID)))
+		context.AbortWithStatusJSON(404, gin.H{"error": "Participant " + participantID + " is not in trip " + string(rune(tripID))})
 		return
 	}
 
@@ -92,20 +100,17 @@ func ParticipantBelongsToTrip(context *gin.Context) {
 }
 
 func AccommodationBelongsToTrip(context *gin.Context) {
-	tripIDStr := context.Param("id")
-	tripID, err := strconv.ParseUint(tripIDStr, 10, 32)
+	tripID, err := getTripId(context)
 	if err != nil {
-		logger.Error("Invalid trip ID " + tripIDStr)
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid trip ID"})
-		context.Abort()
+		return
 	}
 	accommodationID := context.Param("accommodationID")
 
 	var accommodation models.Accommodation
 	errDB := databaseInstance.Where("trip_id = ? AND id = ?", tripID, accommodationID).First(&accommodation).Error
 	if errDB != nil {
-		logger.Error("Accommodation " + accommodationID + " not found")
-		context.AbortWithStatusJSON(404, gin.H{"error": "Transport not found"})
+		logger.Error("Accommodation " + accommodationID + " is not in trip " + string(rune(tripID)))
+		context.AbortWithStatusJSON(404, gin.H{"error": "Accommodation " + accommodationID + " is not in trip " + string(rune(tripID))})
 		return
 	}
 
@@ -113,20 +118,17 @@ func AccommodationBelongsToTrip(context *gin.Context) {
 }
 
 func NoteBelongsToTrip(context *gin.Context) {
-	tripIDStr := context.Param("id")
-	tripID, err := strconv.ParseUint(tripIDStr, 10, 32)
+	tripID, err := getTripId(context)
 	if err != nil {
-		logger.Error("Invalid trip ID " + tripIDStr)
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid trip ID"})
-		context.Abort()
+		return
 	}
 	noteID := context.Param("noteID")
 
 	var note models.Note
 	errDB := databaseInstance.Where("trip_id = ? AND id = ?", tripID, noteID).First(&note).Error
 	if errDB != nil {
-		logger.Error("Note " + noteID + " not found")
-		context.AbortWithStatusJSON(404, gin.H{"error": "Transport not found"})
+		logger.Error("Note " + noteID + " is not in trip " + string(rune(tripID)))
+		context.AbortWithStatusJSON(404, gin.H{"error": "Note " + noteID + " is not in trip " + string(rune(tripID))})
 		return
 	}
 
@@ -134,20 +136,17 @@ func NoteBelongsToTrip(context *gin.Context) {
 }
 
 func DocumentBelongsToTrip(context *gin.Context) {
-	tripIDStr := context.Param("id")
-	tripID, err := strconv.ParseUint(tripIDStr, 10, 32)
+	tripID, err := getTripId(context)
 	if err != nil {
-		logger.Error("Invalid trip ID " + tripIDStr)
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid trip ID"})
-		context.Abort()
+		return
 	}
 	documentID := context.Param("documentID")
 
 	var document models.Document
 	errDB := databaseInstance.Where("trip_id = ? AND id = ?", tripID, documentID).First(&document).Error
 	if errDB != nil {
-		logger.Error("Document " + documentID + " not found")
-		context.AbortWithStatusJSON(404, gin.H{"error": "Transport not found"})
+		logger.Error("Document " + documentID + " is not in trip " + string(rune(tripID)))
+		context.AbortWithStatusJSON(404, gin.H{"error": "Document " + documentID + " is not in trip " + string(rune(tripID))})
 		return
 	}
 
@@ -155,20 +154,35 @@ func DocumentBelongsToTrip(context *gin.Context) {
 }
 
 func PhotoBelongsToTrip(context *gin.Context) {
-	tripIDStr := context.Param("id")
-	tripID, err := strconv.ParseUint(tripIDStr, 10, 32)
+	tripID, err := getTripId(context)
 	if err != nil {
-		logger.Error("Invalid trip ID " + tripIDStr)
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid trip ID"})
-		context.Abort()
+		return
 	}
 	photoID := context.Param("photoID")
 
 	var photo models.Photo
 	errDB := databaseInstance.Where("trip_id = ? AND id = ?", tripID, photoID).First(&photo).Error
 	if errDB != nil {
-		logger.Error("Photo " + photoID + " not found")
-		context.AbortWithStatusJSON(404, gin.H{"error": "Transport not found"})
+		logger.Error("Photo " + photoID + " is not in trip " + string(rune(tripID)))
+		context.AbortWithStatusJSON(404, gin.H{"error": "Photo " + photoID + " is not in trip " + string(rune(tripID))})
+		return
+	}
+
+	context.Next()
+}
+
+func ActivityBelongsToTrip(context *gin.Context) {
+	tripID, err := getTripId(context)
+	if err != nil {
+		return
+	}
+	activityID := context.Param("activityID")
+
+	var activity models.Activity
+	errDB := databaseInstance.Where("trip_id = ? AND id = ?", tripID, activityID).First(&activity).Error
+	if errDB != nil {
+		logger.Error("Activity " + activityID + " is not in trip " + string(rune(tripID)))
+		context.AbortWithStatusJSON(404, gin.H{"error": "Activity " + activityID + " is not in trip " + string(rune(tripID))})
 		return
 	}
 
