@@ -155,7 +155,7 @@ func (handler *ActivityHandler) Create(context *gin.Context) {
 // @Failure		401		{object}	error
 // @Router		/trips/{id}/activities/{activityId} [delete]
 func (handler *ActivityHandler) Delete(context *gin.Context) {
-	activityId := context.Param("activityId")
+	activityId := context.Param("activityID")
 
 	err := handler.Repository.Delete(activityId)
 	if err != nil {
