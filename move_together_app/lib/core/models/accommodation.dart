@@ -1,4 +1,4 @@
-import 'package:move_together_app/utils/int_to_double.dart';
+import 'package:move_together_app/utils/dynamic_to_double.dart';
 
 enum AccommodationType {
   hotel,
@@ -14,8 +14,8 @@ class Accommodation {
   final String address;
   final String name;
   final String? bookingUrl;
-  final double? latitude;
-  final double? longitude;
+  final double latitude;
+  final double longitude;
   final double price;
 
 
@@ -27,8 +27,8 @@ class Accommodation {
     required this.address,
     required this.name,
     this.bookingUrl,
-    this.latitude,
-    this.longitude,
+    required this.latitude,
+    required this.longitude,
     required this.price,
   });
 
@@ -41,8 +41,8 @@ class Accommodation {
       address: json['address'],
       name: json['name'],
       bookingUrl: json['bookingURL'],
-      latitude: json['latitude'] is int ? (json['latitude'] as int).toDouble() : json['latitude'],
-      longitude: json['longitude'] is int ? (json['longitude'] as int).toDouble() : json['longitude'],
+      latitude: dynamicToDouble(json['latitude']),
+      longitude: dynamicToDouble(json['longitude']),
       price: dynamicToDouble(json['price']),
     );
   }

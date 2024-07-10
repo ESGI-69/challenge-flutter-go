@@ -1,5 +1,5 @@
 import 'package:move_together_app/core/models/user.dart';
-import 'package:move_together_app/utils/int_to_double.dart';
+import 'package:move_together_app/utils/dynamic_to_double.dart';
 
 class Activity {
   final int id;
