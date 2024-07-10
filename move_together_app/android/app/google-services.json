@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "989598576311",
+    "project_id": "move-together-app",
+    "storage_bucket": "move-together-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989598576311:android:b835113b6085187cc2e732",
+        "android_client_info": {
+          "package_name": "com.example.move_together_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMEu6DjfxDCwqAZf22gRMMmDp3q2FH1ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -57,6 +57,9 @@ dependencies:
   gal: ^2.3.0
   file_picker: ^8.0.6
   open_file: ^3.3.2
+  firebase_core: ^3.2.0
+  firebase_messaging: ^15.0.3
+  flutter_local_notifications: ^8.2.0
 
 dev_dependencies:
   flutter_test:
