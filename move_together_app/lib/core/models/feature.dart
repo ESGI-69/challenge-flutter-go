@@ -28,7 +28,8 @@ class Feature {
 
   factory Feature.fromJson(Map<String, dynamic> json) {
     return Feature(
-      name: FeatureNames.values.firstWhere((e) => e.toString().split('.').last == json['name']),
+      name: FeatureNames.values
+          .firstWhere((e) => e.toString().split('.').last == json['name']),
       isEnabled: json['isEnabled'],
       modifiedBy: User.fromJson(json['modifiedBy']),
       updatedAt: DateTime.parse(json['updatedAt']),
@@ -44,7 +45,7 @@ class Feature {
     };
   }
 
-  copyWith({required bool isEnabled}){
+  copyWith({required bool isEnabled}) {
     return Feature(
       name: name,
       isEnabled: isEnabled,
@@ -53,4 +54,3 @@ class Feature {
     );
   }
 }
-

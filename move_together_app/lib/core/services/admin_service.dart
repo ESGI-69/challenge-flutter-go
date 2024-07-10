@@ -1,6 +1,7 @@
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/core/models/user.dart';
+import 'package:move_together_app/core/models/feature.dart';
 import 'package:move_together_app/core/services/api.dart';
 
 class AdminService {
@@ -80,6 +81,16 @@ class AdminService {
       return User.fromJson(response.data);
     } else {
       throw Exception('Failed to change role');
+    }
+  }
+  
+  Future<Feature> patchFeature(String featureName) async {
+    final response = await api.patch('/admin/app-settings/$featureName');
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return Feature.fromJson(response.data);
+    } else {
+      throw Exception('Failed to patch feature');
     }
   }
 }
