@@ -22,9 +22,13 @@ class ButtonChat extends StatelessWidget {
         width: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white,
         ),
-        child: const Icon(Icons.chat_bubble, color: Colors.black, size: 20),
+        child: Icon(
+          Icons.chat_bubble,
+          color: Theme.of(context).primaryColor,
+          size: 20,
+        ),
       ),
     );
   }
