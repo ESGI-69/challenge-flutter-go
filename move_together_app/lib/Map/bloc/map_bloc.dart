@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
@@ -28,7 +27,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       ]);
 
       var transportsWithGeoPos = List<Transport>.empty();
-      var accommodationsWithGeoPos = (results[1] as List<Accommodation>).where((element) => element.latitude != null && element.longitude != null).toList();
+      var accommodationsWithGeoPos = (results[1] as List<Accommodation>).where((element) => element.latitude != 0 && element.longitude != 0).toList();
       var activitiesWithGeoPos = (results[2] as List<Activity>).where((element) => element.latitude != 0 && element.longitude != 0).toList();
 
       emit(MapDataLoadingSuccess(
