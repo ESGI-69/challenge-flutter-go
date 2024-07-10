@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:move_together_app/Accommodation/bloc/accommodation_bloc.dart';
 
 class MapCard extends StatefulWidget {
   final int tripId;
@@ -28,18 +26,6 @@ class _MapCardState extends State<MapCard> {
     super.dispose();
   }
 
-  Set<Marker> _createMarkers(List<dynamic> accommodations) {
-    return accommodations.map((accommodation) {
-      return Marker(
-        markerId: MarkerId(accommodation.id.toString()),
-        position: LatLng(accommodation.latitude, accommodation.longitude),
-        infoWindow: InfoWindow(
-          title: "${accommodation.name} - ${accommodation.address}", 
-          snippet: "${accommodation.latitude}, ${accommodation.longitude}"
-        ),
-      );
-    }).toSet();
-  }
 
   @override
   Widget build(BuildContext context) {
