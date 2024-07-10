@@ -126,7 +126,7 @@ class UsersTable extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      roleToString[user.role] ?? 'Unknown',
+                      user.role.toString().split('.').last,
                       style: const TextStyle(
                         color: Color(0xFF263238),
                         fontSize: 16,

@@ -180,10 +180,7 @@ definitions:
   requests.UserChangeRoleBody:
     properties:
       role:
-        enum:
-        - ADMIN
-        - USER
-        type: string
+        $ref: '#/definitions/models.UserRole'
     required:
     - role
     type: object

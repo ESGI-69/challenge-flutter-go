@@ -2286,11 +2286,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "role": {
-                    "type": "string",
-                    "enum": [
-                        "ADMIN",
-                        "USER"
-                    ]
+                    "$ref": "#/definitions/models.UserRole"
                 }
             }
         },
