@@ -6,7 +6,7 @@ import 'package:move_together_app/Document/document_card.dart';
 import 'package:move_together_app/Transport/transport_card.dart';
 import 'package:move_together_app/Note/note_card.dart';
 import 'package:move_together_app/core/models/trip.dart';
-import 'package:move_together_app/core/Map/map_card.dart';
+import 'package:move_together_app/Map/map_card.dart';
 
 class TripBody extends StatelessWidget {
   final Trip trip;
