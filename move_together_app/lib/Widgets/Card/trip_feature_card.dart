@@ -40,39 +40,42 @@ class TripFeatureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          _Header(
-            icon: icon,
-            title: title,
-            showAddButton: showAddButton,
-            isLoading: isLoading,
-            showTitleArrow: onTitleTap != null,
-            onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
-            onAddTap: onAddTap != null ? () => onAddTap!() : null,
-          ),
-          _BodySelector(
-            type: type,
-            isLoading: isLoading,
-            length: length,
-            emptyMessage: emptyMessage,
-            itemBuilder: itemBuilder ?? (context, index) => const SizedBox(),
-            child: child,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            _Header(
+              icon: icon,
+              title: title,
+              showAddButton: showAddButton,
+              isLoading: isLoading,
+              showTitleArrow: onTitleTap != null,
+              onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
+              onAddTap: onAddTap != null ? () => onAddTap!() : null,
+            ),
+            _BodySelector(
+              type: type,
+              isLoading: isLoading,
+              length: length,
+              emptyMessage: emptyMessage,
+              itemBuilder: itemBuilder ?? (context, index) => const SizedBox(),
+              child: child,
+            ),
+          ],
+        ),
       ),
     );
   }
