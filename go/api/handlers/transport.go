@@ -126,6 +126,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 		EndAddress:     requestBody.EndAddress,
 		MeetingAddress: requestBody.MeetingAddress,
 		MeetingTime:    meetingTime,
+		Price:          requestBody.Price,
 	}
 
 	isValid := transport.IsTransportTypeValid(context)
@@ -153,6 +154,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 			ID:       transport.Author.ID,
 			Username: transport.Author.Username,
 		},
+		Price: transport.Price,
 	}
 
 	context.JSON(http.StatusCreated, transportResponse)

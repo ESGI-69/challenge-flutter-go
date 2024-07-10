@@ -12,4 +12,5 @@ type TransportResponse struct {
 	MeetingAddress string               `json:"meetingAddress"`
 	MeetingTime    string               `json:"meetingTime"`
 	Author         UserResponse         `json:"author"`
+	Price          float64              `json:"price"`
 }
