@@ -24,6 +24,10 @@ class NavigationBarBackoffice extends StatelessWidget implements PreferredSizeWi
           onPressed: () => backOfficeRouter.replaceNamed('logs'),
         ),
         TextButton(
+          child: Text('Users', style: TextStyle(color: Theme.of(context).primaryColor)),
+          onPressed: () => backOfficeRouter.replaceNamed('users'),
+        ),
+        TextButton(
           child: Text('Logout', style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () async {
             final authProvider = context.read<AuthProvider>();

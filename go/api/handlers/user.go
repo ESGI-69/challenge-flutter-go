@@ -109,3 +109,92 @@ func (handler *UserHandler) Create(context *gin.Context) {
 	context.JSON(http.StatusCreated, response)
 	logger.ApiInfo(context, "User "+string(rune(user.ID))+" created")
 }
+
+// Get all the users
+//
+// @Summary		Get all the users as an admin
+// @Description	Get all the users as an admin
+// @Tags			admin
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Success		200	{array}	responses.UserRoleReponse
+// @Failure		400	{object}	error
+// @Failure		401	{object}	error
+// @Router			/admin/users [get]
+func (handler *UserHandler) GetAll(context *gin.Context) {
+	users, err := handler.Repository.GetAll()
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	responseUsers := make([]responses.UserRoleReponse, len(users))
+	for i, user := range users {
+		responseUsers[i] = responses.UserRoleReponse{
+			ID:       user.ID,
+			Username: user.Username,
+			Role:     user.Role,
+		}
+	}
+
+	context.JSON(http.StatusOK, responseUsers)
+	logger.ApiInfo(context, "Get all users")
+}
+
+// Change the role of a user
+//
+// @Summary		Change the role of a user as an admin
+// @Description	Change the role of a user as an admin
+// @Tags			admin
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Param			id	path		string	true	"ID of the user"
+// @Param			role	body		requests.UserChangeRoleBody	true	"New role of the user"
+// @Success		200	{object}	responses.UserRoleReponse
+// @Failure		400	{object}	error
+// @Failure		401	{object}	error
+// @Failure		404	{object}	error
+// @Router			/admin/users/{id}/role [patch]
+func (handler *UserHandler) UpdateRole(context *gin.Context) {
+	userID := context.Param("id")
+
+	var requestBody requests.UserChangeRoleBody
+	isBodyValid := utils.Deserialize(&requestBody, context)
+	if !isBodyValid {
+		return
+	}
+
+	user, err := handler.Repository.Get(userID)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	if user.Username == "admin" {
+		logger.ApiError(context, "Admin role can't be changed")
+		context.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	if requestBody.Role != "" {
+		user.Role = models.UserRole(requestBody.Role)
+	}
+
+	updateError := handler.Repository.Update(&user)
+	if updateError != nil {
+		errorHandlers.HandleGormErrors(updateError, context)
+		return
+	}
+
+	response := responses.UserRoleReponse{
+		ID:       user.ID,
+		Username: user.Username,
+		Role:     user.Role,
+	}
+
+	context.JSON(http.StatusOK, response)
+	logger.ApiInfo(context, "User "+string(rune(user.ID))+" role updated to "+string(user.Role))
+
+}
