@@ -72,7 +72,7 @@ class AdminService {
     final response = await api.patch(
       '/admin/users/$userId/role',
       data: {
-        'role': user.role,
+        'role': user.role.toString().split('.').last,
       },
     );
 

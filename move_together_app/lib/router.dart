@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Backoffice/Logs/logs_screen.dart';
-import 'package:move_together_app/Backoffice/Users/users_screen.dart';
+import 'package:move_together_app/Backoffice/Users/users_admin_screen.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
 import 'package:move_together_app/Photo/photo_screen.dart';
 import 'package:move_together_app/views/landing_screen.dart';
@@ -150,7 +150,7 @@ final GoRouter backOfficeRouter = GoRouter(
     GoRoute(
       path: '/users',
       name: 'users',
-      builder: (context, state) => const UsersScreen()
+      builder: (context, state) => const UsersAdminScreen()
     ),
   ],
   redirect: (context, state) async {

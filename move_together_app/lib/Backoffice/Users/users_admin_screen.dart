@@ -1,34 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:move_together_app/Backoffice/Users/users_table.dart';
+import 'package:move_together_app/Backoffice/Users/users_admin_table.dart';
 import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.dart';
-import 'package:move_together_app/Backoffice/Users/bloc/users_bloc.dart';
+import 'package:move_together_app/Backoffice/Users/bloc/users_admin_bloc.dart';
 import 'package:move_together_app/core/models/user.dart';
 
-class UsersScreen extends StatefulWidget {
-  const UsersScreen({
+class UsersAdminScreen extends StatefulWidget {
+  const UsersAdminScreen({
     super.key
 });
 
   @override
-  State<UsersScreen> createState() => _UsersScreenState();
+  UsersAdminScreenState createState() => UsersAdminScreenState();
 }
 
-class _UsersScreenState extends State<UsersScreen> {
+class UsersAdminScreenState extends State<UsersAdminScreen> {
 
   void changeUserRole(User user){
-    print('current user passed $user');
-    final newRole = user.role == Role.ADMIN ? Role.USER : Role.ADMIN;
 
-    final newUser = User(
-      id: user.id,
-      name: user.name,
-      role: newRole,
-    );
-
-    print('Changing role of user ${user.name} to ${roleToString[newRole]}');
-    context.read<UsersBloc>().add(UserDataUpdateUser(newUser));
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +54,17 @@ class _UsersScreenState extends State<UsersScreen> {
                       padding: const EdgeInsets.all(16.0),
                       child: UsersTable(
                         users: state.users,
-                        changeUserRole: changeUserRole,
+                        changeUserRole: (User user) {
+                          final newRole = user.role == Role.ADMIN ? Role.USER : Role.ADMIN;
+
+                          final newUser = User(
+                            id: user.id,
+                            name: user.name,
+                            role: newRole,
+                          );
+
+                          context.read<UsersBloc>().add(UserDataUpdateUser(newUser));
+                        },
                       ),
                     )
                   ],

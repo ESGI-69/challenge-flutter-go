@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/services/admin_service.dart';
 
-part 'users_event.dart';
-part 'users_state.dart';
+part 'users_admin_event.dart';
+part 'users_admin_state.dart';
 
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersBloc(BuildContext context) : super(UsersInitial()) {

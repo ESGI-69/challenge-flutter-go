@@ -17,7 +17,6 @@ class UsersTable extends StatelessWidget {
   });
 
   @override
-
   Widget build(BuildContext context) {
     return Table(
       border: TableBorder.all(
@@ -78,8 +77,8 @@ class UsersTable extends StatelessWidget {
                 ),
               ),
             ),
-            TableCell(child:
-              Center(
+            TableCell(
+              child: Center(
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Row(
@@ -143,12 +142,18 @@ class UsersTable extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            changeUserRole(user);
-                          },
-                        ),
+                        if (user.name != "admin") // Conditional check
+                          TextButton(
+                            onPressed: () => changeUserRole(user),
+                            child: Text(
+                              user.role == Role.ADMIN
+                                  ? 'Make User'
+                                  : 'Make Admin',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
