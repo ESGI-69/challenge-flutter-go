@@ -513,7 +513,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.UserRoleReponse'
+            items:
+              $ref: '#/definitions/responses.UserRoleReponse'
+            type: array
         "400":
           description: Bad Request
           schema: {}

@@ -181,7 +181,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.UserRoleReponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.UserRoleReponse"
+                            }
                         }
                     },
                     "400": {

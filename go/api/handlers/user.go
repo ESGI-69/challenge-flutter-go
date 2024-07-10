@@ -118,7 +118,7 @@ func (handler *UserHandler) Create(context *gin.Context) {
 // @Accept			json
 // @Produce		json
 // @Security		BearerAuth
-// @Success		200	{object}	responses.UserRoleReponse
+// @Success		200	{array}	responses.UserRoleReponse
 // @Failure		400	{object}	error
 // @Failure		401	{object}	error
 // @Router			/admin/users [get]
