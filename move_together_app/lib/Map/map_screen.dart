@@ -1,24 +1,26 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:move_together_app/Map/bloc/map_bloc.dart';
-import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
+import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/utils/map.dart';
 
-class MapCard extends StatefulWidget {
-  final int tripId;
-
-  const MapCard({
+class MapScreen extends StatefulWidget {
+  const MapScreen({
     super.key,
-    required this.tripId,
   });
 
   @override
-  State<MapCard> createState() => _MapCardState();
+  State<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapCardState extends State<MapCard> {
+class _MapScreenState extends State<MapScreen> {
   BitmapDescriptor? hotelPin;
   BitmapDescriptor? transportStartPin;
   BitmapDescriptor? transportEndPin;
@@ -91,8 +93,11 @@ class _MapCardState extends State<MapCard> {
 
   @override
   Widget build(BuildContext context) {
+    final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[1]);
+    final Completer<GoogleMapController> mapController = Completer<GoogleMapController>();
+
     return BlocProvider(
-      create: (context) => MapBloc(context)..add(MapDataFetch(widget.tripId)),
+      create: (context) => MapBloc(context)..add(MapDataFetch(tripId)),
       child: BlocBuilder<MapBloc, MapState>(
         builder: (context, state) {
           if (state is MapDataLoadingSuccess) {
@@ -126,22 +131,42 @@ class _MapCardState extends State<MapCard> {
               );
             }
 
-            return TripFeatureCard(
-              title: 'Carte',
-              type: TripFeatureCardType.full,
-              isLoading: false,
-              icon: Icons.pin_drop,
-              onTitleTap: () {
-                context.pushNamed('map', pathParameters: {'tripId': widget.tripId.toString()});
-              },
-              child: GoogleMap(
+            return Scaffold(
+              extendBodyBehindAppBar: true,
+              appBar: AppBar(
+                systemOverlayStyle: const SystemUiOverlayStyle(
+                  statusBarBrightness: Brightness.light,
+                ),
+                backgroundColor: Colors.transparent,
+                leading: const Padding(
+                  padding: EdgeInsets.only(left: 16.0),
+                  child: Row(
+                    children: [
+                      ButtonBack(),
+                    ],
+                  ),
+                ),
+              ),
+              body: GoogleMap(
+                onMapCreated: (GoogleMapController controller) {
+                  mapController.complete(controller);
+                },
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top,
+                ),
                 zoomControlsEnabled: false,
-                zoomGesturesEnabled: false,
-                scrollGesturesEnabled: false,
-                rotateGesturesEnabled: false,
-                tiltGesturesEnabled: false,
-                mapType: MapType.hybrid,
-                initialCameraPosition: getMapCameraPositionFromMarkers(_markers, true),
+                zoomGesturesEnabled: true,
+                scrollGesturesEnabled: true,
+                compassEnabled: true,
+                rotateGesturesEnabled: true,
+                mapToolbarEnabled: true,
+                tiltGesturesEnabled: true,
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>> {
+                  Factory<OneSequenceGestureRecognizer> (
+                    () => EagerGestureRecognizer(),
+                  ),
+                },
+                initialCameraPosition: getMapCameraPositionFromMarkers(_markers, false),
                 markers: _markers,
                 // polylines: {
                 //   const Polyline(
@@ -158,11 +183,8 @@ class _MapCardState extends State<MapCard> {
               ),
             );
           } else {
-            return TripFeatureCard(
-              title: 'Carte',
-              type: TripFeatureCardType.full,
-              isLoading: state is MapDataLoading,
-              icon: Icons.pin_drop,
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }
         }
