@@ -82,6 +82,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/pins/
     - assets/images/google_logo.svg
     - .env
 
