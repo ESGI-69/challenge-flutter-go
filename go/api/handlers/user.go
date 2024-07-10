@@ -172,6 +172,12 @@ func (handler *UserHandler) UpdateRole(context *gin.Context) {
 		return
 	}
 
+	if user.Username == "admin" {
+		logger.ApiError(context, "Admin role can't be changed")
+		context.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
 	if requestBody.Role != "" {
 		user.Role = models.UserRole(requestBody.Role)
 	}

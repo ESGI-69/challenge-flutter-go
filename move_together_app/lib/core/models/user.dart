@@ -8,7 +8,7 @@ enum Role { USER, ADMIN }
 class User {
   final int id;
   final String name;
-  final Role role;
+  late final Role role;
 
   User({
     required this.id,

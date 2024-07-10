@@ -1,5 +1,6 @@
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/trip.dart';
+import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/core/services/api.dart';
 
 class AdminService {
@@ -53,6 +54,32 @@ class AdminService {
       return Trip.fromJson(response.data);
     } else {
       throw Exception('Failed to edit trip');
+    }
+  }
+
+  Future<List<User>> getAllUsers() async {
+    final response = await api.get('/admin/users');
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return (response.data as List).map((user) => User.fromJson(user)).toList();
+    } else {
+      throw Exception('Failed to get users');
+    }
+  }
+
+  Future <User> changeRoleUser(User user) async {
+    final userId = user.id;
+    final response = await api.patch(
+      '/admin/users/$userId/role',
+      data: {
+        'role': user.role,
+      },
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return User.fromJson(response.data);
+    } else {
+      throw Exception('Failed to change role');
     }
   }
 }
