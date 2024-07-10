@@ -64,7 +64,7 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 			ID:       feature.ModifiedBy.ID,
 			Username: feature.ModifiedBy.Username,
 		},
-		UpdateAt: feature.UpdatedAt.Format(time.RFC3339),
+		UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
 	}
 
 	context.JSON(http.StatusOK, responseFeature)
@@ -99,7 +99,7 @@ func (handler *FeatureHandler) GetFeatures(context *gin.Context) {
 				Username: feature.ModifiedBy.Username,
 			},
 			IsEnabled: feature.IsEnabled,
-			UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
+			UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
 		}
 	}
 
@@ -135,7 +135,7 @@ func (handler *FeatureHandler) GetFeaturesAdmin(context *gin.Context) {
 				Username: feature.ModifiedBy.Username,
 			},
 			IsEnabled: feature.IsEnabled,
-			UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
+			UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
 		}
 	}
 

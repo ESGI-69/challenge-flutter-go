@@ -24,6 +24,8 @@ import 'package:move_together_app/Trip/trip_create_screen.dart';
 import 'package:move_together_app/Backoffice/Dashboard/dashboard_screen.dart';
 import 'package:move_together_app/Backoffice/Trip/trip_screen.dart';
 
+import 'Backoffice/Feature/feature_screen.dart';
+
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
 List<String> loggedRoutes = [

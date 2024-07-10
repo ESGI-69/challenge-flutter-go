@@ -83,14 +83,30 @@ class AdminService {
       throw Exception('Failed to change role');
     }
   }
-  
-  Future<Feature> patchFeature(String featureName) async {
-    final response = await api.patch('/admin/app-settings/$featureName');
+  Future<Feature> patchFeature(String featureName, bool isEnabled) async {
+    final response = await api.patch(
+      '/admin/app-settings/$featureName',
+      data: {
+        'isEnabled': isEnabled,
+      },
+    );
 
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       return Feature.fromJson(response.data);
     } else {
       throw Exception('Failed to patch feature');
+    }
+  }
+
+  Future<List<Feature>> getAllFeatures() async {
+    final response = await api.get(
+      '/app-settings',
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return (response.data as List).map((feature) => Feature.fromJson(feature)).toList();
+    } else {
+      throw Exception('Failed to get features');
     }
   }
 }

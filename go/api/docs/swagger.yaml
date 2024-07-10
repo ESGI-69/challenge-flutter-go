@@ -293,7 +293,7 @@ definitions:
         $ref: '#/definitions/responses.UserResponse'
       name:
         $ref: '#/definitions/models.FeatureName'
-      updateAt:
+      updatedAt:
         type: string
     type: object
   responses.LoginResponse:

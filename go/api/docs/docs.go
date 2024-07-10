@@ -2610,7 +2610,7 @@ const docTemplate = `{
                 "name": {
                     "$ref": "#/definitions/models.FeatureName"
                 },
-                "updateAt": {
+                "updatedAt": {
                     "type": "string"
                 }
             }

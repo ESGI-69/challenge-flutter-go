@@ -15,7 +15,7 @@ func (t *FeatureRepository) Create(feature *models.Feature) error {
 }
 
 func (t *FeatureRepository) GetFeatures() (features []models.Feature, err error) {
-	err = t.Database.Preload("ModifiedBy").Find(&features).Error
+	err = t.Database.Preload("ModifiedBy").Order("name ASC").Find(&features).Error
 	return
 }
 

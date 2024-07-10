@@ -1,4 +1,4 @@
-part of 'features_bloc.dart';
+part of 'feature_bloc.dart';
 
 @immutable
 sealed class FeaturesState {}
