@@ -19,6 +19,8 @@ class TripBody extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: ListView(
         children: [
+          MapCard(tripId: trip.id),
+          const SizedBox(height: 16),
           TransportCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
