@@ -5,21 +5,10 @@ import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.d
 import 'package:move_together_app/Backoffice/Users/bloc/users_admin_bloc.dart';
 import 'package:move_together_app/core/models/user.dart';
 
-class UsersAdminScreen extends StatefulWidget {
+class UsersAdminScreen extends StatelessWidget {
   const UsersAdminScreen({
     super.key
 });
-
-  @override
-  UsersAdminScreenState createState() => UsersAdminScreenState();
-}
-
-class UsersAdminScreenState extends State<UsersAdminScreen> {
-
-  void changeUserRole(User user){
-
-  }
-
 
   @override
   Widget build(BuildContext context) {
