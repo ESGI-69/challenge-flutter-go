@@ -63,6 +63,10 @@ class TransportInfoModal extends StatelessWidget {
             Text(
               'Arrivée : ${transport.endAddress} le ${DateFormat.yMMMd().format(transport.endDate.toLocal())}',
             ),
+            const SizedBox(height: 8),
+            Text(
+              'Prix : ${transport.price}€',
+            ),
             const SizedBox(height: 16),
               (hasTripEditPermission && transport.author.isMe(context)) || isTripOwner
               ? ElevatedButton(

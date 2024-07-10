@@ -29,6 +29,7 @@ class TransportService {
     required DateTime endDate,
     required String startAddress,
     required String endAddress,
+    required double price,
   }) async {
     final response = await api.post(
       '/trips/$tripId/transports',
@@ -38,6 +39,7 @@ class TransportService {
         'endDate': endDate.toUtc().toIso8601String(),
         'startAddress': startAddress,
         'endAddress': endAddress,
+        'price': price,
       },
     );
 

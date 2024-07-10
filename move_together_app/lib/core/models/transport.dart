@@ -1,4 +1,5 @@
 import 'package:move_together_app/core/models/user.dart';
+import 'package:move_together_app/utils/int_to_double.dart';
 
 enum TransportType {
   car,
@@ -16,6 +17,7 @@ class Transport {
   final String? meetingAddress;
   final DateTime? meetingTime;
   final User author;
+  final double price;
 
   Transport({
     required this.id,
@@ -27,6 +29,7 @@ class Transport {
     this.meetingAddress,
     this.meetingTime,
     required this.author,
+    required this.price,
   });
 
   factory Transport.fromJson(Map<String, dynamic> json) {
@@ -40,6 +43,7 @@ class Transport {
       meetingAddress: json['meetingAddress'],
       meetingTime: DateTime.parse(json['meetingTime']),
       author: User.fromJson(json['author']),
+      price: dynamicToDouble(json['price']),
     );
   }
 
@@ -54,6 +58,7 @@ class Transport {
       'meetingAddress': meetingAddress,
       'meetingTime': meetingTime,
       'author': author.toJson(),
+      'price': price,
     };
   }
 }

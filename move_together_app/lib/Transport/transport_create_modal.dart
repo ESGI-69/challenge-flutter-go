@@ -6,6 +6,8 @@ import 'package:move_together_app/Widgets/Input/cool_date_time_picker.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/services/transport_service.dart';
+import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
+
 
 Map<TransportType, String> transportTypeString = {
   TransportType.car: 'car',
@@ -33,9 +35,10 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
   final TextEditingController _endAddressController = TextEditingController();
   DateTime _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+  final TextEditingController _priceController = TextEditingController();
 
   void createTransport() async {
-    if (_startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)) {
+    if (_startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _priceController.text.isEmpty) {
       return;
     }
     final createdTransport = await TransportService(context.read<AuthProvider>()).create(
@@ -45,6 +48,7 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
       endDate: _endDateTime,
       startAddress: _startAddressController.text,
       endAddress: _endAddressController.text,
+      price: double.parse(_priceController.text),
     );
     widget.onTransportCreated(createdTransport);
   }
@@ -129,6 +133,12 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
                 });
               },
             ),
+            const SizedBox(height: 8),
+            CoolNumberField(
+                  controller: _priceController,
+                  hintText: 'Prix',
+                  prefixIcon: Icons.euro,
+                ),
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: createTransport,
