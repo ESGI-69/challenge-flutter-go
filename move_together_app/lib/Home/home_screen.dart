@@ -97,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                             context.read<HomeBloc>().add(HomeDataFetch());
                           },
+                          totalPrice: trip.totalPrice,
                         );
                       }).toList(),
                       ),

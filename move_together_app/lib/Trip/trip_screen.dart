@@ -32,6 +32,7 @@ class TripScreen extends StatelessWidget {
               onDateUpdate: (firstDate, secondDate) {},
               imageUrl: '',
               tripId: 0,
+              totalPrice: 0.0,
               onParticipantsTap: () {},
             ),
             body: const Center(
@@ -75,6 +76,7 @@ class TripScreen extends StatelessWidget {
                   state.trip.id,
                 ));
               },
+              totalPrice: state.trip.totalPrice,
             ),
             body: TripBody(trip: state.trip),
           );
