@@ -98,6 +98,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
   BitmapDescriptor? transportStartPin;
   BitmapDescriptor? transportEndPin;
   BitmapDescriptor? activityPin;
+  BitmapDescriptor? meetingPin;
   double iconHeight = 48.0;
   bool isMapReady = false;
 
@@ -134,6 +135,14 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         height: iconHeight,
         'assets/images/pins/activity_pin.png',
       ),
+
+      BitmapDescriptor.asset(
+        const ImageConfiguration(
+          devicePixelRatio: 2.5,
+        ),
+        height: iconHeight,
+        'assets/images/pins/meeting_pin.png',
+      ),
     ]);
 
     setState(() {
@@ -141,6 +150,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
       transportStartPin = bitmaps[1];
       transportEndPin = bitmaps[2];
       activityPin = bitmaps[3];
+      meetingPin = bitmaps[4];
     });
   }
 
@@ -227,7 +237,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
               title: transport.meetingAddress ?? 'Meeting Point',
               snippet: transport.meetingTime?.toString() ?? 'Meeting Time',
             ),
-            icon: transportStartPin ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            icon: meetingPin ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           ),
         );
 
