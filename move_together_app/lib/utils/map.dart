@@ -158,13 +158,17 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
     required List<Activity> activities,
     required List<Accommodation> accommodations,
     required List<Transport> transports,
+    required RefinedGoogleMapType mapType,
   }) {
     final Set<Marker> tempMarker = <Marker>{};
     final Set<Polyline> tempPolyline = <Polyline>{};
+    final bool disabledTapOnMarker = mapType == RefinedGoogleMapType.card;
+
     for (var activity in activities) {
       tempMarker.add(
         Marker(
-          markerId: MarkerId(activity.id.toString()),
+          consumeTapEvents: disabledTapOnMarker,
+          markerId: MarkerId('activity-${activity.id}'),
           position: LatLng(activity.latitude, activity.longitude),
           infoWindow: InfoWindow(
             title: activity.name,
@@ -180,7 +184,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
     for (var accommodation in accommodations) {
       tempMarker.add(
         Marker(
-          markerId: MarkerId(accommodation.id.toString()),
+          consumeTapEvents: disabledTapOnMarker,
+          markerId: MarkerId('accomodation-${accommodation.id}'),
           position: LatLng(accommodation.latitude, accommodation.longitude),
           infoWindow: InfoWindow(
             title: accommodation.name,
@@ -194,7 +199,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
     for (var transport in transports) {
       tempMarker.add(
         Marker(
-          markerId: MarkerId(transport.id.toString()),
+          consumeTapEvents: disabledTapOnMarker,
+          markerId: MarkerId('transport-start-${transport.id}'),
           position: LatLng(transport.startLatitude, transport.startLongitude),
           infoWindow: InfoWindow(
             title: transport.startAddress,
@@ -206,7 +212,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
 
       tempMarker.add(
         Marker(
-          markerId: MarkerId(transport.id.toString()),
+          consumeTapEvents: disabledTapOnMarker,
+          markerId: MarkerId('transport-end-${transport.id}'),
           position: LatLng(transport.endLatitude, transport.endLongitude),
           infoWindow: InfoWindow(
             title: transport.endAddress,
@@ -218,7 +225,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
 
       tempPolyline.add(
         Polyline(
-          polylineId: PolylineId(transport.id.toString()),
+          polylineId: PolylineId('transport-stat-end-${transport.id}'),
           points: [
             LatLng(transport.startLatitude, transport.startLongitude),
             LatLng(transport.endLatitude, transport.endLongitude),
@@ -231,7 +238,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
       if (transport.hasValidMeetingGeolocation) {
         tempMarker.add(
           Marker(
-            markerId: MarkerId(transport.id.toString()),
+            consumeTapEvents: disabledTapOnMarker,
+            markerId: MarkerId('transport-meeting-${transport.id}'),
             position: LatLng(transport.meetingLatitude, transport.meetingLongitude),
             infoWindow: InfoWindow(
               title: transport.meetingAddress ?? 'Meeting Point',
@@ -244,7 +252,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         if (!transport.isMeetingPointFarFromStartPoint) {
           tempPolyline.add(
             Polyline(
-              polylineId: PolylineId(transport.id.toString()),
+              polylineId: PolylineId('transport-meeting-start-${transport.id}'),
               patterns: <PatternItem>[PatternItem.dash(300), PatternItem.gap(300)],
               points: [
                 LatLng(transport.startLatitude, transport.startLongitude),
@@ -282,6 +290,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
       activities: widget.activities,
       accommodations: widget.accommodations,
       transports: widget.transports,
+      mapType: widget.type,
     );
     setState(() {
       isMapReady = true;
