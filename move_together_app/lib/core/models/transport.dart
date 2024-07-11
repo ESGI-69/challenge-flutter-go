@@ -88,4 +88,6 @@ class Transport {
 
   bool get hasValidGeolocation => startLatitude != 0 && startLongitude != 0 && endLatitude != 0 && endLongitude != 0;
   bool get hasValidMeetingGeolocation => meetingLatitude != 0 && meetingLongitude != 0;
+  // Is the meeting point is annormally far from the start point. Used to conditionally draw the dashed line between the start and meeting point to avoid performance issues.
+  bool get isMeetingPointFarFromStartPoint => (startLatitude - meetingLatitude).abs() > 0.1 && (startLongitude - meetingLongitude).abs() > 0.1;
 }
