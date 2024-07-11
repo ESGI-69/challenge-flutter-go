@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/core/services/feature_service.dart';
 import 'package:move_together_app/core/models/feature.dart';
-import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:provider/provider.dart';
 
 class FeatureProvider with ChangeNotifier {
   final FeatureService _featureService = FeatureService();

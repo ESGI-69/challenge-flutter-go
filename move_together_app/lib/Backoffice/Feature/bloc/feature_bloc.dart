@@ -27,7 +27,7 @@ class FeatureBloc extends Bloc<FeaturesEvent, FeaturesState> {
     on<FeatureDataPatchFeature>((event, emit) async {
       emit(FeaturesDataLoading());
       try {
-        await adminServices.patchFeature(event.feature.name.toString(), event.feature.isEnabled);
+        await adminServices.patchFeature(event.feature.name.toString().split('.').last, event.feature.isEnabled);
         final features = await adminServices.getAllFeatures();
         emit(FeaturesDataLoadingSuccess(features: features));
       } on ApiException catch (error) {
