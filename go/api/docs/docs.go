@@ -2547,11 +2547,23 @@ const docTemplate = `{
                 "endDate": {
                     "type": "string"
                 },
+                "endLatitude": {
+                    "type": "number"
+                },
+                "endLongitude": {
+                    "type": "number"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "meetingAddress": {
                     "type": "string"
+                },
+                "meetingLatitude": {
+                    "type": "number"
+                },
+                "meetingLongitude": {
+                    "type": "number"
                 },
                 "meetingTime": {
                     "type": "string"
@@ -2564,6 +2576,12 @@ const docTemplate = `{
                 },
                 "startDate": {
                     "type": "string"
+                },
+                "startLatitude": {
+                    "type": "number"
+                },
+                "startLongitude": {
+                    "type": "number"
                 },
                 "transportType": {
                     "$ref": "#/definitions/models.TransportType"

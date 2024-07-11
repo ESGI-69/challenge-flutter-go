@@ -96,13 +96,6 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 
 	tripIdUint, _ := strconv.ParseUint(tripId, 10, 64)
 
-	getLat, getLong, err := utils.GetGeoLocation(requestBody.Address)
-	if err != nil { //A voir si on bloque la creation si l'adresse n'est pas valide
-		logger.ApiWarning(context, "Invalid address "+requestBody.Address)
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid address"})
-		return
-	}
-
 	var accommodation = models.Accommodation{
 		Trip:              models.Trip{Model: gorm.Model{ID: uint(tripIdUint)}},
 		AccommodationType: models.AccommodationType(requestBody.AccommodationType),
@@ -111,17 +104,10 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 		Address:           requestBody.Address,
 		BookingURL:        requestBody.BookingURL,
 		Name:              requestBody.Name,
-		Latitude:          getLat,
-		Longitude:         getLong,
 		Price:             requestBody.Price,
 	}
 
-	if !accommodation.IsAccommodationTypeValid(context) {
-		logger.ApiWarning(context, "Invalid accommodation type "+requestBody.AccommodationType)
-		return
-	}
-
-	err = handler.Repository.Create(&accommodation)
+	err := handler.Repository.Create(&accommodation)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

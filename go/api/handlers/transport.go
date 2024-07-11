@@ -47,18 +47,25 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 		}
 
 		transportsResponse[i] = responses.TransportResponse{
-			ID:             transport.ID,
-			TransportType:  transport.TransportType,
-			StartDate:      transport.StartDate.Format(time.RFC3339),
-			EndDate:        transport.EndDate.Format(time.RFC3339),
-			StartAddress:   transport.StartAddress,
-			EndAddress:     transport.EndAddress,
-			MeetingAddress: transport.MeetingAddress,
-			MeetingTime:    nullableMeetingTime,
+			ID:               transport.ID,
+			TransportType:    transport.TransportType,
+			StartDate:        transport.StartDate.Format(time.RFC3339),
+			EndDate:          transport.EndDate.Format(time.RFC3339),
+			StartAddress:     transport.StartAddress,
+			StartLatitude:    transport.StartLatitude,
+			StartLongitude:   transport.StartLongitude,
+			EndAddress:       transport.EndAddress,
+			EndLatitude:      transport.EndLatitude,
+			EndLongitude:     transport.EndLongitude,
+			MeetingAddress:   transport.MeetingAddress,
+			MeetingLatitude:  transport.MeetingLatitude,
+			MeetingLongitude: transport.MeetingLongitude,
+			MeetingTime:      nullableMeetingTime,
 			Author: responses.UserResponse{
 				ID:       transport.Author.ID,
 				Username: transport.Author.Username,
 			},
+			Price: transport.Price,
 		}
 	}
 
@@ -130,12 +137,6 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 		Price:          requestBody.Price,
 	}
 
-	isValid := transport.IsTransportTypeValid(context)
-	if !isValid {
-		logger.ApiWarning(context, "Invalid transport type "+requestBody.TransportType)
-		return
-	}
-
 	errTransport := handler.Repository.Create(&transport)
 	if errTransport != nil {
 		errorHandlers.HandleGormErrors(errTransport, context)
@@ -143,14 +144,20 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 	}
 
 	transportResponse := responses.TransportResponse{
-		ID:             transport.ID,
-		TransportType:  transport.TransportType,
-		StartDate:      transport.StartDate.Format(time.RFC3339),
-		EndDate:        transport.EndDate.Format(time.RFC3339),
-		StartAddress:   transport.StartAddress,
-		EndAddress:     transport.EndAddress,
-		MeetingAddress: transport.MeetingAddress,
-		MeetingTime:    transport.MeetingTime.Format(time.RFC3339),
+		ID:               transport.ID,
+		TransportType:    transport.TransportType,
+		StartDate:        transport.StartDate.Format(time.RFC3339),
+		EndDate:          transport.EndDate.Format(time.RFC3339),
+		StartAddress:     transport.StartAddress,
+		StartLatitude:    transport.StartLatitude,
+		StartLongitude:   transport.StartLongitude,
+		EndAddress:       transport.EndAddress,
+		EndLatitude:      transport.EndLatitude,
+		EndLongitude:     transport.EndLongitude,
+		MeetingAddress:   transport.MeetingAddress,
+		MeetingLatitude:  transport.MeetingLatitude,
+		MeetingLongitude: transport.MeetingLongitude,
+		MeetingTime:      transport.MeetingTime.Format(time.RFC3339),
 		Author: responses.UserResponse{
 			ID:       transport.Author.ID,
 			Username: transport.Author.Username,

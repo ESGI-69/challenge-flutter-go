@@ -1,9 +1,10 @@
 package models
 
 import (
+	"challenge-flutter-go/api/utils/geo"
+	"errors"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -17,28 +18,45 @@ const (
 
 type Transport struct {
 	gorm.Model
-	TransportType  TransportType `gorm:"not null; default:'car'"`
-	StartDate      time.Time     `gorm:"not null"`
-	TripID         uint
-	Trip           Trip `gorm:"constraint:OnUpdate:CASCADE;not null"`
-	AuthorID       uint
-	Author         User      `gorm:"constraint:OnUpdate:CASCADE;not null"`
-	EndDate        time.Time `gorm:"not null"`
-	StartAddress   string    `gorm:"not null"`
-	EndAddress     string    `gorm:"not null"`
-	MeetingAddress string
-	MeetingTime    time.Time
-	Price          float64 `gorm:"not null; default:0" validate:"min=0"`
+	TransportType    TransportType `gorm:"not null; default:'car'"`
+	StartDate        time.Time     `gorm:"not null"`
+	TripID           uint
+	Trip             Trip `gorm:"constraint:OnUpdate:CASCADE;not null"`
+	AuthorID         uint
+	Author           User      `gorm:"constraint:OnUpdate:CASCADE;not null"`
+	EndDate          time.Time `gorm:"not null"`
+	StartAddress     string    `gorm:"not null"`
+	StartLatitude    float64   `gorm:"default:0"`
+	StartLongitude   float64   `gorm:"default:0"`
+	EndAddress       string    `gorm:"not null"`
+	EndLatitude      float64   `gorm:"default:0"`
+	EndLongitude     float64   `gorm:"default:0"`
+	MeetingAddress   string
+	MeetingLatitude  float64 `gorm:"default:0"`
+	MeetingLongitude float64 `gorm:"default:0"`
+	MeetingTime      time.Time
+	Price            float64 `gorm:"not null; default:0" validate:"min=0"`
 }
 
 // Checks if the transport type is valid, returns false if it's not & aborts the request
-func (t *Transport) IsTransportTypeValid(context *gin.Context) (isValid bool) {
-	isValid = t.TransportType == TransportTypeCar || t.TransportType == TransportTypePlane || t.TransportType == TransportTypeBus
-	if !isValid {
-		context.AbortWithStatusJSON(400, gin.H{
-			"error": "Invalid transport type",
-			"valid": []string{"car", "plane", "bus"},
-		})
+func (transport *Transport) isTransportTypeValid() (isValid bool) {
+	return transport.TransportType == TransportTypeCar || transport.TransportType == TransportTypePlane || transport.TransportType == TransportTypeBus
+}
+
+func (transport *Transport) BeforeSave(tx *gorm.DB) (err error) {
+	if !transport.isTransportTypeValid() {
+		return gorm.ErrInvalidData
+	}
+	if err = geo.GetGeoLocation(transport.StartAddress, &transport.StartLatitude, &transport.StartLongitude); err != nil {
+		return errors.New("geo location api is on an error state")
+	}
+	if err = geo.GetGeoLocation(transport.EndAddress, &transport.EndLatitude, &transport.EndLongitude); err != nil {
+		return errors.New("geo location api is on an error state")
+	}
+	if transport.MeetingAddress != "" {
+		if err = geo.GetGeoLocation(transport.MeetingAddress, &transport.MeetingLatitude, &transport.MeetingLongitude); err != nil {
+			return errors.New("geo location api is on an error state")
+		}
 	}
 	return
 }
