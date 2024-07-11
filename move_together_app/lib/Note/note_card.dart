@@ -24,71 +24,71 @@ class NoteCard extends StatelessWidget {
     return BlocProvider(
         create: (context) => NoteBloc(context)..add(NotesDataFetch(tripId)),
         child: BlocBuilder<NoteBloc, NoteState>(
-            builder: (context, state) {
-              if (state is NotesDataLoadingSuccess) {
-                return TripFeatureCard(
-                  title: 'Notes',
-                  emptyMessage: 'Tellement vide ! Appuie sur le + pour ajouter des notes',
-                  showAddButton: userHasEditPermission,
-                  icon: Icons.note,
-                  isLoading: state is NotesDataLoading,
-                  length: state.notes.length,
-                  onAddTap: () {
-                    showCupertinoModalBottomSheet(
+          builder: (context, state) {
+            if (state is NotesDataLoadingSuccess) {
+              return TripFeatureCard(
+                title: 'Notes',
+                emptyMessage: 'Tellement vide ! Appuie sur le + pour ajouter des notes',
+                showAddButton: userHasEditPermission,
+                icon: Icons.note,
+                isLoading: state is NotesDataLoading,
+                length: state.notes.length,
+                onAddTap: () {
+                  showCupertinoModalBottomSheet(
+                    expand: true,
+                    context: context,
+                    builder: (BuildContext context) => NoteCreateModal(
+                      tripId: tripId,
+                      onNoteCreated: (createdNote) {
+                        state.notes.add(createdNote);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  );
+                },
+                itemBuilder: (context, index) {
+                  return NoteRow(
+                    note: state.notes[index],
+                    onTap: () => showCupertinoModalBottomSheet(
                       expand: true,
                       context: context,
-                      builder: (BuildContext context) => NoteCreateModal(
-                        tripId: tripId,
-                        onNoteCreated: (createdNote) {
-                          state.notes.add(createdNote);
-                          Navigator.of(context).pop();
-                        },
+                      builder: (BuildContext context) => NoteInfoModal(
+                          note: state.notes[index],
+                          hasTripEditPermission: userHasEditPermission,
+                          isTripOwner: userIsOwner,
+                          onNoteDeleted: (note) => {
+                            state.notes.remove(note),
+                            Navigator.of(context).pop(),
+                          },
+                          tripId: tripId
                       ),
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    return NoteRow(
-                      note: state.notes[index],
-                      onTap: () => showCupertinoModalBottomSheet(
-                        expand: true,
-                        context: context,
-                        builder: (BuildContext context) => NoteInfoModal(
-                            note: state.notes[index],
-                            hasTripEditPermission: userHasEditPermission,
-                            isTripOwner: userIsOwner,
-                            onNoteDeleted: (note) => {
-                              state.notes.remove(note),
-                              Navigator.of(context).pop(),
-                            },
-                            tripId: tripId
-                        ),
-                      ),
-                    );
-                  },
-                );
-              } else if (state is NotesDataLoading) {
-                return TripFeatureCard(
-                  title: 'Notes',
-                  emptyMessage: 'Tellement vide ! Appuie sur le + pour ajouter des notes',
-                  showAddButton: false,
-                  icon: Icons.note,
-                  isLoading: true,
-                  length: 0,
-                  itemBuilder: (context, index) {
-                    return const SizedBox();
-                  },
-                );
-              } else if (state is NotesDataLoadingError) {
-                return Center(
-                  child: Column(
-                    children: [
-                      Text(state.errorMessage),
-                    ],
-                  ),
-                );
-              }
-              return const SizedBox();
+                    ),
+                  );
+                },
+              );
+            } else if (state is NotesDataLoading) {
+              return TripFeatureCard(
+                title: 'Notes',
+                emptyMessage: 'Tellement vide ! Appuie sur le + pour ajouter des notes',
+                showAddButton: false,
+                icon: Icons.note,
+                isLoading: true,
+                length: 0,
+                itemBuilder: (context, index) {
+                  return const SizedBox();
+                },
+              );
+            } else if (state is NotesDataLoadingError) {
+              return Center(
+                child: Column(
+                  children: [
+                    Text(state.errorMessage),
+                  ],
+                ),
+              );
             }
+            return const SizedBox();
+          }
         )
     );
   }

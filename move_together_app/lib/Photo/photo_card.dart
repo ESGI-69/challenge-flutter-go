@@ -38,7 +38,7 @@ class PhotoCard extends StatelessWidget {
               icon: Icons.camera_alt,
               isLoading: state is PhotosDataLoading,
               length: state.photos.length,
-              isFullGridView: true,
+              type: TripFeatureCardType.grid,
               onAddTap: () async {
                 final XFile? image = await picker.pickImage(source: ImageSource.gallery);
                 if (image != null) {
@@ -66,7 +66,7 @@ class PhotoCard extends StatelessWidget {
               icon: Icons.camera_alt,
               isLoading: state is PhotosDataLoading,
               length: 0,
-              isFullGridView: true,
+              type: TripFeatureCardType.grid,
               onAddTap: () {},
               itemBuilder: (context, index) => const SizedBox(),
             );
@@ -78,7 +78,7 @@ class PhotoCard extends StatelessWidget {
               icon: Icons.camera_alt,
               isLoading: true,
               length: 0,
-              isFullGridView: true,
+              type: TripFeatureCardType.grid,
               onAddTap: () {},
               itemBuilder: (context, index) => const SizedBox(),
             );

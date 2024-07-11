@@ -2,8 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSDocumentsFolderUsageDescription</key>
-    <string>Nous avons besoin d'accéder à vos documents pour sélectionner un fichier.</string>
+	<key>DART_DEFINES</key>
+	<string>$(DART_DEFINES)</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Nous avons besoin d'accéder à vos documents pour sélectionner un fichier.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) demande l'accès à votre bibliothèque de photos pour que vous puissiez choisir une photo de profil ou envoyer des photos à vos amis.</string>
 	<key>NSCameraUsageDescription</key>

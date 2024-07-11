@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:move_together_app/Widgets/Card/trip_feature_card_grid_body.dart';
+import 'package:move_together_app/Widgets/Card/trip_feature_card_full_body.dart';
+import 'package:move_together_app/Widgets/Card/trip_feature_card_row_body.dart';
+
+enum TripFeatureCardType {
+  row,
+  grid,
+  full,
+}
 
 class TripFeatureCard extends StatelessWidget {
   final bool isLoading;
@@ -8,9 +17,10 @@ class TripFeatureCard extends StatelessWidget {
   final String title;
   final Function? onAddTap;
   final Function()? onTitleTap;
-  final Widget? Function(BuildContext context, int index) itemBuilder;
+  final Widget? Function(BuildContext context, int index)? itemBuilder;
+  final Widget? child;
   final bool showAddButton;
-  final bool isFullGridView;
+  final TripFeatureCardType type;
 
   const TripFeatureCard({
     super.key,
@@ -21,165 +31,96 @@ class TripFeatureCard extends StatelessWidget {
     required this.title,
     this.onAddTap,
     this.onTitleTap,
-    required this.itemBuilder,
+    this.itemBuilder,
+    this.child,
     this.showAddButton = false,
-    this.isFullGridView = false,
+    this.type = TripFeatureCardType.row,
   });
 
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          _Header(
-            icon: icon,
-            title: title,
-            showAddButton: showAddButton,
-            isLoading: isLoading,
-            showTitleArrow: onTitleTap != null,
-            onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
-            onAddTap: onAddTap != null ? () => onAddTap!() : null,
-          ),
-          isFullGridView
-            ? _GridBody(
-              isLoading: isLoading,
-              length: length,
-              emptyMessage: emptyMessage,
-              itemBuilder: itemBuilder,
-            )
-            : _RowBody(
-              isLoading: isLoading,
-              length: length,
-              emptyMessage: emptyMessage,
-              itemBuilder: itemBuilder,
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RowBody extends StatelessWidget {
-  final bool isLoading;
-  final int length;
-  final String emptyMessage;
-  final Widget? Function(BuildContext context, int index) itemBuilder;
-
-  const _RowBody({
-    this.isLoading = false,
-    this.length = 0,
-    required this.emptyMessage,
-    required this.itemBuilder,
-  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 6,
-        bottom: 12,
-        left: 16,
-        right: 16,
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            _Header(
+              icon: icon,
+              title: title,
+              showAddButton: showAddButton,
+              isLoading: isLoading,
+              showTitleArrow: onTitleTap != null,
+              onTitleTap: onTitleTap != null ? () => onTitleTap!() : null,
+              onAddTap: onAddTap != null ? () => onAddTap!() : null,
+            ),
+            _BodySelector(
+              type: type,
+              isLoading: isLoading,
+              length: length,
+              emptyMessage: emptyMessage,
+              itemBuilder: itemBuilder ?? (context, index) => const SizedBox(),
+              child: child,
+            ),
+          ],
+        ),
       ),
-      child: isLoading
-        ? const Center(
-            child: CircularProgressIndicator.adaptive(),
-          )
-        : length == 0
-          ? _EmptyBody(message: emptyMessage)
-          : ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 125),
-            child: ListView.separated(
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemCount: length,
-              itemBuilder: itemBuilder,
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-            )
-          )
     );
   }
 }
 
-class _GridBody extends StatelessWidget {
+class _BodySelector extends StatelessWidget {
+  final TripFeatureCardType type;
   final bool isLoading;
   final int length;
   final String emptyMessage;
   final Widget? Function(BuildContext context, int index) itemBuilder;
+  final Widget? child;
 
-  const _GridBody({
+  const _BodySelector({
+    required this.type,
     this.isLoading = false,
     this.length = 0,
     this.emptyMessage = 'No elements',
     required this.itemBuilder,
+    this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-      ? const Center(
-          child: CircularProgressIndicator.adaptive(),
-        )
-      : length == 0
-        ? Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 6,
-            horizontal: 16,
-          ),
-          child: _EmptyBody(message: emptyMessage),
-        )
-        : ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 200),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
-            ),
-            itemCount: length,
-            itemBuilder: itemBuilder,
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-          ),
+    switch (type) {
+      case TripFeatureCardType.row:
+        return TripFeatureCardRowBody(
+          isLoading: isLoading,
+          length: length,
+          emptyMessage: emptyMessage,
+          itemBuilder: itemBuilder,
         );
-  }
-}
-
-class _EmptyBody extends StatelessWidget {
-  final String message;
-
-  const _EmptyBody({
-    required this.message,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48),
-        child: Text(
-          message,
-          style: const TextStyle(
-            color: Colors.black54,
-            fontSize: 12,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+      case TripFeatureCardType.grid:
+        return TripFeatureCardGridBody(
+          isLoading: isLoading,
+          length: length,
+          emptyMessage: emptyMessage,
+          itemBuilder: itemBuilder,
+        );
+      case TripFeatureCardType.full:
+        return TripFeatureCardFullBody(
+          isLoading: isLoading,
+          child: child,
+        );
+    }
   }
 }
 
