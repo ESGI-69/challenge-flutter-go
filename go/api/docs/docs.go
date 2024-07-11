@@ -2628,6 +2628,9 @@ const docTemplate = `{
                 },
                 "startDate": {
                     "type": "string"
+                },
+                "totalPrice": {
+                    "type": "number"
                 }
             }
         },

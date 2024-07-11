@@ -10,8 +10,13 @@ import 'package:move_together_app/Map/map_card.dart';
 
 class TripBody extends StatelessWidget {
   final Trip trip;
+  final Function() onRefresh;
 
-  const TripBody({required this.trip, super.key});
+  const TripBody({
+    required this.trip,
+    super.key,
+    required this.onRefresh,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +27,13 @@ class TripBody extends StatelessWidget {
           tripId: trip.id,
           userHasEditPermission: trip.currentUserHasEditingRights(context),
           userIsOwner: trip.isCurrentUserOwner(context),
+          onRefresh: onRefresh,
         ),
         AccommodationCard(
           tripId: trip.id,
           userHasEditPermission: trip.currentUserHasEditingRights(context),
           userIsOwner: trip.isCurrentUserOwner(context),
+          onRefresh: onRefresh,
         ),
         PhotoCard(
           tripId: trip.id,
@@ -36,7 +43,7 @@ class TripBody extends StatelessWidget {
         DocumentCard(
           tripId: trip.id,
           userHasEditPermission: trip.currentUserHasEditingRights(context),
-          userIsOwner: trip.isCurrentUserOwner(context)
+          userIsOwner: trip.isCurrentUserOwner(context),
         ),
         NoteCard(
           tripId: trip.id,
@@ -47,6 +54,7 @@ class TripBody extends StatelessWidget {
           tripId: trip.id,
           userHasEditPermission: trip.currentUserHasEditingRights(context),
           userIsOwner: trip.isCurrentUserOwner(context),
+          onRefresh: onRefresh,
         ),
       ],
     );

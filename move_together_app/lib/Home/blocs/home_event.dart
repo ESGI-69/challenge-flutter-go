@@ -5,6 +5,12 @@ sealed class HomeEvent {}
 
 final class HomeDataFetch extends HomeEvent {}
 
+final class HomeDataFetchSingleTrip extends HomeEvent {
+  final int tripId;
+
+  HomeDataFetchSingleTrip(this.tripId);
+}
+
 final class HomeDataLeaveTrip extends HomeEvent {
   final Trip trip;
 

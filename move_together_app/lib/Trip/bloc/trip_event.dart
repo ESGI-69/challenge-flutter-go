@@ -9,6 +9,12 @@ final class TripDataFetch extends TripEvent {
   TripDataFetch(this.tripId);
 }
 
+final class TripDataRefreshTrip extends TripEvent {
+  final int tripId;
+
+  TripDataRefreshTrip(this.tripId);
+}
+
 final class TripDataCreateTrip extends TripEvent {
   final Trip trip;
 

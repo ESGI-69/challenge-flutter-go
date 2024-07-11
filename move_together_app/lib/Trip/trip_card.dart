@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/Trip/trip_cost_tag.dart';
 import 'package:move_together_app/Widgets/Button/button_leave.dart';
 import 'package:move_together_app/Widgets/Button/button_delete.dart';
 import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
@@ -22,6 +23,7 @@ class TripCard extends StatelessWidget {
   final Function() onDelete;
   final bool isCurrentUserOwner;
   final Function() onParticipantsTap;
+  final double totalPrice;
 
   const TripCard({
     super.key,
@@ -37,6 +39,7 @@ class TripCard extends StatelessWidget {
     required this.onDelete,
     required this.isCurrentUserOwner,
     required this.onParticipantsTap,
+    required this.totalPrice,
   });
 
   @override
@@ -71,6 +74,13 @@ class TripCard extends StatelessWidget {
                   headers: {
                     'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
                   },
+                ),
+              ),
+              Positioned(
+                top: 10,
+                left: 10,
+                child: TripCostTag(
+                  totalCost: totalPrice,
                 ),
               ),
               Positioned(

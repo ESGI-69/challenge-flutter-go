@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Accommodation/bloc/accommodation_bloc.dart';
 import 'package:move_together_app/Accommodation/accommodation_create_modal.dart';
 import 'package:move_together_app/Accommodation/accommodation_info_modal.dart';
@@ -11,12 +12,14 @@ class AccommodationCard extends StatelessWidget {
   final int tripId;
   final bool userHasEditPermission;
   final bool userIsOwner;
+  final Function() onRefresh;
 
   const AccommodationCard({
     super.key,
     required this.tripId,
     required this.userHasEditPermission,
     required this.userIsOwner,
+    required this.onRefresh,
   });
 
   @override
@@ -41,7 +44,8 @@ class AccommodationCard extends StatelessWidget {
                     tripId: tripId,
                     onAccommodationCreated: (createdAccommodation) {
                       state.accommodations.add(createdAccommodation);
-                      Navigator.of(context).pop();
+                      context.pop();
+                      onRefresh();
                     },
                   ),
                 );
@@ -58,9 +62,10 @@ class AccommodationCard extends StatelessWidget {
                         accommodation: state.accommodations[index],
                         hasTripEditPermission: userHasEditPermission,
                         isTripOwner: userIsOwner,
-                        onAccommodationDeleted: (accommodation) => {
-                          state.accommodations.remove(accommodation),
-                          Navigator.of(context).pop(),
+                        onAccommodationDeleted: (accommodation) {
+                          state.accommodations.remove(accommodation);
+                          context.pop();
+                          onRefresh();
                         },
                         tripId: tripId
                       ),

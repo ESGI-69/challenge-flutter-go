@@ -5,8 +5,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Home/blocs/home_bloc.dart';
 import 'package:move_together_app/Home/empty_home.dart';
 import 'package:move_together_app/Participant/participant_info.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Trip/trip_card.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:move_together_app/core/services/trip_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tripService = TripService(context.read<AuthProvider>());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -76,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           tripId: trip.id,
                           onTap: () async {
                             await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
-                            context.read<HomeBloc>().add(HomeDataFetch());
+                            context.read<HomeBloc>().add(HomeDataFetchSingleTrip(trip.id));
                           },
                           onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
                           onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
@@ -95,8 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 inviteCode: trip.inviteCode,
                               )
                             );
-                            context.read<HomeBloc>().add(HomeDataFetch());
+                            state.trips[_currentIndex] = await tripService.get(trip.id.toString());
                           },
+                          totalPrice: trip.totalPrice,
                         );
                       }).toList(),
                       ),

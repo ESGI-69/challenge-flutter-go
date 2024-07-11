@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/Trip/trip_cost_tag.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/Dialog/edit_trip_name.dart';
 import 'package:move_together_app/Widgets/Button/button_chat.dart';
@@ -21,6 +22,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String imageUrl;
   final int tripId;
   final bool userHasEditRights;
+  final double totalPrice;
 
   const TripAppBar({
     super.key,
@@ -34,6 +36,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onParticipantsTap,
     required this.imageUrl,
     required this.tripId,
+    required this.totalPrice,
     this.userHasEditRights = false,
   });
 
@@ -101,13 +104,23 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: ButtonChat(
-              tripId: tripId,
-              tripName: name,
-            ),
-          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: TripCostTag(
+                  totalCost: totalPrice,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: ButtonChat(
+                  tripId: tripId,
+                  tripName: name,
+                ),
+              ),
+            ],
+          )
         ],
         title: ParticipantIcons(
           participants: participants,
