@@ -60,4 +60,6 @@ class Accommodation {
       'price': price,
     };
   }
+
+  bool get hasValidGeolocation => latitude != 0 && longitude != 0;
 }

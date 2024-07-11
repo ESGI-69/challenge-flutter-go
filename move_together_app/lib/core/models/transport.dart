@@ -85,4 +85,7 @@ class Transport {
       'price': price,
     };
   }
+
+  bool get hasValidGeolocation => startLatitude != 0 && startLongitude != 0 && endLatitude != 0 && endLongitude != 0;
+  bool get hasValidMeetingGeolocation => meetingLatitude != 0 && meetingLongitude != 0;
 }

@@ -47,12 +47,14 @@ func (handler *ActivityHandler) GetAllFromTrip(context *gin.Context) {
 			Description: activity.Description,
 			StartDate:   activity.StartDate.Format(time.RFC3339),
 			EndDate:     activity.EndDate.Format(time.RFC3339),
+			Location:    activity.Location,
 			Latitude:    activity.Latitude,
 			Longitude:   activity.Longitude,
 			Owner: responses.UserResponse{
 				ID:       activity.Owner.ID,
 				Username: activity.Owner.Username,
 			},
+			Price: activity.Price,
 		}
 	}
 

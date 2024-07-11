@@ -26,9 +26,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         activityService.getAll(event.tripId),
       ]);
 
-      var transportsWithGeoPos = List<Transport>.empty();
-      var accommodationsWithGeoPos = (results[1] as List<Accommodation>).where((element) => element.latitude != 0 && element.longitude != 0).toList();
-      var activitiesWithGeoPos = (results[2] as List<Activity>).where((element) => element.latitude != 0 && element.longitude != 0).toList();
+      var transportsWithGeoPos = (results[0] as List<Transport>).where((transport) => transport.hasValidGeolocation).toList();
+      var accommodationsWithGeoPos = (results[1] as List<Accommodation>).where((accommodation) => accommodation.hasValidGeolocation).toList();
+      var activitiesWithGeoPos = (results[2] as List<Activity>).where((activity) => activity.hasValidGeolocation).toList();
 
       emit(MapDataLoadingSuccess(
         transports: transportsWithGeoPos,
