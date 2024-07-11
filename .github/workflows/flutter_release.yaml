@@ -32,7 +32,7 @@ jobs:
     - name: Retrive dependencies
       run: flutter pub get
     - name: Build Android
-      run: flutter build apk --release
+      run: flutter build apk --release --dart-define GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:

@@ -51,7 +51,7 @@ jobs:
     - name: Retrive dependencies
       run: flutter pub get
     - name: Build iOS
-      run: flutter build ios --release --no-codesign
+      run: flutter build ios --release --no-codesign --dart-define GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
 
   flutter-build-android:
     defaults:
@@ -74,7 +74,7 @@ jobs:
     - name: Retrive dependencies
       run: flutter pub get
     - name: Build Android
-      run: flutter build apk --release
+      run: flutter build apk --release --dart-define GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
 
   flutter-build-web:
     defaults:
