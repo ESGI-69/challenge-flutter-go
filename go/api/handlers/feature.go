@@ -60,7 +60,7 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 	responseFeature := responses.FeatureResponse{
 		Name:      feature.Name,
 		IsEnabled: feature.IsEnabled,
-		ModifedBy: responses.UserResponse{
+		ModifiedBy: responses.UserResponse{
 			ID:       feature.ModifiedBy.ID,
 			Username: feature.ModifiedBy.Username,
 		},
@@ -94,7 +94,7 @@ func (handler *FeatureHandler) GetFeatures(context *gin.Context) {
 	for i, feature := range features {
 		responseFeatures[i] = responses.FeatureResponse{
 			Name: feature.Name,
-			ModifedBy: responses.UserResponse{
+			ModifiedBy: responses.UserResponse{
 				ID:       feature.ModifiedBy.ID,
 				Username: feature.ModifiedBy.Username,
 			},
@@ -130,7 +130,7 @@ func (handler *FeatureHandler) GetFeaturesAdmin(context *gin.Context) {
 	for i, feature := range features {
 		responseFeatures[i] = responses.FeatureResponse{
 			Name: feature.Name,
-			ModifedBy: responses.UserResponse{
+			ModifiedBy: responses.UserResponse{
 				ID:       feature.ModifiedBy.ID,
 				Username: feature.ModifiedBy.Username,
 			},

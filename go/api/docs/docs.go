@@ -2604,7 +2604,7 @@ const docTemplate = `{
                 "isEnabled": {
                     "type": "boolean"
                 },
-                "modifedBy": {
+                "modifiedBy": {
                     "$ref": "#/definitions/responses.UserResponse"
                 },
                 "name": {
