@@ -13,8 +13,14 @@ class Transport {
   final DateTime startDate;
   final DateTime endDate;
   final String startAddress;
+  final double startLatitude;
+  final double startLongitude;
   final String endAddress;
+  final double endLatitude;
+  final double endLongitude;
   final String? meetingAddress;
+  final double meetingLatitude;
+  final double meetingLongitude;
   final DateTime? meetingTime;
   final User author;
   final double price;
@@ -25,8 +31,14 @@ class Transport {
     required this.startDate,
     required this.endDate,
     required this.startAddress,
+    required this.startLatitude,
+    required this.startLongitude,
     required this.endAddress,
+    required this.endLatitude,
+    required this.endLongitude,
     this.meetingAddress,
+    required this.meetingLatitude,
+    required this.meetingLongitude,
     this.meetingTime,
     required this.author,
     required this.price,
@@ -39,8 +51,14 @@ class Transport {
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
       startAddress: json['startAddress'],
+      startLatitude: dynamicToDouble(json['startLatitude']),
+      startLongitude: dynamicToDouble(json['startLongitude']),
       endAddress: json['endAddress'],
+      endLatitude: dynamicToDouble(json['endLatitude']),
+      endLongitude: dynamicToDouble(json['endLongitude']),
       meetingAddress: json['meetingAddress'],
+      meetingLatitude: dynamicToDouble(json['meetingLatitude']),
+      meetingLongitude: dynamicToDouble(json['meetingLongitude']),
       meetingTime: DateTime.parse(json['meetingTime']),
       author: User.fromJson(json['author']),
       price: dynamicToDouble(json['price']),
@@ -54,8 +72,14 @@ class Transport {
       'startDate': startDate,
       'endDate': endDate,
       'startAddress': startAddress,
+      'startLatitude': startLatitude,
+      'startLongitude': startLongitude,
       'endAddress': endAddress,
+      'endLatitude': endLatitude,
+      'endLongitude': endLongitude,
       'meetingAddress': meetingAddress,
+      'meetingLatitude': meetingLatitude,
+      'meetingLongitude': meetingLongitude,
       'meetingTime': meetingTime,
       'author': author.toJson(),
       'price': price,
