@@ -6,6 +6,7 @@ import 'package:move_together_app/Widgets/Input/cool_date_time_picker.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/accommodation.dart';
 import 'package:move_together_app/core/services/accommodation_service.dart';
+import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
 
 Map<AccommodationType, String> accommodationTypeString = {
   AccommodationType.hotel: 'hotel',
@@ -24,7 +25,8 @@ class AccommodationCreateModal extends StatefulWidget {
   });
 
   @override
-  State<AccommodationCreateModal> createState() => _AccommodationCreateModalState();
+  State<AccommodationCreateModal> createState() =>
+      _AccommodationCreateModalState();
 }
 
 class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
@@ -34,12 +36,17 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
   final TextEditingController _bookingUrlController = TextEditingController();
   DateTime _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+  final TextEditingController _priceController = TextEditingController();
 
   void createAccommodation() async {
-    if (_addressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)) {
+    if (_addressController.text.isEmpty ||
+        _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) ||
+        _endDateTime == DateTime.fromMillisecondsSinceEpoch(0) ||
+        _priceController.text.isEmpty) {
       return;
     }
-    final createdAccommodation = await AccommodationService(context.read<AuthProvider>()).create(
+    final createdAccommodation =
+        await AccommodationService(context.read<AuthProvider>()).create(
       tripId: widget.tripId,
       accommodationType: _selectedAccommodationType,
       startDate: _startDateTime,
@@ -47,6 +54,7 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
       address: _addressController.text,
       name: _nameController.text,
       bookingUrl: _bookingUrlController.text,
+      price: double.parse(_priceController.text),
     );
     widget.onAccommodationCreated(createdAccommodation);
   }
@@ -65,98 +73,107 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const _Header(),
-              Row(
-                children: [
-                  Expanded(
-                    child: CupertinoSlidingSegmentedControl<AccommodationType>(
-                      groupValue: _selectedAccommodationType,
-                      onValueChanged: (value) => {
-                        if (value != null) {
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            const _Header(),
+            Row(
+              children: [
+                Expanded(
+                  child: CupertinoSlidingSegmentedControl<AccommodationType>(
+                    groupValue: _selectedAccommodationType,
+                    onValueChanged: (value) => {
+                      if (value != null)
+                        {
                           setState(() {
                             _selectedAccommodationType = value;
                           })
                         }
-                      },
-                      children: const <AccommodationType, Widget>{
-                        AccommodationType.hotel: Text('Hotel'),
-                        AccommodationType.airbnb: Text('Airbnb'),
-                        AccommodationType.other: Text('Other'),
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              CoolTextField(
-                controller: _addressController,
-                hintText: 'Adresse du lieu',
-                prefixIcon: Icons.location_pin,
-              ),
-              const SizedBox(height: 8),
-              CoolDateTimePicker(
-                hintText: 'Date d\'arrivée',
-                prefixIcon: Icons.calendar_today,
-                onDateTimeChanged: (DateTime dateTime) {
-                  setState(() {
-                    _startDateTime = dateTime;
-                  });
-                },
-                onDateTimeCleared: () {
-                  setState(() {
-                    _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              CoolDateTimePicker(
-                hintText: 'Date de départ',
-                prefixIcon: Icons.calendar_today,
-                onDateTimeChanged: (DateTime dateTime) {
-                  setState(() {
-                    _endDateTime = dateTime;
-                  });
-                },
-                onDateTimeCleared: () {
-                  setState(() {
-                    _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                  });
-                },
-              ),
-              const SizedBox(height: 36),
-                CoolTextField(
-                controller: _nameController,
-                hintText: "Nom de l'hébergement",
-                prefixIcon: Icons.tag,
-              ),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _bookingUrlController,
-                hintText: "Url de l'établissement",
-                prefixIcon: Icons.link,
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: createAccommodation,
-                style: _addressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
-                  ? ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                  )
-                  : ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
-                  ),
-                child: const Text(
-                  'Créer',
-                  style: TextStyle(
-                    color: Colors.white,
+                    },
+                    children: const <AccommodationType, Widget>{
+                      AccommodationType.hotel: Text('Hotel'),
+                      AccommodationType.airbnb: Text('Airbnb'),
+                      AccommodationType.other: Text('Other'),
+                    },
                   ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            CoolTextField(
+              controller: _addressController,
+              hintText: 'Adresse du lieu',
+              prefixIcon: Icons.location_pin,
+            ),
+            const SizedBox(height: 8),
+            CoolDateTimePicker(
+              hintText: 'Date d\'arrivée',
+              prefixIcon: Icons.calendar_today,
+              onDateTimeChanged: (DateTime dateTime) {
+                setState(() {
+                  _startDateTime = dateTime;
+                });
+              },
+              onDateTimeCleared: () {
+                setState(() {
+                  _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            CoolDateTimePicker(
+              hintText: 'Date de départ',
+              prefixIcon: Icons.calendar_today,
+              onDateTimeChanged: (DateTime dateTime) {
+                setState(() {
+                  _endDateTime = dateTime;
+                });
+              },
+              onDateTimeCleared: () {
+                setState(() {
+                  _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                });
+              },
+            ),
+            const SizedBox(height: 36),
+            CoolTextField(
+              controller: _nameController,
+              hintText: "Nom de l'hébergement",
+              prefixIcon: Icons.tag,
+            ),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _bookingUrlController,
+              hintText: "Url de l'établissement",
+              prefixIcon: Icons.link,
+            ),
+            const SizedBox(height: 8),
+            CoolNumberField(
+              controller: _priceController,
+              hintText: 'Prix',
+              prefixIcon: Icons.euro,
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: createAccommodation,
+              style: _addressController.text.isEmpty ||
+                      _startDateTime ==
+                          DateTime.fromMillisecondsSinceEpoch(0) ||
+                      _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
+                  ? ButtonStyle(
+                      backgroundColor:
+                          WidgetStateProperty.all<Color>(Colors.grey),
+                    )
+                  : ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                          Theme.of(context).primaryColor),
+                    ),
+              child: const Text(
+                'Créer',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
-            ]
-          ),
+            ),
+          ]),
         ),
       ),
     );
@@ -186,8 +203,8 @@ class _Header extends StatelessWidget {
           const SizedBox(height: 4),
           const Row(
             children: [
-              Expanded(child: 
-                Text(
+              Expanded(
+                child: Text(
                   'Créer un hébergement',
                   textAlign: TextAlign.center,
                   style: TextStyle(

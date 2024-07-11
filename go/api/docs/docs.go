@@ -2105,6 +2105,7 @@ const docTemplate = `{
                 "address",
                 "endDate",
                 "name",
+                "price",
                 "startDate"
             ],
             "properties": {
@@ -2122,6 +2123,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 },
                 "startDate": {
                     "type": "string"
@@ -2344,6 +2348,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 },
                 "startDate": {
                     "type": "string"

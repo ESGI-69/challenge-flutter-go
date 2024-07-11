@@ -51,6 +51,7 @@ func (handler *AccommodationHandler) GetAllFromTrip(context *gin.Context) {
 			AccommodationType: accommodation.AccommodationType,
 			Latitude:          accommodation.Latitude,
 			Longitude:         accommodation.Longitude,
+			Price:             accommodation.Price,
 		}
 	}
 
@@ -112,6 +113,7 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 		Name:              requestBody.Name,
 		Latitude:          getLat,
 		Longitude:         getLong,
+		Price:             requestBody.Price,
 	}
 
 	if !accommodation.IsAccommodationTypeValid(context) {
@@ -135,6 +137,7 @@ func (handler *AccommodationHandler) Create(context *gin.Context) {
 		AccommodationType: accommodation.AccommodationType,
 		Latitude:          accommodation.Latitude,
 		Longitude:         accommodation.Longitude,
+		Price:             accommodation.Price,
 	})
 	logger.ApiInfo(context, "Create accommodation "+string(rune(accommodation.ID))+" on trip "+tripId)
 }

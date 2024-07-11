@@ -61,6 +61,8 @@ definitions:
         type: string
       name:
         type: string
+      price:
+        type: number
       startDate:
         type: string
     required:
@@ -68,6 +70,7 @@ definitions:
     - address
     - endDate
     - name
+    - price
     - startDate
     type: object
   requests.ActivityCreateBody:
@@ -217,6 +220,8 @@ definitions:
         type: number
       name:
         type: string
+      price:
+        type: number
       startDate:
         type: string
     type: object

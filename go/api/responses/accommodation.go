@@ -12,4 +12,5 @@ type AccommodationResponse struct {
 	BookingURL        string                   `json:"bookingURL"`
 	Latitude          float64                  `json:"latitude"`
 	Longitude         float64                  `json:"longitude"`
+	Price             float64                  `json:"price"`
 }
