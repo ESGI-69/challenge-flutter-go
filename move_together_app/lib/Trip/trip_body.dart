@@ -37,23 +37,23 @@ class TripBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var featureProvider = Provider.of<FeatureProvider>(context);
+
     return ListView(
       children: [
-        // if (featureProvider.isFeatureEnabled('map'))
-          MapCard(tripId: trip.id),
+        MapCard(tripId: trip.id),
         if (featureNames[FeatureNames.transport] == 'transport')
           TransportCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureNames[FeatureNames.accommodation] == 'accommodation')
+        if (featureProvider.isFeatureEnabled(FeatureNames.accommodation))
           AccommodationCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureNames[FeatureNames.photo] == 'photo')
+        if (featureProvider.isFeatureEnabled(FeatureNames.photo))
           PhotoCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
@@ -65,13 +65,13 @@ class TripBody extends StatelessWidget {
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureNames[FeatureNames.note] == 'note')
+        if (featureProvider.isFeatureEnabled(FeatureNames.note))
           NoteCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureNames[FeatureNames.activity] == 'activity')
+        if (featureProvider.isFeatureEnabled(FeatureNames.activity))
           ActivityCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),

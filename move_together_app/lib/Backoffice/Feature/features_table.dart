@@ -2,6 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../core/models/feature.dart';
 
+Map<FeatureNames, String> featureNames = {
+  FeatureNames.document: 'document',
+  FeatureNames.auth: 'auth',
+  FeatureNames.chat: 'chat',
+  FeatureNames.trip: 'trip',
+  FeatureNames.note: 'note',
+  FeatureNames.transport: 'transport',
+  FeatureNames.accommodation: 'accommodation',
+  FeatureNames.user: 'user',
+  FeatureNames.photo: 'photo',
+  FeatureNames.activity: 'activity',
+};
+
+
 class FeaturesTable extends StatelessWidget {
   final List<Feature> features;
   final Function patchFeature;
@@ -120,7 +134,7 @@ class FeaturesTable extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      feature.name,
+                      featureNames[feature.name]!,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF263238),

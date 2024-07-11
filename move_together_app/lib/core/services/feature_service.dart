@@ -4,11 +4,11 @@ import 'package:move_together_app/core/services/api.dart';
 
 class FeatureService {
   final api = Api().dio;
-  final AuthProvider authProvider;
+  final AuthProvider? authProvider;
 
-  FeatureService(
+  FeatureService({
     this.authProvider,
-  );
+  });
 
   Future<List<Feature>> getAll() async {
     final response = await api.get(

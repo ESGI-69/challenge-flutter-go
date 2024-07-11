@@ -10,6 +10,20 @@ import 'package:move_together_app/core/models/participant.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
 import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/feature_provider.dart';
+import 'package:move_together_app/core/models/feature.dart';
+
+Map<FeatureNames, String> featureNames = {
+  FeatureNames.document: 'document',
+  FeatureNames.auth: 'auth',
+  FeatureNames.chat: 'chat',
+  FeatureNames.trip: 'trip',
+  FeatureNames.note: 'note',
+  FeatureNames.transport: 'transport',
+  FeatureNames.accommodation: 'accommodation',
+  FeatureNames.user: 'user',
+  FeatureNames.photo: 'photo',
+  FeatureNames.activity: 'activity',
+};
 
 class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String name;
@@ -115,7 +129,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                   totalCost: totalPrice,
                 ),
               ),
-              if (featureProvider.isFeatureEnabled('chat'))
+              if (featureProvider.isFeatureEnabled(FeatureNames.chat))
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: ButtonChat(

@@ -2605,7 +2605,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "modifiedBy": {
-                    "$ref": "#/definitions/responses.UserResponse"
+                    "$ref": "#/definitions/responses.UserRoleReponse"
                 },
                 "name": {
                     "$ref": "#/definitions/models.FeatureName"
