@@ -19,6 +19,7 @@ type Trip struct {
 	Editors        []User          `gorm:"many2many:trip_editors;"`
 	Transports     []Transport     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:TripID;"`
 	Accommodations []Accommodation `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:TripID;"`
+	Activities     []Activity      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:TripID;"`
 	Country        string          `gorm:"not null"`
 	City           string          `gorm:"not null"`
 	StartDate      time.Time       `gorm:"not null"`
@@ -81,4 +82,18 @@ func (t *Trip) UserIsViewer(user *User) bool {
 
 func (t *Trip) UserHasViewRight(user *User) bool {
 	return t.UserIsViewer(user) || t.UserHasEditRight(user)
+}
+
+func (t *Trip) GetTotalPrice() float64 {
+	totalPrice := 0.0
+	for _, transport := range t.Transports {
+		totalPrice += transport.Price
+	}
+	for _, accommodation := range t.Accommodations {
+		totalPrice += accommodation.Price
+	}
+	for _, activity := range t.Activities {
+		totalPrice += activity.Price
+	}
+	return totalPrice
 }

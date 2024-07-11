@@ -405,6 +405,8 @@ definitions:
         type: array
       startDate:
         type: string
+      totalPrice:
+        type: number
     type: object
   responses.UserResponse:
     properties:

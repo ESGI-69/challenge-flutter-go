@@ -95,6 +95,7 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		EndDate:      trip.EndDate.Format(time.RFC3339),
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
+		TotalPrice:   trip.GetTotalPrice(),
 	}
 
 	context.JSON(http.StatusCreated, responseTrip)
@@ -133,6 +134,7 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 			EndDate:      trip.EndDate.Format(time.RFC3339),
 			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 			InviteCode:   trip.InviteCode,
+			TotalPrice:   trip.GetTotalPrice(),
 		}
 	}
 
@@ -168,6 +170,7 @@ func (handler *TripHandler) Get(context *gin.Context) {
 		EndDate:      trip.EndDate.Format(time.RFC3339),
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
+		TotalPrice:   trip.GetTotalPrice(),
 	}
 
 	context.JSON(http.StatusOK, responseTrip)

@@ -9,6 +9,7 @@ type TripResponse struct {
 	EndDate      string                `json:"endDate"`
 	Participants []ParticipantResponse `json:"participants"`
 	InviteCode   string                `json:"inviteCode"`
+	TotalPrice   float64               `json:"totalPrice"`
 }
 
 type TripAddTransport struct {
