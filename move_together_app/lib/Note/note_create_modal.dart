@@ -37,51 +37,53 @@ class _NoteCreateModalState extends State<NoteCreateModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.only(bottom: 32),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        margin: const EdgeInsets.only(bottom: 32),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const _Header(),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _titleController,
-                hintText: 'Titre',
-                prefixIcon: Icons.title,
-              ),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _contentController,
-                hintText: 'Contenu',
-                prefixIcon: Icons.text_fields,
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: createNote,
-                style: _titleController.text.isEmpty || _contentController.text.isEmpty
-                    ? ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                )
-                    : ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const _Header(),
+                const SizedBox(height: 8),
+                CoolTextField(
+                  controller: _titleController,
+                  hintText: 'Titre',
+                  prefixIcon: Icons.title,
                 ),
-                child: const Text(
-                  'Créer',
-                  style: TextStyle(
-                    color: Colors.white,
+                const SizedBox(height: 8),
+                CoolTextField(
+                  controller: _contentController,
+                  hintText: 'Contenu',
+                  prefixIcon: Icons.text_fields,
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: createNote,
+                  style: _titleController.text.isEmpty || _contentController.text.isEmpty
+                      ? ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
+                  )
+                      : ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
+                  ),
+                  child: const Text(
+                    'Créer',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            ]
+              ]
+          ),
         ),
       ),
     );

@@ -52,52 +52,54 @@ class _DocumentCreateModalState extends State<DocumentCreateModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.only(bottom: 32),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        margin: const EdgeInsets.only(bottom: 32),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const _Header(),
-            const SizedBox(height: 16),
-            CoolTextField(
-              controller: _titleDocumentController,
-              hintText: 'Titre du document',
-              prefixIcon: Icons.title,
-            ),
-            const SizedBox(height: 8),
-            CoolTextField(
-              controller: _descriptionDocumentController,
-              hintText: 'Description du document',
-              prefixIcon: Icons.description,
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: selectDocument,
-              child: Text(_selectedFile == null ? 'Sélectionner un document' : 'Document sélectionné : ${_selectedFile!.name}'),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: createDocument,
-              style: _titleDocumentController.text.isEmpty || _descriptionDocumentController.text.isEmpty || _selectedFile == null
-                  ? ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.black12))
-                  : ButtonStyle(backgroundColor: WidgetStateProperty.all(Theme.of(context).primaryColor)),
-              child: const Text(
-                'Créer le document',
-                style: TextStyle(
-                  color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const _Header(),
+              const SizedBox(height: 16),
+              CoolTextField(
+                controller: _titleDocumentController,
+                hintText: 'Titre du document',
+                prefixIcon: Icons.title,
+              ),
+              const SizedBox(height: 8),
+              CoolTextField(
+                controller: _descriptionDocumentController,
+                hintText: 'Description du document',
+                prefixIcon: Icons.description,
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: selectDocument,
+                child: Text(_selectedFile == null ? 'Sélectionner un document' : 'Document sélectionné : ${_selectedFile!.name}'),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: createDocument,
+                style: _titleDocumentController.text.isEmpty || _descriptionDocumentController.text.isEmpty || _selectedFile == null
+                    ? ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.black12))
+                    : ButtonStyle(backgroundColor: WidgetStateProperty.all(Theme.of(context).primaryColor)),
+                child: const Text(
+                  'Créer le document',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -61,119 +61,121 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.only(bottom: 32),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        margin: const EdgeInsets.only(bottom: 32),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const _Header(),
-            Row(
-              children: [
-                Expanded(
-                  child: CupertinoSlidingSegmentedControl<AccommodationType>(
-                    groupValue: _selectedAccommodationType,
-                    onValueChanged: (value) => {
-                      if (value != null)
-                        {
-                          setState(() {
-                            _selectedAccommodationType = value;
-                          })
-                        }
-                    },
-                    children: const <AccommodationType, Widget>{
-                      AccommodationType.hotel: Text('Hotel'),
-                      AccommodationType.airbnb: Text('Airbnb'),
-                      AccommodationType.other: Text('Other'),
-                    },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              const _Header(),
+              Row(
+                children: [
+                  Expanded(
+                    child: CupertinoSlidingSegmentedControl<AccommodationType>(
+                      groupValue: _selectedAccommodationType,
+                      onValueChanged: (value) => {
+                        if (value != null)
+                          {
+                            setState(() {
+                              _selectedAccommodationType = value;
+                            })
+                          }
+                      },
+                      children: const <AccommodationType, Widget>{
+                        AccommodationType.hotel: Text('Hotel'),
+                        AccommodationType.airbnb: Text('Airbnb'),
+                        AccommodationType.other: Text('Other'),
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              CoolTextField(
+                controller: _addressController,
+                hintText: 'Adresse du lieu',
+                prefixIcon: Icons.location_pin,
+              ),
+              const SizedBox(height: 8),
+              CoolDateTimePicker(
+                hintText: 'Date d\'arrivée',
+                prefixIcon: Icons.calendar_today,
+                onDateTimeChanged: (DateTime dateTime) {
+                  setState(() {
+                    _startDateTime = dateTime;
+                  });
+                },
+                onDateTimeCleared: () {
+                  setState(() {
+                    _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                  });
+                },
+              ),
+              const SizedBox(height: 8),
+              CoolDateTimePicker(
+                hintText: 'Date de départ',
+                prefixIcon: Icons.calendar_today,
+                onDateTimeChanged: (DateTime dateTime) {
+                  setState(() {
+                    _endDateTime = dateTime;
+                  });
+                },
+                onDateTimeCleared: () {
+                  setState(() {
+                    _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                  });
+                },
+              ),
+              const SizedBox(height: 36),
+              CoolTextField(
+                controller: _nameController,
+                hintText: "Nom de l'hébergement",
+                prefixIcon: Icons.tag,
+              ),
+              const SizedBox(height: 8),
+              CoolTextField(
+                controller: _bookingUrlController,
+                hintText: "Url de l'établissement",
+                prefixIcon: Icons.link,
+              ),
+              const SizedBox(height: 8),
+              CoolNumberField(
+                controller: _priceController,
+                hintText: 'Prix',
+                prefixIcon: Icons.euro,
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: createAccommodation,
+                style: _addressController.text.isEmpty ||
+                        _startDateTime ==
+                            DateTime.fromMillisecondsSinceEpoch(0) ||
+                        _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
+                    ? ButtonStyle(
+                        backgroundColor:
+                            WidgetStateProperty.all<Color>(Colors.grey),
+                      )
+                    : ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all<Color>(
+                            Theme.of(context).primaryColor),
+                      ),
+                child: const Text(
+                  'Créer',
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            CoolTextField(
-              controller: _addressController,
-              hintText: 'Adresse du lieu',
-              prefixIcon: Icons.location_pin,
-            ),
-            const SizedBox(height: 8),
-            CoolDateTimePicker(
-              hintText: 'Date d\'arrivée',
-              prefixIcon: Icons.calendar_today,
-              onDateTimeChanged: (DateTime dateTime) {
-                setState(() {
-                  _startDateTime = dateTime;
-                });
-              },
-              onDateTimeCleared: () {
-                setState(() {
-                  _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            CoolDateTimePicker(
-              hintText: 'Date de départ',
-              prefixIcon: Icons.calendar_today,
-              onDateTimeChanged: (DateTime dateTime) {
-                setState(() {
-                  _endDateTime = dateTime;
-                });
-              },
-              onDateTimeCleared: () {
-                setState(() {
-                  _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                });
-              },
-            ),
-            const SizedBox(height: 36),
-            CoolTextField(
-              controller: _nameController,
-              hintText: "Nom de l'hébergement",
-              prefixIcon: Icons.tag,
-            ),
-            const SizedBox(height: 8),
-            CoolTextField(
-              controller: _bookingUrlController,
-              hintText: "Url de l'établissement",
-              prefixIcon: Icons.link,
-            ),
-            const SizedBox(height: 8),
-            CoolNumberField(
-              controller: _priceController,
-              hintText: 'Prix',
-              prefixIcon: Icons.euro,
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: createAccommodation,
-              style: _addressController.text.isEmpty ||
-                      _startDateTime ==
-                          DateTime.fromMillisecondsSinceEpoch(0) ||
-                      _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
-                  ? ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all<Color>(Colors.grey),
-                    )
-                  : ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                          Theme.of(context).primaryColor),
-                    ),
-              child: const Text(
-                'Créer',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         ),
       ),
     );
