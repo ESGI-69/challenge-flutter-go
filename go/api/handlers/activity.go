@@ -47,12 +47,14 @@ func (handler *ActivityHandler) GetAllFromTrip(context *gin.Context) {
 			Description: activity.Description,
 			StartDate:   activity.StartDate.Format(time.RFC3339),
 			EndDate:     activity.EndDate.Format(time.RFC3339),
+			Location:    activity.Location,
 			Latitude:    activity.Latitude,
 			Longitude:   activity.Longitude,
 			Owner: responses.UserResponse{
 				ID:       activity.Owner.ID,
 				Username: activity.Owner.Username,
 			},
+			Price: activity.Price,
 		}
 	}
 
@@ -96,13 +98,6 @@ func (handler *ActivityHandler) Create(context *gin.Context) {
 		return
 	}
 
-	latitude, longitude, err := utils.GetGeoLocation(requestBody.Location)
-	if err != nil {
-		logger.ApiWarning(context, "Invalid address "+requestBody.Location)
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid address"})
-		return
-	}
-
 	currentUser, _ := utils.GetCurrentUser(context)
 
 	var activity = models.Activity{
@@ -114,11 +109,9 @@ func (handler *ActivityHandler) Create(context *gin.Context) {
 		StartDate:   startDate,
 		EndDate:     endDate,
 		Location:    requestBody.Location,
-		Latitude:    latitude,
-		Longitude:   longitude,
 	}
 
-	err = handler.Repository.Create(&activity)
+	err := handler.Repository.Create(&activity)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

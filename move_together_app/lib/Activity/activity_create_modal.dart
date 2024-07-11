@@ -54,8 +54,8 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [Container(
+    return SingleChildScrollView(
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         margin: const EdgeInsets.only(bottom: 32),
         decoration: const BoxDecoration(
@@ -144,7 +144,7 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
               ]
           ),
         ),
-      )],
+      ),
     );
   }
 }

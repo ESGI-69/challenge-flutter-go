@@ -35,6 +35,8 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
   final TextEditingController _endAddressController = TextEditingController();
   DateTime _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+  final TextEditingController _meetingAddressController = TextEditingController();
+  DateTime _meetingDateTime = DateTime.fromMillisecondsSinceEpoch(0);
   final TextEditingController _priceController = TextEditingController();
 
   void createTransport() async {
@@ -49,114 +51,139 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
       startAddress: _startAddressController.text,
       endAddress: _endAddressController.text,
       price: double.parse(_priceController.text),
+      meetingAddress: _meetingAddressController.text,
+      meetingTime: _meetingDateTime,
     );
     widget.onTransportCreated(createdTransport);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.only(bottom: 32),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        margin: const EdgeInsets.only(bottom: 32),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const _Header(),
-            Row(
-              children: [
-                Expanded(
-                  child: CupertinoSlidingSegmentedControl<TransportType>(
-                    groupValue: _selectedTransportType,
-                    onValueChanged: (value) => {
-                      if (value != null) {
-                        setState(() {
-                          _selectedTransportType = value;
-                        })
-                      }
-                    },
-                    children: const <TransportType, Widget>{
-                      TransportType.car: Text('Voiture'),
-                      TransportType.plane: Text('Avion'),
-                      TransportType.bus: Text('Bus'),
-                    },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const _Header(),
+              Row(
+                children: [
+                  Expanded(
+                    child: CupertinoSlidingSegmentedControl<TransportType>(
+                      groupValue: _selectedTransportType,
+                      onValueChanged: (value) => {
+                        if (value != null) {
+                          setState(() {
+                            _selectedTransportType = value;
+                          })
+                        }
+                      },
+                      children: const <TransportType, Widget>{
+                        TransportType.car: Text('Voiture'),
+                        TransportType.plane: Text('Avion'),
+                        TransportType.bus: Text('Bus'),
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              CoolTextField(
+                controller: _startAddressController,
+                hintText: 'Adresse de départ',
+                prefixIcon: Icons.flight_takeoff,
+              ),
+              const SizedBox(height: 8),
+              CoolDateTimePicker(
+                hintText: 'Date de départ',
+                prefixIcon: Icons.calendar_today,
+                onDateTimeChanged: (DateTime dateTime) {
+                  setState(() {
+                    _startDateTime = dateTime;
+                  });
+                },
+                onDateTimeCleared: () {
+                  setState(() {
+                    _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                  });
+                },
+              ),
+              const SizedBox(height: 8),
+              CoolTextField(
+                controller: _endAddressController,
+                hintText: 'Adresse d\'arrivée',
+                prefixIcon: Icons.flight_land,
+              ),
+              const SizedBox(height: 8),
+              CoolDateTimePicker(
+                hintText: 'Date d\'arrivée',
+                prefixIcon: Icons.calendar_today,
+                onDateTimeChanged: (DateTime dateTime) {
+                  setState(() {
+                    _endDateTime = dateTime;
+                  });
+                },
+                onDateTimeCleared: () {
+                  setState(() {
+                    _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                  });
+                },
+              ),
+              const SizedBox(height: 8),
+              CoolTextField(
+                controller: _meetingAddressController,
+                hintText: 'Adresse de rendez-vous',
+                prefixIcon: Icons.groups,
+              ),
+              const SizedBox(height: 8),
+              CoolDateTimePicker(
+                hintText: 'Date de rendez-vous',
+                prefixIcon: Icons.calendar_today,
+                onDateTimeChanged: (DateTime dateTime) {
+                  setState(() {
+                    _meetingDateTime = dateTime;
+                  });
+                },
+                onDateTimeCleared: () {
+                  setState(() {
+                    _meetingDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                  });
+                },
+              ),
+              const SizedBox(height: 8),
+              CoolNumberField(
+                    controller: _priceController,
+                    hintText: 'Prix',
+                    prefixIcon: Icons.euro,
+                  ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: createTransport,
+                style: _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
+                  ? ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
+                  )
+                  : ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
+                  ),
+                child: const Text(
+                  'Créer',
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            CoolTextField(
-              controller: _startAddressController,
-              hintText: 'Adresse de départ',
-              prefixIcon: Icons.flight_takeoff,
-            ),
-            const SizedBox(height: 8),
-            CoolDateTimePicker(
-              hintText: 'Date de départ',
-              prefixIcon: Icons.calendar_today,
-              onDateTimeChanged: (DateTime dateTime) {
-                setState(() {
-                  _startDateTime = dateTime;
-                });
-              },
-              onDateTimeCleared: () {
-                setState(() {
-                  _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            CoolTextField(
-              controller: _endAddressController,
-              hintText: 'Adresse d\'arrivée',
-              prefixIcon: Icons.flight_land,
-            ),
-            const SizedBox(height: 8),
-            CoolDateTimePicker(
-              hintText: 'Date d\'arrivée',
-              prefixIcon: Icons.calendar_today,
-              onDateTimeChanged: (DateTime dateTime) {
-                setState(() {
-                  _endDateTime = dateTime;
-                });
-              },
-              onDateTimeCleared: () {
-                setState(() {
-                  _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            CoolNumberField(
-                  controller: _priceController,
-                  hintText: 'Prix',
-                  prefixIcon: Icons.euro,
-                ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: createTransport,
-              style: _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
-                ? ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                )
-                : ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
-                ),
-              child: const Text(
-                'Créer',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
               ),
-            ),
-          ]
+            ]
+          ),
         ),
       ),
     );

@@ -30,6 +30,8 @@ class TransportService {
     required String startAddress,
     required String endAddress,
     required double price,
+    String? meetingAddress,
+    DateTime? meetingTime,
   }) async {
     final response = await api.post(
       '/trips/$tripId/transports',
@@ -40,6 +42,8 @@ class TransportService {
         'startAddress': startAddress,
         'endAddress': endAddress,
         'price': price,
+        'meetingAddress': meetingAddress,
+        'meetingTime': meetingTime?.toUtc().toIso8601String(),
       },
     );
 

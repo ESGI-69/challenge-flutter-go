@@ -55,4 +55,6 @@ class Activity {
       'owner': owner.toJson(),
     };
   }
+
+  bool get hasValidGeolocation => latitude != 0 && longitude != 0;
 }

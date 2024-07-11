@@ -1,9 +1,10 @@
 package models
 
 import (
+	"challenge-flutter-go/api/utils/geo"
+	"errors"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -25,19 +26,21 @@ type Accommodation struct {
 	Address           string    `gorm:"not null"`
 	BookingURL        string    `gorm:"null"`
 	Name              string    `gorm:"not null"`
-	Latitude          float64   `gorm:"null"`
-	Longitude         float64   `gorm:"null"`
+	Latitude          float64   `gorm:"default:0"`
+	Longitude         float64   `gorm:"default:0"`
 	Price             float64   `gorm:"not null; default:0" validate:"min=0"`
 }
 
-func (a *Accommodation) IsAccommodationTypeValid(context *gin.Context) (isValid bool) {
-	isValid = a.AccommodationType == AccommodationTypeHotel || a.AccommodationType == AccommodationTypeAirbnb || a.AccommodationType == AccommodationTypeOther
-	if !isValid {
-		// Auto create a list of valid accommodation types
-		context.AbortWithStatusJSON(400, gin.H{
-			"error": "Invalid accommodation type",
-			"valid": []string{"hotel", "airbnb", "other"},
-		})
+func (a *Accommodation) isAccommodationTypeValid() (isValid bool) {
+	return a.AccommodationType == AccommodationTypeHotel || a.AccommodationType == AccommodationTypeAirbnb || a.AccommodationType == AccommodationTypeOther
+}
+
+func (a *Accommodation) BeforeSave(tx *gorm.DB) (err error) {
+	if !a.isAccommodationTypeValid() {
+		return gorm.ErrInvalidData
+	}
+	if err = geo.GetGeoLocation(a.Address, &a.Latitude, &a.Longitude); err != nil {
+		return errors.New("geo location api is on an error state")
 	}
 	return
 }
