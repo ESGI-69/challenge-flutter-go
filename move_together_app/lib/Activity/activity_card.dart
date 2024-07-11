@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Activity/bloc/activity_bloc.dart';
 import 'package:move_together_app/Activity/activity_create_modal.dart';
@@ -11,12 +12,14 @@ class ActivityCard extends StatelessWidget {
   final int tripId;
   final bool userHasEditPermission;
   final bool userIsOwner;
+  final Function() onRefresh;
 
   const ActivityCard({
     super.key,
     required this.tripId,
     required this.userHasEditPermission,
     required this.userIsOwner,
+    required this.onRefresh,
   });
 
   @override
@@ -41,7 +44,8 @@ class ActivityCard extends StatelessWidget {
                         tripId: tripId,
                         onActivityCreated: (createdActivity) {
                           state.activities.add(createdActivity);
-                          Navigator.of(context).pop();
+                          context.pop();
+                          onRefresh();
                         },
                       ),
                     );
@@ -56,9 +60,10 @@ class ActivityCard extends StatelessWidget {
                             activity: state.activities[index],
                             hasTripEditPermission: userHasEditPermission,
                             isTripOwner: userIsOwner,
-                            onActivityDeleted: (note) => {
-                              state.activities.remove(note),
-                              Navigator.of(context).pop(),
+                            onActivityDeleted: (note) {
+                              state.activities.remove(note);
+                              context.pop();
+                              onRefresh();
                             },
                             tripId: tripId
                         ),

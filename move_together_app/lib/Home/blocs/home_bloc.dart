@@ -49,5 +49,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(HomeDataLoadingError(errorMessage: 'Unhandled error'));
       }
     });
+
+    on<HomeDataFetchSingleTrip>((event, emit) async {
+      try {
+        final trip = await tripServices.get(event.tripId.toString());
+        final trips = (state as HomeDataLoadingSuccess).trips;
+        final index = trips.indexWhere((element) => element.id == trip.id);
+        trips[index] = trip;
+        emit(HomeDataLoadingSuccess(trips: trips));
+      } on ApiException catch (error) {
+        emit(HomeDataLoadingError(errorMessage: error.message));
+      } catch (error) {
+        emit(HomeDataLoadingError(errorMessage: 'Unhandled error'));
+      }
+    });
   }
 }

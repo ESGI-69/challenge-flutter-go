@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Transport/bloc/transport_bloc.dart';
 import 'package:move_together_app/Transport/transport_create_modal.dart';
@@ -11,12 +12,14 @@ class TransportCard extends StatelessWidget {
   final int tripId;
   final bool userHasEditPermission;
   final bool userIsOwner;
+  final Function() onRefresh;
 
   const TransportCard({
     super.key,
     required this.tripId,
     required this.userHasEditPermission,
     required this.userIsOwner,
+    required this.onRefresh,
   });
 
   @override
@@ -41,7 +44,8 @@ class TransportCard extends StatelessWidget {
                     tripId: tripId,
                     onTransportCreated: (createdTransport) {
                       state.transports.add(createdTransport);
-                      Navigator.of(context).pop();
+                      context.pop();
+                      onRefresh();
                     },
                   ),
                 );
@@ -56,9 +60,10 @@ class TransportCard extends StatelessWidget {
                       transport: state.transports[index],
                       hasTripEditPermission: userHasEditPermission,
                       isTripOwner: userIsOwner,
-                      onTransportDeleted: (transport) => {
-                        state.transports.remove(transport),
-                        Navigator.of(context).pop(),
+                      onTransportDeleted: (transport) {
+                        state.transports.remove(transport);
+                        context.pop();
+                        onRefresh();
                       },
                       tripId: tripId
                     ),

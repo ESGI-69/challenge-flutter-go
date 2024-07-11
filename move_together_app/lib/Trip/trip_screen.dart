@@ -78,7 +78,14 @@ class TripScreen extends StatelessWidget {
               },
               totalPrice: state.trip.totalPrice,
             ),
-            body: TripBody(trip: state.trip),
+            body: TripBody(
+              trip: state.trip,
+              onRefresh: () {
+                context.read<TripBloc>().add(TripDataFetch(
+                  state.trip.id,
+                ));
+              },
+            ),
           );
         }
         {
