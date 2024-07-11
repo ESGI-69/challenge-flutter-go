@@ -27,7 +27,6 @@ class TransportInfoModal extends StatelessWidget {
     required this.tripId,
   });
 
-
   @override
   Widget build(BuildContext context) {
 

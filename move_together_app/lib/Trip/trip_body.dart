@@ -9,6 +9,20 @@ import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/Map/map_card.dart';
 import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/feature_provider.dart';
+import 'package:move_together_app/core/models/feature.dart';
+
+Map<FeatureNames, String> featureNames = {
+  FeatureNames.document: 'document',
+  FeatureNames.auth: 'auth',
+  FeatureNames.chat: 'chat',
+  FeatureNames.trip: 'trip',
+  FeatureNames.note: 'note',
+  FeatureNames.transport: 'transport',
+  FeatureNames.accommodation: 'accommodation',
+  FeatureNames.user: 'user',
+  FeatureNames.photo: 'photo',
+  FeatureNames.activity: 'activity',
+};
 
 class TripBody extends StatelessWidget {
   final Trip trip;
@@ -22,37 +36,37 @@ class TripBody extends StatelessWidget {
       children: [
         // if (featureProvider.isFeatureEnabled('map'))
           MapCard(tripId: trip.id),
-        if (featureProvider.isFeatureEnabled('transport'))
+        if (featureNames[FeatureNames.transport] == 'transport')
           TransportCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureProvider.isFeatureEnabled('accommodation'))
+        if (featureNames[FeatureNames.accommodation] == 'accommodation')
           AccommodationCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureProvider.isFeatureEnabled('photo'))
+        if (featureNames[FeatureNames.photo] == 'photo')
           PhotoCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureProvider.isFeatureEnabled('document'))
+        if (featureNames[FeatureNames.document] == 'document')
           DocumentCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureProvider.isFeatureEnabled('note'))
+        if (featureNames[FeatureNames.note] == 'note')
           NoteCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
             userIsOwner: trip.isCurrentUserOwner(context),
           ),
-        if (featureProvider.isFeatureEnabled('activity'))
+        if (featureNames[FeatureNames.activity] == 'activity')
           ActivityCard(
             tripId: trip.id,
             userHasEditPermission: trip.currentUserHasEditingRights(context),
