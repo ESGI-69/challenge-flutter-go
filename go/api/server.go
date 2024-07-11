@@ -150,6 +150,10 @@ func setRoutes() {
 	adminsFeatureRoutes.GET("", featureHandler.GetFeaturesAdmin)
 	adminsFeatureRoutes.PATCH("/:name", featureHandler.Update)
 
+	adminsUsersRoutes := adminsRoutes.Group("/users")
+	adminsUsersRoutes.GET("", userHandler.GetAll)
+	adminsUsersRoutes.PATCH("/:id/role", userHandler.UpdateRole)
+
 	usersRoutes := router.Group("/users")
 	usersRoutes.POST("", userHandler.Create)
 	usersRoutes.GET("/:id", middlewares.UserIsLogged, userHandler.Get)

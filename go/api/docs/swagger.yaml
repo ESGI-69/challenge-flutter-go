@@ -180,6 +180,13 @@ definitions:
       startDate:
         type: string
     type: object
+  requests.UserChangeRoleBody:
+    properties:
+      role:
+        $ref: '#/definitions/models.UserRole'
+    required:
+    - role
+    type: object
   requests.UserCreateBody:
     properties:
       password:
@@ -495,6 +502,69 @@ paths:
       security:
       - BearerAuth: []
       summary: Get all trips
+      tags:
+      - admin
+  /admin/users:
+    get:
+      consumes:
+      - application/json
+      description: Get all the users as an admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.UserRoleReponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all the users as an admin
+      tags:
+      - admin
+  /admin/users/{id}/role:
+    patch:
+      consumes:
+      - application/json
+      description: Change the role of a user as an admin
+      parameters:
+      - description: ID of the user
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New role of the user
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UserChangeRoleBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserRoleReponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Change the role of a user as an admin
       tags:
       - admin
   /app-settings:

@@ -29,3 +29,12 @@ func (u *UserRepository) FindByUsername(username string) (user models.User, err 
 func (u *UserRepository) ComparePassword(user models.User, password string) (isSame bool) {
 	return user.CheckPassword(password)
 }
+
+func (u *UserRepository) GetAll() (users []models.User, err error) {
+	err = u.Database.Find(&users).Error
+	return
+}
+
+func (u *UserRepository) Update(user *models.User) (err error) {
+	return u.Database.Save(&user).Error
+}
