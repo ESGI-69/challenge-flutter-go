@@ -2096,6 +2096,7 @@
                 "address",
                 "endDate",
                 "name",
+                "price",
                 "startDate"
             ],
             "properties": {
@@ -2113,6 +2114,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 },
                 "startDate": {
                     "type": "string"
@@ -2335,6 +2339,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 },
                 "startDate": {
                     "type": "string"

@@ -27,6 +27,7 @@ type Accommodation struct {
 	Name              string    `gorm:"not null"`
 	Latitude          float64   `gorm:"null"`
 	Longitude         float64   `gorm:"null"`
+	Price             float64   `gorm:"not null; default:0" validate:"min=0"`
 }
 
 func (a *Accommodation) IsAccommodationTypeValid(context *gin.Context) (isValid bool) {
