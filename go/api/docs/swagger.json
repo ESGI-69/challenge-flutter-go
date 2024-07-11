@@ -1850,6 +1850,13 @@
                 "summary": "Create a new transport on trip",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Body of the transport",
                         "name": "body",
                         "in": "body",
@@ -2195,6 +2202,7 @@
             "required": [
                 "endAddress",
                 "endDate",
+                "price",
                 "startAddress",
                 "startDate",
                 "transportType"
@@ -2211,6 +2219,9 @@
                 },
                 "meetingTime": {
                     "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 },
                 "startAddress": {
                     "type": "string"
@@ -2528,6 +2539,9 @@
                 },
                 "meetingTime": {
                     "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 },
                 "startAddress": {
                     "type": "string"

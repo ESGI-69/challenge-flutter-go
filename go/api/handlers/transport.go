@@ -72,6 +72,7 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 // @Accept			json
 // @Produce		json
 // @Security		BearerAuth
+// @Param		id	path		string	true	"ID of the trip"
 // @Param			body	body		requests.TransportCreateBody	true	"Body of the transport"
 // @Success		201		{object}	responses.TransportResponse
 // @Failure		400		{object}	error
@@ -126,6 +127,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 		EndAddress:     requestBody.EndAddress,
 		MeetingAddress: requestBody.MeetingAddress,
 		MeetingTime:    meetingTime,
+		Price:          requestBody.Price,
 	}
 
 	isValid := transport.IsTransportTypeValid(context)
@@ -153,6 +155,7 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 			ID:       transport.Author.ID,
 			Username: transport.Author.Username,
 		},
+		Price: transport.Price,
 	}
 
 	context.JSON(http.StatusCreated, transportResponse)

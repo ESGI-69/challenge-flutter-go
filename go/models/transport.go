@@ -28,6 +28,7 @@ type Transport struct {
 	EndAddress     string    `gorm:"not null"`
 	MeetingAddress string
 	MeetingTime    time.Time
+	Price          float64 `gorm:"not null; default:0" validate:"min=0"`
 }
 
 // Checks if the transport type is valid, returns false if it's not & aborts the request

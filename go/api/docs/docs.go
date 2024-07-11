@@ -1859,6 +1859,13 @@ const docTemplate = `{
                 "summary": "Create a new transport on trip",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "ID of the trip",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Body of the transport",
                         "name": "body",
                         "in": "body",
@@ -2204,6 +2211,7 @@ const docTemplate = `{
             "required": [
                 "endAddress",
                 "endDate",
+                "price",
                 "startAddress",
                 "startDate",
                 "transportType"
@@ -2220,6 +2228,9 @@ const docTemplate = `{
                 },
                 "meetingTime": {
                     "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 },
                 "startAddress": {
                     "type": "string"
@@ -2537,6 +2548,9 @@ const docTemplate = `{
                 },
                 "meetingTime": {
                     "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 },
                 "startAddress": {
                     "type": "string"
