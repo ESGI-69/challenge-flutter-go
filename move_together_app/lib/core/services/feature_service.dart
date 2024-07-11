@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:move_together_app/core/models/app_settings.dart';
 import 'package:move_together_app/core/services/api.dart';
 
