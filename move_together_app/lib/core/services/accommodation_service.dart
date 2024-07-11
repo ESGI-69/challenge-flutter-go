@@ -30,6 +30,7 @@ class AccommodationService {
     required String address,
     required String name,
     required String? bookingUrl,
+    required double price,
   }) async {
     final response = await api.post(
       '/trips/$tripId/accommodations',
@@ -40,6 +41,7 @@ class AccommodationService {
         'address': address,
         'name': name,
         'bookingUrl': bookingUrl,
+        'price': price,
       },
     );
 

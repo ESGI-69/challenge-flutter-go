@@ -64,6 +64,9 @@ class AccommodationInfoModal extends StatelessWidget {
             Text(
               'Départ : le ${DateFormat.yMMMd().format(accommodation.endDate.toLocal())}',
             ),
+            Text(
+              'Prix : ${accommodation.price}€',
+            ),
             (accommodation.bookingUrl != null && accommodation.bookingUrl!.isNotEmpty) ?
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
