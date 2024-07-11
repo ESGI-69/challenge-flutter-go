@@ -72,6 +72,7 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 // @Accept			json
 // @Produce		json
 // @Security		BearerAuth
+// @Param		id	path		string	true	"ID of the trip"
 // @Param			body	body		requests.TransportCreateBody	true	"Body of the transport"
 // @Success		201		{object}	responses.TransportResponse
 // @Failure		400		{object}	error

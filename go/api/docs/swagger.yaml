@@ -132,6 +132,8 @@ definitions:
         type: string
       meetingTime:
         type: string
+      price:
+        type: number
       startAddress:
         type: string
       startDate:
@@ -141,6 +143,7 @@ definitions:
     required:
     - endAddress
     - endDate
+    - price
     - startAddress
     - startDate
     - transportType
@@ -342,6 +345,8 @@ definitions:
         type: string
       meetingTime:
         type: string
+      price:
+        type: number
       startAddress:
         type: string
       startDate:
@@ -1505,6 +1510,11 @@ paths:
       - application/json
       description: Create a new transport & associate it with the trip
       parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
       - description: Body of the transport
         in: body
         name: body
