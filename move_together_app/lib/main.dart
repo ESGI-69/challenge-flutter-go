@@ -13,11 +13,15 @@ Future<void> main() async {
   initializeDateFormatting('fr_FR');
   Intl.defaultLocale = 'fr_FR';
   await dotenv.load(fileName: ".env");
+
+  FeatureProvider featureProvider = FeatureProvider();
+  await featureProvider.loadFeatures();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
-        ChangeNotifierProvider(create: (context) => FeatureProvider()),
+        ChangeNotifierProvider(create: (context) => featureProvider),
       ],
       child: kIsWeb ? const Backoffice() : const App(),
     ),

@@ -278,7 +278,7 @@ definitions:
     properties:
       isEnabled:
         type: boolean
-      modifedBy:
+      modifiedBy:
         $ref: '#/definitions/responses.UserResponse'
       name:
         $ref: '#/definitions/models.FeatureName'
