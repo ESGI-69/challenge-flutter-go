@@ -55,7 +55,9 @@ double getZoomLevel(LatLngBounds bounds, double padding) {
   final double latZoom = zoom(latFraction, padding);
   final double lngZoom = zoom(lngFraction, padding);
 
-  return latZoom < lngZoom ? latZoom : lngZoom;
+  final zoomLevel = latZoom < lngZoom ? latZoom : lngZoom;
+
+  return zoomLevel > 15 ? 15 : zoomLevel;
 }
 
 double latRad(double lat) {
@@ -71,6 +73,7 @@ double zoom(double fraction, double padding) {
 enum RefinedGoogleMapType {
   fullPage,
   card,
+  appBar,
 }
 
 class RefinedGoogleMap extends StatefulWidget {
@@ -334,7 +337,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         polylines: _polylines,
         myLocationButtonEnabled: false,
       );
-    } else if (widget.type == RefinedGoogleMapType.card) {
+    } else if (widget.type == RefinedGoogleMapType.card || widget.type == RefinedGoogleMapType.appBar) {
       return GoogleMap(
         onMapCreated: (GoogleMapController controller) {
           widget.onMapCreated?.call(controller);

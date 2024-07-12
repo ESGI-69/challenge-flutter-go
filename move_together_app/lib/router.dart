@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Activity/activity_screen.dart';
 import 'package:move_together_app/Backoffice/Logs/logs_screen.dart';
 import 'package:move_together_app/Backoffice/Users/users_admin_screen.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
@@ -89,6 +90,11 @@ final GoRouter router = GoRouter(
                   name: 'photos',
                   path: 'photos',
                   builder: (context, state) => const PhotoScreen(),
+                ),
+                GoRoute(
+                  name: 'activity',
+                  path: 'activity/:activityId',
+                  builder: (context, state) => const ActivityScreen(),
                 ),
                 GoRoute(
                   name: 'map',
