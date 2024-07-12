@@ -5,12 +5,16 @@ class Note {
   final String title;
   final String content;
   final User author;
+  final DateTime createdAt;
+  final DateTime updateAt;
 
   Note({
     required this.id,
     required this.title,
     required this.content,
     required this.author,
+    required this.createdAt,
+    required this.updateAt,
   });
 
   factory Note.fromJson(Map<String, dynamic> json) {
@@ -19,6 +23,8 @@ class Note {
       title: json['title'],
       content: json['content'],
       author: User.fromJson(json['author']),
+      createdAt: DateTime.parse(json['createdAt']),
+      updateAt: DateTime.parse(json['updateAt']),
     );
   }
 

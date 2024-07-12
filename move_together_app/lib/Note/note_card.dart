@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Note/bloc/note_bloc.dart';
 import 'package:move_together_app/Note/note_create_modal.dart';
-import 'package:move_together_app/Note/note_info_modal.dart';
 import 'package:move_together_app/Note/note_row.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
 
@@ -49,20 +49,20 @@ class NoteCard extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return NoteRow(
                     note: state.notes[index],
-                    onTap: () => showCupertinoModalBottomSheet(
-                      expand: true,
-                      context: context,
-                      builder: (BuildContext context) => NoteInfoModal(
-                          note: state.notes[index],
-                          hasTripEditPermission: userHasEditPermission,
-                          isTripOwner: userIsOwner,
-                          onNoteDeleted: (note) => {
-                            state.notes.remove(note),
-                            Navigator.of(context).pop(),
-                          },
-                          tripId: tripId
-                      ),
-                    ),
+                    onTap: () async {
+                      await context.pushNamed(
+                        'note',
+                        pathParameters: {
+                          'tripId': tripId.toString(),
+                          'noteId': state.notes[index].id.toString(),
+                        },
+                        queryParameters: {
+                          'hasTripEditPermission': userHasEditPermission.toString(),
+                          'isOwner': userIsOwner.toString(),
+                        },
+                        extra: state.notes[index],
+                      );
+                    },
                   );
                 },
               );
