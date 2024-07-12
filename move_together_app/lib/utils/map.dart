@@ -342,6 +342,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         onMapCreated: (GoogleMapController controller) {
           widget.onMapCreated?.call(controller);
         },
+        padding: widget.type == RefinedGoogleMapType.appBar ? EdgeInsets.only(top: MediaQuery.of(context).padding.top) : EdgeInsets.zero,
         zoomControlsEnabled: false,
         zoomGesturesEnabled: false,
         scrollGesturesEnabled: false,
