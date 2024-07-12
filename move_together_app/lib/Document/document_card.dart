@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Document/bloc/document_bloc.dart';
 import 'package:move_together_app/Document/document_create_modal.dart';
-import 'package:move_together_app/Document/document_screen.dart';
 import 'package:move_together_app/Document/document_row.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
