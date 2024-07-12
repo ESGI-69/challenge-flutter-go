@@ -80,6 +80,8 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 	title := context.PostForm("title")
 	description := context.PostForm("description")
 
+	currentUser, _ := utils.GetCurrentUser(context)
+
 	file, errFile := context.FormFile("document")
 	if errFile != nil {
 		logger.ApiWarning(context, "Document is missing on request")
@@ -104,6 +106,7 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 		Description: description,
 		TripID:      uint(tripId),
 		Path:        filePath,
+		OwnerID:     currentUser.ID,
 	}
 
 	err := handler.Repository.Create(&document)
