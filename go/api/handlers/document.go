@@ -47,6 +47,10 @@ func (handler *DocumentHandler) GetDocumentsOfTrip(context *gin.Context) {
 			Path:        document.Path,
 			CreatedAt:   document.CreatedAt.Format(time.RFC3339),
 			UpdateAt:    document.UpdatedAt.Format(time.RFC3339),
+			Owner: responses.UserResponse{
+				ID:       document.Owner.ID,
+				Username: document.Owner.Username,
+			},
 		}
 	}
 	context.JSON(http.StatusOK, documentResponses)
@@ -76,6 +80,8 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 	title := context.PostForm("title")
 	description := context.PostForm("description")
 
+	currentUser, _ := utils.GetCurrentUser(context)
+
 	file, errFile := context.FormFile("document")
 	if errFile != nil {
 		logger.ApiWarning(context, "Document is missing on request")
@@ -100,6 +106,7 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 		Description: description,
 		TripID:      uint(tripId),
 		Path:        filePath,
+		OwnerID:     currentUser.ID,
 	}
 
 	err := handler.Repository.Create(&document)
@@ -115,6 +122,10 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 		Path:        document.Path,
 		CreatedAt:   document.CreatedAt.Format(time.RFC3339),
 		UpdateAt:    document.UpdatedAt.Format(time.RFC3339),
+		Owner: responses.UserResponse{
+			ID:       document.Owner.ID,
+			Username: document.Owner.Username,
+		},
 	}
 
 	context.JSON(200, documentResponse)

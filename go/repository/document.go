@@ -13,7 +13,7 @@ type DocumentRepository struct {
 
 // Get a document by its ID
 func (d *DocumentRepository) Get(id string) (document models.Document, err error) {
-	err = d.Database.First(&document, id).Error
+	err = d.Database.First(&document, id).Preload(clause.Associations).Error
 	return
 }
 
@@ -24,7 +24,7 @@ func (d *DocumentRepository) Create(document *models.Document) error {
 
 // Get all the documents of a trip
 func (d *DocumentRepository) GetDocuments(tripId string) (documents []models.Document, err error) {
-	err = d.Database.Model(&models.Document{}).Where("trip_id = ?", tripId).Find(&documents).Error
+	err = d.Database.Model(&models.Document{}).Where("trip_id = ?", tripId).Preload(clause.Associations).Find(&documents).Error
 	return
 }
 

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:move_together_app/Accommodation/accommodation_screen.dart';
+import 'package:move_together_app/Activity/activity_screen.dart';
 import 'package:move_together_app/Backoffice/Logs/logs_screen.dart';
 import 'package:move_together_app/Backoffice/Users/users_admin_screen.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
+import 'package:move_together_app/Document/document_screen.dart';
 import 'package:move_together_app/Map/map_screen.dart';
-import 'package:move_together_app/Photo/photo_screen.dart';
+import 'package:move_together_app/Note/note_screen.dart';
+import 'package:move_together_app/Photo/photos_screen.dart';
+import 'package:move_together_app/Transport/transport_screen.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
@@ -88,7 +93,32 @@ final GoRouter router = GoRouter(
                 GoRoute(
                   name: 'photos',
                   path: 'photos',
-                  builder: (context, state) => const PhotoScreen(),
+                  builder: (context, state) => const PhotosScreen(),
+                ),
+                GoRoute(
+                  name: 'activity',
+                  path: 'activities/:activityId',
+                  builder: (context, state) => const ActivityScreen(),
+                ),
+                GoRoute(
+                  name: 'transport',
+                  path: 'transports/:transportId',
+                  builder: (context, state) => const TransportScreen(),
+                ),
+                GoRoute(
+                  name: 'accommodation',
+                  path: 'accommodations/:accommodationId',
+                  builder: (context, state) => const AccommodationScreen(),
+                ),
+                GoRoute(
+                  name: 'document',
+                  path: 'documents/:documentId',
+                  builder: (context, state) => const DocumentScreen(),
+                ),
+                GoRoute(
+                  name: 'note',
+                  path: 'notes/:noteId',
+                  builder: (context, state) => const NoteScreen(),
                 ),
                 GoRoute(
                   name: 'map',
@@ -101,7 +131,7 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           name: 'profile',
-          path: 'profile',
+          path: 'profile', 
           builder: (context, state) => const ProfileScreen(),
         ),
       ],

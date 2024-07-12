@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Document/bloc/document_bloc.dart';
 import 'package:move_together_app/Document/document_create_modal.dart';
-import 'package:move_together_app/Document/document_info_modal.dart';
 import 'package:move_together_app/Document/document_row.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
@@ -49,22 +49,20 @@ class DocumentCard extends StatelessWidget {
               itemBuilder: (context, index) {
                 return DocumentRow(
                   document: state.documents[index],
-                  onTap: () {
-                    showCupertinoModalBottomSheet(
-                      expand: true,
-                      context: context,
-                      builder: (BuildContext context) => DocumentInfoModal(
-                        document: state.documents[index],
-                        hasTripEditPermission: userHasEditPermission,
-                        isTripOwner: userIsOwner,
-                        onDocumentDeleted: (document) =>
-                        {
-                          state.documents.remove(document),
-                          Navigator.of(context).pop(),
-                        },
-                        tripId: tripId,
-                      ),
+                  onTap: () async {
+                    await context.pushNamed(
+                      'document',
+                      pathParameters: {
+                        'tripId': tripId.toString(),
+                        'documentId': state.documents[index].id.toString(),
+                      },
+                      queryParameters: {
+                        'hasTripEditPermission': userHasEditPermission.toString(),
+                        'isTripOwner': userIsOwner.toString(),
+                      },
+                      extra: state.documents[index],
                     );
+                    context.read<DocumentBloc>().add(DocumentsDataFetch(tripId));
                   }
                 );
               }

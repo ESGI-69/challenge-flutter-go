@@ -55,7 +55,9 @@ double getZoomLevel(LatLngBounds bounds, double padding) {
   final double latZoom = zoom(latFraction, padding);
   final double lngZoom = zoom(lngFraction, padding);
 
-  return latZoom < lngZoom ? latZoom : lngZoom;
+  final zoomLevel = latZoom < lngZoom ? latZoom : lngZoom;
+
+  return zoomLevel > 15 ? 15 : zoomLevel;
 }
 
 double latRad(double lat) {
@@ -71,6 +73,7 @@ double zoom(double fraction, double padding) {
 enum RefinedGoogleMapType {
   fullPage,
   card,
+  appBar,
 }
 
 class RefinedGoogleMap extends StatefulWidget {
@@ -309,7 +312,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
       return const Center(
         child: CircularProgressIndicator(),
       );
-    } else if (widget.type == RefinedGoogleMapType.fullPage) {
+    } else if (widget.type == RefinedGoogleMapType.fullPage || widget.type == RefinedGoogleMapType.appBar) {
       return GoogleMap(
         onMapCreated: (GoogleMapController controller) {
           widget.onMapCreated?.call(controller);
@@ -329,7 +332,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
             () => EagerGestureRecognizer(),
           ),
         },
-        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, false),
+        mapType: MapType.hybrid,
+        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, RefinedGoogleMapType.appBar == widget.type),
         markers: _markers,
         polylines: _polylines,
         myLocationButtonEnabled: false,

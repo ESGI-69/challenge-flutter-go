@@ -88,7 +88,7 @@ func (handler *NoteHandler) AddNoteToTrip(context *gin.Context) {
 		Title:   requestBody.Title,
 		Content: requestBody.Content,
 		Author:  currentUser,
-		Trip:    trip,
+		TripID:  trip.ID,
 	}
 
 	err := handler.Repository.Create(&note)

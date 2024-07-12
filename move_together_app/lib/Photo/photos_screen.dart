@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Photo/bloc/photo_bloc.dart';
 import 'package:move_together_app/Photo/photo_item.dart';
 
-class PhotoScreen extends StatelessWidget {
-  const PhotoScreen({super.key});
+class PhotosScreen extends StatelessWidget {
+  const PhotosScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

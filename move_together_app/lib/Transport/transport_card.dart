@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Transport/bloc/transport_bloc.dart';
 import 'package:move_together_app/Transport/transport_create_modal.dart';
-import 'package:move_together_app/Transport/transport_info_modal.dart';
 import 'package:move_together_app/Transport/transport_row.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
 
@@ -53,21 +52,22 @@ class TransportCard extends StatelessWidget {
               itemBuilder: (context, index) {
                 return TransportRow(
                   transport: state.transports[index],
-                  onTap: () => showCupertinoModalBottomSheet(
-                    expand: true,
-                    context: context,
-                    builder: (BuildContext context) => TransportInfoModal(
-                      transport: state.transports[index],
-                      hasTripEditPermission: userHasEditPermission,
-                      isTripOwner: userIsOwner,
-                      onTransportDeleted: (transport) {
-                        state.transports.remove(transport);
-                        context.pop();
-                        onRefresh();
+                  onTap: () async {
+                    await context.pushNamed(
+                      'transport',
+                      pathParameters: {
+                        'tripId': tripId.toString(),
+                        'transportId': state.transports[index].id.toString()
                       },
-                      tripId: tripId
-                    ),
-                  ),
+                      queryParameters: {
+                        'hasTripEditPermission': userHasEditPermission.toString(),
+                        'isTripOwner': userIsOwner.toString(),
+                      },
+                      extra: state.transports[index],
+                    );
+                    context.read<TransportBloc>().add(TransportsDataFetch(tripId));
+                    onRefresh();
+                  },
                 );
               },
             );
