@@ -261,3 +261,42 @@ func (handler *UserHandler) UpdatePhoto(context *gin.Context) {
 	context.JSON(200, userResponse)
 	logger.ApiInfo(context, "Update the profile picture of user "+currentUser.Username)
 }
+
+// Download the profile picture of a user
+//
+// @Summary		Download the profile picture of a user
+// @Description	Download the profile picture of a user
+// @Tags			users
+// @Accept			json
+// @Produce		application/octet-stream
+// @Security		BearerAuth
+// @Param			userId	path	string	true	"ID of the user"
+// @Success      200         {file}    true    "A file stream of the profile picture"
+// @Failure		400	{object}	error
+// @Failure		401	{object}	error
+// @Failure		404	{object}	error
+// @Router			/users/photo/{userId} [get]
+func (handler *UserHandler) DownloadPhoto(context *gin.Context) {
+	userId := context.Param("userId")
+	if userId == "" {
+		logger.ApiError(context, "User ID missing in the download photo request")
+		context.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	user, err := handler.Repository.Get(userId)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	filepath, errFilePath := utils.GetFilePath("profile-picture", user.ProfilePicturePath)
+	if errFilePath != nil {
+		logger.ApiError(context, "Error getting file path: "+filepath)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error getting file path"})
+		return
+	}
+	context.Header("Content-Disposition", "attachment; filename=\""+user.ProfilePicturePath+"\"")
+	context.File(filepath)
+	logger.ApiInfo(context, "Download the profile picture of user "+user.Username)
+}

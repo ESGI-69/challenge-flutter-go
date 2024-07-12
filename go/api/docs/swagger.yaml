@@ -1786,6 +1786,38 @@ paths:
       summary: Update the profile picture of a user
       tags:
       - users
+  /users/photo/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: Download the profile picture of a user
+      parameters:
+      - description: ID of the user
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: A file stream of the profile picture
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Download the profile picture of a user
+      tags:
+      - users
 securityDefinitions:
   BearerAuth:
     in: header
