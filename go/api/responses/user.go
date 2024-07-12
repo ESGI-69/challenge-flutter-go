@@ -6,6 +6,7 @@ type UserResponse struct {
 	ID                 uint   `json:"id"`
 	Username           string `json:"username"`
 	ProfilePicturePath string `json:"profilePicturePath"`
+	ProfilePictureUri  string `json:"profilePictureUri"`
 }
 
 type UserRoleReponse struct {
@@ -13,6 +14,7 @@ type UserRoleReponse struct {
 	Username           string          `json:"username"`
 	Role               models.UserRole `json:"role"`
 	ProfilePicturePath string          `json:"profilePicturePath"`
+	ProfilePictureUri  string          `json:"profilePictureUri"`
 }
 
 type ParticipantTripRole string

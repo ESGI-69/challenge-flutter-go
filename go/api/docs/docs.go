@@ -2740,6 +2740,9 @@ const docTemplate = `{
                 "profilePicturePath": {
                     "type": "string"
                 },
+                "profilePictureUri": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
@@ -2752,6 +2755,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "profilePicturePath": {
+                    "type": "string"
+                },
+                "profilePictureUri": {
                     "type": "string"
                 },
                 "role": {

@@ -8,6 +8,7 @@ import (
 	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -69,7 +70,10 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		Username:           user.Username,
 		Role:               user.Role,
 		ProfilePicturePath: user.ProfilePicturePath,
+		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(currentUser.ID), 10),
 	}
+
+	fmt.Println(response.ProfilePictureUri)
 
 	context.JSON(http.StatusOK, response)
 	logger.ApiInfo(context, "Get user "+string(rune(user.ID)))
@@ -107,6 +111,7 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		Username:           user.Username,
 		Role:               user.Role,
 		ProfilePicturePath: user.ProfilePicturePath,
+		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
 	}
 	context.JSON(http.StatusCreated, response)
 	logger.ApiInfo(context, "User "+string(rune(user.ID))+" created")
@@ -138,6 +143,7 @@ func (handler *UserHandler) GetAll(context *gin.Context) {
 			Username:           user.Username,
 			Role:               user.Role,
 			ProfilePicturePath: user.ProfilePicturePath,
+			ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
 		}
 	}
 
@@ -196,6 +202,7 @@ func (handler *UserHandler) UpdateRole(context *gin.Context) {
 		Username:           user.Username,
 		Role:               user.Role,
 		ProfilePicturePath: user.ProfilePicturePath,
+		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
 	}
 
 	context.JSON(http.StatusOK, response)
@@ -256,6 +263,7 @@ func (handler *UserHandler) UpdatePhoto(context *gin.Context) {
 		Username:           currentUser.Username,
 		Role:               currentUser.Role,
 		ProfilePicturePath: currentUser.ProfilePicturePath,
+		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(currentUser.ID), 10),
 	}
 
 	context.JSON(200, userResponse)

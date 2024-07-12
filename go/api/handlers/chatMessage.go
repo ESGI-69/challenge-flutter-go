@@ -9,6 +9,7 @@ import (
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -63,6 +64,7 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 			Username:           chatMessage.Author.Username,
 			Role:               chatMessage.Author.Role,
 			ProfilePicturePath: chatMessage.Author.ProfilePicturePath,
+			ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(currentUser.ID), 10),
 		},
 		Content:   chatMessage.Content,
 		CreatedAt: chatMessage.CreatedAt.Format(time.RFC3339),
@@ -107,6 +109,7 @@ func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
 				Username:           chatMessage.Author.Username,
 				Role:               chatMessage.Author.Role,
 				ProfilePicturePath: chatMessage.Author.ProfilePicturePath,
+				ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(chatMessage.Author.ID), 10),
 			},
 			Content:   chatMessage.Content,
 			CreatedAt: chatMessage.CreatedAt.Format(time.RFC3339),

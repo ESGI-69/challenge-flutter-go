@@ -22,6 +22,7 @@ class PhotoInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(photo.uri);
     return Column(
       children: [
         ModalBottomSheetHeader(
@@ -72,7 +73,7 @@ class PhotoInfo extends StatelessWidget {
               headers: {
                 'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
               },
-            ),
+            )
           ),
         ),
       ],

@@ -2731,6 +2731,9 @@
                 "profilePicturePath": {
                     "type": "string"
                 },
+                "profilePictureUri": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
@@ -2743,6 +2746,9 @@
                     "type": "integer"
                 },
                 "profilePicturePath": {
+                    "type": "string"
+                },
+                "profilePictureUri": {
                     "type": "string"
                 },
                 "role": {
