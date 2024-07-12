@@ -7,7 +7,7 @@ import 'package:move_together_app/Backoffice/Users/users_admin_screen.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
 import 'package:move_together_app/Document/document_screen.dart';
 import 'package:move_together_app/Map/map_screen.dart';
-import 'package:move_together_app/Photo/photo_screen.dart';
+import 'package:move_together_app/Photo/photos_screen.dart';
 import 'package:move_together_app/Transport/transport_screen.dart';
 import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
@@ -92,26 +92,26 @@ final GoRouter router = GoRouter(
                 GoRoute(
                   name: 'photos',
                   path: 'photos',
-                  builder: (context, state) => const PhotoScreen(),
+                  builder: (context, state) => const PhotosScreen(),
                 ),
                 GoRoute(
                   name: 'activity',
-                  path: 'activity/:activityId',
+                  path: 'activities/:activityId',
                   builder: (context, state) => const ActivityScreen(),
                 ),
                 GoRoute(
                   name: 'transport',
-                  path: 'transport/:transportId',
+                  path: 'transports/:transportId',
                   builder: (context, state) => const TransportScreen(),
                 ),
                 GoRoute(
                   name: 'accommodation',
-                  path: 'accommodation/:accommodationId',
+                  path: 'accommodations/:accommodationId',
                   builder: (context, state) => const AccommodationScreen(),
                 ),
                 GoRoute(
                   name: 'document',
-                  path: 'document/:documentId',
+                  path: 'documents/:documentId',
                   builder: (context, state) => const DocumentScreen(),
                 ),
                 GoRoute(
