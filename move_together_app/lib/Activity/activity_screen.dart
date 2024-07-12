@@ -52,7 +52,12 @@ class ActivityScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.only(
+                top: 16.0,
+                left: 16.0,
+                right: 16.0,
+                bottom: MediaQuery.of(context).padding.bottom + 16.0,
+              ),
               child: Column(
                 children: [
                   DetailsList(
