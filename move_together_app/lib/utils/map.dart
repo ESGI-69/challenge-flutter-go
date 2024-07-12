@@ -312,7 +312,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
       return const Center(
         child: CircularProgressIndicator(),
       );
-    } else if (widget.type == RefinedGoogleMapType.fullPage) {
+    } else if (widget.type == RefinedGoogleMapType.fullPage || widget.type == RefinedGoogleMapType.appBar) {
       return GoogleMap(
         onMapCreated: (GoogleMapController controller) {
           widget.onMapCreated?.call(controller);
@@ -332,17 +332,17 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
             () => EagerGestureRecognizer(),
           ),
         },
-        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, false),
+        mapType: MapType.hybrid,
+        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, RefinedGoogleMapType.appBar == widget.type),
         markers: _markers,
         polylines: _polylines,
         myLocationButtonEnabled: false,
       );
-    } else if (widget.type == RefinedGoogleMapType.card || widget.type == RefinedGoogleMapType.appBar) {
+    } else if (widget.type == RefinedGoogleMapType.card) {
       return GoogleMap(
         onMapCreated: (GoogleMapController controller) {
           widget.onMapCreated?.call(controller);
         },
-        padding: widget.type == RefinedGoogleMapType.appBar ? EdgeInsets.only(top: MediaQuery.of(context).padding.top) : EdgeInsets.zero,
         zoomControlsEnabled: false,
         zoomGesturesEnabled: false,
         scrollGesturesEnabled: false,
