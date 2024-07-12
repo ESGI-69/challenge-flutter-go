@@ -65,9 +65,10 @@ func (handler *UserHandler) Get(context *gin.Context) {
 	}
 
 	response := responses.UserRoleReponse{
-		ID:       user.ID,
-		Username: user.Username,
-		Role:     user.Role,
+		ID:                 user.ID,
+		Username:           user.Username,
+		Role:               user.Role,
+		ProfilePicturePath: user.ProfilePicturePath,
 	}
 
 	context.JSON(http.StatusOK, response)
@@ -102,9 +103,10 @@ func (handler *UserHandler) Create(context *gin.Context) {
 	}
 
 	response := responses.UserRoleReponse{
-		ID:       user.ID,
-		Username: user.Username,
-		Role:     user.Role,
+		ID:                 user.ID,
+		Username:           user.Username,
+		Role:               user.Role,
+		ProfilePicturePath: user.ProfilePicturePath,
 	}
 	context.JSON(http.StatusCreated, response)
 	logger.ApiInfo(context, "User "+string(rune(user.ID))+" created")
@@ -132,9 +134,10 @@ func (handler *UserHandler) GetAll(context *gin.Context) {
 	responseUsers := make([]responses.UserRoleReponse, len(users))
 	for i, user := range users {
 		responseUsers[i] = responses.UserRoleReponse{
-			ID:       user.ID,
-			Username: user.Username,
-			Role:     user.Role,
+			ID:                 user.ID,
+			Username:           user.Username,
+			Role:               user.Role,
+			ProfilePicturePath: user.ProfilePicturePath,
 		}
 	}
 
@@ -189,12 +192,72 @@ func (handler *UserHandler) UpdateRole(context *gin.Context) {
 	}
 
 	response := responses.UserRoleReponse{
-		ID:       user.ID,
-		Username: user.Username,
-		Role:     user.Role,
+		ID:                 user.ID,
+		Username:           user.Username,
+		Role:               user.Role,
+		ProfilePicturePath: user.ProfilePicturePath,
 	}
 
 	context.JSON(http.StatusOK, response)
 	logger.ApiInfo(context, "User "+string(rune(user.ID))+" role updated to "+string(user.Role))
 
+}
+
+// Update the profile picture of a user
+//
+// @Summary		Update the profile picture of a user
+// @Description	Update the profile picture of a user
+// @Tags			users
+// @Accept			multipart/form-data
+// @Produce		json
+// @Security		BearerAuth
+// @Param			photo	formData	file	true	"Photo file"
+// @Success		200	{object}	responses.UserRoleReponse
+// @Failure		400	{object}	error
+// @Failure		401	{object}	error
+// @Router			/users/photo [patch]
+func (handler *UserHandler) UpdatePhoto(context *gin.Context) {
+	context.Request.Body = http.MaxBytesReader(context.Writer, context.Request.Body, 10<<20)
+
+	file, errFile := context.FormFile("photo")
+	if errFile != nil {
+		logger.ApiWarning(context, "Photo is missing on request")
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Photo is missing on request"})
+	}
+
+	if file.Size > 5<<20 {
+		logger.ApiWarning(context, "File size exceeds limit of 5 MB")
+		context.JSON(http.StatusBadRequest, gin.H{"error": "File size exceeds limit of 5 MB"})
+		return
+	}
+	currentUser, _ := utils.GetCurrentUser(context)
+
+	fileName := currentUser.Username + "-pp"
+
+	filePath, errFilePath := utils.SaveUploadedFile(file, "profile-picture", fileName)
+	if errFilePath != nil {
+		logger.ApiError(context, "Error saving file: "+filePath)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving file"})
+		return
+	}
+
+	utils.DeleteFile("profile-picture", currentUser.ProfilePicturePath)
+
+	currentUser.ProfilePicturePath = filePath
+
+	err := handler.Repository.Update(&currentUser)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	userResponse := responses.UserRoleReponse{
+		ID:                 currentUser.ID,
+		Username:           currentUser.Username,
+		Role:               currentUser.Role,
+		ProfilePicturePath: currentUser.ProfilePicturePath,
+	}
+
+	context.JSON(200, userResponse)
+	logger.ApiInfo(context, "Update the profile picture of user "+currentUser.Username)
 }

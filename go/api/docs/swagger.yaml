@@ -414,6 +414,8 @@ definitions:
     properties:
       id:
         type: integer
+      profilePicturePath:
+        type: string
       username:
         type: string
     type: object
@@ -421,6 +423,8 @@ definitions:
     properties:
       id:
         type: integer
+      profilePicturePath:
+        type: string
       role:
         $ref: '#/definitions/models.UserRole'
       username:
@@ -1751,6 +1755,35 @@ paths:
       security:
       - BearerAuth: []
       summary: Get the user
+      tags:
+      - users
+  /users/photo:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: Update the profile picture of a user
+      parameters:
+      - description: Photo file
+        in: formData
+        name: photo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserRoleReponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update the profile picture of a user
       tags:
       - users
 securityDefinitions:

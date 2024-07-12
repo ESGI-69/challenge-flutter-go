@@ -3,14 +3,16 @@ package responses
 import "challenge-flutter-go/models"
 
 type UserResponse struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
+	ID                 uint   `json:"id"`
+	Username           string `json:"username"`
+	ProfilePicturePath string `json:"profilePicturePath"`
 }
 
 type UserRoleReponse struct {
-	ID       uint            `json:"id"`
-	Username string          `json:"username"`
-	Role     models.UserRole `json:"role"`
+	ID                 uint            `json:"id"`
+	Username           string          `json:"username"`
+	Role               models.UserRole `json:"role"`
+	ProfilePicturePath string          `json:"profilePicturePath"`
 }
 
 type ParticipantTripRole string

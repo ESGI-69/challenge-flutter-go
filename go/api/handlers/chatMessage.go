@@ -59,9 +59,10 @@ func (handler *ChatMessageHandler) AddChatMessageToTrip(context *gin.Context) {
 	response := responses.ChatMessageResponse{
 		ID: chatMessage.ID,
 		Author: responses.UserRoleReponse{
-			ID:       chatMessage.Author.ID,
-			Username: chatMessage.Author.Username,
-			Role:     chatMessage.Author.Role,
+			ID:                 chatMessage.Author.ID,
+			Username:           chatMessage.Author.Username,
+			Role:               chatMessage.Author.Role,
+			ProfilePicturePath: chatMessage.Author.ProfilePicturePath,
 		},
 		Content:   chatMessage.Content,
 		CreatedAt: chatMessage.CreatedAt.Format(time.RFC3339),
@@ -102,9 +103,10 @@ func (handler *ChatMessageHandler) GetChatMessagesOfTrip(context *gin.Context) {
 		chatMessageResponse[i] = responses.ChatMessageResponse{
 			ID: chatMessage.ID,
 			Author: responses.UserRoleReponse{
-				ID:       chatMessage.Author.ID,
-				Username: chatMessage.Author.Username,
-				Role:     chatMessage.Author.Role,
+				ID:                 chatMessage.Author.ID,
+				Username:           chatMessage.Author.Username,
+				Role:               chatMessage.Author.Role,
+				ProfilePicturePath: chatMessage.Author.ProfilePicturePath,
 			},
 			Content:   chatMessage.Content,
 			CreatedAt: chatMessage.CreatedAt.Format(time.RFC3339),
