@@ -5,6 +5,7 @@ import 'package:move_together_app/Activity/activity_screen.dart';
 import 'package:move_together_app/Backoffice/Logs/logs_screen.dart';
 import 'package:move_together_app/Backoffice/Users/users_admin_screen.dart';
 import 'package:move_together_app/Chat/chat_screen.dart';
+import 'package:move_together_app/Document/document_screen.dart';
 import 'package:move_together_app/Map/map_screen.dart';
 import 'package:move_together_app/Photo/photo_screen.dart';
 import 'package:move_together_app/Transport/transport_screen.dart';
@@ -109,6 +110,11 @@ final GoRouter router = GoRouter(
                   builder: (context, state) => const AccommodationScreen(),
                 ),
                 GoRoute(
+                  name: 'document',
+                  path: 'document/:documentId',
+                  builder: (context, state) => const DocumentScreen(),
+                ),
+                GoRoute(
                   name: 'map',
                   path: 'map',
                   builder: (context, state) => const MapScreen(),
@@ -119,7 +125,7 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           name: 'profile',
-          path: 'profile',
+          path: 'profile', 
           builder: (context, state) => const ProfileScreen(),
         ),
       ],

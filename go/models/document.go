@@ -15,6 +15,8 @@ type Document struct {
 	Path        string `gorm:"not null"`
 	TripID      uint
 	Trip        Trip `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	OwnerID     uint
+	Owner       User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 func (document *Document) BeforeDelete(tx *gorm.DB) (err error) {

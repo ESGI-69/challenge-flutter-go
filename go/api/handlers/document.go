@@ -47,6 +47,10 @@ func (handler *DocumentHandler) GetDocumentsOfTrip(context *gin.Context) {
 			Path:        document.Path,
 			CreatedAt:   document.CreatedAt.Format(time.RFC3339),
 			UpdateAt:    document.UpdatedAt.Format(time.RFC3339),
+			Owner: responses.UserResponse{
+				ID:       document.Owner.ID,
+				Username: document.Owner.Username,
+			},
 		}
 	}
 	context.JSON(http.StatusOK, documentResponses)
@@ -115,6 +119,10 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 		Path:        document.Path,
 		CreatedAt:   document.CreatedAt.Format(time.RFC3339),
 		UpdateAt:    document.UpdatedAt.Format(time.RFC3339),
+		Owner: responses.UserResponse{
+			ID:       document.Owner.ID,
+			Username: document.Owner.Username,
+		},
 	}
 
 	context.JSON(200, documentResponse)
