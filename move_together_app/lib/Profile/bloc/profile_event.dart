@@ -4,3 +4,5 @@ part of 'profile_bloc.dart';
 sealed class ProfileEvent {}
 
 final class ProfileDataLoaded extends ProfileEvent {}
+
+final class ProfilePictureUpdated extends ProfileEvent {}

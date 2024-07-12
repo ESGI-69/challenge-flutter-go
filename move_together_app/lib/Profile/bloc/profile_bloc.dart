@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/core/services/user_service.dart';
 
 part 'profile_event.dart';
@@ -11,7 +11,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(BuildContext context) : super(ProfileInitial()) {
     final authProvider = context.read<AuthProvider>();
     final userService = UserService(authProvider);
-    on<ProfileEvent>((event, emit) async {
+
+    on<ProfileDataLoaded>((event, emit) async {
       emit(ProfileDataLoading());
 
       try {
@@ -22,6 +23,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       } catch (error) {
         emit(ProfileDataLoadingError(errorMessage: 'Unhandled error'));
       }
+    });
+
+    on<ProfilePictureUpdated>((event, emit) async {
+      final profile = await userService.get(authProvider.userId.toString());
+      emit(ProfileDataLoadingSuccess(profile: profile));
     });
   }
 }

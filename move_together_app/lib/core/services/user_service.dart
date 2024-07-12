@@ -22,6 +22,7 @@ class UserService {
     } else {
       throw Exception('Failed to get user');
     }
+
   }
 
   Future<User> uploadProfilePicture(XFile image) async {
@@ -32,7 +33,6 @@ class UserService {
       '/users/photo',
       data: formData,
     );
-    print(response.data);
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       return User.fromJson(response.data);
     } else {

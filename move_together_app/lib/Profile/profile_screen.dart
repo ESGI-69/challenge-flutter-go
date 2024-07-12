@@ -1,3 +1,4 @@
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Profile/bloc/profile_bloc.dart';
@@ -11,6 +12,7 @@ class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
   final ImagePicker picker = ImagePicker();
+  final uuid = const Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
       body: BlocProvider(
           create: (context) => ProfileBloc(context)..add(ProfileDataLoaded()),
           child:
-              BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+          BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
             if (state is ProfileDataLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -45,6 +47,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Text(state.errorMessage),
               );
             } else if (state is ProfileDataLoadingSuccess) {
+              final uniqueImageUrl = '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}?v=${uuid.v4()}';
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -53,31 +56,32 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       state.profile.profilePictureUri != null
                           ? InkWell(
-                              onTap: () async {
-                                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                                if (image != null) {
-                                  await userService.uploadProfilePicture(image);
-                                }
-                              },
-                              child: ClipOval(
-                                child: Image.network(
-                                  '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}',
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            )
+                        onTap: () async {
+                          final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                          if (image != null) {
+                            await userService.uploadProfilePicture(image);
+                            context.read<ProfileBloc>().add(ProfilePictureUpdated());
+                          }
+                        },
+                        child: ClipOval(
+                          child: Image.network(
+                            uniqueImageUrl,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
                           : InkWell(
-                              onTap: () {
-                                print("Profile picture tapped");
-                              },
-                              child: Icon(
-                                Icons.account_circle,
-                                size: 100,
-                                color: Theme.of(context).hintColor,
-                              ),
-                            ),
+                        onTap: () {
+                          print("Profile picture tapped");
+                        },
+                        child: Icon(
+                          Icons.account_circle,
+                          size: 100,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
                     ],
                   ),
                   Text(
