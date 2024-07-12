@@ -17,6 +17,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userService = UserService(context.read<AuthProvider>());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -47,25 +48,25 @@ class ProfileScreen extends StatelessWidget {
                 child: Text(state.errorMessage),
               );
             } else if (state is ProfileDataLoadingSuccess) {
-              final uniqueImageUrl = '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}?v=${uuid.v4()}';
+              Future<void> handleProfilePictureUpdate() async {
+                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  await userService.uploadProfilePicture(image);
+                  context.read<ProfileBloc>().add(ProfilePictureUpdated());
+                }
+              }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      state.profile.profilePictureUri != null
+                      state.profile.profilePicturePath != null && state.profile.profilePicturePath != ''
                           ? InkWell(
-                        onTap: () async {
-                          final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                          if (image != null) {
-                            await userService.uploadProfilePicture(image);
-                            context.read<ProfileBloc>().add(ProfilePictureUpdated());
-                          }
-                        },
+                        onTap: handleProfilePictureUpdate,
                         child: ClipOval(
                           child: Image.network(
-                            uniqueImageUrl,
+                            '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}?v=${uuid.v4()}',
                             width: 100,
                             height: 100,
                             fit: BoxFit.cover,
@@ -73,9 +74,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       )
                           : InkWell(
-                        onTap: () {
-                          print("Profile picture tapped");
-                        },
+                        onTap: handleProfilePictureUpdate,
                         child: Icon(
                           Icons.account_circle,
                           size: 100,
