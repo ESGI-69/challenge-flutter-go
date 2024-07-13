@@ -25,11 +25,16 @@ class FeatureBloc extends Bloc<FeaturesEvent, FeaturesState> {
     });
 
     on<FeatureDataPatchFeature>((event, emit) async {
-      emit(FeaturesDataLoading());
       try {
-        await adminServices.patchFeature(event.feature.name.toString().split('.').last, event.feature.isEnabled);
-        final features = await adminServices.getAllFeatures();
-        emit(FeaturesDataLoadingSuccess(features: features));
+        final feature = await adminServices.patchFeature(event.feature.name.toString().split('.').last, event.feature.isEnabled);
+        if (state is FeaturesDataLoadingSuccess) {
+          final features = (state as FeaturesDataLoadingSuccess).features;
+          final index = features.indexWhere((element) => element.name == feature.name);
+          if (index != -1) {
+            features[index] = feature;
+            emit(FeaturesDataLoadingSuccess(features: features));
+          }
+        }
       } on ApiException catch (error) {
         emit(FeaturesDataLoadingError(errorMessage: error.message));
       } catch (error) {
