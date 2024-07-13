@@ -7,8 +7,6 @@ import 'package:move_together_app/Transport/transport_card.dart';
 import 'package:move_together_app/Note/note_card.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/Map/map_card.dart';
-import 'package:provider/provider.dart';
-import 'package:move_together_app/Provider/feature_provider.dart';
 import 'package:move_together_app/core/models/feature.dart';
 
 Map<FeatureNames, String> featureNames = {
@@ -36,47 +34,42 @@ class TripBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var featureProvider = Provider.of<FeatureProvider>(context);
-
     return ListView(
       children: [
         MapCard(tripId: trip.id),
-        if (featureNames[FeatureNames.transport] == 'transport')
-          TransportCard(
-            tripId: trip.id,
-            userHasEditPermission: trip.currentUserHasEditingRights(context),
-            userIsOwner: trip.isCurrentUserOwner(context),
-          ),
-        if (featureProvider.isFeatureEnabled(FeatureNames.accommodation))
-          AccommodationCard(
-            tripId: trip.id,
-            userHasEditPermission: trip.currentUserHasEditingRights(context),
-            userIsOwner: trip.isCurrentUserOwner(context),
-          ),
-        if (featureProvider.isFeatureEnabled(FeatureNames.photo))
-          PhotoCard(
-            tripId: trip.id,
-            userHasEditPermission: trip.currentUserHasEditingRights(context),
-            userIsOwner: trip.isCurrentUserOwner(context),
-          ),
-        if (featureNames[FeatureNames.document] == 'document')
-          DocumentCard(
-            tripId: trip.id,
-            userHasEditPermission: trip.currentUserHasEditingRights(context),
-            userIsOwner: trip.isCurrentUserOwner(context),
-          ),
-        if (featureProvider.isFeatureEnabled(FeatureNames.note))
-          NoteCard(
-            tripId: trip.id,
-            userHasEditPermission: trip.currentUserHasEditingRights(context),
-            userIsOwner: trip.isCurrentUserOwner(context),
-          ),
-        if (featureProvider.isFeatureEnabled(FeatureNames.activity))
-          ActivityCard(
-            tripId: trip.id,
-            userHasEditPermission: trip.currentUserHasEditingRights(context),
-            userIsOwner: trip.isCurrentUserOwner(context),
-          ),
+        TransportCard(
+          tripId: trip.id,
+          userHasEditPermission: trip.currentUserHasEditingRights(context),
+          userIsOwner: trip.isCurrentUserOwner(context),
+          onRefresh: onRefresh,
+        ),
+        AccommodationCard(
+          tripId: trip.id,
+          userHasEditPermission: trip.currentUserHasEditingRights(context),
+          userIsOwner: trip.isCurrentUserOwner(context),
+          onRefresh: onRefresh,
+        ),
+        PhotoCard(
+          tripId: trip.id,
+          userHasEditPermission: trip.currentUserHasEditingRights(context),
+          userIsOwner: trip.isCurrentUserOwner(context),
+        ),
+        DocumentCard(
+          tripId: trip.id,
+          userHasEditPermission: trip.currentUserHasEditingRights(context),
+          userIsOwner: trip.isCurrentUserOwner(context),
+        ),
+        NoteCard(
+          tripId: trip.id,
+          userHasEditPermission: trip.currentUserHasEditingRights(context),
+          userIsOwner: trip.isCurrentUserOwner(context),
+        ),
+        ActivityCard(
+          tripId: trip.id,
+          userHasEditPermission: trip.currentUserHasEditingRights(context),
+          userIsOwner: trip.isCurrentUserOwner(context),
+          onRefresh: onRefresh,
+        ),
       ],
     );
   }
