@@ -42,7 +42,9 @@ func StringToParticipantTripRole(role string) ParticipantTripRole {
 }
 
 type ParticipantResponse struct {
-	ID       uint                `json:"id"`
-	Username string              `json:"username"`
-	TripRole ParticipantTripRole `json:"tripRole"`
+	ID                 uint                `json:"id"`
+	Username           string              `json:"username"`
+	TripRole           ParticipantTripRole `json:"tripRole"`
+	ProfilePicturePath string              `json:"profilePicturePath"`
+	ProfilePictureUri  string              `json:"profilePictureUri"`
 }

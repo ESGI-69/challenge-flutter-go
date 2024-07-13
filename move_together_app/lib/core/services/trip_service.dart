@@ -62,7 +62,7 @@ class TripService {
 
   Future<Trip> get(String tripId) async {
     final response = await api.get('/trips/$tripId');
-
+    
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {

@@ -2583,6 +2583,12 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "profilePicturePath": {
+                    "type": "string"
+                },
+                "profilePictureUri": {
+                    "type": "string"
+                },
                 "tripRole": {
                     "$ref": "#/definitions/responses.ParticipantTripRole"
                 },
