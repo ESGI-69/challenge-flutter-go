@@ -8,7 +8,6 @@ import (
 	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -72,8 +71,6 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		ProfilePicturePath: user.ProfilePicturePath,
 		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(currentUser.ID), 10),
 	}
-
-	fmt.Println(response.ProfilePictureUri)
 
 	context.JSON(http.StatusOK, response)
 	logger.ApiInfo(context, "Get user "+string(rune(user.ID)))

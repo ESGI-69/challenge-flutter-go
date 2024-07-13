@@ -44,9 +44,4 @@ class Participant {
     final userId = context.read<AuthProvider>().userId;
     return userId == id;
   }
-
-  @override
-  String toString() {
-    return 'Participant{id: $id, username: $username, tripRole: $tripRole, profilePicturePath: $profilePicturePath, profilePictureUri: $profilePictureUri}';
-  }
 }
