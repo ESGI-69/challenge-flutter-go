@@ -1985,6 +1985,100 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/photo": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update the profile picture of a user",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update the profile picture of a user",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Photo file",
+                        "name": "photo",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.UserRoleReponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/users/photo/{userId}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Download the profile picture of a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Download the profile picture of a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the user",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A file stream of the profile picture",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/users/{id}": {
             "get": {
                 "security": [
@@ -2489,6 +2583,12 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "profilePicturePath": {
+                    "type": "string"
+                },
+                "profilePictureUri": {
+                    "type": "string"
+                },
                 "tripRole": {
                     "$ref": "#/definitions/responses.ParticipantTripRole"
                 },
@@ -2643,6 +2743,12 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "profilePicturePath": {
+                    "type": "string"
+                },
+                "profilePictureUri": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
@@ -2653,6 +2759,12 @@ const docTemplate = `{
             "properties": {
                 "id": {
                     "type": "integer"
+                },
+                "profilePicturePath": {
+                    "type": "string"
+                },
+                "profilePictureUri": {
+                    "type": "string"
                 },
                 "role": {
                     "$ref": "#/definitions/models.UserRole"

@@ -3,14 +3,18 @@ package responses
 import "challenge-flutter-go/models"
 
 type UserResponse struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
+	ID                 uint   `json:"id"`
+	Username           string `json:"username"`
+	ProfilePicturePath string `json:"profilePicturePath"`
+	ProfilePictureUri  string `json:"profilePictureUri"`
 }
 
 type UserRoleReponse struct {
-	ID       uint            `json:"id"`
-	Username string          `json:"username"`
-	Role     models.UserRole `json:"role"`
+	ID                 uint            `json:"id"`
+	Username           string          `json:"username"`
+	Role               models.UserRole `json:"role"`
+	ProfilePicturePath string          `json:"profilePicturePath"`
+	ProfilePictureUri  string          `json:"profilePictureUri"`
 }
 
 type ParticipantTripRole string
@@ -38,7 +42,9 @@ func StringToParticipantTripRole(role string) ParticipantTripRole {
 }
 
 type ParticipantResponse struct {
-	ID       uint                `json:"id"`
-	Username string              `json:"username"`
-	TripRole ParticipantTripRole `json:"tripRole"`
+	ID                 uint                `json:"id"`
+	Username           string              `json:"username"`
+	TripRole           ParticipantTripRole `json:"tripRole"`
+	ProfilePicturePath string              `json:"profilePicturePath"`
+	ProfilePictureUri  string              `json:"profilePictureUri"`
 }

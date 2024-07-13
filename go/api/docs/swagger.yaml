@@ -311,6 +311,10 @@ definitions:
     properties:
       id:
         type: integer
+      profilePicturePath:
+        type: string
+      profilePictureUri:
+        type: string
       tripRole:
         $ref: '#/definitions/responses.ParticipantTripRole'
       username:
@@ -414,6 +418,10 @@ definitions:
     properties:
       id:
         type: integer
+      profilePicturePath:
+        type: string
+      profilePictureUri:
+        type: string
       username:
         type: string
     type: object
@@ -421,6 +429,10 @@ definitions:
     properties:
       id:
         type: integer
+      profilePicturePath:
+        type: string
+      profilePictureUri:
+        type: string
       role:
         $ref: '#/definitions/models.UserRole'
       username:
@@ -1751,6 +1763,67 @@ paths:
       security:
       - BearerAuth: []
       summary: Get the user
+      tags:
+      - users
+  /users/photo:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: Update the profile picture of a user
+      parameters:
+      - description: Photo file
+        in: formData
+        name: photo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserRoleReponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update the profile picture of a user
+      tags:
+      - users
+  /users/photo/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: Download the profile picture of a user
+      parameters:
+      - description: ID of the user
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: A file stream of the profile picture
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Download the profile picture of a user
       tags:
       - users
 securityDefinitions:

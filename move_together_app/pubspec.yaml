@@ -58,6 +58,7 @@ dependencies:
   file_picker: ^8.0.6
   open_file: ^3.3.2
   google_maps_flutter: ^2.7.0
+  uuid: ^4.4.2
 
 dev_dependencies:
   flutter_test:

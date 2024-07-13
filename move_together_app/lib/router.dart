@@ -66,73 +66,72 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const LandingScreen(),
       routes: [
         GoRoute(
-          name: 'home',
-          path: 'trips',
-          builder: (context, state) => const HomeScreen(),
-          routes: [
-            GoRoute(
-              name: 'join',
-              path: 'join',
-              builder: (context, state) => const JoinTripScreen(),
-            ),
-            GoRoute(
-              name: 'create',
-              path: 'create',
-              builder: (context, state) => const CreateTripScreen(),
-            ),
-            GoRoute(
-              name: 'trip',
-              path: ':tripId',
-              builder: (context, state) => const TripScreen(),
-              routes: [
-                GoRoute(
-                  name: 'chat',
-                  path: 'chat',
-                  builder: (context, state) => const ChatScreen(),
-                ),
-                GoRoute(
-                  name: 'photos',
-                  path: 'photos',
-                  builder: (context, state) => const PhotosScreen(),
-                ),
-                GoRoute(
-                  name: 'activity',
-                  path: 'activities/:activityId',
-                  builder: (context, state) => const ActivityScreen(),
-                ),
-                GoRoute(
-                  name: 'transport',
-                  path: 'transports/:transportId',
-                  builder: (context, state) => const TransportScreen(),
-                ),
-                GoRoute(
-                  name: 'accommodation',
-                  path: 'accommodations/:accommodationId',
-                  builder: (context, state) => const AccommodationScreen(),
-                ),
-                GoRoute(
-                  name: 'document',
-                  path: 'documents/:documentId',
-                  builder: (context, state) => const DocumentScreen(),
-                ),
-                GoRoute(
-                  name: 'note',
-                  path: 'notes/:noteId',
-                  builder: (context, state) => const NoteScreen(),
-                ),
-                GoRoute(
-                  name: 'map',
-                  path: 'map',
-                  builder: (context, state) => const MapScreen(),
-                ),
-              ],
-            ),
-          ]
-        ),
+            name: 'home',
+            path: 'trips',
+            builder: (context, state) => const HomeScreen(),
+            routes: [
+              GoRoute(
+                name: 'join',
+                path: 'join',
+                builder: (context, state) => const JoinTripScreen(),
+              ),
+              GoRoute(
+                name: 'create',
+                path: 'create',
+                builder: (context, state) => const CreateTripScreen(),
+              ),
+              GoRoute(
+                name: 'trip',
+                path: ':tripId',
+                builder: (context, state) => const TripScreen(),
+                routes: [
+                  GoRoute(
+                    name: 'chat',
+                    path: 'chat',
+                    builder: (context, state) => const ChatScreen(),
+                  ),
+                  GoRoute(
+                    name: 'photos',
+                    path: 'photos',
+                    builder: (context, state) => const PhotosScreen(),
+                  ),
+                  GoRoute(
+                    name: 'activity',
+                    path: 'activities/:activityId',
+                    builder: (context, state) => const ActivityScreen(),
+                  ),
+                  GoRoute(
+                    name: 'transport',
+                    path: 'transports/:transportId',
+                    builder: (context, state) => const TransportScreen(),
+                  ),
+                  GoRoute(
+                    name: 'accommodation',
+                    path: 'accommodations/:accommodationId',
+                    builder: (context, state) => const AccommodationScreen(),
+                  ),
+                  GoRoute(
+                    name: 'document',
+                    path: 'documents/:documentId',
+                    builder: (context, state) => const DocumentScreen(),
+                  ),
+                  GoRoute(
+                    name: 'note',
+                    path: 'notes/:noteId',
+                    builder: (context, state) => const NoteScreen(),
+                  ),
+                  GoRoute(
+                    name: 'map',
+                    path: 'map',
+                    builder: (context, state) => const MapScreen(),
+                  ),
+                ],
+              ),
+            ]),
         GoRoute(
           name: 'profile',
-          path: 'profile', 
-          builder: (context, state) => const ProfileScreen(),
+          path: 'profile',
+          builder: (context, state) => ProfileScreen(),
         ),
       ],
     ),
@@ -179,15 +178,13 @@ final GoRouter backOfficeRouter = GoRouter(
       builder: (context, state) => const BackofficeTripsScreen(),
     ),
     GoRoute(
-      path: '/logs',
-      name: 'logs',
-      builder: (context, state) => const LogsScreen()
-    ),
+        path: '/logs',
+        name: 'logs',
+        builder: (context, state) => const LogsScreen()),
     GoRoute(
-      path: '/users',
-      name: 'users',
-      builder: (context, state) => const UsersAdminScreen()
-    ),
+        path: '/users',
+        name: 'users',
+        builder: (context, state) => const UsersAdminScreen()),
   ],
   redirect: (context, state) async {
     final topRoutePath = state.topRoute?.path;
@@ -197,9 +194,9 @@ final GoRouter backOfficeRouter = GoRouter(
     }
     final bool userIsAdmin = await isAdmin(context);
 
-
     final bool routeIsPublic = unloggedRoutes.contains(topRoutePath);
-    final bool routeRequireAuthentication = backOfficeRoutes.contains(topRoutePath);
+    final bool routeRequireAuthentication =
+        backOfficeRoutes.contains(topRoutePath);
 
     if (!userIsAuthenticated && routeRequireAuthentication) {
       secureStorage.delete(key: 'jwt');

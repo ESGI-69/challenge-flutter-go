@@ -72,7 +72,7 @@ class PhotoInfo extends StatelessWidget {
               headers: {
                 'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
               },
-            ),
+            )
           ),
         ),
       ],

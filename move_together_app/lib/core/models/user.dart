@@ -9,11 +9,15 @@ class User {
   final int id;
   final String name;
   final Role role;
+  final String? profilePicturePath;
+  final String? profilePictureUri;
 
   User({
     required this.id,
     required this.name,
     required this.role,
+    this.profilePicturePath,
+    this.profilePictureUri,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -21,6 +25,8 @@ class User {
       id: json['id'],
       name: json['username'],
       role: json['role'] != null ? Role.values.firstWhere((e) => e.toString().split('.').last == json['role']) : Role.USER,
+      profilePicturePath: json['profilePicturePath'],
+      profilePictureUri: json['profilePictureUri'],
     );
   }
 
@@ -31,6 +37,8 @@ class User {
       'id': id,
       'name': name,
       'role': role.toString().split('.').last,
+      'profilePicturePath': profilePicturePath,
+      'profilePictureUri': profilePictureUri,
     };
   }
 

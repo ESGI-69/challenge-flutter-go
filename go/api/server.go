@@ -157,6 +157,8 @@ func setRoutes() {
 	usersRoutes := router.Group("/users")
 	usersRoutes.POST("", userHandler.Create)
 	usersRoutes.GET("/:id", middlewares.UserIsLogged, userHandler.Get)
+	usersRoutes.PATCH("/photo", middlewares.UserIsLogged, userHandler.UpdatePhoto)
+	usersRoutes.GET("/photo/:userId", userHandler.DownloadPhoto)
 
 	tripsRoutes := router.Group("/trips", middlewares.UserIsLogged)
 	tripsRoutes.POST("", tripHandler.Create)

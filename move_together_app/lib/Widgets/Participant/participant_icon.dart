@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:move_together_app/core/models/participant.dart';
+import 'package:uuid/uuid.dart';
 
 class ParticipantIcon extends StatelessWidget {
   final Participant participant;
+  final uuid = const Uuid();
 
   const ParticipantIcon({
     super.key,
@@ -22,8 +25,12 @@ class ParticipantIcon extends StatelessWidget {
           color: Colors.white,
           width: 3,
         ),
+        image: participant.profilePicturePath != null && participant.profilePicturePath != '' ? DecorationImage(
+          image: NetworkImage('${dotenv.env['API_ADDRESS']}${participant.profilePictureUri}?v=${uuid.v4()}'),
+          fit: BoxFit.cover,
+        ) : null,
       ),
-      child: Center(
+      child: participant.profilePicturePath == null || participant.profilePicturePath == '' ? Center(
         child: Text(
           participant.username[0].toUpperCase(),
           style: TextStyle(
@@ -32,7 +39,7 @@ class ParticipantIcon extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+      ) : null,
     );
   }
 }
