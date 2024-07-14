@@ -1,6 +1,9 @@
 enum LogLevel {
+  // ignore: constant_identifier_names
   INFO,
+  // ignore: constant_identifier_names
   WARN,
+  // ignore: constant_identifier_names
   ERROR,
 }
 class Log {
