@@ -21,10 +21,10 @@ class Log {
     required this.level,
     required this.message,
     required this.timestamp,
-    this.ip = '', // Valeur par défaut si non spécifié
-    this.path = '', // Valeur par défaut si non spécifié
-    this.method = '', // Valeur par défaut si non spécifié
-    this.username = '', // Valeur par défaut si non spécifié
+    this.ip = '',
+    this.path = '',
+    this.method = '',
+    this.username = '',
   });
 
   factory Log.fromJson(Map<String, dynamic> json) {
@@ -33,17 +33,17 @@ class Log {
       level: LogLevel.values.firstWhere((e) => e.toString().split('.').last == json['level']),
       message: json['message'],
       timestamp: DateTime.parse(json['timestamp']),
-      ip: json['ip'] ?? '', // Utilisez ?? pour fournir une valeur par défaut
-      path: json['path'] ?? '', // Utilisez ?? pour fournir une valeur par défaut
-      method: json['method'] ?? '', // Utilisez ?? pour fournir une valeur par défaut
-      username: json['username'] ?? '', // Utilisez ?? pour fournir une valeur par défaut
+      ip: json['ip'] ?? '',
+      path: json['path'] ?? '',
+      method: json['method'] ?? '',
+      username: json['username'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'level': level.toString().split('.').last, // Pour rendre le JSON plus propre
+      'level': level.toString().split('.').last,
       'message': message,
       'timestamp': timestamp.toIso8601String(),
       'ip': ip,
