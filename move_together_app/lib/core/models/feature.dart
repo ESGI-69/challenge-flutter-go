@@ -14,7 +14,7 @@ enum FeatureNames {
 }
 
 class Feature {
-  final FeatureNames name;
+  final String name;
   final bool isEnabled;
   final User modifiedBy;
   final DateTime updatedAt;
@@ -28,8 +28,7 @@ class Feature {
 
   factory Feature.fromJson(Map<String, dynamic> json) {
     return Feature(
-      name: FeatureNames.values
-          .firstWhere((e) => e.toString().split('.').last == json['name']),
+      name: json['name'],
       isEnabled: json['isEnabled'],
       modifiedBy: User.fromJson(json['modifiedBy']),
       updatedAt: DateTime.parse(json['updatedAt']),
