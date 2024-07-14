@@ -25,9 +25,16 @@ class TripBloc extends Bloc<TripsEvent, TripsState> {
     });
 
     on<TripDataDeleteTrip>((event, emit) async {
-      emit(TripsDataLoading());
       try {
         await adminServices.deleteTrip(event.trip.id.toString());
+        if (state is TripsDataLoadingSuccess) {
+          final trips = (state as TripsDataLoadingSuccess).trips;
+          final index = trips.indexWhere((element) => element.id == event.trip.id);
+          if (index != -1) {
+            trips.removeAt(index);
+            emit(TripsDataLoadingSuccess(trips: trips));
+          }
+        }
         final trips = await adminServices.getAllTrips();
         emit(TripsDataLoadingSuccess(trips: trips));
       } on ApiException catch (error) {
