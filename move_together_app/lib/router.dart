@@ -102,7 +102,7 @@ final GoRouter router = GoRouter(
                   GoRoute(
                     name: 'activity',
                     path: 'activities/:activityId',
-                    builder: (context, state) => const ActivityScreen(),
+                    builder: (context, state) => ActivityScreen(),
                   ),
                   GoRoute(
                     name: 'transport',

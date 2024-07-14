@@ -9,11 +9,18 @@ import 'package:move_together_app/core/services/activity_service.dart';
 import 'package:move_together_app/utils/map.dart';
 
 class ActivityScreen extends StatelessWidget {
-  const ActivityScreen({super.key});
+  ActivityScreen({super.key});
+
+  final _activityNameController = TextEditingController();
+  final _activityDescriptionController = TextEditingController();
+  final _activityLocationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final activity = GoRouterState.of(context).extra as Activity;
+    _activityNameController.text = activity.name;
+    _activityDescriptionController.text = activity.description;
+    _activityLocationController.text = activity.location;
 
     final tripId = int.parse(GoRouterState.of(context).pathParameters['tripId']!);
 
@@ -61,14 +68,29 @@ class ActivityScreen extends StatelessWidget {
               child: Column(
                 children: [
                   DetailsList(
+                    onConfirmEdition: () async {
+                      await ActivityService(context.read<AuthProvider>()).update(
+                        tripId,
+                        activity.id,
+                        name: _activityNameController.text,
+                        description: _activityDescriptionController.text,
+                        location: _activityLocationController.text,
+                      );
+                      context.pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Activité modifiée avec succès'),
+                        ),
+                      );
+                    },
                     items: [
-                      DetailItem(title: 'Nom', value: activity.name),
+                      DetailItem(title: 'Nom', controller: _activityNameController, isEditable: true),
                       DetailItem(title: 'Date et heure de début', value: activity.startDate),
                       DetailItem(title: 'Date et heure de fin', value: activity.endDate),
                       DetailItem(title: 'Prix', value: '${activity.price.toStringAsFixed(2)}€'),
-                      DetailItem(title: 'Lieu', value: activity.location),
+                      DetailItem(title: 'Lieu', controller: _activityLocationController, isEditable: true),
                       DetailItem(title: 'Créé par', value: activity.owner.formattedUsername),
-                      DetailItem(title: 'Déscription', value: activity.description),
+                      DetailItem(title: 'Déscription', controller: _activityDescriptionController, isEditable: true),
                     ]
                   ),
                   const SizedBox(height: 16),

@@ -62,4 +62,25 @@ class ActivityService {
       throw Exception('Failed to delete activities');
     }
   }
+
+  Future<Activity> update(int tripId, int activityId, {
+    String name = '',
+    String description = '',
+    String location = '',
+  }) async {
+    final response = await api.patch(
+      '/trips/$tripId/activities/$activityId',
+      data: {
+        'name': name,
+        'description': description,
+        'location': location,
+      },
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return Activity.fromJson(response.data);
+    } else {
+      throw Exception('Failed to update activities');
+    }
+  }
 }
