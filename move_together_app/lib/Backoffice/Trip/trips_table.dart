@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/models/participant.dart';
 import '../../core/models/trip.dart';
 
 class TripsTable extends StatelessWidget {
@@ -194,7 +193,7 @@ class TripsTable extends StatelessWidget {
                     children: [
                       TableCell(
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(4.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
