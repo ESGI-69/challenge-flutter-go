@@ -75,6 +75,10 @@ func setRoutes() {
 		Database: databaseInstance,
 	}
 
+	logRepository := repository.LogRepository{
+		Database: databaseInstance,
+	}
+
 	userHandler := handlers.UserHandler{
 		Repository: userRepository,
 	}
@@ -133,6 +137,10 @@ func setRoutes() {
 		TripRepository: tripRepository,
 	}
 
+	logHandler := handlers.LogHandler{
+		Repository: logRepository,
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.Static("/backoffice", "./backoffice")
@@ -153,6 +161,9 @@ func setRoutes() {
 	adminsUsersRoutes := adminsRoutes.Group("/users")
 	adminsUsersRoutes.GET("", userHandler.GetAll)
 	adminsUsersRoutes.PATCH("/:id/role", userHandler.UpdateRole)
+
+	adminLogsRoutes := adminsRoutes.Group("/logs")
+	adminLogsRoutes.GET("", logHandler.GetAll)
 
 	usersRoutes := router.Group("/users")
 	usersRoutes.POST("", userHandler.Create)
