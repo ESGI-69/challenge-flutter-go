@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/core/models/participant.dart';
+import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/utils/dynamic_to_double.dart';
 
 class Trip {
@@ -12,6 +13,9 @@ class Trip {
   final List<Participant> participants;
   final String inviteCode;
   final double totalPrice;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final User? owner;
 
   Trip({
     required this.id,
@@ -23,6 +27,9 @@ class Trip {
     required this.participants,
     required this.inviteCode,
     this.totalPrice = 0.0,
+    this.createdAt,
+    this.updatedAt,
+    this.owner,
   });
 
   factory Trip.fromJson(Map<String, dynamic> json) {
@@ -36,6 +43,9 @@ class Trip {
       participants: json['participants'].map<Participant>((e) => Participant.fromJson(e)).toList(),
       inviteCode: json['inviteCode'],
       totalPrice: dynamicToDouble(json['totalPrice']),
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      owner: json['owner'] != null ? User.fromJson(json['owner']) : null,
     );
   }
 

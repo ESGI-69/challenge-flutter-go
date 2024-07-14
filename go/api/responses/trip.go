@@ -10,6 +10,9 @@ type TripResponse struct {
 	Participants []ParticipantResponse `json:"participants"`
 	InviteCode   string                `json:"inviteCode"`
 	TotalPrice   float64               `json:"totalPrice"`
+	CreatedAt    string                `json:"createdAt"`
+	UpdatedAt    string                `json:"updatedAt"`
+	Owner        UserResponse          `json:"owner"`
 }
 
 type TripAddTransport struct {

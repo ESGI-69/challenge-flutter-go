@@ -406,6 +406,8 @@ definitions:
         type: string
       country:
         type: string
+      createdAt:
+        type: string
       endDate:
         type: string
       id:
@@ -414,6 +416,8 @@ definitions:
         type: string
       name:
         type: string
+      owner:
+        $ref: '#/definitions/responses.UserResponse'
       participants:
         items:
           $ref: '#/definitions/responses.ParticipantResponse'
@@ -422,6 +426,8 @@ definitions:
         type: string
       totalPrice:
         type: number
+      updatedAt:
+        type: string
     type: object
   responses.UserResponse:
     properties:

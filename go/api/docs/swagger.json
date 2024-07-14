@@ -2771,6 +2771,9 @@
                 "country": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
                 "endDate": {
                     "type": "string"
                 },
@@ -2783,6 +2786,9 @@
                 "name": {
                     "type": "string"
                 },
+                "owner": {
+                    "$ref": "#/definitions/responses.UserResponse"
+                },
                 "participants": {
                     "type": "array",
                     "items": {
@@ -2794,6 +2800,9 @@
                 },
                 "totalPrice": {
                     "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },

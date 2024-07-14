@@ -439,6 +439,12 @@ func (handler *TripHandler) GetAll(context *gin.Context) {
 			EndDate:      trip.EndDate.Format(time.RFC3339),
 			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 			InviteCode:   trip.InviteCode,
+			CreatedAt:    trip.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:    trip.UpdatedAt.Format(time.RFC3339),
+			Owner: responses.UserResponse{
+				ID:       trip.Owner.ID,
+				Username: trip.Owner.Username,
+			},
 		}
 	}
 
