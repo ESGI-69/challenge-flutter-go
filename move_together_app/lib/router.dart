@@ -24,6 +24,8 @@ import 'package:move_together_app/Trip/trip_create_screen.dart';
 import 'package:move_together_app/Backoffice/Dashboard/dashboard_screen.dart';
 import 'package:move_together_app/Backoffice/Trip/trip_screen.dart';
 
+import 'Backoffice/Feature/feature_screen.dart';
+
 const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
 List<String> loggedRoutes = [
@@ -47,6 +49,8 @@ List<String> backOfficeRoutes = [
   '/',
   '/trip',
   '/users',
+  '/trips',
+  '/features',
 ];
 
 Future<bool> isAuthenticated(BuildContext context) async {
@@ -178,9 +182,15 @@ final GoRouter backOfficeRouter = GoRouter(
       builder: (context, state) => const BackofficeTripsScreen(),
     ),
     GoRoute(
-        path: '/logs',
-        name: 'logs',
-        builder: (context, state) => const LogsScreen()),
+      path: '/feature',
+      name: 'feature',
+      builder: (context, state) => const BackofficeFeaturesScreen(),
+    ),
+    GoRoute(
+      path: '/logs',
+      name: 'logs',
+      builder: (context, state) => const LogsScreen()
+    ),
     GoRoute(
         path: '/users',
         name: 'users',

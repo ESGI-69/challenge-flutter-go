@@ -15,7 +15,7 @@ func (t *FeatureRepository) Create(feature *models.Feature) error {
 }
 
 func (t *FeatureRepository) GetFeatures() (features []models.Feature, err error) {
-	err = t.Database.Preload("ModifiedBy").Find(&features).Error
+	err = t.Database.Preload("ModifiedBy").Order("name ASC").Find(&features).Error
 	return
 }
 
@@ -25,7 +25,7 @@ func (t *FeatureRepository) Get(name string) (feature models.Feature, err error)
 }
 
 func (t *FeatureRepository) Update(feature *models.Feature) (err error) {
-	return t.Database.Save(&feature).Preload("ModifedBy").Error
+	return t.Database.Save(&feature).Preload("ModifiedBy").Error
 }
 
 func (t *FeatureRepository) Delete(id string) error {

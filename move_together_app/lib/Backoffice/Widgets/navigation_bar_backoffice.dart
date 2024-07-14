@@ -16,6 +16,10 @@ class NavigationBarBackoffice extends StatelessWidget implements PreferredSizeWi
           onPressed: () => backOfficeRouter.replaceNamed('dashboard'),
         ),
         TextButton(
+          child: Text('Feature', style: TextStyle(color: Theme.of(context).primaryColor)),
+          onPressed: () => backOfficeRouter.replaceNamed('feature'),
+        ),
+        TextButton(
           child: Text('Trip', style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () => backOfficeRouter.replaceNamed('trip'),
         ),

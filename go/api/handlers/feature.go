@@ -60,11 +60,12 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 	responseFeature := responses.FeatureResponse{
 		Name:      feature.Name,
 		IsEnabled: feature.IsEnabled,
-		ModifedBy: responses.UserResponse{
+		ModifiedBy: responses.UserRoleReponse{
 			ID:       feature.ModifiedBy.ID,
 			Username: feature.ModifiedBy.Username,
+			Role:     feature.ModifiedBy.Role,
 		},
-		UpdateAt: feature.UpdatedAt.Format(time.RFC3339),
+		UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
 	}
 
 	context.JSON(http.StatusOK, responseFeature)
@@ -94,12 +95,13 @@ func (handler *FeatureHandler) GetFeatures(context *gin.Context) {
 	for i, feature := range features {
 		responseFeatures[i] = responses.FeatureResponse{
 			Name: feature.Name,
-			ModifedBy: responses.UserResponse{
+			ModifiedBy: responses.UserRoleReponse{
 				ID:       feature.ModifiedBy.ID,
 				Username: feature.ModifiedBy.Username,
+				Role:     feature.ModifiedBy.Role,
 			},
 			IsEnabled: feature.IsEnabled,
-			UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
+			UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
 		}
 	}
 
@@ -130,12 +132,13 @@ func (handler *FeatureHandler) GetFeaturesAdmin(context *gin.Context) {
 	for i, feature := range features {
 		responseFeatures[i] = responses.FeatureResponse{
 			Name: feature.Name,
-			ModifedBy: responses.UserResponse{
+			ModifiedBy: responses.UserRoleReponse{
 				ID:       feature.ModifiedBy.ID,
 				Username: feature.ModifiedBy.Username,
+				Role:     feature.ModifiedBy.Role,
 			},
 			IsEnabled: feature.IsEnabled,
-			UpdateAt:  feature.UpdatedAt.Format(time.RFC3339),
+			UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
 		}
 	}
 

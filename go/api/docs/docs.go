@@ -2604,13 +2604,13 @@ const docTemplate = `{
                 "isEnabled": {
                     "type": "boolean"
                 },
-                "modifedBy": {
-                    "$ref": "#/definitions/responses.UserResponse"
+                "modifiedBy": {
+                    "$ref": "#/definitions/responses.UserRoleReponse"
                 },
                 "name": {
                     "$ref": "#/definitions/models.FeatureName"
                 },
-                "updateAt": {
+                "updatedAt": {
                     "type": "string"
                 }
             }

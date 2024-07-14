@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Trip/trip_cost_tag.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
@@ -9,6 +8,9 @@ import 'package:move_together_app/Widgets/Participant/participant_icons.dart';
 import 'package:move_together_app/Trip/trip_quick_info.dart';
 import 'package:move_together_app/core/models/participant.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
+import 'package:provider/provider.dart';
+import 'package:move_together_app/Provider/feature_provider.dart';
+import 'package:move_together_app/core/models/feature.dart';
 
 class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String name;
@@ -42,6 +44,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var featureProvider = Provider.of<FeatureProvider>(context);
     void nameEdit(String name) async {
       await TripService(context.read<AuthProvider>()).edit(
         tripId,
@@ -103,6 +106,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
+
         actions: [
           Row(
             children: [
@@ -112,15 +116,16 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                   totalCost: totalPrice,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: ButtonChat(
-                  tripId: tripId,
-                  tripName: name,
+              if (featureProvider.isFeatureEnabled(FeatureNames.chat))
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: ButtonChat(
+                    tripId: tripId,
+                    tripName: name,
+                  ),
                 ),
-              ),
             ],
-          )
+          ),
         ],
         title: ParticipantIcons(
           participants: participants,

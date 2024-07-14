@@ -22,7 +22,6 @@ class Api {
     );
 
     dio.interceptors.add(AppInterceptors());
-
     return dio;
   }
 }
