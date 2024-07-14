@@ -69,7 +69,7 @@ func (handler *UserHandler) Get(context *gin.Context) {
 		Username:           user.Username,
 		Role:               user.Role,
 		ProfilePicturePath: user.ProfilePicturePath,
-		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(currentUser.ID), 10),
+		ProfilePictureUri:  user.GetProfilePictureUri(),
 	}
 
 	context.JSON(http.StatusOK, response)
@@ -108,7 +108,7 @@ func (handler *UserHandler) Create(context *gin.Context) {
 		Username:           user.Username,
 		Role:               user.Role,
 		ProfilePicturePath: user.ProfilePicturePath,
-		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
+		ProfilePictureUri:  user.GetProfilePictureUri(),
 	}
 	context.JSON(http.StatusCreated, response)
 	logger.ApiInfo(context, "User "+string(rune(user.ID))+" created")
@@ -140,7 +140,7 @@ func (handler *UserHandler) GetAll(context *gin.Context) {
 			Username:           user.Username,
 			Role:               user.Role,
 			ProfilePicturePath: user.ProfilePicturePath,
-			ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
+			ProfilePictureUri:  user.GetProfilePictureUri(),
 		}
 	}
 
@@ -199,7 +199,7 @@ func (handler *UserHandler) UpdateRole(context *gin.Context) {
 		Username:           user.Username,
 		Role:               user.Role,
 		ProfilePicturePath: user.ProfilePicturePath,
-		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
+		ProfilePictureUri:  user.GetProfilePictureUri(),
 	}
 
 	context.JSON(http.StatusOK, response)
@@ -260,7 +260,7 @@ func (handler *UserHandler) UpdatePhoto(context *gin.Context) {
 		Username:           currentUser.Username,
 		Role:               currentUser.Role,
 		ProfilePicturePath: currentUser.ProfilePicturePath,
-		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(currentUser.ID), 10),
+		ProfilePictureUri:  currentUser.GetProfilePictureUri(),
 	}
 
 	context.JSON(200, userResponse)
@@ -310,7 +310,7 @@ func (handler *UserHandler) Update(context *gin.Context) {
 		Username:           user.Username,
 		Role:               user.Role,
 		ProfilePicturePath: user.ProfilePicturePath,
-		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
+		ProfilePictureUri:  user.GetProfilePictureUri(),
 	}
 
 	context.JSON(http.StatusOK, response)

@@ -93,6 +93,21 @@ definitions:
     - price
     - startDate
     type: object
+  requests.ActivityUpdateBody:
+    properties:
+      description:
+        type: string
+      endDate:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      startDate:
+        type: string
+    type: object
   requests.AuthLoginBody:
     properties:
       password:
@@ -1004,6 +1019,45 @@ paths:
       security:
       - BearerAuth: []
       summary: Delete an activity
+      tags:
+      - activity
+    patch:
+      consumes:
+      - application/json
+      description: Update an activity associated with the trip
+      parameters:
+      - description: ID of the trip
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ID of the activity
+        in: path
+        name: activityId
+        required: true
+        type: string
+      - description: Activity information
+        in: body
+        name: activity
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ActivityUpdateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ActivityResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Update an activity
       tags:
       - activity
   /trips/{id}/banner/download:

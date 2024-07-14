@@ -8,6 +8,7 @@ import (
 	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -51,8 +52,10 @@ func (handler *ActivityHandler) GetAllFromTrip(context *gin.Context) {
 			Latitude:    activity.Latitude,
 			Longitude:   activity.Longitude,
 			Owner: responses.UserResponse{
-				ID:       activity.Owner.ID,
-				Username: activity.Owner.Username,
+				ID:                 activity.Owner.ID,
+				Username:           activity.Owner.Username,
+				ProfilePicturePath: activity.Owner.ProfilePicturePath,
+				ProfilePictureUri:  activity.Owner.GetProfilePictureUri(),
 			},
 			Price: activity.Price,
 		}
@@ -128,11 +131,104 @@ func (handler *ActivityHandler) Create(context *gin.Context) {
 		Latitude:    activity.Latitude,
 		Longitude:   activity.Longitude,
 		Owner: responses.UserResponse{
-			ID:       activity.Owner.ID,
-			Username: activity.Owner.Username,
+			ID:                 activity.Owner.ID,
+			Username:           activity.Owner.Username,
+			ProfilePicturePath: activity.Owner.ProfilePicturePath,
+			ProfilePictureUri:  activity.Owner.GetProfilePictureUri(),
 		},
 	})
 	logger.ApiInfo(context, "Activity "+activity.Name+" created on trip "+tripId)
+}
+
+// @Summary		Update an activity
+// @Description	Update an activity associated with the trip
+// @Tags			activity
+// @Accept		json
+// @Produce		json
+// @Security		BearerAuth
+// @Param		id	path		string	true	"ID of the trip"
+// @Param		activityId	path	string	true	"ID of the activity"
+// @Param		activity	body	requests.ActivityUpdateBody	true	"Activity information"
+// @Success		200		{object}	responses.ActivityResponse
+// @Failure		400		{object}	error
+// @Failure		401		{object}	error
+// @Router		/trips/{id}/activities/{activityId} [patch]
+func (handler *ActivityHandler) Update(context *gin.Context) {
+	activityId := context.Param("activityID")
+
+	var requestBody requests.ActivityUpdateBody
+	isBodyValid := utils.Deserialize(&requestBody, context)
+	if !isBodyValid {
+		return
+	}
+
+	activity, err := handler.Repository.Get(activityId)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	if requestBody.Name != "" {
+		activity.Name = requestBody.Name
+	}
+
+	if requestBody.Description != "" {
+		activity.Description = requestBody.Description
+	}
+
+	if requestBody.Price != 0 {
+		activity.Price = requestBody.Price
+	}
+
+	if requestBody.StartDate != "" {
+		startDate, startDateParseError := time.Parse(time.RFC3339, requestBody.StartDate)
+		if startDateParseError != nil {
+			logger.ApiWarning(context, "Invalid start date "+requestBody.StartDate)
+			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid start date"})
+			return
+		}
+		activity.StartDate = startDate
+	}
+
+	if requestBody.EndDate != "" {
+		endDate, endDateParseError := time.Parse(time.RFC3339, requestBody.EndDate)
+		if endDateParseError != nil {
+			logger.ApiWarning(context, "Invalid end date "+requestBody.EndDate)
+			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid end date"})
+			return
+		}
+		activity.EndDate = endDate
+	}
+
+	if requestBody.Location != "" {
+		activity.Location = requestBody.Location
+	}
+
+	err = handler.Repository.Update(&activity)
+	if err != nil {
+		fmt.Println(err)
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	context.JSON(http.StatusOK, responses.ActivityResponse{
+		ID:          activity.ID,
+		Name:        activity.Name,
+		Description: activity.Description,
+		StartDate:   activity.StartDate.Format(time.RFC3339),
+		EndDate:     activity.EndDate.Format(time.RFC3339),
+		Price:       activity.Price,
+		Location:    activity.Location,
+		Latitude:    activity.Latitude,
+		Longitude:   activity.Longitude,
+		Owner: responses.UserResponse{
+			ID:                 activity.Owner.ID,
+			Username:           activity.Owner.Username,
+			ProfilePicturePath: activity.Owner.ProfilePicturePath,
+			ProfilePictureUri:  activity.Owner.GetProfilePictureUri(),
+		},
+	})
+	logger.ApiInfo(context, "Activity "+activity.Name+" updated")
 }
 
 // @Summary		Delete an activity

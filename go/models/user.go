@@ -2,6 +2,7 @@ package models
 
 import (
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/raja/argon2pw"
@@ -25,6 +26,13 @@ type User struct {
 	TripsInvitations   []Trip   `gorm:"many2many:trip_invited;"`
 	GoogleID           string
 	ProfilePicturePath string
+}
+
+func (user *User) GetProfilePictureUri() string {
+	if user.ProfilePicturePath == "" {
+		return ""
+	}
+	return "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10)
 }
 
 // Replace the current user password by hashing it

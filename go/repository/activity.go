@@ -11,6 +11,11 @@ type ActivityRepository struct {
 	Database *gorm.DB
 }
 
+func (t *ActivityRepository) Get(id string) (activity models.Activity, err error) {
+	err = t.Database.Preload(clause.Associations).First(&activity, id).Error
+	return
+}
+
 func (t *ActivityRepository) Create(activity *models.Activity) error {
 	return t.Database.Create(&activity).Error
 }
@@ -26,16 +31,8 @@ func (t *ActivityRepository) Delete(id string) error {
 	return result.Error
 }
 
-func (t *ActivityRepository) Update(activityId string, activity *models.Activity) error {
-	result := t.Database.Model(&models.Activity{}).Where("id = ?", activityId).Updates(activity)
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return gorm.ErrRecordNotFound
-	}
-	result.Preload(clause.Associations).Find(&activity)
-	return result.Error
+func (t *ActivityRepository) Update(activity *models.Activity) error {
+	return t.Database.Save(&activity).Error
 }
 
 func (t *ActivityRepository) GetAllFromTrip(tripId string) (activities []models.Activity, err error) {

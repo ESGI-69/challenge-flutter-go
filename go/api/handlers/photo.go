@@ -49,8 +49,10 @@ func (handler *PhotoHandler) GetPhotosOfTrip(context *gin.Context) {
 			CreatedAt:   photo.CreatedAt.Format(time.RFC3339),
 			UpdateAt:    photo.UpdatedAt.Format(time.RFC3339),
 			Owner: responses.UserResponse{
-				ID:       photo.Owner.ID,
-				Username: photo.Owner.Username,
+				ID:                 photo.Owner.ID,
+				Username:           photo.Owner.Username,
+				ProfilePicturePath: photo.Owner.ProfilePicturePath,
+				ProfilePictureUri:  photo.Owner.GetProfilePictureUri(),
 			},
 		}
 	}
@@ -124,8 +126,10 @@ func (handler *PhotoHandler) CreatePhoto(context *gin.Context) {
 		CreatedAt:   photo.CreatedAt.Format(time.RFC3339),
 		UpdateAt:    photo.UpdatedAt.Format(time.RFC3339),
 		Owner: responses.UserResponse{
-			ID:       photo.Owner.ID,
-			Username: photo.Owner.Username,
+			ID:                 photo.Owner.ID,
+			Username:           photo.Owner.Username,
+			ProfilePicturePath: photo.Owner.ProfilePicturePath,
+			ProfilePictureUri:  photo.Owner.GetProfilePictureUri(),
 		},
 	}
 

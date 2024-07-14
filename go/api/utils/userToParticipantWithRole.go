@@ -3,7 +3,6 @@ package utils
 import (
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/models"
-	"strconv"
 )
 
 func UserToParticipantWithRole(Viewers []models.User, Editors []models.User, Owner models.User) (participants []responses.ParticipantResponse) {
@@ -13,7 +12,7 @@ func UserToParticipantWithRole(Viewers []models.User, Editors []models.User, Own
 			TripRole:           responses.ParticipantTripRoleViewer,
 			Username:           user.Username,
 			ProfilePicturePath: user.ProfilePicturePath,
-			ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
+			ProfilePictureUri:  user.GetProfilePictureUri(),
 		})
 	}
 
@@ -23,7 +22,7 @@ func UserToParticipantWithRole(Viewers []models.User, Editors []models.User, Own
 			TripRole:           responses.ParticipantTripRoleEditor,
 			Username:           user.Username,
 			ProfilePicturePath: user.ProfilePicturePath,
-			ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
+			ProfilePictureUri:  user.GetProfilePictureUri(),
 		})
 	}
 
@@ -32,7 +31,7 @@ func UserToParticipantWithRole(Viewers []models.User, Editors []models.User, Own
 		TripRole:           responses.ParticipantTripRoleOwner,
 		Username:           Owner.Username,
 		ProfilePicturePath: Owner.ProfilePicturePath,
-		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(Owner.ID), 10),
+		ProfilePictureUri:  Owner.GetProfilePictureUri(),
 	})
 
 	return

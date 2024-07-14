@@ -62,8 +62,10 @@ func (handler *TransportHandler) GetAllFromTrip(context *gin.Context) {
 			MeetingLongitude: transport.MeetingLongitude,
 			MeetingTime:      nullableMeetingTime,
 			Author: responses.UserResponse{
-				ID:       transport.Author.ID,
-				Username: transport.Author.Username,
+				ID:                 transport.Author.ID,
+				Username:           transport.Author.Username,
+				ProfilePicturePath: transport.Author.ProfilePicturePath,
+				ProfilePictureUri:  transport.Author.GetProfilePictureUri(),
 			},
 			Price: transport.Price,
 		}
@@ -159,8 +161,10 @@ func (handler *TransportHandler) Create(context *gin.Context) {
 		MeetingLongitude: transport.MeetingLongitude,
 		MeetingTime:      transport.MeetingTime.Format(time.RFC3339),
 		Author: responses.UserResponse{
-			ID:       transport.Author.ID,
-			Username: transport.Author.Username,
+			ID:                 transport.Author.ID,
+			Username:           transport.Author.Username,
+			ProfilePicturePath: transport.Author.ProfilePicturePath,
+			ProfilePictureUri:  transport.Author.GetProfilePictureUri(),
 		},
 		Price: transport.Price,
 	}

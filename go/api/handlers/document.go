@@ -48,8 +48,10 @@ func (handler *DocumentHandler) GetDocumentsOfTrip(context *gin.Context) {
 			CreatedAt:   document.CreatedAt.Format(time.RFC3339),
 			UpdateAt:    document.UpdatedAt.Format(time.RFC3339),
 			Owner: responses.UserResponse{
-				ID:       document.Owner.ID,
-				Username: document.Owner.Username,
+				ID:                 document.Owner.ID,
+				Username:           document.Owner.Username,
+				ProfilePicturePath: document.Owner.ProfilePicturePath,
+				ProfilePictureUri:  document.Owner.GetProfilePictureUri(),
 			},
 		}
 	}
@@ -123,8 +125,10 @@ func (handler *DocumentHandler) CreateDocument(context *gin.Context) {
 		CreatedAt:   document.CreatedAt.Format(time.RFC3339),
 		UpdateAt:    document.UpdatedAt.Format(time.RFC3339),
 		Owner: responses.UserResponse{
-			ID:       document.Owner.ID,
-			Username: document.Owner.Username,
+			ID:                 document.Owner.ID,
+			Username:           document.Owner.Username,
+			ProfilePicturePath: document.Owner.ProfilePicturePath,
+			ProfilePictureUri:  document.Owner.GetProfilePictureUri(),
 		},
 	}
 

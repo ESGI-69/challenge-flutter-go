@@ -210,6 +210,7 @@ func setRoutes() {
 	tripActivitiesRoutes := tripsRoutes.Group("/:id/activities")
 	tripActivitiesRoutes.GET("", middlewares.UserIsTripParticipant, activityHandler.GetAllFromTrip)
 	tripActivitiesRoutes.POST("", middlewares.UserHasTripEditRight, activityHandler.Create)
+	tripActivitiesRoutes.PATCH("/:activityID", middlewares.UserHasTripEditRight, middlewares.ActivityBelongsToTrip, activityHandler.Update)
 	tripActivitiesRoutes.DELETE("/:activityID", middlewares.UserHasTripEditRight, middlewares.ActivityBelongsToTrip, activityHandler.Delete)
 
 	featuresRoutes := router.Group("/app-settings")

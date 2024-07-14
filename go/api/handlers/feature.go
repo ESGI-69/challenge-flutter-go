@@ -61,9 +61,11 @@ func (handler *FeatureHandler) Update(context *gin.Context) {
 		Name:      feature.Name,
 		IsEnabled: feature.IsEnabled,
 		ModifiedBy: responses.UserRoleReponse{
-			ID:       feature.ModifiedBy.ID,
-			Username: feature.ModifiedBy.Username,
-			Role:     feature.ModifiedBy.Role,
+			ID:                 feature.ModifiedBy.ID,
+			Username:           feature.ModifiedBy.Username,
+			Role:               feature.ModifiedBy.Role,
+			ProfilePicturePath: feature.ModifiedBy.ProfilePicturePath,
+			ProfilePictureUri:  feature.ModifiedBy.GetProfilePictureUri(),
 		},
 		UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
 	}
@@ -96,9 +98,11 @@ func (handler *FeatureHandler) GetFeatures(context *gin.Context) {
 		responseFeatures[i] = responses.FeatureResponse{
 			Name: feature.Name,
 			ModifiedBy: responses.UserRoleReponse{
-				ID:       feature.ModifiedBy.ID,
-				Username: feature.ModifiedBy.Username,
-				Role:     feature.ModifiedBy.Role,
+				ID:                 feature.ModifiedBy.ID,
+				Username:           feature.ModifiedBy.Username,
+				Role:               feature.ModifiedBy.Role,
+				ProfilePicturePath: feature.ModifiedBy.ProfilePicturePath,
+				ProfilePictureUri:  feature.ModifiedBy.GetProfilePictureUri(),
 			},
 			IsEnabled: feature.IsEnabled,
 			UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
@@ -133,9 +137,11 @@ func (handler *FeatureHandler) GetFeaturesAdmin(context *gin.Context) {
 		responseFeatures[i] = responses.FeatureResponse{
 			Name: feature.Name,
 			ModifiedBy: responses.UserRoleReponse{
-				ID:       feature.ModifiedBy.ID,
-				Username: feature.ModifiedBy.Username,
-				Role:     feature.ModifiedBy.Role,
+				ID:                 feature.ModifiedBy.ID,
+				Username:           feature.ModifiedBy.Username,
+				Role:               feature.ModifiedBy.Role,
+				ProfilePicturePath: feature.ModifiedBy.ProfilePicturePath,
+				ProfilePictureUri:  feature.ModifiedBy.GetProfilePictureUri(),
 			},
 			IsEnabled: feature.IsEnabled,
 			UpdatedAt: feature.UpdatedAt.Format(time.RFC3339),
