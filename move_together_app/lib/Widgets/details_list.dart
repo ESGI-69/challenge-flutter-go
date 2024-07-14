@@ -6,11 +6,13 @@ class DetailItem {
   final dynamic value;
   final bool isEditable;
   final TextEditingController? controller;
+  final bool obscureText;
 
   const DetailItem({
     required this.title,
     this.value,
     this.isEditable = false,
+    this.obscureText = false,
     this.controller,
   });
 
@@ -107,6 +109,7 @@ class _DetailsListState extends State<DetailsList> {
                                 });
                               },
                               controller: item.value == null ? item.controller : TextEditingController(text: item.stringValue),
+                              obscureText: item.obscureText,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Touchez pour modifier',

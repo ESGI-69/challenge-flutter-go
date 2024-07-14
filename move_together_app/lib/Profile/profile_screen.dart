@@ -123,6 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         title: 'Mot de passe',
                         isEditable: true,
                         controller: _passwordController,
+                        obscureText: true,
                       ),
                       DetailItem(
                         title: 'Role',
