@@ -10,6 +10,10 @@ import (
 
 // Return the geo location of a given address (latitude, longitude)
 func GetGeoLocation(address string, latitude *float64, longitude *float64) (err error) {
+	if address == "" {
+		return nil
+	}
+
 	const openStreetMapUrl = "https://nominatim.openstreetmap.org/search?q=%s&format=json"
 	url := fmt.Sprintf(openStreetMapUrl, url.QueryEscape(address))
 
