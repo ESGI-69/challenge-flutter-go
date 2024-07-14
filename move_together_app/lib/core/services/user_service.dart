@@ -39,4 +39,20 @@ class UserService {
       throw Exception('Failed to upload profile picture');
     }
   }
+
+  Future<User> update(int userId, String newPassword) async {
+    final response = await api.patch(
+      '/users/$userId',
+      data: {
+        'password': newPassword,
+      },
+    );
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return User.fromJson(response.data);
+    } else {
+      throw Exception('Failed to update user');
+    }
+  }
 }
+ 

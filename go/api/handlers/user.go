@@ -267,6 +267,56 @@ func (handler *UserHandler) UpdatePhoto(context *gin.Context) {
 	logger.ApiInfo(context, "Update the profile picture of user "+currentUser.Username)
 }
 
+// Update the user information
+//
+// @Summary		Update the user information
+// @Description	Update the user information
+// @Tags			users
+// @Accept			json
+// @Produce		json
+// @Security		BearerAuth
+// @Param			id	path		string	true	"ID of the user"
+// @Param			user	body		requests.UserUpdateBody	true	"User information to update"
+// @Success		200	{object}	responses.UserRoleReponse
+// @Failure		400	{object}	error
+// @Failure		401	{object}	error
+// @Failure		404	{object}	error
+// @Router			/users/{id} [patch]
+func (handler *UserHandler) Update(context *gin.Context) {
+	id := context.Param("id")
+
+	var requestBody requests.UserUpdateBody
+	isBodyValid := utils.Deserialize(&requestBody, context)
+	if !isBodyValid {
+		return
+	}
+
+	user, err := handler.Repository.Get(id)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	user.Password = requestBody.Password
+
+	err = handler.Repository.Update(&user)
+	if err != nil {
+		errorHandlers.HandleGormErrors(err, context)
+		return
+	}
+
+	response := responses.UserRoleReponse{
+		ID:                 user.ID,
+		Username:           user.Username,
+		Role:               user.Role,
+		ProfilePicturePath: user.ProfilePicturePath,
+		ProfilePictureUri:  "/users/photo/" + strconv.FormatUint(uint64(user.ID), 10),
+	}
+
+	context.JSON(http.StatusOK, response)
+	logger.ApiInfo(context, "Update user "+string(rune(user.ID)))
+}
+
 // Download the profile picture of a user
 //
 // @Summary		Download the profile picture of a user

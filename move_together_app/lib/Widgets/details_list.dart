@@ -4,10 +4,14 @@ import 'package:intl/intl.dart';
 class DetailItem {
   final String title;
   final dynamic value;
+  final bool isEditable;
+  final TextEditingController? controller;
 
   const DetailItem({
     required this.title,
-    required this.value,
+    this.value,
+    this.isEditable = false,
+    this.controller,
   });
 
   String get stringValue {
@@ -19,13 +23,22 @@ class DetailItem {
   }
 }
 
-class DetailsList extends StatelessWidget {
+class DetailsList extends StatefulWidget {
+  final Function()? onConfirmEdition;
   final List<DetailItem> items;
 
   const DetailsList({
     super.key,
     required this.items,
+    this.onConfirmEdition,
   });
+
+  @override
+  State<DetailsList> createState() => _DetailsListState();
+}
+
+class _DetailsListState extends State<DetailsList> {
+  bool _isEdited = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +59,9 @@ class DetailsList extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
-              children: items.map(
+              children: widget.items.map(
                 (item) {
-                  final border = item == items.last
+                  final border = item == widget.items.last
                       ? BorderSide.none
                       : const BorderSide(
                           color: Colors.grey,
@@ -66,12 +79,46 @@ class DetailsList extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            item.title,
-                            style: Theme.of(context).textTheme.labelSmall,
+                          Row(
+                            children: [
+                              Text(
+                                item.title,
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              ...item.isEditable ? [
+                                const SizedBox(width: 8),
+                                Icon(
+                                  Icons.edit,
+                                  size: 16,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ] : [],
+                            ],
                           ),
                           const SizedBox(width: 8),
-                          item.stringValue != ''
+                          item.value is! DateTime
+                          ? SizedBox(
+                            width: double.infinity,
+                            height: 24,
+                            child: TextFormField(
+                              onChanged: (value) {
+                                setState(() {
+                                  _isEdited = true;
+                                });
+                              },
+                              controller: item.value == null ? item.controller : TextEditingController(text: item.stringValue),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Touchez pour modifier',
+                                hintStyle: TextStyle(
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              readOnly: !item.isEditable,
+                            ),
+                          )
+                          : item.stringValue != ''
                             ? Text(
                               item.stringValue,
                               style: Theme.of(context).textTheme.bodyMedium,
@@ -91,6 +138,22 @@ class DetailsList extends StatelessWidget {
             ),
           ),
         ),
+        ..._isEdited
+          ? [
+            const SizedBox(height: 16),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  widget.onConfirmEdition?.call();
+                  setState(() {
+                    _isEdited = false;
+                  });
+                },
+                child: const Text('Confirmer les modifications'),
+              ),
+            ),
+          ]
+          : [const SizedBox()],
       ],
     );
   }

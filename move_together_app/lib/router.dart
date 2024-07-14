@@ -131,7 +131,7 @@ final GoRouter router = GoRouter(
         GoRoute(
           name: 'profile',
           path: 'profile',
-          builder: (context, state) => ProfileScreen(),
+          builder: (context, state) => const ProfileScreen(),
         ),
       ],
     ),
