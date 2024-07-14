@@ -37,7 +37,7 @@ class _BackofficeFeaturesScreenState extends State<BackofficeFeaturesScreen> {
                     child: Column(
                       children: [
                         const Text(
-                          'LIST OF TRIPS',
+                          'LIST OF FEATURES',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
