@@ -441,6 +441,10 @@ func (handler *TripHandler) GetAll(context *gin.Context) {
 			InviteCode:   trip.InviteCode,
 			CreatedAt:    trip.CreatedAt.Format(time.RFC3339),
 			UpdatedAt:    trip.UpdatedAt.Format(time.RFC3339),
+			Owner: responses.UserResponse{
+				ID:       trip.Owner.ID,
+				Username: trip.Owner.Username,
+			},
 		}
 	}
 

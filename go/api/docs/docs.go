@@ -2795,6 +2795,9 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "owner": {
+                    "$ref": "#/definitions/responses.UserResponse"
+                },
                 "participants": {
                     "type": "array",
                     "items": {
