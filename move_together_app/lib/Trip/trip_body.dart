@@ -7,20 +7,6 @@ import 'package:move_together_app/Transport/transport_card.dart';
 import 'package:move_together_app/Note/note_card.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/Map/map_card.dart';
-import 'package:move_together_app/core/models/feature.dart';
-
-Map<FeatureNames, String> featureNames = {
-  FeatureNames.document: 'document',
-  FeatureNames.auth: 'auth',
-  FeatureNames.chat: 'chat',
-  FeatureNames.trip: 'trip',
-  FeatureNames.note: 'note',
-  FeatureNames.transport: 'transport',
-  FeatureNames.accommodation: 'accommodation',
-  FeatureNames.user: 'user',
-  FeatureNames.photo: 'photo',
-  FeatureNames.activity: 'activity',
-};
 
 class TripBody extends StatelessWidget {
   final Trip trip;
