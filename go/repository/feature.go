@@ -30,6 +30,9 @@ func (t *FeatureRepository) Update(feature *models.Feature) (err error) {
 
 func (t *FeatureRepository) Delete(id string) error {
 	result := t.Database.Delete(&models.Feature{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}

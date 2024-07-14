@@ -28,6 +28,9 @@ func (t *TransportRepository) Create(transport *models.Transport) error {
 // Delete a transport from a trip
 func (t *TransportRepository) Delete(id string) error {
 	result := t.Database.Delete(&models.Transport{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}

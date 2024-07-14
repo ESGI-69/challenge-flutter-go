@@ -36,6 +36,9 @@ func (d *PhotoRepository) DeletePhoto(id string) (err error) {
 		return err
 	}
 	result := d.Database.Delete(&photo)
+	if result.Error != nil {
+		return result.Error
+	}
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}

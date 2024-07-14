@@ -85,6 +85,9 @@ func (t *TripRepository) Update(trip *models.Trip) (err error) {
 // Delete a trip
 func (t *TripRepository) Delete(id string) error {
 	result := t.Database.Delete(&models.Trip{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}

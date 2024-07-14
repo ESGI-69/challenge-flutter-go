@@ -16,6 +16,9 @@ func (t *AccommodationRepository) Create(accommodation *models.Accommodation) er
 
 func (t *AccommodationRepository) Delete(id string) error {
 	result := t.Database.Delete(&models.Accommodation{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}

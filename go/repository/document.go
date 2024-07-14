@@ -36,6 +36,9 @@ func (d *DocumentRepository) DeleteDocument(id string) (err error) {
 		return err
 	}
 	result := d.Database.Delete(&document)
+	if result.Error != nil {
+		return result.Error
+	}
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}

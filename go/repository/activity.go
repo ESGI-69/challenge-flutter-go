@@ -17,9 +17,24 @@ func (t *ActivityRepository) Create(activity *models.Activity) error {
 
 func (t *ActivityRepository) Delete(id string) error {
 	result := t.Database.Delete(&models.Activity{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
 	if result.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}
+	return result.Error
+}
+
+func (t *ActivityRepository) Update(activityId string, activity *models.Activity) error {
+	result := t.Database.Model(&models.Activity{}).Where("id = ?", activityId).Updates(activity)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	result.Preload(clause.Associations).Find(&activity)
 	return result.Error
 }
 
