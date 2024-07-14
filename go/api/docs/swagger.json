@@ -2771,6 +2771,9 @@
                 "country": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
                 "endDate": {
                     "type": "string"
                 },
@@ -2794,6 +2797,9 @@
                 },
                 "totalPrice": {
                     "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },

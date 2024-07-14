@@ -2780,6 +2780,9 @@ const docTemplate = `{
                 "country": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
                 "endDate": {
                     "type": "string"
                 },
@@ -2803,6 +2806,9 @@ const docTemplate = `{
                 },
                 "totalPrice": {
                     "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },

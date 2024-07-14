@@ -12,6 +12,8 @@ class Trip {
   final List<Participant> participants;
   final String inviteCode;
   final double totalPrice;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Trip({
     required this.id,
@@ -23,6 +25,8 @@ class Trip {
     required this.participants,
     required this.inviteCode,
     this.totalPrice = 0.0,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Trip.fromJson(Map<String, dynamic> json) {
@@ -36,6 +40,8 @@ class Trip {
       participants: json['participants'].map<Participant>((e) => Participant.fromJson(e)).toList(),
       inviteCode: json['inviteCode'],
       totalPrice: dynamicToDouble(json['totalPrice']),
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 

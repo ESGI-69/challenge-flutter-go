@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../core/models/trip.dart';
 
 class TripsTable extends StatelessWidget {
@@ -112,6 +113,56 @@ class TripsTable extends StatelessWidget {
                       SizedBox(width: 8),
                       Text(
                         "Participants",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF263238),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.date_range,
+                        color: Color(0xFF55C0A8),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        "Created At",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF263238),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.date_range,
+                        color: Color(0xFF55C0A8),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        "Updated At",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF263238),
@@ -271,6 +322,46 @@ class TripsTable extends StatelessWidget {
                     ],
                   );
                 }).toList(),
+              ),
+            ),
+            TableCell(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat('kk:mm dd-MM-yyyy').format(trip.createdAt??DateTime.now()),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF263238),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat('kk:mm dd-MM-yyyy').format(trip.updatedAt??DateTime.now()),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF263238),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
             TableCell(
