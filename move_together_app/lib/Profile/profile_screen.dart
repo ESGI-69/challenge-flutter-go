@@ -107,6 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 16),
                   DetailsList(
+                    hasEditRights: true,
                     onConfirmEdition: () async {
                       if (_passwordController.text.isNotEmpty) {
                         await userService.update(state.profile.id, _passwordController.text);

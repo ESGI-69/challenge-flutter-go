@@ -68,6 +68,7 @@ class ActivityScreen extends StatelessWidget {
               child: Column(
                 children: [
                   DetailsList(
+                    hasEditRights: hasTripEditPermission,
                     onConfirmEdition: () async {
                       await ActivityService(context.read<AuthProvider>()).update(
                         tripId,

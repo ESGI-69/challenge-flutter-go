@@ -27,11 +27,13 @@ class DetailItem {
 
 class DetailsList extends StatefulWidget {
   final Function()? onConfirmEdition;
+  final bool hasEditRights;
   final List<DetailItem> items;
 
   const DetailsList({
     super.key,
     required this.items,
+    this.hasEditRights = false,
     this.onConfirmEdition,
   });
 
@@ -87,7 +89,7 @@ class _DetailsListState extends State<DetailsList> {
                                 item.title,
                                 style: Theme.of(context).textTheme.labelSmall,
                               ),
-                              ...item.isEditable ? [
+                              ...item.isEditable && widget.hasEditRights ? [
                                 const SizedBox(width: 8),
                                 Icon(
                                   Icons.edit,
@@ -118,7 +120,7 @@ class _DetailsListState extends State<DetailsList> {
                                 ),
                               ),
                               style: Theme.of(context).textTheme.bodyMedium,
-                              readOnly: !item.isEditable,
+                              readOnly: !item.isEditable || !widget.hasEditRights,
                             ),
                           )
                           : item.stringValue != ''
