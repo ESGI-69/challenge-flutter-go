@@ -11,9 +11,13 @@ type LogRepository struct {
 	Database *gorm.DB
 }
 
-// Get all logs (might have filters after)
-func (l *LogRepository) GetAll(page int, pageSize int) (logs []models.LogEntry, err error) {
+// Get all logs
+func (l *LogRepository) GetAll(page int, pageSize int, filter string) (logs []models.LogEntry, err error) {
 	offset := (page - 1) * pageSize
-	err = l.Database.Preload(clause.Associations).Offset(offset).Limit(pageSize).Find(&logs).Error
+	query := l.Database.Preload(clause.Associations).Offset(offset).Limit(pageSize).Order("timestamp DESC")
+	if filter != "" {
+		query = query.Where("level = ?", filter)
+	}
+	err = query.Find(&logs).Error
 	return
 }

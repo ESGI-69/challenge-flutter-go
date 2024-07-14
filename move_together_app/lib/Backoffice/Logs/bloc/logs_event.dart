@@ -3,4 +3,8 @@ part of 'logs_bloc.dart';
 @immutable
 sealed class LogsEvent {}
 
-final class LogsDataFetch extends LogsEvent {}
+class LogsDataFetch extends LogsEvent {
+  final String? filter;
+  final int page;
+  LogsDataFetch({this.filter, required this.page});
+}

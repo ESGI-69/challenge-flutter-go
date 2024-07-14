@@ -361,6 +361,12 @@ const docTemplate = `{
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by log level",
+                        "name": "filter",
+                        "in": "query"
                     }
                 ],
                 "responses": {

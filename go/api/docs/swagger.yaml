@@ -707,6 +707,10 @@ paths:
         in: query
         name: page
         type: string
+      - description: Filter by log level
+        in: query
+        name: filter
+        type: string
       produces:
       - application/json
       responses:

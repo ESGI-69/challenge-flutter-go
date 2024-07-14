@@ -111,8 +111,11 @@ class AdminService {
     }
   }
 
-  Future<List<Log>> getAllLogs() async {
-    final response = await api.get('/admin/logs');
+  Future<List<Log>> getAllLogs({String? filter, int? page}) async {
+    final response = await api.get('/admin/logs', queryParameters: {
+      'filter': filter,
+      'page': page,
+    });
 
     if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
       return (response.data as List).map((log) => Log.fromJson(log)).toList();

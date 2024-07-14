@@ -22,18 +22,26 @@ type LogHandler struct {
 // @Produce		json
 // @Security		BearerAuth
 // @Param		page	query	string	false	"Page number"
+// @Param		filter	query	string	false	"Filter by log level"
 // @Success		200		{object}	[]responses.LogResponse
 // @Failure		400		{object}	error
 // @Failure		401		{object}	error
 // @Router		/logs [get]
 func (handler *LogHandler) GetAll(context *gin.Context) {
 	page := context.Query("page")
+	filter := context.Query("filter")
+	if filter != "" {
+		if filter != "WARN" && filter != "INFO" && filter != "ERROR" {
+			context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid filter"})
+			return
+		}
+	}
 	pageNumber, err := strconv.Atoi(page)
 	if err != nil {
 		pageNumber = 1
 	}
 
-	logs, err := handler.Repository.GetAll(pageNumber, 10)
+	logs, err := handler.Repository.GetAll(pageNumber, 10, filter)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

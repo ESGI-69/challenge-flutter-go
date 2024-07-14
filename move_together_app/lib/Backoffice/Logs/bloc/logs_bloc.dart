@@ -15,12 +15,11 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
     on<LogsDataFetch>((event, emit) async {
       emit(LogsDataLoading());
       try {
-        final logs = await adminServices.getAllLogs();
+        final logs = await adminServices.getAllLogs(filter: event.filter, page: event.page);
         emit(LogsDataLoadingSuccess(logs: logs));
       } on ApiException catch (error) {
         emit(LogsDataLoadingError(errorMessage: error.message));
       } catch (error) {
-        print(error);
         emit(LogsDataLoadingError(errorMessage: 'Unhandled error'));
       }
     });

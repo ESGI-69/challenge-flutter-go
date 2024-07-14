@@ -20,41 +20,45 @@ class LogsTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Table(
-        border: TableBorder.all(
-            color: const Color(0xFF81C784),
-            width: 2,
-            borderRadius: const BorderRadius.all(Radius.elliptical(10, 10))),
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      child: Column(
         children: [
-          const TableRow(
-            decoration: BoxDecoration(
-              color: Color(0xFFB9F6CA),
-            ),
+          Table(
+            border: TableBorder.all(
+                color: const Color(0xFF81C784),
+                width: 2,
+                borderRadius: const BorderRadius.all(Radius.elliptical(10, 10))),
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: [
-              TableCell(child: Center(child: Text('ID'))),
-              TableCell(child: Center(child: Text('Level'))),
-              TableCell(child: Center(child: Text('Message'))),
-              TableCell(child: Center(child: Text('Timestamp'))),
-              TableCell(child: Center(child: Text('IP'))),
-              TableCell(child: Center(child: Text('Path'))),
-              TableCell(child: Center(child: Text('Method'))),
-              TableCell(child: Center(child: Text('Username'))),
+              const TableRow(
+                decoration: BoxDecoration(
+                  color: Color(0xFFB9F6CA),
+                ),
+                children: [
+                  TableCell(child: Center(child: Text('Timestamp'))),
+                  TableCell(child: Center(child: Text('ID'))),
+                  TableCell(child: Center(child: Text('Level'))),
+                  TableCell(child: Center(child: Text('Message'))),
+                  TableCell(child: Center(child: Text('IP'))),
+                  TableCell(child: Center(child: Text('Path'))),
+                  TableCell(child: Center(child: Text('Method'))),
+                  TableCell(child: Center(child: Text('Username'))),
+                ],
+              ),
+              for (final log in logs)
+                TableRow(
+                  children: [
+                    TableCell(child: Center(child: Text(log.timestamp.toLocal().toString()))),
+                    TableCell(child: Center(child: Text(log.id.toString()))),
+                    TableCell(child: Center(child: Text(logLevelToString[log.level]!))),
+                    TableCell(child: Center(child: Text(log.message))),
+                    TableCell(child: Center(child: Text(log.ip))),
+                    TableCell(child: Center(child: Text(log.path))),
+                    TableCell(child: Center(child: Text(log.method))),
+                    TableCell(child: Center(child: Text(log.username))),
+                  ],
+                ),
             ],
           ),
-          for (final log in logs)
-            TableRow(
-              children: [
-                TableCell(child: Center(child: Text(log.id.toString()))),
-                TableCell(child: Center(child: Text(logLevelToString[log.level]!))),
-                TableCell(child: Center(child: Text(log.message))),
-                TableCell(child: Center(child: Text(log.timestamp.toString()))),
-                TableCell(child: Center(child: Text(log.ip))),
-                TableCell(child: Center(child: Text(log.path))),
-                TableCell(child: Center(child: Text(log.method))),
-                TableCell(child: Center(child: Text(log.username))),
-              ],
-            ),
         ],
       ),
     );
