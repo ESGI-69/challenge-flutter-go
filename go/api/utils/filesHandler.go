@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"challenge-flutter-go/logger"
 	"fmt"
 	"io"
 	"math/rand"
@@ -103,6 +104,6 @@ func DeleteFile(fileType, fileName string) error {
 		return err
 	}
 
-	fmt.Println("File deleted: " + filePath)
+	logger.Info(fmt.Sprintf("File %s deleted", fileName))
 	return nil
 }
