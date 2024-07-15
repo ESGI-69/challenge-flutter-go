@@ -43,8 +43,8 @@ class Trip {
       participants: json['participants'].map<Participant>((e) => Participant.fromJson(e)).toList(),
       inviteCode: json['inviteCode'],
       totalPrice: dynamicToDouble(json['totalPrice']),
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: json['createdAt'] != "" ? DateTime.parse(json['createdAt']) : null,
+      updatedAt: json['updatedAt'] != "" ? DateTime.parse(json['updatedAt']) : null,
       owner: json['owner'] != null ? User.fromJson(json['owner']) : null,
     );
   }
