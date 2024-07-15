@@ -16,6 +16,7 @@ const (
 	FeatureNameAccommodation FeatureName = "accommodation"
 	FeatureNameUser          FeatureName = "user"
 	FeatureNamePhoto         FeatureName = "photo"
+	FeatureNameActivity      FeatureName = "activity"
 )
 
 type Feature struct {
