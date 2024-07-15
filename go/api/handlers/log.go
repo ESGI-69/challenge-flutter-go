@@ -3,6 +3,7 @@ package handlers
 import (
 	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/api/responses"
+	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
 	"strconv"
@@ -31,7 +32,7 @@ func (handler *LogHandler) GetAll(context *gin.Context) {
 	page := context.Query("page")
 	filter := context.Query("filter")
 	if filter != "" {
-		if filter != "WARN" && filter != "INFO" && filter != "ERROR" {
+		if filter != string(models.LogLevelInfo) && filter != string(models.LogLevelWarn) && filter != string(models.LogLevelError) {
 			context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid filter"})
 			return
 		}
@@ -41,7 +42,7 @@ func (handler *LogHandler) GetAll(context *gin.Context) {
 		pageNumber = 1
 	}
 
-	logs, err := handler.Repository.GetAll(pageNumber, 10, filter)
+	logs, err := handler.Repository.GetAll(pageNumber, 50, filter)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return

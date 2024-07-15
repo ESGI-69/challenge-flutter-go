@@ -46,58 +46,62 @@ class _LogsScreenState extends State<LogsScreen> {
                         color: Color(0xFF263238),
                       ),
                     ),
-                    Column(
-                      children: [
-                         DropdownButton<String>(
-                          value: selectedFilter,
-                          items: <String>['','INFO', 'WARN', 'ERROR'].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedFilter = newValue;
-                              currentPage = 1;
-                              context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
-                            });
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: LogsTable(
-                            logs: state.logs,
-                          ),
-                        ),
-                        Text('Page $currentPage'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
                           children: [
-                        if (currentPage > 1) 
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                currentPage--;
-                                context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
-                              });
-                            },
-                            child: const Text('Previous'),
-                          ),
-                        if (state.logs.isNotEmpty)
-                            ElevatedButton(
-                              onPressed: () {
+                            DropdownButton<String>(
+                              value: selectedFilter,
+                              items: <String>['', 'INFO', 'WARN', 'ERROR'].map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
                                 setState(() {
-                                  currentPage++;
+                                  selectedFilter = newValue;
+                                  currentPage = 1;
                                   context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
                                 });
                               },
-                              child: const Text('Next'),
                             ),
-                          ]
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: LogsTable(
+                                logs: state.logs,
+                              ),
+                            ),
+                            Text('Page $currentPage'),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (currentPage > 1)
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        currentPage--;
+                                        context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
+                                      });
+                                    },
+                                    child: const Text('Previous'),
+                                  ),
+                                if (state.logs.isNotEmpty)
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        currentPage++;
+                                        context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
+                                      });
+                                    },
+                                    child: const Text('Next'),
+                                  ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    )
+                      ),
+                    ),
                   ],
                 ),
               );
