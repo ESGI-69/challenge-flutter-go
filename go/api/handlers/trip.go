@@ -388,7 +388,6 @@ func (handler *TripHandler) DownloadTripBanner(context *gin.Context) {
 		context.File("assets/default.jpg")
 		return
 	} else {
-
 		bannerPath, errBannerPath := utils.GetFilePath("banner", trip.PhotoUrl)
 		if errBannerPath != nil {
 			logger.ApiError(context, "Failed to get banner file path "+trip.PhotoUrl)

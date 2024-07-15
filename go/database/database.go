@@ -117,6 +117,11 @@ func createFeatures() {
 			IsEnabled:  true,
 			ModifiedBy: user,
 		},
+		{
+			Name:       models.FeatureNameActivity,
+			IsEnabled:  true,
+			ModifiedBy: user,
+		},
 	}
 
 	for _, feature := range features {
