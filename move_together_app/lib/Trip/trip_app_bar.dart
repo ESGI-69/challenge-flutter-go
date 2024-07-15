@@ -14,6 +14,8 @@ import 'package:move_together_app/core/models/feature.dart';
 
 class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String name;
+  final String country;
+  final String city;
   final DateTime startDate;
   final DateTime endDate;
   final List<Participant> participants;
@@ -30,6 +32,8 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.isLoading = false,
     required this.name,
+    required this.country,
+    required this.city,
     required this.startDate,
     required this.endDate,
     required this.participants,
@@ -85,6 +89,8 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: TripQuickInfo(
                   isLoading: true,
                   name: '',
+                  country: '',
+                  city: '',
                   startDate: DateTime.now(),
                   endDate: DateTime.now(),
                   onNameTap: () {},
@@ -153,6 +159,8 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                   name: name,
                   startDate: startDate,
                   endDate: endDate,
+                  country: country,
+                  city: city,
                   onNameTap: () {
                     showDialog(
                         context: context,

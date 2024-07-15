@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class TripQuickInfo extends StatelessWidget {
   final String name;
+  final String country;
+  final String city;
   final DateTime startDate;
   final DateTime endDate;
   final bool isLoading;
@@ -14,6 +16,8 @@ class TripQuickInfo extends StatelessWidget {
     this.isLoading = false,
     this.userHasEditRights = false,
     required this.name,
+    required this.country,
+    required this.city,
     required this.startDate,
     required this.endDate,
     this.onNameTap,
@@ -49,21 +53,21 @@ class TripQuickInfo extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4), // Adjust vertical padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: isLoading
-          ? [
+              ? [
             const Text(
               'Chargement...',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2), // Adjust vertical spacing
             const CircularProgressIndicator.adaptive(),
           ]
-          : [
+              : [
             GestureDetector(
               onTap: onNameTapHandler,
               child: Text(
@@ -71,23 +75,38 @@ class TripQuickInfo extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // Reduced font size
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2), // Adjust vertical spacing
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.calendar_month, size: 16),
-                const SizedBox(width: 4),
+                const Icon(Icons.location_on, size: 14), // Reduced icon size
+                const SizedBox(width: 2), // Adjust horizontal spacing
+                Text(
+                  '$city, $country',
+                  style: const TextStyle(
+                    fontSize: 14, // Reduced font size
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 2), // Adjust vertical spacing
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.calendar_month, size: 14), // Reduced icon size
+                const SizedBox(width: 2), // Adjust horizontal spacing
                 GestureDetector(
                   onTap: onDateTapHandler,
                   child: Text(
-                  '${startDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]} - ${endDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                  ),
+                    '${startDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]} - ${endDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]}',
+                    style: const TextStyle(
+                      fontSize: 14, // Reduced font size
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ),
               ],

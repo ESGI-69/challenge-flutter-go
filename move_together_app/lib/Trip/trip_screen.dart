@@ -25,6 +25,8 @@ class TripScreen extends StatelessWidget {
             appBar: TripAppBar(
               isLoading: true,
               name: '',
+              country: '',
+              city: '',
               startDate: DateTime.now(),
               endDate: DateTime.now(),
               participants: const [],
@@ -48,6 +50,8 @@ class TripScreen extends StatelessWidget {
             extendBodyBehindAppBar: true,
             appBar: TripAppBar(
               name: state.trip.name,
+              country: state.trip.country,
+              city: state.trip.city,
               startDate: state.trip.startDate,
               endDate: state.trip.endDate,
               participants: state.trip.participants,
