@@ -53,7 +53,7 @@ class TripQuickInfo extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4), // Adjust vertical padding
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -64,7 +64,7 @@ class TripQuickInfo extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 2), // Adjust vertical spacing
+            const SizedBox(height: 2),
             const CircularProgressIndicator.adaptive(),
           ]
               : [
@@ -75,36 +75,36 @@ class TripQuickInfo extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold), // Reduced font size
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(height: 2), // Adjust vertical spacing
+            const SizedBox(height: 2),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.location_on, size: 14), // Reduced icon size
-                const SizedBox(width: 2), // Adjust horizontal spacing
+                const Icon(Icons.location_on, size: 14),
+                const SizedBox(width: 2),
                 Text(
                   '$city, $country',
                   style: const TextStyle(
-                    fontSize: 14, // Reduced font size
+                    fontSize: 14,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 2), // Adjust vertical spacing
+            const SizedBox(height: 2),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.calendar_month, size: 14), // Reduced icon size
-                const SizedBox(width: 2), // Adjust horizontal spacing
+                const Icon(Icons.calendar_month, size: 14),
+                const SizedBox(width: 2),
                 GestureDetector(
                   onTap: onDateTapHandler,
                   child: Text(
                     '${startDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]} - ${endDate.toLocal().toString().replaceAll('-', '/').split(' ')[0]}',
                     style: const TextStyle(
-                      fontSize: 14, // Reduced font size
+                      fontSize: 14,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
