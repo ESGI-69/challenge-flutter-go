@@ -45,7 +45,8 @@ class JoinTripScreenState extends State<JoinTripScreen> {
         setState(() {
           errorMessage = null;
         });
-        context.pushReplacement('/trip/${joinedTrip.id}');
+        context.pushNamed('trip', pathParameters: {'tripId' : joinedTrip.id.toString()});
+
       }
     } catch (e) {
       setState(() {
