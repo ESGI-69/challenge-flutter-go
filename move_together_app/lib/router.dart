@@ -144,6 +144,7 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
+      name: 'register',
       path: '/register',
       builder: (context, state) => const RegisterScreen(),
     ),
