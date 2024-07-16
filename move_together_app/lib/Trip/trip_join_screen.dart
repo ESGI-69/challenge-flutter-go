@@ -119,25 +119,6 @@ class JoinTripScreenState extends State<JoinTripScreen> {
                 child: const Text('Rejoindre Maintenant'),
               ),
               const SizedBox(height: 16),
-              const Text('Ou alors'),
-              ElevatedButton(
-                onPressed: () {
-                  context.pushNamed('create');
-                },
-                style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFF79D0BF)),               
-                  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-                  padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.symmetric(horizontal: 70.0),
-                  ),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                ),
-                child: const Text('Créer un voyage'),
-              ),
               if (errorMessage != null)
                 Text(
                   errorMessage!,

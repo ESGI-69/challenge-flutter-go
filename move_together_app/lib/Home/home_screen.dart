@@ -10,6 +10,9 @@ import 'package:move_together_app/Trip/trip_card.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
 
+import '../Widgets/bottom_sheet_buttons.dart';
+import '../Widgets/button.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -44,7 +47,21 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-        context.pushNamed('join');
+          showBottomSheetButtons(context, [
+            Button(
+              text: 'Créer un voyage',
+              onPressed: () {
+                context.pop();
+                context.pushNamed('create');
+              }
+            ),
+            Button(
+              text: 'Rejoindre un voyage',
+              onPressed: () {
+                context.pushNamed('join');
+              }
+            ),
+          ]);
         },
         shape: const CircleBorder(),
         child: const Icon(Icons.add),
