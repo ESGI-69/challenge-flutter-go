@@ -2889,6 +2889,12 @@ const docTemplate = `{
                 "inviteCode": {
                     "type": "string"
                 },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
                 "name": {
                     "type": "string"
                 },

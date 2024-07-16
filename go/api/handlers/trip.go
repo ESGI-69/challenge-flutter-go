@@ -96,6 +96,12 @@ func (handler *TripHandler) Create(context *gin.Context) {
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
 		TotalPrice:   trip.GetTotalPrice(),
+		Latitude:     trip.Latitude,
+		Longitude:    trip.Longitude,
+		Owner: responses.UserResponse{
+			ID:       trip.Owner.ID,
+			Username: trip.Owner.Username,
+		},
 	}
 
 	context.JSON(http.StatusCreated, responseTrip)
@@ -135,6 +141,12 @@ func (handler *TripHandler) GetAllJoined(context *gin.Context) {
 			Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 			InviteCode:   trip.InviteCode,
 			TotalPrice:   trip.GetTotalPrice(),
+			Latitude:     trip.Latitude,
+			Longitude:    trip.Longitude,
+			Owner: responses.UserResponse{
+				ID:       trip.Owner.ID,
+				Username: trip.Owner.Username,
+			},
 		}
 	}
 
@@ -171,6 +183,12 @@ func (handler *TripHandler) Get(context *gin.Context) {
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
 		TotalPrice:   trip.GetTotalPrice(),
+		Latitude:     trip.Latitude,
+		Longitude:    trip.Longitude,
+		Owner: responses.UserResponse{
+			ID:       trip.Owner.ID,
+			Username: trip.Owner.Username,
+		},
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
@@ -248,6 +266,13 @@ func (handler *TripHandler) Update(context *gin.Context) {
 		EndDate:      trip.EndDate.Format(time.RFC3339),
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
+		TotalPrice:   trip.GetTotalPrice(),
+		Latitude:     trip.Latitude,
+		Longitude:    trip.Longitude,
+		Owner: responses.UserResponse{
+			ID:       trip.Owner.ID,
+			Username: trip.Owner.Username,
+		},
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
@@ -296,6 +321,13 @@ func (handler *TripHandler) Join(context *gin.Context) {
 		EndDate:      trip.EndDate.Format(time.RFC3339),
 		Participants: utils.UserToParticipantWithRole(trip.Viewers, trip.Editors, trip.Owner),
 		InviteCode:   trip.InviteCode,
+		TotalPrice:   trip.GetTotalPrice(),
+		Latitude:     trip.Latitude,
+		Longitude:    trip.Longitude,
+		Owner: responses.UserResponse{
+			ID:       trip.Owner.ID,
+			Username: trip.Owner.Username,
+		},
 	}
 
 	context.JSON(http.StatusOK, responseTrip)
@@ -444,6 +476,9 @@ func (handler *TripHandler) GetAll(context *gin.Context) {
 				ID:       trip.Owner.ID,
 				Username: trip.Owner.Username,
 			},
+			Latitude:   trip.Latitude,
+			Longitude:  trip.Longitude,
+			TotalPrice: trip.GetTotalPrice(),
 		}
 	}
 

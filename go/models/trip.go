@@ -1,8 +1,10 @@
 package models
 
 import (
+	"challenge-flutter-go/api/utils/geo"
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"time"
 
 	"gorm.io/gorm"
@@ -26,19 +28,21 @@ type Trip struct {
 	EndDate        time.Time       `gorm:"not null"`
 	InviteCode     string          `gorm:"unique;min:8;max:8;not null"`
 	PhotoUrl       string          `gorm:"null"`
+	Latitude       float64         `gorm:"default:0"`
+	Longitude      float64         `gorm:"default:0"`
 }
 
 func (t *Trip) BeforeCreate(tx *gorm.DB) error {
 	t.InviteCode = t.generateInviteCode()
-	if t.Name == "" {
-		t.Name = t.City
-	}
 	return nil
 }
 
-func (t *Trip) BeforeUpdate(tx *gorm.DB) error {
+func (t *Trip) BeforeSave(tx *gorm.DB) error {
 	if t.Name == "" {
 		t.Name = t.City
+	}
+	if err := geo.GetGeoLocation(t.City+", "+t.Country, &t.Latitude, &t.Longitude); err != nil {
+		return errors.New("geo location api is on an error state")
 	}
 	return nil
 }

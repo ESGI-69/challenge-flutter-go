@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:move_together_app/core/models/participant.dart';
 import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/utils/dynamic_to_double.dart';
@@ -16,6 +17,8 @@ class Trip {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final User? owner;
+  final double latitude;
+  final double longitude;
 
   Trip({
     required this.id,
@@ -30,6 +33,8 @@ class Trip {
     this.createdAt,
     this.updatedAt,
     this.owner,
+    this.latitude = 0.0,
+    this.longitude = 0.0,
   });
 
   factory Trip.fromJson(Map<String, dynamic> json) {
@@ -46,6 +51,8 @@ class Trip {
       createdAt: json['createdAt'] != "" ? DateTime.parse(json['createdAt']) : null,
       updatedAt: json['updatedAt'] != "" ? DateTime.parse(json['updatedAt']) : null,
       owner: json['owner'] != null ? User.fromJson(json['owner']) : null,
+      latitude: dynamicToDouble(json['latitude']),
+      longitude: dynamicToDouble(json['longitude']),
     );
   }
 
@@ -73,4 +80,6 @@ class Trip {
     if (myRole == ParticipantTripRole.EDITOR) return true;
     return false;
   }
+
+  LatLng get latLng => LatLng(latitude, longitude);
 }

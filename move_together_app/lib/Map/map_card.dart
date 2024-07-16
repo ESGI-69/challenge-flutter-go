@@ -3,14 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Map/bloc/map_bloc.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
+import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/utils/map.dart';
 
 class MapCard extends StatelessWidget {
   final int tripId;
+  final Trip trip;
 
   const MapCard({
     super.key,
     required this.tripId,
+    required this.trip,
   });
 
   @override
@@ -33,6 +36,7 @@ class MapCard extends StatelessWidget {
                 accommodations: state.accommodations,
                 transports: state.transports,
                 type: RefinedGoogleMapType.card,
+                initialCameraPosition: trip.latLng,
               ),
             );
           } else {
