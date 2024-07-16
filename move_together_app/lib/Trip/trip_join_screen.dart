@@ -38,16 +38,10 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   Future<void> _joinTrip() async {
     try {
       final tripServices = TripService(context.read<AuthProvider>());
-      final joinedTrip = await tripServices.join(
+      await tripServices.join(
         _tripCodeController.text,
       );
-      if (mounted) {
-        setState(() {
-          errorMessage = null;
-        });
-        context.pushNamed('trip', pathParameters: {'tripId' : joinedTrip.id.toString()});
-
-      }
+      context.pushNamed('home');
     } catch (e) {
       setState(() {
         errorMessage = 'Joining trip failed';
