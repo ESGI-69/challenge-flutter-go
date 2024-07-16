@@ -82,13 +82,23 @@ class TripScreen extends StatelessWidget {
               },
               totalPrice: state.trip.totalPrice,
             ),
-            body: TripBody(
-              trip: state.trip,
-              onRefresh: () {
+            body: RefreshIndicator(
+              backgroundColor: Theme.of(context).primaryColor,
+              color: Colors.white,
+              edgeOffset: 200,
+              onRefresh: () async {
                 context.read<TripBloc>().add(TripDataFetch(
                   state.trip.id,
                 ));
               },
+              child: TripBody(
+                trip: state.trip,
+                onRefresh: () {
+                  context.read<TripBloc>().add(TripDataFetch(
+                    state.trip.id,
+                  ));
+                },
+              ),
             ),
           );
         }
