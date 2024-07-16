@@ -20,6 +20,7 @@ definitions:
     - accommodation
     - user
     - photo
+    - activity
     type: string
     x-enum-varnames:
     - FeatureNameDocument
@@ -31,6 +32,7 @@ definitions:
     - FeatureNameAccommodation
     - FeatureNameUser
     - FeatureNamePhoto
+    - FeatureNameActivity
   models.LogLevel:
     enum:
     - INFO

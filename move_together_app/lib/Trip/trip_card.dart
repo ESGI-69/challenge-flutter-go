@@ -14,6 +14,8 @@ class TripCard extends StatelessWidget {
   final int tripId;
   final String imageUrl;
   final String name;
+  final String country;
+  final String city;
   final DateTime startDate;
   final DateTime endDate;
   final String inviteCode;
@@ -30,6 +32,8 @@ class TripCard extends StatelessWidget {
     required this.tripId,
     required this.imageUrl,
     required this.name,
+    required this.country,
+    required this.city,
     required this.startDate,
     required this.endDate,
     required this.inviteCode,
@@ -156,6 +160,8 @@ class TripCard extends StatelessWidget {
                 heightFactor: BorderSide.strokeAlignCenter,
                 child: TripQuickInfo(
                   name: name,
+                  country: country,
+                  city: city,
                   startDate: startDate,
                   endDate: endDate,
                 ),

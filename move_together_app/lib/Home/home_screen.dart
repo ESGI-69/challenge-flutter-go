@@ -85,6 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
                           imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
                           name: trip.name,
+                          country: trip.country,
+                          city: trip.city,
                           startDate: trip.startDate,
                           endDate: trip.endDate,
                           inviteCode: trip.inviteCode,
