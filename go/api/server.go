@@ -23,8 +23,13 @@ func init() {
 	gin.SetMode(config.GetConfig().Mode)
 	router = gin.New()
 	router.SetTrustedProxies([]string{"*"})
+	allowedOrigins := []string{config.GetConfig().FrontendURL}
+	if config.GetConfig().Mode != "release" {
+		logger.Warning("CORS is enabled for all origins")
+		allowedOrigins = []string{"*"}
+	}
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{config.GetConfig().FrontendURL},
+		AllowOrigins:     allowedOrigins,
 		AllowMethods:     []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
