@@ -3,14 +3,14 @@ import 'package:dio/dio.dart';
 import 'package:move_together_app/core/services/api.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/document.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class DocumentService {
   final api = Api().dio;
   final AuthProvider authProvider;
 
-  DocumentService(
-      this.authProvider,
-      );
+  DocumentService(this.authProvider);
 
   Future<List<Document>> getAll(int tripId) async {
     final response = await api.get(
@@ -60,8 +60,15 @@ class DocumentService {
     }
   }
 
-  Future<String> download(int tripId, int documentId) async {
-    final documentPath = '${Directory.systemTemp.path}/${documentId}_moove_together.pdf';
+  Future<String> download(int tripId, int documentId, String documentName) async {
+    Directory? directory;
+    if (Platform.isAndroid) {
+      directory = await getExternalStorageDirectory();
+    } else if (Platform.isIOS) {
+      directory = await getApplicationDocumentsDirectory();
+    }
+
+    final documentPath = path.join(directory!.path, '${documentId}_${documentName}_moove_together.pdf');
     final response = await api.download(
       '/trips/$tripId/documents/$documentId/download',
       documentPath,
