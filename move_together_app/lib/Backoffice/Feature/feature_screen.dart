@@ -32,28 +32,30 @@ class _BackofficeFeaturesScreenState extends State<BackofficeFeaturesScreen> {
                     child: Text(state.errorMessage),
                   );
                 } else if (state is FeaturesDataLoadingSuccess) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        const Text(
-                          'LIST OF FEATURES',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF263238),
+                  return SingleChildScrollView(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          const Text(
+                            'LIST OF FEATURES',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF263238),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: FeaturesTable(
-                            features: state.features,
-                            patchFeature: (feature) {
-                              context.read<FeatureBloc>().add(FeatureDataPatchFeature(feature));
-                            },
-                          ),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: FeaturesTable(
+                              features: state.features,
+                              patchFeature: (feature) {
+                                context.read<FeatureBloc>().add(FeatureDataPatchFeature(feature));
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 }

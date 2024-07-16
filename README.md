@@ -81,3 +81,8 @@ In some cases, the map might still show a blank map with no terrain textures, if
 ```
 flutter clean
 ```
+
+Command to update the app icon :
+```
+flutter pub pub run flutter_launcher_icons:main
+```
