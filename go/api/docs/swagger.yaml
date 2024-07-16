@@ -31,6 +31,16 @@ definitions:
     - FeatureNameAccommodation
     - FeatureNameUser
     - FeatureNamePhoto
+  models.LogLevel:
+    enum:
+    - INFO
+    - WARN
+    - ERROR
+    type: string
+    x-enum-varnames:
+    - LogLevelInfo
+    - LogLevelWarn
+    - LogLevelError
   models.TransportType:
     enum:
     - car
@@ -294,6 +304,25 @@ definitions:
       name:
         $ref: '#/definitions/models.FeatureName'
       updatedAt:
+        type: string
+    type: object
+  responses.LogResponse:
+    properties:
+      id:
+        type: integer
+      ip:
+        type: string
+      level:
+        $ref: '#/definitions/models.LogLevel'
+      message:
+        type: string
+      method:
+        type: string
+      path:
+        type: string
+      timestamp:
+        type: string
+      username:
         type: string
     type: object
   responses.LoginResponse:
@@ -668,6 +697,40 @@ paths:
       summary: Login the user
       tags:
       - auth
+  /logs:
+    get:
+      consumes:
+      - application/json
+      description: Get all logs
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: string
+      - description: Filter by log level
+        in: query
+        name: filter
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.LogResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      security:
+      - BearerAuth: []
+      summary: Get all logs
+      tags:
+      - log
   /trips:
     get:
       consumes:

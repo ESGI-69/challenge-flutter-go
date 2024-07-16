@@ -2,6 +2,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/core/models/user.dart';
 import 'package:move_together_app/core/models/feature.dart';
+import 'package:move_together_app/core/models/log.dart';
 import 'package:move_together_app/core/services/api.dart';
 
 class AdminService {
@@ -107,6 +108,19 @@ class AdminService {
       return (response.data as List).map((feature) => Feature.fromJson(feature)).toList();
     } else {
       throw Exception('Failed to get features');
+    }
+  }
+
+  Future<List<Log>> getAllLogs({String? filter, int? page}) async {
+    final response = await api.get('/admin/logs', queryParameters: {
+      'filter': filter,
+      'page': page,
+    });
+
+    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      return (response.data as List).map((log) => Log.fromJson(log)).toList();
+    } else {
+      throw Exception('Failed to get logs');
     }
   }
 }
