@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/services/auth_service.dart';
 
+import '../Widgets/button.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -65,12 +67,33 @@ class RegisterScreenState extends State<RegisterScreen> {
                 obscureText: true,
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _register,
-                child: const Text('Register'),
+              SizedBox(
+                width: double.infinity,
+                child: Button(
+                  onPressed: _register,
+                  text: 'Register',
+                  type: ButtonType.primary,
+                ),
               ),
               if (errorMessage != null)
                 Text(errorMessage!, style: const TextStyle(color: Colors.red)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Already have an account?",
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.goNamed('home');
+                    },
+                    child: const Text('Login'),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

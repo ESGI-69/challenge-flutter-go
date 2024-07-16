@@ -88,7 +88,7 @@ class LandingScreenState extends State<LandingScreen> {
                 ),
               ),
               const Text(
-                "Planifie ton voyage avec tes amis",
+                "Plan your trip with friends",
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
@@ -127,7 +127,7 @@ class LandingScreenState extends State<LandingScreen> {
                   const Text(
                     "Don't have an account?",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.grey,
                     ),
                   ),
                   TextButton(
