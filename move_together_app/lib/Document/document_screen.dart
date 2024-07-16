@@ -37,8 +37,10 @@ class DocumentScreen extends StatelessWidget {
       final result = await OpenFile.open(documentPath, type: 'application/pdf');
       if (result.type != ResultType.done) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Erreur lors de l\'ouverture du document')),
+           SnackBar(
+              content: const Text('Erreur lors de l\'ouverture du document'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+           ),
         );
       }
     }
