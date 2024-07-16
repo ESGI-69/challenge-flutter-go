@@ -6,14 +6,7 @@ import 'package:move_together_app/Widgets/details_list.dart';
 import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
 import 'package:open_file/open_file.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:io';
-import 'package:provider/provider.dart';
-import 'package:path/path.dart' as path;
-import 'package:flutter/services.dart';
 
 class DocumentScreen extends StatelessWidget {
   const DocumentScreen({super.key});
@@ -41,12 +34,7 @@ class DocumentScreen extends StatelessWidget {
     void downloadDocument() async {
       final documentPath = await DocumentService(context.read<AuthProvider>())
           .download(tripId, document.id, document.title);
-
-      final file = File(documentPath);
-      final uri = Uri.file(file.path);
-
       final result = await OpenFile.open(documentPath, type: 'application/pdf');
-      print('result :: $result');
       if (result.type != ResultType.done) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
