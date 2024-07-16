@@ -170,14 +170,14 @@ func setRoutes() {
 	adminLogsRoutes := adminsRoutes.Group("/logs")
 	adminLogsRoutes.GET("", logHandler.GetAll)
 
-	usersRoutes := router.Group("/users")
+	usersRoutes := router.Group("/users", middlewares.IsUserFeatureEnabled)
 	usersRoutes.POST("", userHandler.Create)
 	usersRoutes.GET("/:id", middlewares.UserIsLogged, userHandler.Get)
 	usersRoutes.PATCH("/photo", middlewares.UserIsLogged, userHandler.UpdatePhoto)
 	usersRoutes.PATCH("/:id", middlewares.UserIsLogged, userHandler.Update)
 	usersRoutes.GET("/photo/:userId", userHandler.DownloadPhoto)
 
-	tripsRoutes := router.Group("/trips", middlewares.UserIsLogged)
+	tripsRoutes := router.Group("/trips", middlewares.UserIsLogged, middlewares.IsTripFeatureEnabled)
 	tripsRoutes.POST("", tripHandler.Create)
 	tripsRoutes.GET("", tripHandler.GetAllJoined)
 	tripsRoutes.GET("/:id", middlewares.UserIsTripParticipant, tripHandler.Get)
@@ -187,43 +187,43 @@ func setRoutes() {
 	tripsRoutes.DELETE("/:id", middlewares.UserIsTripOwner, tripHandler.Delete)
 	tripsRoutes.GET("/:id/banner/download", middlewares.UserIsTripParticipant, tripHandler.DownloadTripBanner)
 
-	tripTransportsRoutes := tripsRoutes.Group("/:id/transports")
+	tripTransportsRoutes := tripsRoutes.Group("/:id/transports", middlewares.IsTransportFeatureEnabled)
 	tripTransportsRoutes.GET("", middlewares.UserIsTripParticipant, transportHandler.GetAllFromTrip)
 	tripTransportsRoutes.POST("", middlewares.UserHasTripEditRight, transportHandler.Create)
 	tripTransportsRoutes.DELETE("/:transportID", middlewares.UserHasTripEditRight, middlewares.TransportBelongsToTrip, transportHandler.DeleteTransport)
 
-	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripParticipant)
+	tripParticipantsRoutes := tripsRoutes.Group("/:id/participants", middlewares.UserIsTripParticipant, middlewares.IsUserFeatureEnabled)
 	tripParticipantsRoutes.GET("", participantHandler.GetAllFromTrip)
 	tripParticipantsRoutes.PATCH("/:participantId/role", middlewares.UserIsTripOwner, middlewares.ParticipantBelongsToTrip, participantHandler.ChangeRole)
 	tripParticipantsRoutes.DELETE("/:participantId", middlewares.UserIsTripOwner, middlewares.ParticipantBelongsToTrip, participantHandler.RemoveParticipant)
 
-	tripAccommodationsRoutes := tripsRoutes.Group("/:id/accommodations")
+	tripAccommodationsRoutes := tripsRoutes.Group("/:id/accommodations", middlewares.IsAccomodationFeatureEnabled)
 	tripAccommodationsRoutes.GET("", middlewares.UserIsTripParticipant, accommodationHandler.GetAllFromTrip)
 	tripAccommodationsRoutes.POST("", middlewares.UserHasTripEditRight, accommodationHandler.Create)
 	tripAccommodationsRoutes.DELETE("/:accommodationID", middlewares.UserHasTripEditRight, middlewares.AccommodationBelongsToTrip, accommodationHandler.DeleteAccommodation)
 
-	tripNotesRoutes := tripsRoutes.Group("/:id/notes")
+	tripNotesRoutes := tripsRoutes.Group("/:id/notes", middlewares.IsNoteFeatureEnabled)
 	tripNotesRoutes.GET("", middlewares.UserIsTripParticipant, noteHandler.GetNotesOfTrip)
 	tripNotesRoutes.POST("", middlewares.UserHasTripEditRight, noteHandler.AddNoteToTrip)
 	tripNotesRoutes.DELETE("/:noteID", middlewares.UserHasTripEditRight, middlewares.NoteBelongsToTrip, noteHandler.DeleteNoteFromTrip)
 
-	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages", middlewares.UserIsTripParticipant)
+	tripChatMessagesRoutes := tripsRoutes.Group("/:id/chatMessages", middlewares.UserIsTripParticipant, middlewares.IsChatFeatureEnabled)
 	tripChatMessagesRoutes.GET("", chatMessageHandler.GetChatMessagesOfTrip)
 	tripChatMessagesRoutes.POST("", chatMessageHandler.AddChatMessageToTrip)
 
-	tripDocumentsRoutes := tripsRoutes.Group("/:id/documents")
+	tripDocumentsRoutes := tripsRoutes.Group("/:id/documents", middlewares.IsDocumentFeatureEnabled)
 	tripDocumentsRoutes.GET("", middlewares.UserIsTripParticipant, documentHandler.GetDocumentsOfTrip)
 	tripDocumentsRoutes.POST("", middlewares.UserHasTripEditRight, documentHandler.CreateDocument)
 	tripDocumentsRoutes.DELETE("/:documentID", middlewares.UserHasTripEditRight, middlewares.DocumentBelongsToTrip, documentHandler.DeleteDocumentFromTrip)
 	tripDocumentsRoutes.GET("/:documentID/download", middlewares.UserIsTripParticipant, middlewares.DocumentBelongsToTrip, documentHandler.DownloadDocument)
 
-	tripPhotosRoutes := tripsRoutes.Group("/:id/photos")
+	tripPhotosRoutes := tripsRoutes.Group("/:id/photos", middlewares.IsPhotoFeatureEnabled)
 	tripPhotosRoutes.GET("", middlewares.UserIsTripParticipant, photoHandler.GetPhotosOfTrip)
 	tripPhotosRoutes.POST("", middlewares.UserHasTripEditRight, photoHandler.CreatePhoto)
 	tripPhotosRoutes.DELETE("/:photoID", middlewares.UserHasTripEditRight, middlewares.PhotoBelongsToTrip, photoHandler.DeletePhotoFromTrip)
 	tripPhotosRoutes.GET("/:photoID/download", middlewares.UserIsTripParticipant, middlewares.PhotoBelongsToTrip, photoHandler.DownloadPhoto)
 
-	tripActivitiesRoutes := tripsRoutes.Group("/:id/activities")
+	tripActivitiesRoutes := tripsRoutes.Group("/:id/activities", middlewares.IsActivityFeatureEnabled)
 	tripActivitiesRoutes.GET("", middlewares.UserIsTripParticipant, activityHandler.GetAllFromTrip)
 	tripActivitiesRoutes.POST("", middlewares.UserHasTripEditRight, activityHandler.Create)
 	tripActivitiesRoutes.DELETE("/:activityID", middlewares.UserHasTripEditRight, middlewares.ActivityBelongsToTrip, activityHandler.Delete)
@@ -232,7 +232,7 @@ func setRoutes() {
 	featuresRoutes.GET("", featureHandler.GetFeatures)
 
 	socketRoutes := router.Group("/ws", middlewares.UserIsLoggedByParam)
-	socketRoutes.GET("/chat", middlewares.SocketUserIsTripParticipant, socketHandler.HandleChatConnections)
+	socketRoutes.GET("/chat", middlewares.SocketUserIsTripParticipant, middlewares.IsChatFeatureEnabled, socketHandler.HandleChatConnections)
 
 	router.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
