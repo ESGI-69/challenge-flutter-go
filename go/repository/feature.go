@@ -16,10 +16,25 @@ func (t *FeatureRepository) Create(feature *models.Feature) error {
 
 func (t *FeatureRepository) GetFeatures() (features []models.Feature, err error) {
 	err = t.Database.Preload("ModifiedBy").Order("name ASC").Find(&features).Error
+	var featureNamesToHide []models.FeatureName = []models.FeatureName{
+		models.FeatureNameAuth,
+		models.FeatureNameTrip,
+		models.FeatureNameUser,
+	}
+
+	for i := 0; i < len(features); i++ {
+		for j := 0; j < len(featureNamesToHide); j++ {
+			if features[i].Name == featureNamesToHide[j] {
+				features = append(features[:i], features[i+1:]...)
+				i--
+				break
+			}
+		}
+	}
 	return
 }
 
-func (t *FeatureRepository) Get(name string) (feature models.Feature, err error) {
+func (t *FeatureRepository) Get(name models.FeatureName) (feature models.Feature, err error) {
 	err = t.Database.Preload("ModifiedBy").First(&feature, "name = ?", name).Error
 	return
 }
