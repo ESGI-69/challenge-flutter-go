@@ -6,6 +6,7 @@ import (
 	"challenge-flutter-go/api/responses"
 	"challenge-flutter-go/api/utils"
 	"challenge-flutter-go/logger"
+	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 	"net/http"
 	"time"
@@ -33,13 +34,48 @@ type FeatureHandler struct {
 func (handler *FeatureHandler) Update(context *gin.Context) {
 	featureName := context.Param("name")
 
+	if featureName == "" {
+		logger.ApiError(context, "Invalid feature name :  "+featureName)
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid feature name"})
+		return
+	}
+
+	var enumFeatureName models.FeatureName
+	switch featureName {
+	case "document":
+		enumFeatureName = models.FeatureNameDocument
+	case "auth":
+		enumFeatureName = models.FeatureNameAuth
+	case "chat":
+		enumFeatureName = models.FeatureNameChat
+	case "trip":
+		enumFeatureName = models.FeatureNameTrip
+	case "note":
+		enumFeatureName = models.FeatureNameNote
+	case "transport":
+		enumFeatureName = models.FeatureNameTransport
+	case "accommodation":
+		enumFeatureName = models.FeatureNameAccommodation
+	case "user":
+		enumFeatureName = models.FeatureNameUser
+	case "photo":
+		enumFeatureName = models.FeatureNamePhoto
+	case "activity":
+		enumFeatureName = models.FeatureNameActivity
+	default:
+		enumFeatureName = models.FeatureNameActivity
+		logger.ApiError(context, "Invalid feature name :  "+featureName)
+		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid feature name"})
+		return
+	}
+
 	var requestBody requests.FeatureUpdateBody
 	isBodyValid := utils.Deserialize(&requestBody, context)
 	if !isBodyValid {
 		return
 	}
 
-	feature, _ := handler.Repository.Get(featureName)
+	feature, _ := handler.Repository.Get(enumFeatureName)
 	currentUser, _ := utils.GetCurrentUser(context)
 
 	if feature.Name == "" {
