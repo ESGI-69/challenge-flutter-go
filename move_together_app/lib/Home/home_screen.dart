@@ -46,20 +46,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showBottomSheetButtons(context, [
-            Button(
-              text: 'Créer un voyage',
-              onPressed: () {
-                context.pop();
-                context.pushNamed('create');
-              }
-            ),
-            Button(
+        onPressed: () async {
+          await showBottomSheetButtons(context, [
+            ButtonSheetButton(
               text: 'Rejoindre un voyage',
-              onPressed: () {
-                context.pushNamed('join');
-              }
+              onPressed: () => context.pushNamed('join'),
+            ),
+            ButtonSheetButton(
+              text: 'Créer un voyage',
+              onPressed: () => context.pushNamed('create'),
             ),
           ]);
         },
