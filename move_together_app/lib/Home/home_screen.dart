@@ -48,6 +48,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icons.person
                 ),
               ),
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.refresh,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    context.read<HomeBloc>().add(HomeDataFetch());
+                    setState(() {
+                      _currentIndex = 0;
+                    });
+                  },
+                ),
+              ],
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
