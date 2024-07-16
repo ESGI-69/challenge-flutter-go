@@ -3,6 +3,7 @@ package middlewares
 import (
 	"challenge-flutter-go/api/errorHandlers"
 	"challenge-flutter-go/database"
+	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
 
@@ -21,7 +22,8 @@ func IsAccomodationFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -35,7 +37,8 @@ func IsActivityFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -49,7 +52,8 @@ func IsAuthFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -63,7 +67,8 @@ func IsChatFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -77,7 +82,8 @@ func IsDocumentFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -91,7 +97,8 @@ func IsNoteFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -105,7 +112,8 @@ func IsPhotoFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -119,7 +127,8 @@ func IsTransportFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -133,7 +142,8 @@ func IsTripFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()
@@ -147,7 +157,8 @@ func IsUserFeatureEnabled(context *gin.Context) {
 	}
 
 	if !isEnabled {
-		context.AbortWithStatusJSON(403, gin.H{"error": "Feature not enabled"})
+		context.AbortWithStatusJSON(503, gin.H{"error": "Feature not enabled"})
+		logger.ApiWarning(context, "Feature not enabled")
 		return
 	}
 	context.Next()

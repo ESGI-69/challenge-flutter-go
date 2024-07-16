@@ -9,7 +9,6 @@ class FeatureService {
     if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
-      print("api call features");
       return (response.data as List)
           .map((feature) => Feature.fromJson(feature))
           .toList();

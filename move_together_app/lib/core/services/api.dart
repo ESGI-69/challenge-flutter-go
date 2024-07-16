@@ -18,6 +18,9 @@ class Api {
         baseUrl: dotenv.env['API_ADDRESS']!,
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 5),
+        validateStatus: (status) {
+          return status! < 500 || status == 503;
+        },
       ),
     );
 
