@@ -32,28 +32,30 @@ class _BackofficeTripsScreenState extends State<BackofficeTripsScreen> {
                     child: Text(state.errorMessage),
                   );
                 } else if (state is TripsDataLoadingSuccess) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        const Text(
-                          'LIST OF TRIPS',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF263238),
+                  return SingleChildScrollView(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          const Text(
+                            'LIST OF TRIPS',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF263238),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: TripsTable(
-                            trips: state.trips,
-                            deleteTrip: (trip) {
-                              context.read<TripBloc>().add(TripDataDeleteTrip(trip));
-                            },
-                          ),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: TripsTable(
+                              trips: state.trips,
+                              deleteTrip: (trip) {
+                                context.read<TripBloc>().add(TripDataDeleteTrip(trip));
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 }

@@ -27,36 +27,38 @@ class UsersAdminScreen extends StatelessWidget {
                 child: Text(state.errorMessage),
               );
             } else if (state is UsersDataLoadingSuccess) {
-              return SizedBox(
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    const Text(
-                      'LIST OF USERS',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF263238),
+              return SingleChildScrollView(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      const Text(
+                        'LIST OF USERS',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF263238),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: UsersTable(
-                        users: state.users,
-                        changeUserRole: (User user) {
-                          final newRole = user.role == Role.ADMIN ? Role.USER : Role.ADMIN;
-
-                          final newUser = User(
-                            id: user.id,
-                            name: user.name,
-                            role: newRole,
-                          );
-
-                          context.read<UsersBloc>().add(UserDataUpdateUser(newUser));
-                        },
-                      ),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: UsersTable(
+                          users: state.users,
+                          changeUserRole: (User user) {
+                            final newRole = user.role == Role.ADMIN ? Role.USER : Role.ADMIN;
+                
+                            final newUser = User(
+                              id: user.id,
+                              name: user.name,
+                              role: newRole,
+                            );
+                
+                            context.read<UsersBloc>().add(UserDataUpdateUser(newUser));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               );
             }
