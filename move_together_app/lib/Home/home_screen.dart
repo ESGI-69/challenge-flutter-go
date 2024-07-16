@@ -10,6 +10,8 @@ import 'package:move_together_app/Trip/trip_card.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
 
+import '../Widgets/bottom_sheet_buttons.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -26,100 +28,109 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     final tripService = TripService(context.read<AuthProvider>());
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        leading: IconButton(
-          color: Theme.of(context).primaryColor,
-          onPressed: () {
-            context.pushNamed('profile');
-          },
-          icon: const Icon(
-            Icons.person
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-        context.pushNamed('join');
-        },
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add),
-      ),
-      body: SafeArea(
-        child: BlocProvider(
-          create: (context) => HomeBloc(context)..add(HomeDataFetch()),
-          child: BlocBuilder<HomeBloc, HomeState>(
-            builder: (context, state) {
-              if (state is HomeDataLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is HomeDataLoadingError) {
-                return Center(
-                  child: Text(state.errorMessage),
-                );
-              } else if (state is HomeDataLoadingSuccess) {
-                if (state.trips.isEmpty) {
-                  return const EmptyHome();
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Flex(
-                    direction: Axis.vertical,
-                    children: <Widget>[
-                    Expanded(
-                      child: PageView(
-                      onPageChanged: changePage,
-                      children: state.trips.map((trip) {
-                        return TripCard(
-                          tripId: trip.id,
-                          onTap: () async {
-                            await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
-                            context.read<HomeBloc>().add(HomeDataFetchSingleTrip(trip.id));
-                          },
-                          onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
-                          onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
-                          imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
-                          name: trip.name,
-                          country: trip.country,
-                          city: trip.city,
-                          startDate: trip.startDate,
-                          endDate: trip.endDate,
-                          inviteCode: trip.inviteCode,
-                          participants: trip.participants,
-                          isCurrentUserOwner: trip.isCurrentUserOwner(context),
-                          onParticipantsTap: () async {
-                            await showCupertinoModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) => ParticipantInfo(
-                                tripId: trip.id,
-                                inviteCode: trip.inviteCode,
-                              )
-                            );
-                            state.trips[_currentIndex] = await tripService.get(trip.id.toString());
-                          },
-                          totalPrice: trip.totalPrice,
-                        );
-                      }).toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    PageIndicator(
-                      currentIndex: _currentIndex,
-                      pageCount: state.trips.length,
-                    ),
-                    ],
+    return BlocProvider(
+      create: (context) => HomeBloc(context)..add(HomeDataFetch()),
+      child: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              leading: IconButton(
+                color: Theme.of(context).primaryColor,
+                onPressed: () {
+                  context.pushNamed('profile');
+                },
+                icon: const Icon(
+                  Icons.person
+                ),
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                await showBottomSheetButtons(context, [
+                  ButtonSheetButton(
+                    text: 'Rejoindre un voyage',
+                    onPressed: () => context.pushNamed('join'),
                   ),
-                );
-              }
-              return const SizedBox();
-            }
-          )
-        ),
+                  ButtonSheetButton(
+                    text: 'Créer un voyage',
+                    onPressed: () => context.pushNamed('create'),
+                  ),
+                ]);
+                context.read<HomeBloc>().add(HomeDataFetch());
+              },
+              shape: const CircleBorder(),
+              child: const Icon(Icons.add),
+            ),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Flex(
+                  direction: Axis.vertical,
+                  children: state is HomeDataLoading ?
+                    const <Widget>[
+                      Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ] : state is HomeDataLoadingError ? <Widget>[
+                      Center(
+                        child: Text(state.errorMessage),
+                      ),
+                    ] : state is HomeDataLoadingSuccess && state.trips.isNotEmpty ? <Widget>[
+                      Expanded(
+                        child: PageView(
+                          onPageChanged: changePage,
+                          children:
+                            state.trips.map((trip) {
+                              return TripCard(
+                              tripId: trip.id,
+                              onTap: () async {
+                                await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
+                                context.read<HomeBloc>().add(HomeDataFetchSingleTrip(trip.id));
+                              },
+                              onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
+                              onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
+                              imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
+                              name: trip.name,
+                              country: trip.country,
+                              city: trip.city,
+                              startDate: trip.startDate,
+                              endDate: trip.endDate,
+                              inviteCode: trip.inviteCode,
+                              participants: trip.participants,
+                              isCurrentUserOwner: trip.isCurrentUserOwner(context),
+                              onParticipantsTap: () async {
+                                await showCupertinoModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) => ParticipantInfo(
+                                    tripId: trip.id,
+                                    inviteCode: trip.inviteCode,
+                                  )
+                                );
+                                state.trips[_currentIndex] = await tripService.get(trip.id.toString());
+                              },
+                              totalPrice: trip.totalPrice,
+                            );
+                            }).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 16.0),
+                      PageIndicator(
+                        currentIndex: _currentIndex,
+                        pageCount: state.trips.length,
+                      ),
+                    ] : <Widget>[
+                      const EmptyHome(),
+                    ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -38,16 +38,10 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   Future<void> _joinTrip() async {
     try {
       final tripServices = TripService(context.read<AuthProvider>());
-      final joinedTrip = await tripServices.join(
+      await tripServices.join(
         _tripCodeController.text,
       );
-      if (mounted) {
-        setState(() {
-          errorMessage = null;
-        });
-        context.pushNamed('trip', pathParameters: {'tripId' : joinedTrip.id.toString()});
-
-      }
+      context.pushNamed('home');
     } catch (e) {
       setState(() {
         errorMessage = 'Joining trip failed';
@@ -119,25 +113,6 @@ class JoinTripScreenState extends State<JoinTripScreen> {
                 child: const Text('Rejoindre Maintenant'),
               ),
               const SizedBox(height: 16),
-              const Text('Ou alors'),
-              ElevatedButton(
-                onPressed: () {
-                  context.pushNamed('create');
-                },
-                style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(const Color(0xFF79D0BF)),               
-                  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-                  padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.symmetric(horizontal: 70.0),
-                  ),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                ),
-                child: const Text('Créer un voyage'),
-              ),
               if (errorMessage != null)
                 Text(
                   errorMessage!,
