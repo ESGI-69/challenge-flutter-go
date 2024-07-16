@@ -71,7 +71,7 @@ class DocumentScreen extends StatelessWidget {
                     ? ElevatedButton(
                         onPressed: deleteDocument,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
+                          backgroundColor: WidgetStateProperty.all<Color>(
                               Theme.of(context).colorScheme.error),
                         ),
                         child: const Text(
