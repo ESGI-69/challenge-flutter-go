@@ -32,6 +32,7 @@ definitions:
     - FeatureNameAccommodation
     - FeatureNameUser
     - FeatureNamePhoto
+    - FeatureNameActivity
   models.LogLevel:
     enum:
     - INFO
@@ -42,7 +43,6 @@ definitions:
     - LogLevelInfo
     - LogLevelWarn
     - LogLevelError
-    - FeatureNameActivity
   models.TransportType:
     enum:
     - car
