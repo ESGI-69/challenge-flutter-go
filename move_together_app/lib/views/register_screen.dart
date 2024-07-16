@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/services/auth_service.dart';
 
-import '../Widgets/button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
