@@ -16,6 +16,12 @@ func (t *FeatureRepository) Create(feature *models.Feature) error {
 
 func (t *FeatureRepository) GetFeatures() (features []models.Feature, err error) {
 	err = t.Database.Preload("ModifiedBy").Order("name ASC").Find(&features).Error
+	for i, feature := range features {
+		if feature.Name == models.FeatureNameTrip {
+			features = append(features[:i], features[i+1:]...)
+			break
+		}
+	}
 	return
 }
 
