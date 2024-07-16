@@ -13,14 +13,6 @@ type TripResponse struct {
 	CreatedAt    string                `json:"createdAt"`
 	UpdatedAt    string                `json:"updatedAt"`
 	Owner        UserResponse          `json:"owner"`
-}
-
-type TripAddTransport struct {
-	TransportType string       `json:"transportType"`
-	StartDate     string       `json:"startDate"`
-	TripID        uint         `json:"tripId"`
-	Trip          TripResponse `json:"trip"`
-	EndDate       string       `json:"endDate"`
-	StartAddress  string       `json:"startAddress"`
-	EndAddress    string       `json:"endAddress"`
+	Latitude     float64               `json:"latitude"`
+	Longitude    float64               `json:"longitude"`
 }

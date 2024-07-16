@@ -8,11 +8,11 @@ import 'dart:math';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/models/transport.dart';
 
-CameraPosition getMapCameraPositionFromMarkers(Set<Marker> markers, bool isCard) {
+CameraPosition getMapCameraPositionFromMarkers(Set<Marker> markers, bool isCard, LatLng initialCameraPosition) {
   if (markers.isEmpty) {
-    return const CameraPosition(
-      target: LatLng(0, 0),
-      zoom: 0,
+    return CameraPosition(
+      target: initialCameraPosition,
+      zoom: 12,
     );
   }
 
@@ -81,6 +81,7 @@ class RefinedGoogleMap extends StatefulWidget {
   final List<Accommodation> accommodations;
   final List<Transport> transports;
   final RefinedGoogleMapType type;
+  final LatLng initialCameraPosition;
   final Function(GoogleMapController)? onMapCreated;
 
   const RefinedGoogleMap({
@@ -89,6 +90,7 @@ class RefinedGoogleMap extends StatefulWidget {
     required this.accommodations,
     required this.transports,
     required this.type,
+    this.initialCameraPosition = const LatLng(0, 0),
     this.onMapCreated,
   });
 
@@ -333,7 +335,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
           ),
         },
         mapType: MapType.hybrid,
-        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, RefinedGoogleMapType.appBar == widget.type),
+        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, RefinedGoogleMapType.appBar == widget.type, widget.initialCameraPosition),
         markers: _markers,
         polylines: _polylines,
         myLocationButtonEnabled: false,
@@ -349,7 +351,7 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         rotateGesturesEnabled: false,
         tiltGesturesEnabled: false,
         mapType: MapType.hybrid,
-        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, true),
+        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, true, widget.initialCameraPosition),
         markers: _markers,
         polylines: _polylines,
         myLocationButtonEnabled: false,

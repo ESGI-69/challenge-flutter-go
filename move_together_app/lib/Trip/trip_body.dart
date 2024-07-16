@@ -26,7 +26,7 @@ class TripBody extends StatelessWidget {
     var featureProvider = Provider.of<FeatureProvider>(context);
     return ListView(
       children: [
-        MapCard(tripId: trip.id),
+        MapCard(tripId: trip.id, trip: trip),
         if (featureProvider.isFeatureEnabled(FeatureNames.transport))
           TransportCard(
             tripId: trip.id,

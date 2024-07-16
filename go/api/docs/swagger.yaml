@@ -445,6 +445,10 @@ definitions:
         type: integer
       inviteCode:
         type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
       name:
         type: string
       owner:
