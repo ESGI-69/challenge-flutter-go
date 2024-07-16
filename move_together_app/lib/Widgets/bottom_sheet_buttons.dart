@@ -49,7 +49,7 @@ class BottomSheetButtons extends StatelessWidget {
             },
             width: double.infinity,
             text: 'Annuler',
-            isDestructive: true,
+            type: ButtonType.destructive,
           )
         ]
       ),
