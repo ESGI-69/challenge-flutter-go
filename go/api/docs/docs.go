@@ -2263,7 +2263,8 @@ const docTemplate = `{
                 "transport",
                 "accommodation",
                 "user",
-                "photo"
+                "photo",
+                "activity"
             ],
             "x-enum-varnames": [
                 "FeatureNameDocument",
@@ -2274,7 +2275,8 @@ const docTemplate = `{
                 "FeatureNameTransport",
                 "FeatureNameAccommodation",
                 "FeatureNameUser",
-                "FeatureNamePhoto"
+                "FeatureNamePhoto",
+                "FeatureNameActivity"
             ]
         },
         "models.LogLevel": {

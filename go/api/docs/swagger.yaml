@@ -20,6 +20,7 @@ definitions:
     - accommodation
     - user
     - photo
+    - activity
     type: string
     x-enum-varnames:
     - FeatureNameDocument
@@ -41,6 +42,7 @@ definitions:
     - LogLevelInfo
     - LogLevelWarn
     - LogLevelError
+    - FeatureNameActivity
   models.TransportType:
     enum:
     - car
