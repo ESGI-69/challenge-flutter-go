@@ -26,6 +26,8 @@ type ResponseBody struct {
 func SearchPlaces(query string) (string, error) {
 	url := "https://places.googleapis.com/v1/places:searchText"
 
+	fmt.Printf("Search Places query : %v", query)
+
 	requestBody := RequestBody{
 		TextQuery: query,
 		PageSize:  1,
@@ -34,6 +36,8 @@ func SearchPlaces(query string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error marshalling request body: %v", err)
 	}
+
+	fmt.Printf("Search Places jsonData : %v", string(jsonData))
 
 	// Create a new POST request
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
@@ -44,11 +48,16 @@ func SearchPlaces(query string) (string, error) {
 	req.Header.Set("X-Goog-Api-Key", viper.GetString("GOOGLE_API_KEY"))
 	req.Header.Set("X-Goog-FieldMask", "places.formattedAddress,places.photos")
 
+	fmt.Print("Search Places request : ", req)
+
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("error sending request: %v", err)
 	}
+
+	fmt.Printf("Search Places response : %v", resp)
+
 	defer resp.Body.Close()
 
 	// On decode la réponse
@@ -57,6 +66,8 @@ func SearchPlaces(query string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error decoding response: %v", err)
 	}
+
+	fmt.Printf("Search Places result : %v", result)
 
 	// Return the first photo name
 	if len(result.Places) > 0 && len(result.Places[0].Photos) > 0 {
