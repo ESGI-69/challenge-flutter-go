@@ -5,6 +5,8 @@ import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/note.dart';
 import 'package:move_together_app/core/services/note_service.dart';
 
+import '../Widgets/button.dart';
+
 class NoteCreateModal extends StatefulWidget {
   final Function(Note) onNoteCreated;
   final int tripId;
@@ -66,21 +68,12 @@ class _NoteCreateModalState extends State<NoteCreateModal> {
                   prefixIcon: Icons.text_fields,
                 ),
                 const SizedBox(height: 8),
-                ElevatedButton(
+                Button(
                   onPressed: createNote,
-                  style: _titleController.text.isEmpty || _contentController.text.isEmpty
-                      ? ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                  )
-                      : ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
-                  ),
-                  child: const Text(
-                    'Créer',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  type: _titleController.text.isEmpty || _contentController.text.isEmpty
+                      ? ButtonType.disabled
+                      : ButtonType.primary,
+                  text: 'Créer',
                 ),
               ]
           ),

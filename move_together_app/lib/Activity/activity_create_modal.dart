@@ -7,6 +7,8 @@ import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/services/activity_service.dart';
 
+import '../Widgets/button.dart';
+
 class ActivityCreateModal extends StatefulWidget {
   final Function(Activity) onActivityCreated;
   final int tripId;
@@ -125,21 +127,12 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
                   prefixIcon: Icons.location_on,
                 ),
                 const SizedBox(height: 8),
-                ElevatedButton(
+                Button(
                   onPressed: createActivity,
-                  style: cantPost()
-                      ? ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                  )
-                      : ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
-                  ),
-                  child: const Text(
-                    'Créer',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  type: cantPost()
+                      ? ButtonType.disabled
+                      : ButtonType.primary,
+                  text: 'Créer',
                 ),
               ]
           ),

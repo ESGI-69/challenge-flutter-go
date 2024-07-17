@@ -6,6 +6,8 @@ import 'package:move_together_app/Widgets/details_list.dart';
 import 'package:move_together_app/core/models/note.dart';
 import 'package:move_together_app/core/services/note_service.dart';
 
+import '../Widgets/button.dart';
+
 class NoteScreen extends StatelessWidget {
   const NoteScreen({super.key});
 
@@ -40,17 +42,10 @@ class NoteScreen extends StatelessWidget {
               ]),
               const SizedBox(height: 16),
               (hasTripEditPermission && note.author.isMe(context)) || isTripOwner
-                  ? ElevatedButton(
+                  ? Button(
                 onPressed: deleteNote,
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.error),
-                ),
-                child: const Text(
-                  'Supprimer',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+                type: ButtonType.destructive,
+                text: 'Supprimer',
               )
                   : !hasTripEditPermission
                   ? Text(

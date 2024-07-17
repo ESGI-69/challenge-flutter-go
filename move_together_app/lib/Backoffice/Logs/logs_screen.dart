@@ -4,6 +4,8 @@ import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.d
 import 'package:move_together_app/Backoffice/Logs/bloc/logs_bloc.dart';
 import 'package:move_together_app/Backoffice/Logs/logs_table.dart';
 
+import '../../Widgets/button.dart';
+
 
 class LogsScreen extends StatefulWidget {
   const LogsScreen({super.key});
@@ -77,24 +79,24 @@ class _LogsScreenState extends State<LogsScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 if (currentPage > 1)
-                                  ElevatedButton(
+                                  Button(
                                     onPressed: () {
                                       setState(() {
                                         currentPage--;
                                         context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
                                       });
                                     },
-                                    child: const Text('Previous'),
+                                    text: 'Previous',
                                   ),
                                 if (state.logs.isNotEmpty)
-                                  ElevatedButton(
+                                  Button(
                                     onPressed: () {
                                       setState(() {
                                         currentPage++;
                                         context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
                                       });
                                     },
-                                    child: const Text('Next'),
+                                    text: 'Next',
                                   ),
                               ],
                             ),

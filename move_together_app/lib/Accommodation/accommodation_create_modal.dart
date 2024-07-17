@@ -8,6 +8,8 @@ import 'package:move_together_app/core/models/accommodation.dart';
 import 'package:move_together_app/core/services/accommodation_service.dart';
 import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
 
+import '../Widgets/button.dart';
+
 Map<AccommodationType, String> accommodationTypeString = {
   AccommodationType.hotel: 'hotel',
   AccommodationType.airbnb: 'airbnb',
@@ -153,26 +155,15 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
                 prefixIcon: Icons.euro,
               ),
               const SizedBox(height: 8),
-              ElevatedButton(
+              Button(
                 onPressed: createAccommodation,
-                style: _addressController.text.isEmpty ||
+                type: _addressController.text.isEmpty ||
                         _startDateTime ==
                             DateTime.fromMillisecondsSinceEpoch(0) ||
                         _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
-                    ? ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all<Color>(Colors.grey),
-                      )
-                    : ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                            Theme.of(context).primaryColor),
-                      ),
-                child: const Text(
-                  'Créer',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+                    ? ButtonType.disabled
+                    : ButtonType.primary,
+                text: 'Créer',
               ),
             ]),
           ),

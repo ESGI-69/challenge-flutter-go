@@ -8,6 +8,8 @@ import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/services/transport_service.dart';
 import 'package:move_together_app/utils/map.dart';
 
+import '../Widgets/button.dart';
+
 Map<TransportType, String> transportTypeString = {
   TransportType.car: 'Voiture',
   TransportType.plane: 'Avion',
@@ -82,17 +84,10 @@ class TransportScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                     (hasTripEditPermission && transport.author.isMe(context)) || isTripOwner
-                    ? ElevatedButton(
+                    ? Button(
                       onPressed: deleteTransport,
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.error),
-                      ),
-                      child: const Text(
-                        'Supprimer',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                      type: ButtonType.destructive,
+                      text: 'Supprimer',
                     )
                     : !hasTripEditPermission
                       ? Text(

@@ -7,6 +7,8 @@ import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '../Widgets/button.dart';
+
 
 class DocumentCreateModal extends StatefulWidget {
   final Function(Document) onDocumentCreated;
@@ -81,22 +83,17 @@ class _DocumentCreateModalState extends State<DocumentCreateModal> {
                 prefixIcon: Icons.description,
               ),
               const SizedBox(height: 8),
-              ElevatedButton(
+              Button(
                 onPressed: selectDocument,
-                child: Text(_selectedFile == null ? 'Sélectionner un document' : 'Document sélectionné : ${_selectedFile!.name}'),
+                text: _selectedFile == null ? 'Sélectionner un document' : 'Document sélectionné : ${_selectedFile!.name}',
               ),
               const SizedBox(height: 8),
-              ElevatedButton(
+              Button(
                 onPressed: createDocument,
-                style: _titleDocumentController.text.isEmpty || _descriptionDocumentController.text.isEmpty || _selectedFile == null
-                    ? ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.black12))
-                    : ButtonStyle(backgroundColor: WidgetStateProperty.all(Theme.of(context).primaryColor)),
-                child: const Text(
-                  'Créer le document',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+                type: _titleDocumentController.text.isEmpty || _descriptionDocumentController.text.isEmpty || _selectedFile == null
+                    ? ButtonType.disabled
+                    : ButtonType.primary,
+                text: 'Créer le document',
               ),
             ],
           ),

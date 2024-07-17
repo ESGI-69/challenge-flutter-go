@@ -4,22 +4,25 @@ enum ButtonType {
   primary,
   classic,
   destructive,
+  disabled,
 }
 
 class Button extends StatelessWidget {
-  final String text;
+  final String? text;
   final Function() onPressed;
   final double? width;
   final BorderRadius? borderRadius;
   final ButtonType type;
+  final IconData? icon;
 
   const Button({
     super.key,
-    required this.text,
+    this.text,
     required this.onPressed,
     this.width,
     this.borderRadius,
     this.type = ButtonType.classic,
+    this.icon,
   });
 
   @override
@@ -37,7 +40,9 @@ class Button extends StatelessWidget {
     Color backgroundColor() {
       if (type == ButtonType.classic || type == ButtonType.destructive) {
         return Colors.white;
-      }else {
+      } else if (type == ButtonType.disabled) {
+        return Colors.grey;
+      } else {
         return Theme.of(context).primaryColor;
       }
     }
@@ -55,12 +60,16 @@ class Button extends StatelessWidget {
               ),
             ),
           ),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: textColor(),
+          child:
+            text != null ?
+            Text(
+              text!,
+              style: TextStyle(
+                color: textColor(),
+              )
             )
-          )
+            : icon != null ? Icon(icon)
+                :null,
       ),
     );
   }

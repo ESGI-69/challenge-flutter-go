@@ -9,6 +9,8 @@ import 'package:move_together_app/core/services/accommodation_service.dart';
 import 'package:move_together_app/utils/map.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../Widgets/button.dart';
+
 Map<AccommodationType, String> accommodationTypeString = {
   AccommodationType.hotel: 'Hotel',
   AccommodationType.airbnb: 'airbnb',
@@ -107,17 +109,10 @@ class AccommodationScreen extends StatelessWidget {
                     : const SizedBox(),
                   const SizedBox(height: 16),
                   (hasTripEditPermission) || isTripOwner
-                    ? ElevatedButton(
+                    ? Button(
                       onPressed: deleteAccommodation,
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.error),
-                      ),
-                      child: const Text(
-                        'Supprimer',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                      type: ButtonType.destructive,
+                      text: 'Supprimer',
                     )
                     : !hasTripEditPermission
                       ? Text(

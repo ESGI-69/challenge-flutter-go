@@ -8,6 +8,8 @@ import 'package:move_together_app/core/services/document_service.dart';
 import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 
+import '../Widgets/button.dart';
+
 class DocumentScreen extends StatelessWidget {
   const DocumentScreen({super.key});
 
@@ -64,24 +66,16 @@ class DocumentScreen extends StatelessWidget {
                       value: document.owner.formattedUsername),
                 ]),
                 const SizedBox(height: 8),
-                ElevatedButton(
+                Button(
                   onPressed: downloadDocument,
-                  child: const Text('Voir le document'),
+                  text: 'Voir le document',
                 ),
                 const SizedBox(height: 8),
                 (hasTripEditPermission || isTripOwner)
-                    ? ElevatedButton(
+                    ? Button(
                         onPressed: deleteDocument,
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(
-                              Theme.of(context).colorScheme.error),
-                        ),
-                        child: const Text(
-                          'Supprimer le document',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                        type: ButtonType.destructive,
+                        text: 'Supprimer le document',
                       )
                     : !hasTripEditPermission
                         ? Text(

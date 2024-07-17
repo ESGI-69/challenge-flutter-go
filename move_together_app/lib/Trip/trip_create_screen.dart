@@ -6,6 +6,8 @@ import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/Trip/bloc/trip_bloc.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 
+import '../Widgets/button.dart';
+
 class CreateTripScreen extends StatefulWidget {
   const CreateTripScreen({super.key});
 
@@ -96,7 +98,7 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                         children: <Widget>[
                           Expanded(
                             flex: 12,
-                            child: ElevatedButton.icon(
+                            child: Button(
                               onPressed: () async {
                                 final DateTimeRange? selectedDateRange = await showDateRangePicker(
                                   context: context,
@@ -112,20 +114,14 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                                   });
                                  }
                               },
-                              icon: const Icon(Icons.calendar_month),
-                              label: Text(_dateController.text.isNotEmpty ? _dateController.text : 'Date', style: const TextStyle(fontWeight: FontWeight.bold)),
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
+                              icon: Icons.calendar_month,
+                              type: ButtonType.classic,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 5),
-                      ElevatedButton(
+                      Button(
                         onPressed: () {
                           if(_destinationController.text.isEmpty || _dateController.text.isEmpty || _nameController.text.isEmpty || _countryController.text.isEmpty) {
                             return;
@@ -146,24 +142,10 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                           context.read<TripBloc>().add(TripDataCreateTrip(newTrip));
                             setState(() {});
                         },
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(
-                            _destinationController.text.isEmpty || _dateController.text.isEmpty || _nameController.text.isEmpty
-                                ? Colors.grey
-                                : const Color(0xFF79D0BF),
-                          ),
-                          foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-                          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.symmetric(vertical: 10.0)
-                          ),
-                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                          ),
-                          minimumSize: WidgetStateProperty.all<Size>(const Size(double.infinity, 0)),
-                        ),
-                        child: const Text('Ajoute un voyage'),
+                        type: _destinationController.text.isEmpty || _dateController.text.isEmpty || _nameController.text.isEmpty
+                          ? ButtonType.disabled
+                          : ButtonType.primary,
+                        text: 'Ajoute un voyage',
                       ),
                     ],
                   ),

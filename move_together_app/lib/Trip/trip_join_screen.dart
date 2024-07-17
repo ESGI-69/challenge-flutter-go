@@ -6,6 +6,8 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
 
+import '../Widgets/button.dart';
+
 class JoinTripScreen extends StatefulWidget {
   const JoinTripScreen({ super.key });
 
@@ -89,28 +91,15 @@ class JoinTripScreenState extends State<JoinTripScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _joinTrip,
-                style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                    (Set<WidgetState> states) {
-                      if (_tripCodeController.text.length >= 8) {
-                        return const Color(0xFF79D0BF);
-                      }
-                      return const Color(0xFFb2e4da);
-                    },
-                  ),                  
-                  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-                  padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.symmetric(horizontal: 70.0),
-                  ),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
+              SizedBox(
+                width: double.infinity,
+                child: Button(
+                  onPressed: _joinTrip,
+                  type: _tripCodeController.text.length >= 8
+                      ? ButtonType.primary
+                      : ButtonType.disabled,
+                  text: 'Rejoindre Maintenant',
                 ),
-                child: const Text('Rejoindre Maintenant'),
               ),
               const SizedBox(height: 16),
               if (errorMessage != null)

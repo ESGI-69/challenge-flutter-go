@@ -8,6 +8,8 @@ import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/services/transport_service.dart';
 import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
 
+import '../Widgets/button.dart';
+
 
 Map<TransportType, String> transportTypeString = {
   TransportType.car: 'car',
@@ -166,21 +168,12 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
                     prefixIcon: Icons.euro,
                   ),
               const SizedBox(height: 8),
-              ElevatedButton(
+              Button(
                 onPressed: createTransport,
-                style: _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
-                  ? ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                  )
-                  : ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
-                  ),
-                child: const Text(
-                  'Créer',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+                type: _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
+                  ? ButtonType.disabled
+                  : ButtonType.primary,
+                text: 'Créer',
               ),
             ]
           ),
