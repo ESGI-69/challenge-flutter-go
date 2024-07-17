@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -31,7 +32,7 @@ class PhotoItem extends StatelessWidget {
           )
         );
       },
-      child: Image.network(
+      child: ExtendedImage.network(
         '${dotenv.env['API_ADDRESS']}${photo.uri}',
         fit: BoxFit.cover,
         headers: {

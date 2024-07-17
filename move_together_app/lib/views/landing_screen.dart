@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,7 +66,7 @@ class LandingScreenState extends State<LandingScreen> {
                 children: [
                   SizedBox(
                     height: 250,
-                    child: Image.asset(
+                    child: ExtendedImage.asset(
                       'assets/images/fond_couleurs_transparent.png',
                       fit: BoxFit.cover,
                     ),

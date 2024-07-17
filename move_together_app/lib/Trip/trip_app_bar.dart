@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Trip/trip_cost_tag.dart';
@@ -145,7 +146,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 35),
-                child: Image.network(
+                child: ExtendedImage.network(
                   imageUrl,
                   fit: BoxFit.cover,
                   headers: {
