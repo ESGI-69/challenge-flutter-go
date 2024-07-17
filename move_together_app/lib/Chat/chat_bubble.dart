@@ -58,10 +58,6 @@ class ChatBubble extends StatelessWidget {
             ],
           ),
         ),
-        if ( isOwnMessage )
-          ParticipantIcon(
-              participant: Participant.fromUser(message.author)
-          ),
       ],
     );
   }
