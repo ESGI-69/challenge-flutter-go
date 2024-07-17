@@ -100,7 +100,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      context.goNamed('landing');
+                      context.goNamed('login');
                     },
                     child: const Text('Login'),
                   ),
