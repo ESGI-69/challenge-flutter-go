@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:move_together_app/core/models/message.dart';
 import 'package:intl/intl.dart';
+import 'package:move_together_app/core/models/participant.dart';
+
+import '../Widgets/Participant/participant_icon.dart';
 
 class ChatBubble extends StatelessWidget {
   final Message message;
@@ -18,6 +21,10 @@ class ChatBubble extends StatelessWidget {
       mainAxisAlignment:
           isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
+        if ( !isOwnMessage )
+          ParticipantIcon(
+              participant: Participant.fromUser(message.author)
+          ),
         Container(
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width * 0.8,
@@ -51,6 +58,10 @@ class ChatBubble extends StatelessWidget {
             ],
           ),
         ),
+        if ( isOwnMessage )
+          ParticipantIcon(
+              participant: Participant.fromUser(message.author)
+          ),
       ],
     );
   }
