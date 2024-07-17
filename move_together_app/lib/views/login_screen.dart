@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/services/auth_service.dart';
 
-import '../Widgets/button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,11 +33,11 @@ class LoginScreenState extends State<LoginScreen> {
         errorMessage = null;
       });
       if (!mounted) return;
-        if (!kIsWeb) {
-          context.goNamed('home');
-        } else {
-          context.goNamed('dashboard');
-        }
+      if (!kIsWeb) {
+        context.goNamed('home');
+      } else {
+        context.goNamed('dashboard');
+      }
     } catch (e) {
       if (mounted) {
         setState(() {

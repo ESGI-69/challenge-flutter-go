@@ -7,8 +7,7 @@ import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
 import 'package:file_picker/file_picker.dart';
 
-import '../Widgets/button.dart';
-
+import 'package:move_together_app/Widgets/button.dart';
 
 class DocumentCreateModal extends StatefulWidget {
   final Function(Document) onDocumentCreated;
@@ -25,12 +24,15 @@ class DocumentCreateModal extends StatefulWidget {
 }
 
 class _DocumentCreateModalState extends State<DocumentCreateModal> {
-  final TextEditingController _titleDocumentController = TextEditingController();
-  final TextEditingController _descriptionDocumentController = TextEditingController();
+  final TextEditingController _titleDocumentController =
+      TextEditingController();
+  final TextEditingController _descriptionDocumentController =
+      TextEditingController();
   PlatformFile? _selectedFile;
 
   void selectDocument() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
     if (result != null) {
       setState(() {
         _selectedFile = result.files.first;
@@ -39,11 +41,14 @@ class _DocumentCreateModalState extends State<DocumentCreateModal> {
   }
 
   void createDocument() async {
-    if (_titleDocumentController.text.isEmpty || _descriptionDocumentController.text.isEmpty || _selectedFile == null) {
+    if (_titleDocumentController.text.isEmpty ||
+        _descriptionDocumentController.text.isEmpty ||
+        _selectedFile == null) {
       return;
     }
 
-    final createdDocument = await DocumentService(context.read<AuthProvider>()).create(
+    final createdDocument =
+        await DocumentService(context.read<AuthProvider>()).create(
       tripId: widget.tripId,
       title: _titleDocumentController.text,
       description: _descriptionDocumentController.text,
@@ -85,12 +90,16 @@ class _DocumentCreateModalState extends State<DocumentCreateModal> {
               const SizedBox(height: 8),
               Button(
                 onPressed: selectDocument,
-                text: _selectedFile == null ? 'Sélectionner un document' : 'Document sélectionné : ${_selectedFile!.name}',
+                text: _selectedFile == null
+                    ? 'Sélectionner un document'
+                    : 'Document sélectionné : ${_selectedFile!.name}',
               ),
               const SizedBox(height: 8),
               Button(
                 onPressed: createDocument,
-                type: _titleDocumentController.text.isEmpty || _descriptionDocumentController.text.isEmpty || _selectedFile == null
+                type: _titleDocumentController.text.isEmpty ||
+                        _descriptionDocumentController.text.isEmpty ||
+                        _selectedFile == null
                     ? ButtonType.disabled
                     : ButtonType.primary,
                 text: 'Créer le document',

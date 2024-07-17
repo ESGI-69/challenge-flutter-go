@@ -8,7 +8,7 @@ import 'package:move_together_app/core/services/document_service.dart';
 import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 
-import '../Widgets/button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 class DocumentScreen extends StatelessWidget {
   const DocumentScreen({super.key});
@@ -39,10 +39,10 @@ class DocumentScreen extends StatelessWidget {
       final result = await OpenFile.open(documentPath, type: 'application/pdf');
       if (result.type != ResultType.done) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
-              content: const Text('Erreur lors de l\'ouverture du document'),
-              backgroundColor: Theme.of(context).colorScheme.error,
-           ),
+          SnackBar(
+            content: const Text('Erreur lors de l\'ouverture du document'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
         );
       }
     }

@@ -7,7 +7,7 @@ import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/services/activity_service.dart';
 
-import '../Widgets/button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 class ActivityCreateModal extends StatefulWidget {
   final Function(Activity) onActivityCreated;
@@ -32,17 +32,18 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
   final TextEditingController _locationController = TextEditingController();
 
   bool cantPost() {
-    return _nameController.text.isEmpty
-      || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0)
-      || _endDate == DateTime.fromMillisecondsSinceEpoch(0)
-      || _priceController.text.isEmpty;
+    return _nameController.text.isEmpty ||
+        _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) ||
+        _endDate == DateTime.fromMillisecondsSinceEpoch(0) ||
+        _priceController.text.isEmpty;
   }
 
   void createActivity() async {
     if (cantPost()) {
       return;
     }
-    final createdActivity = await ActivityService(context.read<AuthProvider>()).create(
+    final createdActivity =
+        await ActivityService(context.read<AuthProvider>()).create(
       tripId: widget.tripId,
       name: _nameController.text,
       description: _descriptionController.text,
@@ -68,74 +69,69 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const _Header(),
-                const SizedBox(height: 8),
-                CoolTextField(
-                  controller: _nameController,
-                  hintText: 'Titre',
-                  prefixIcon: Icons.title,
-                ),
-                const SizedBox(height: 8),
-                CoolTextField(
-                  controller: _descriptionController,
-                  hintText: 'Description',
-                  prefixIcon: Icons.description,
-                ),
-                const SizedBox(height: 8),
-                CoolDateTimePicker(
-                  hintText: 'Date de début',
-                  prefixIcon: Icons.calendar_today,
-                  onDateTimeChanged: (dateTime) {
-                    setState(() {
-                      _startDateTime = dateTime;
-                    });
-                  },
-                  onDateTimeCleared: () {
-                    setState(() {
-                      _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                CoolDateTimePicker(
-                  hintText: 'Date de fin',
-                  prefixIcon: Icons.calendar_today,
-                  onDateTimeChanged: (dateTime) {
-                    setState(() {
-                      _endDate = dateTime;
-                    });
-                  },
-                  onDateTimeCleared: () {
-                    setState(() {
-                      _endDate = DateTime.fromMillisecondsSinceEpoch(0);
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                CoolNumberField(
-                  controller: _priceController,
-                  hintText: 'Prix',
-                  prefixIcon: Icons.euro,
-                ),
-                const SizedBox(height: 8),
-                CoolTextField(
-                  controller: _locationController,
-                  hintText: 'Lieu',
-                  prefixIcon: Icons.location_on,
-                ),
-                const SizedBox(height: 8),
-                Button(
-                  onPressed: createActivity,
-                  type: cantPost()
-                      ? ButtonType.disabled
-                      : ButtonType.primary,
-                  text: 'Créer',
-                ),
-              ]
-          ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            const _Header(),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _nameController,
+              hintText: 'Titre',
+              prefixIcon: Icons.title,
+            ),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _descriptionController,
+              hintText: 'Description',
+              prefixIcon: Icons.description,
+            ),
+            const SizedBox(height: 8),
+            CoolDateTimePicker(
+              hintText: 'Date de début',
+              prefixIcon: Icons.calendar_today,
+              onDateTimeChanged: (dateTime) {
+                setState(() {
+                  _startDateTime = dateTime;
+                });
+              },
+              onDateTimeCleared: () {
+                setState(() {
+                  _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            CoolDateTimePicker(
+              hintText: 'Date de fin',
+              prefixIcon: Icons.calendar_today,
+              onDateTimeChanged: (dateTime) {
+                setState(() {
+                  _endDate = dateTime;
+                });
+              },
+              onDateTimeCleared: () {
+                setState(() {
+                  _endDate = DateTime.fromMillisecondsSinceEpoch(0);
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            CoolNumberField(
+              controller: _priceController,
+              hintText: 'Prix',
+              prefixIcon: Icons.euro,
+            ),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _locationController,
+              hintText: 'Lieu',
+              prefixIcon: Icons.location_on,
+            ),
+            const SizedBox(height: 8),
+            Button(
+              onPressed: createActivity,
+              type: cantPost() ? ButtonType.disabled : ButtonType.primary,
+              text: 'Créer',
+            ),
+          ]),
         ),
       ),
     );
@@ -165,14 +161,14 @@ class _Header extends StatelessWidget {
           const SizedBox(height: 4),
           const Row(
             children: [
-              Expanded(child:
-              Text(
-                'Créer une activité',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  'Créer une activité',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
               )
             ],
           ),

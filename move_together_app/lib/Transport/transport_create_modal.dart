@@ -8,8 +8,7 @@ import 'package:move_together_app/core/models/transport.dart';
 import 'package:move_together_app/core/services/transport_service.dart';
 import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
 
-import '../Widgets/button.dart';
-
+import 'package:move_together_app/Widgets/button.dart';
 
 Map<TransportType, String> transportTypeString = {
   TransportType.car: 'car',
@@ -37,15 +36,21 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
   final TextEditingController _endAddressController = TextEditingController();
   DateTime _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-  final TextEditingController _meetingAddressController = TextEditingController();
+  final TextEditingController _meetingAddressController =
+      TextEditingController();
   DateTime _meetingDateTime = DateTime.fromMillisecondsSinceEpoch(0);
   final TextEditingController _priceController = TextEditingController();
 
   void createTransport() async {
-    if (_startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _priceController.text.isEmpty) {
+    if (_startAddressController.text.isEmpty ||
+        _endAddressController.text.isEmpty ||
+        _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) ||
+        _endDateTime == DateTime.fromMillisecondsSinceEpoch(0) ||
+        _priceController.text.isEmpty) {
       return;
     }
-    final createdTransport = await TransportService(context.read<AuthProvider>()).create(
+    final createdTransport =
+        await TransportService(context.read<AuthProvider>()).create(
       tripId: widget.tripId,
       transportType: _selectedTransportType,
       startDate: _startDateTime,
@@ -73,110 +78,112 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const _Header(),
-              Row(
-                children: [
-                  Expanded(
-                    child: CupertinoSlidingSegmentedControl<TransportType>(
-                      groupValue: _selectedTransportType,
-                      onValueChanged: (value) => {
-                        if (value != null) {
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            const _Header(),
+            Row(
+              children: [
+                Expanded(
+                  child: CupertinoSlidingSegmentedControl<TransportType>(
+                    groupValue: _selectedTransportType,
+                    onValueChanged: (value) => {
+                      if (value != null)
+                        {
                           setState(() {
                             _selectedTransportType = value;
                           })
                         }
-                      },
-                      children: const <TransportType, Widget>{
-                        TransportType.car: Text('Voiture'),
-                        TransportType.plane: Text('Avion'),
-                        TransportType.bus: Text('Bus'),
-                      },
-                    ),
+                    },
+                    children: const <TransportType, Widget>{
+                      TransportType.car: Text('Voiture'),
+                      TransportType.plane: Text('Avion'),
+                      TransportType.bus: Text('Bus'),
+                    },
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _startAddressController,
-                hintText: 'Adresse de départ',
-                prefixIcon: Icons.flight_takeoff,
-              ),
-              const SizedBox(height: 8),
-              CoolDateTimePicker(
-                hintText: 'Date de départ',
-                prefixIcon: Icons.calendar_today,
-                onDateTimeChanged: (DateTime dateTime) {
-                  setState(() {
-                    _startDateTime = dateTime;
-                  });
-                },
-                onDateTimeCleared: () {
-                  setState(() {
-                    _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _endAddressController,
-                hintText: 'Adresse d\'arrivée',
-                prefixIcon: Icons.flight_land,
-              ),
-              const SizedBox(height: 8),
-              CoolDateTimePicker(
-                hintText: 'Date d\'arrivée',
-                prefixIcon: Icons.calendar_today,
-                onDateTimeChanged: (DateTime dateTime) {
-                  setState(() {
-                    _endDateTime = dateTime;
-                  });
-                },
-                onDateTimeCleared: () {
-                  setState(() {
-                    _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              CoolTextField(
-                controller: _meetingAddressController,
-                hintText: 'Adresse de rendez-vous',
-                prefixIcon: Icons.groups,
-              ),
-              const SizedBox(height: 8),
-              CoolDateTimePicker(
-                hintText: 'Date de rendez-vous',
-                prefixIcon: Icons.calendar_today,
-                onDateTimeChanged: (DateTime dateTime) {
-                  setState(() {
-                    _meetingDateTime = dateTime;
-                  });
-                },
-                onDateTimeCleared: () {
-                  setState(() {
-                    _meetingDateTime = DateTime.fromMillisecondsSinceEpoch(0);
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              CoolNumberField(
-                    controller: _priceController,
-                    hintText: 'Prix',
-                    prefixIcon: Icons.euro,
-                  ),
-              const SizedBox(height: 8),
-              Button(
-                onPressed: createTransport,
-                type: _startAddressController.text.isEmpty || _endAddressController.text.isEmpty || _startDateTime == DateTime.fromMillisecondsSinceEpoch(0) || _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _startAddressController,
+              hintText: 'Adresse de départ',
+              prefixIcon: Icons.flight_takeoff,
+            ),
+            const SizedBox(height: 8),
+            CoolDateTimePicker(
+              hintText: 'Date de départ',
+              prefixIcon: Icons.calendar_today,
+              onDateTimeChanged: (DateTime dateTime) {
+                setState(() {
+                  _startDateTime = dateTime;
+                });
+              },
+              onDateTimeCleared: () {
+                setState(() {
+                  _startDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _endAddressController,
+              hintText: 'Adresse d\'arrivée',
+              prefixIcon: Icons.flight_land,
+            ),
+            const SizedBox(height: 8),
+            CoolDateTimePicker(
+              hintText: 'Date d\'arrivée',
+              prefixIcon: Icons.calendar_today,
+              onDateTimeChanged: (DateTime dateTime) {
+                setState(() {
+                  _endDateTime = dateTime;
+                });
+              },
+              onDateTimeCleared: () {
+                setState(() {
+                  _endDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _meetingAddressController,
+              hintText: 'Adresse de rendez-vous',
+              prefixIcon: Icons.groups,
+            ),
+            const SizedBox(height: 8),
+            CoolDateTimePicker(
+              hintText: 'Date de rendez-vous',
+              prefixIcon: Icons.calendar_today,
+              onDateTimeChanged: (DateTime dateTime) {
+                setState(() {
+                  _meetingDateTime = dateTime;
+                });
+              },
+              onDateTimeCleared: () {
+                setState(() {
+                  _meetingDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            CoolNumberField(
+              controller: _priceController,
+              hintText: 'Prix',
+              prefixIcon: Icons.euro,
+            ),
+            const SizedBox(height: 8),
+            Button(
+              onPressed: createTransport,
+              type: _startAddressController.text.isEmpty ||
+                      _endAddressController.text.isEmpty ||
+                      _startDateTime ==
+                          DateTime.fromMillisecondsSinceEpoch(0) ||
+                      _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
                   ? ButtonType.disabled
                   : ButtonType.primary,
-                text: 'Créer',
-              ),
-            ]
-          ),
+              text: 'Créer',
+            ),
+          ]),
         ),
       ),
     );
@@ -206,8 +213,8 @@ class _Header extends StatelessWidget {
           const SizedBox(height: 4),
           const Row(
             children: [
-              Expanded(child: 
-                Text(
+              Expanded(
+                child: Text(
                   'Créer un moyen de transport',
                   textAlign: TextAlign.center,
                   style: TextStyle(

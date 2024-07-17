@@ -8,7 +8,7 @@ import 'package:move_together_app/core/models/accommodation.dart';
 import 'package:move_together_app/core/services/accommodation_service.dart';
 import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
 
-import '../Widgets/button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 Map<AccommodationType, String> accommodationTypeString = {
   AccommodationType.hotel: 'hotel',

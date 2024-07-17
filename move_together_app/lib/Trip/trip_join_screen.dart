@@ -6,10 +6,10 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
 
-import '../Widgets/button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 class JoinTripScreen extends StatefulWidget {
-  const JoinTripScreen({ super.key });
+  const JoinTripScreen({super.key});
 
   @override
   JoinTripScreenState createState() => JoinTripScreenState();
@@ -33,8 +33,7 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   }
 
   void _handleTextChanged() {
-    setState(() {
-    });
+    setState(() {});
   }
 
   Future<void> _joinTrip() async {
@@ -56,13 +55,13 @@ class JoinTripScreenState extends State<JoinTripScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const Padding(
-        padding: EdgeInsets.only(left: 16.0),
-         child: Row(
-          children: [
-            ButtonBack(),
-          ],
+          padding: EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: [
+              ButtonBack(),
+            ],
+          ),
         ),
-      ),
       ),
       body: Center(
         child: Padding(
@@ -71,23 +70,25 @@ class JoinTripScreenState extends State<JoinTripScreen> {
             children: [
               const Text('Tu as été invité?'),
               const Text('S\'il te plait, entre le code PIN ci-dessous'),
-              const Icon(Icons.groups_rounded, size: 100, color: Color(0xFF79D0BF)),
+              const Icon(Icons.groups_rounded,
+                  size: 100, color: Color(0xFF79D0BF)),
               TextField(
                 controller: _tripCodeController,
                 decoration: const InputDecoration(
                   counterText: '',
-                   enabledBorder: OutlineInputBorder(
-                            borderSide:  BorderSide(color: Colors.pinkAccent),
-                          ),
-                    focusedBorder: OutlineInputBorder(
-                            borderSide:  BorderSide(color: Colors.pinkAccent),
-                          ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.pinkAccent),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.pinkAccent),
+                  ),
                 ),
                 textAlign: TextAlign.center,
                 maxLength: 10,
-                style: const TextStyle(color: Colors.black,
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 16),
@@ -113,9 +114,4 @@ class JoinTripScreenState extends State<JoinTripScreen> {
       ),
     );
   }
-
-
-
 }
-      
-
