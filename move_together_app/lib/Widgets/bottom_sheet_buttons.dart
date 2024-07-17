@@ -5,18 +5,18 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'button.dart';
 import 'buttons_group.dart';
 
-class ButtonSheetButton {
+class BottomSheetButton {
   final String text;
   final Future Function() onPressed;
 
-  const ButtonSheetButton({
+  const BottomSheetButton({
     required this.text,
     required this.onPressed,
   });
 }
 
 class BottomSheetButtons extends StatelessWidget {
-  final List<ButtonSheetButton> buttons;
+  final List<BottomSheetButton> buttons;
 
   const BottomSheetButtons({
     super.key,
@@ -57,7 +57,7 @@ class BottomSheetButtons extends StatelessWidget {
   }
 }
 
-Future showBottomSheetButtons(BuildContext context, List<ButtonSheetButton> buttons) {
+Future showBottomSheetButtons(BuildContext context, List<BottomSheetButton> buttons) {
   return showCupertinoModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
