@@ -22,62 +22,63 @@ class DocumentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DocumentBloc(context)..add(DocumentsDataFetch(tripId)),
-      child: BlocBuilder<DocumentBloc, DocumentState>(
-        builder: (context, state) {
-          if (state is DocumentsDataLoadingSuccess){
+        create: (context) =>
+            DocumentBloc(context)..add(DocumentsDataFetch(tripId)),
+        child:
+            BlocBuilder<DocumentBloc, DocumentState>(builder: (context, state) {
+          if (state is DocumentsDataLoadingSuccess) {
             return TripFeatureCard(
-              title: 'Documents',
-              emptyMessage: 'Aucun document. Appuie sur le + pour ajouter tes documents de voyage',
-              showAddButton: userHasEditPermission,
-              icon: Icons.folder,
-              isLoading: state is DocumentsDataLoading,
-              length: state.documents.length,
-              onAddTap: (){
-                showCupertinoModalBottomSheet(
-                  expand: true,
-                  context: context,
-                  builder: (BuildContext context) => DocumentCreateModal(
-                    tripId: tripId,
-                    onDocumentCreated: (createdDocument) {
-                      state.documents.add(createdDocument);
-                      Navigator.of(context).pop();
-                    },
-                  )
-                );
-              },
-              itemBuilder: (context, index) {
-                return DocumentRow(
-                  document: state.documents[index],
-                  onTap: () async {
-                    await context.pushNamed(
-                      'document',
-                      pathParameters: {
-                        'tripId': tripId.toString(),
-                        'documentId': state.documents[index].id.toString(),
-                      },
-                      queryParameters: {
-                        'hasTripEditPermission': userHasEditPermission.toString(),
-                        'isTripOwner': userIsOwner.toString(),
-                      },
-                      extra: state.documents[index],
-                    );
-                    context.read<DocumentBloc>().add(DocumentsDataFetch(tripId));
-                  }
-                );
-              }
-            );
+                title: 'Documents',
+                emptyMessage:
+                    'Aucun document. Appuie sur le + pour ajouter tes documents de voyage',
+                showAddButton: userHasEditPermission,
+                icon: Icons.folder,
+                isLoading: state is DocumentsDataLoading,
+                length: state.documents.length,
+                onAddTap: () {
+                  showCupertinoModalBottomSheet(
+                      expand: true,
+                      context: context,
+                      builder: (BuildContext context) => DocumentCreateModal(
+                            tripId: tripId,
+                            onDocumentCreated: (createdDocument) {
+                              state.documents.add(createdDocument);
+                              Navigator.of(context).pop();
+                            },
+                          ));
+                },
+                itemBuilder: (context, index) {
+                  return DocumentRow(
+                      document: state.documents[index],
+                      onTap: () async {
+                        await context.pushNamed(
+                          'document',
+                          pathParameters: {
+                            'tripId': tripId.toString(),
+                            'documentId': state.documents[index].id.toString(),
+                          },
+                          queryParameters: {
+                            'hasTripEditPermission':
+                                userHasEditPermission.toString(),
+                            'isTripOwner': userIsOwner.toString(),
+                          },
+                          extra: state.documents[index],
+                        );
+                        context
+                            .read<DocumentBloc>()
+                            .add(DocumentsDataFetch(tripId));
+                      });
+                });
           } else if (state is DocumentsDataLoading) {
             return TripFeatureCard(
-              title: 'Documents',
-              icon: Icons.folder,
-              isLoading: true,
-              length: 0,
-              itemBuilder: (context, index) {
-                return const SizedBox();
-              }
-            );
-          } else if (state is DocumentsDataLoadingError){
+                title: 'Documents',
+                icon: Icons.folder,
+                isLoading: true,
+                length: 0,
+                itemBuilder: (context, index) {
+                  return const SizedBox();
+                });
+          } else if (state is DocumentsDataLoadingError) {
             return Center(
               child: Column(
                 children: [
@@ -87,8 +88,6 @@ class DocumentCard extends StatelessWidget {
             );
           }
           return const SizedBox();
-        }
-      )
-    );
+        }));
   }
 }

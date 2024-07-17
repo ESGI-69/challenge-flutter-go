@@ -18,7 +18,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   ChatBloc(BuildContext context, String tripId, String token)
       : _chatService = ChatService(context.read<AuthProvider>()),
-        _webSocketService = WebSocketService(dotenv.env['WEBSOCKET_ADDRESS']!, 'chat', tripId, token),
+        _webSocketService = WebSocketService(
+            dotenv.env['WEBSOCKET_ADDRESS']!, 'chat', tripId, token),
         super(ChatInitial()) {
     on<ChatDataFetch>(_onChatDataFetch);
     on<ChatDataSendMessage>(_onChatDataSendMessage);
@@ -42,16 +43,21 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _onChatDataSendMessage(ChatDataSendMessage event, Emitter<ChatState> emit) async {
+  void _onChatDataSendMessage(
+      ChatDataSendMessage event, Emitter<ChatState> emit) async {
     final currentState = state;
     if (currentState is ChatDataLoadingSuccess) {
       emit(currentState.copyWith(sendMessageState: ChatSendMessageLoading()));
       try {
         await _chatService.create(event.tripId, event.message);
       } on ApiException catch (error) {
-        emit(currentState.copyWith(sendMessageState: ChatSendMessageError(errorMessage: error.message)));
+        emit(currentState.copyWith(
+            sendMessageState:
+                ChatSendMessageError(errorMessage: error.message)));
       } catch (error) {
-        emit(currentState.copyWith(sendMessageState: const ChatSendMessageError(errorMessage: 'Unhandled error')));
+        emit(currentState.copyWith(
+            sendMessageState:
+                const ChatSendMessageError(errorMessage: 'Unhandled error')));
       }
     }
   }

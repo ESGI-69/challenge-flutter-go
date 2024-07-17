@@ -6,7 +6,7 @@ class TripFeatureCardFullBody extends StatelessWidget {
   final Widget? child;
 
   const TripFeatureCardFullBody({
-    super.key, 
+    super.key,
     this.isLoading = false,
     this.child,
   });
@@ -14,12 +14,13 @@ class TripFeatureCardFullBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return isLoading
-      ? const Center(
-          child: CircularProgressIndicator.adaptive(),
-        )
-      : ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 200),
-        child: child ?? const TripFeatureCardEmptyBody(message: 'No map provided'),
-      );
+        ? const Center(
+            child: CircularProgressIndicator.adaptive(),
+          )
+        : ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 200),
+            child: child ??
+                const TripFeatureCardEmptyBody(message: 'No map provided'),
+          );
   }
 }

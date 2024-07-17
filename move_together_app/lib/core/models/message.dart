@@ -7,7 +7,6 @@ class Message {
   final User author;
   final DateTime createdAt;
 
-
   Message({
     required this.id,
     required this.content,
@@ -20,8 +19,7 @@ class Message {
         id: json['id'],
         content: json['content'],
         author: User.fromJson(json['author']),
-        createdAt: DateTime.parse(json['createdAt'])
-    );
+        createdAt: DateTime.parse(json['createdAt']));
   }
 
   Map<String, dynamic> toJson() {

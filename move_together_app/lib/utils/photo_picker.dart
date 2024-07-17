@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:move_together_app/Widgets/bottom_sheet_buttons.dart';
 import 'package:image_picker/image_picker.dart';
 
-Future<XFile?> pickPhoto(BuildContext context, ) async {
+Future<XFile?> pickPhoto(
+  BuildContext context,
+) async {
   XFile? image;
   final ImagePicker picker = ImagePicker();
 
   await showBottomSheetButtons(
     context,
-    List.from(
-    [
+    List.from([
       BottomSheetButton(
         text: 'Prendre une photo',
         onPressed: () async {

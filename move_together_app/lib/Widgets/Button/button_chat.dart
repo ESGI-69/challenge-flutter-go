@@ -15,7 +15,9 @@ class ButtonChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.pushNamed('chat', pathParameters: {'tripId': tripId.toString()}, queryParameters: {'tripName': tripName});
+        context.pushNamed('chat',
+            pathParameters: {'tripId': tripId.toString()},
+            queryParameters: {'tripName': tripName});
       },
       child: Container(
         height: 40,

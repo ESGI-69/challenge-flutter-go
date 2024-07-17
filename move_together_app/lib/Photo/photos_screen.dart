@@ -11,47 +11,46 @@ class PhotosScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[1]);
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.of(context).pop(),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: const Text('Photos'),
         ),
-        title: const Text('Photos'),
-      ),
-      body: BlocProvider(
-        create: (context) => PhotoBloc(context)..add(PhotosDataFetch(tripId)),
-        child: BlocBuilder<PhotoBloc, PhotoState>(
-          builder: (context, state) {
-            if (state is PhotosDataLoadingSuccess) {
-              return GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 1,
-                  mainAxisSpacing: 1,
-                ),
-                itemCount: state.photos.length,
-                itemBuilder: (context, index) {
-                  final photo = state.photos[index];
-                  return PhotoItem(
-                    tripId: tripId,
-                    photo: photo,
-                    onDeleteSuccess: (photo) {
-                      state.photos.remove(photo);
-                      if (state.photos.isEmpty) {
-                        context.pop();
-                      }
-                    },
-                  );
-                },
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
-      )
-    );
+        body: BlocProvider(
+          create: (context) => PhotoBloc(context)..add(PhotosDataFetch(tripId)),
+          child: BlocBuilder<PhotoBloc, PhotoState>(
+            builder: (context, state) {
+              if (state is PhotosDataLoadingSuccess) {
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 1,
+                    mainAxisSpacing: 1,
+                  ),
+                  itemCount: state.photos.length,
+                  itemBuilder: (context, index) {
+                    final photo = state.photos[index];
+                    return PhotoItem(
+                      tripId: tripId,
+                      photo: photo,
+                      onDeleteSuccess: (photo) {
+                        state.photos.remove(photo);
+                        if (state.photos.isEmpty) {
+                          context.pop();
+                        }
+                      },
+                    );
+                  },
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ));
   }
 }

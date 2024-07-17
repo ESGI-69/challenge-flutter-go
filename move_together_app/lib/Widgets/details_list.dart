@@ -74,9 +74,7 @@ class _DetailsListState extends State<DetailsList> {
                   return Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      border: Border(
-                        bottom: border
-                      ),
+                      border: Border(bottom: border),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -89,51 +87,59 @@ class _DetailsListState extends State<DetailsList> {
                                 item.title,
                                 style: Theme.of(context).textTheme.labelSmall,
                               ),
-                              ...item.isEditable ? [
-                                const SizedBox(width: 8),
-                                Icon(
-                                  Icons.edit,
-                                  size: 16,
-                                  color: Theme.of(context).hintColor,
-                                ),
-                              ] : [],
+                              ...item.isEditable
+                                  ? [
+                                      const SizedBox(width: 8),
+                                      Icon(
+                                        Icons.edit,
+                                        size: 16,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    ]
+                                  : [],
                             ],
                           ),
                           const SizedBox(width: 8),
                           item.value is! DateTime
-                          ? SizedBox(
-                            width: double.infinity,
-                            height: 24,
-                            child: TextFormField(
-                              onChanged: (value) {
-                                setState(() {
-                                  _isEdited = true;
-                                });
-                              },
-                              controller: item.value == null ? item.controller : TextEditingController(text: item.stringValue),
-                              obscureText: item.obscureText,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Touchez pour modifier',
-                                hintStyle: TextStyle(
-                                  color: Theme.of(context).hintColor,
-                                ),
-                              ),
-                              style: Theme.of(context).textTheme.bodyMedium,
-                              readOnly: !item.isEditable,
-                            ),
-                          )
-                          : item.stringValue != ''
-                            ? Text(
-                              item.stringValue,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            )
-                            : Text(
-                              'Non renseigné',
-                              style: TextStyle(
-                                color: Theme.of(context).hintColor,
-                              ),
-                            ),
+                              ? SizedBox(
+                                  width: double.infinity,
+                                  height: 24,
+                                  child: TextFormField(
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isEdited = true;
+                                      });
+                                    },
+                                    controller: item.value == null
+                                        ? item.controller
+                                        : TextEditingController(
+                                            text: item.stringValue),
+                                    obscureText: item.obscureText,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Touchez pour modifier',
+                                      hintStyle: TextStyle(
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    ),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                    readOnly: !item.isEditable,
+                                  ),
+                                )
+                              : item.stringValue != ''
+                                  ? Text(
+                                      item.stringValue,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    )
+                                  : Text(
+                                      'Non renseigné',
+                                      style: TextStyle(
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    ),
                         ],
                       ),
                     ),
@@ -144,21 +150,21 @@ class _DetailsListState extends State<DetailsList> {
           ),
         ),
         ..._isEdited
-          ? [
-            const SizedBox(height: 16),
-            Center(
-              child: Button(
-                onPressed: () {
-                  widget.onConfirmEdition?.call();
-                  setState(() {
-                    _isEdited = false;
-                  });
-                },
-                text: 'Confirmer les modifications',
-              ),
-            ),
-          ]
-          : [const SizedBox()],
+            ? [
+                const SizedBox(height: 16),
+                Center(
+                  child: Button(
+                    onPressed: () {
+                      widget.onConfirmEdition?.call();
+                      setState(() {
+                        _isEdited = false;
+                      });
+                    },
+                    text: 'Confirmer les modifications',
+                  ),
+                ),
+              ]
+            : [const SizedBox()],
       ],
     );
   }

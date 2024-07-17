@@ -7,11 +7,10 @@ class AccommodationRow extends StatelessWidget {
   final void Function() onTap;
 
   const AccommodationRow({
-    super.key, 
+    super.key,
     required this.accommodation,
     required this.onTap,
   });
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +54,8 @@ class AccommodationRow extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, color: Colors.black38, size: 16)
+              const Icon(Icons.arrow_forward_ios,
+                  color: Colors.black38, size: 16)
             ],
           ),
         ),

@@ -21,4 +21,3 @@ class ChatDataReceived extends ChatEvent {
 
   ChatDataReceived(this.message);
 }
-

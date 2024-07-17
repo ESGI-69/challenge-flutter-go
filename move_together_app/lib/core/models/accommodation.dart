@@ -18,7 +18,6 @@ class Accommodation {
   final double longitude;
   final double price;
 
-
   Accommodation({
     required this.id,
     required this.accommodationType,
@@ -35,7 +34,8 @@ class Accommodation {
   factory Accommodation.fromJson(Map<String, dynamic> json) {
     return Accommodation(
       id: json['id'],
-      accommodationType: AccommodationType.values.firstWhere((e) => e.toString().split('.').last == json['accommodationType']),
+      accommodationType: AccommodationType.values.firstWhere(
+          (e) => e.toString().split('.').last == json['accommodationType']),
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
       address: json['address'],

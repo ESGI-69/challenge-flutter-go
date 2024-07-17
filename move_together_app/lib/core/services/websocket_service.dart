@@ -5,7 +5,7 @@ class WebSocketService {
 
   WebSocketService(String url, String route, String roomId, String token)
       : _channel = WebSocketChannel.connect(
-      Uri.parse('$url/$route?roomId=$roomId&token=$token'));
+            Uri.parse('$url/$route?roomId=$roomId&token=$token'));
 
   Stream get stream => _channel.stream;
 

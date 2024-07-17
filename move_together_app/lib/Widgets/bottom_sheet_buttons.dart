@@ -18,10 +18,7 @@ class BottomSheetButton {
 class BottomSheetButtons extends StatelessWidget {
   final List<BottomSheetButton> buttons;
 
-  const BottomSheetButtons({
-    super.key,
-    required this.buttons
-  });
+  const BottomSheetButtons({super.key, required this.buttons});
 
   @override
   Widget build(BuildContext context) {
@@ -34,36 +31,37 @@ class BottomSheetButtons extends StatelessWidget {
       ),
       height: 200,
       color: Colors.transparent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          ButtonsGroup(buttons: buttons.map((button) => Button(
-              text: button.text,
-              onPressed: () async {
-                await button.onPressed();
-                context.pop();
-              },
-              width: double.infinity,
-            )).toList(),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Button(
-            onPressed: () {
-              context.pop();
-            },
-            width: double.infinity,
-            text: 'Annuler',
-            type: ButtonType.destructive,
-          )
-        ]
-      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+        ButtonsGroup(
+          buttons: buttons
+              .map((button) => Button(
+                    text: button.text,
+                    onPressed: () async {
+                      await button.onPressed();
+                      context.pop();
+                    },
+                    width: double.infinity,
+                  ))
+              .toList(),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Button(
+          onPressed: () {
+            context.pop();
+          },
+          width: double.infinity,
+          text: 'Annuler',
+          type: ButtonType.destructive,
+        )
+      ]),
     );
   }
 }
 
-Future showBottomSheetButtons(BuildContext context, List<BottomSheetButton> buttons) {
+Future showBottomSheetButtons(
+    BuildContext context, List<BottomSheetButton> buttons) {
   return showMaterialModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,

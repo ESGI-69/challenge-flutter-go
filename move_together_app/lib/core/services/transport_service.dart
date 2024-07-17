@@ -15,8 +15,12 @@ class TransportService {
       '/trips/$tripId/transports',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      return (response.data as List).map((transport) => Transport.fromJson(transport)).toList();
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return (response.data as List)
+          .map((transport) => Transport.fromJson(transport))
+          .toList();
     } else {
       throw Exception('Failed to get user');
     }
@@ -47,7 +51,9 @@ class TransportService {
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Transport.fromJson(response.data);
     } else {
       throw Exception('Failed to create transport');
@@ -59,8 +65,9 @@ class TransportService {
       '/trips/$tripId/transports/$transportId',
     );
 
-
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to delete transport');

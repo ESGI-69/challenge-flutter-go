@@ -45,13 +45,13 @@ class PhotoCard extends StatelessWidget {
                   context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
                 }
               },
-              onTitleTap:
-                state.photos.isNotEmpty ?
-                () async {
-                  await context.pushNamed('photos', pathParameters: { 'tripId': tripId.toString() });
-                  context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
-                }
-                : null,
+              onTitleTap: state.photos.isNotEmpty
+                  ? () async {
+                      await context.pushNamed('photos',
+                          pathParameters: {'tripId': tripId.toString()});
+                      context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
+                    }
+                  : null,
               itemBuilder: (context, index) => PhotoItem(
                 tripId: tripId,
                 photo: state.photos[index],

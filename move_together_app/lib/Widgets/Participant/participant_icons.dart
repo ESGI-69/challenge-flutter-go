@@ -18,38 +18,35 @@ class ParticipantIcons extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 9),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ...participants.map((participant) {
-              return Align(
-                widthFactor: 0.5,
-                child: ParticipantIcon(
-                  participant: participant,
-                ),
-              );
-            }),
-            onTap != null
-            ? Align(
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          ...participants.map((participant) {
+            return Align(
               widthFactor: 0.5,
-              child: Container(
-                height: 36,
-                width: 36,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
+              child: ParticipantIcon(
+                participant: participant,
               ),
-            )
-            : const SizedBox(),
-          ]
-        ),
+            );
+          }),
+          onTap != null
+              ? Align(
+                  widthFactor: 0.5,
+                  child: Container(
+                    height: 36,
+                    width: 36,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.add,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox(),
+        ]),
       ),
     );
   }

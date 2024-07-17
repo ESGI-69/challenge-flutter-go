@@ -53,93 +53,97 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: BlocProvider(
-          create: (context) => ProfileBloc(context)..add(ProfileDataLoaded()),
-          child: BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-            if (state is ProfileDataLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is ProfileDataLoadingError) {
-              return Center(
-                child: Text(state.errorMessage),
-              );
-            } else if (state is ProfileDataLoadingSuccess) {
-              Future<void> handleProfilePictureUpdate() async {
-                final XFile? image = await pickPhoto(context);
-                if (image != null) {
-                  await userService.uploadProfilePicture(image);
-                  clearMemoryImageCache(state.profile.profilePictureUri);
-                  await clearDiskCachedImage('${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}');
-                  context.read<ProfileBloc>().add(ProfilePictureUpdated());
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Photo de profil mise à jour'),
-                    ),
-                  );
+            create: (context) => ProfileBloc(context)..add(ProfileDataLoaded()),
+            child: BlocBuilder<ProfileBloc, ProfileState>(
+                builder: (context, state) {
+              if (state is ProfileDataLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is ProfileDataLoadingError) {
+                return Center(
+                  child: Text(state.errorMessage),
+                );
+              } else if (state is ProfileDataLoadingSuccess) {
+                Future<void> handleProfilePictureUpdate() async {
+                  final XFile? image = await pickPhoto(context);
+                  if (image != null) {
+                    await userService.uploadProfilePicture(image);
+                    clearMemoryImageCache(state.profile.profilePictureUri);
+                    await clearDiskCachedImage(
+                        '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}');
+                    context.read<ProfileBloc>().add(ProfilePictureUpdated());
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Photo de profil mise à jour'),
+                      ),
+                    );
+                  }
                 }
-              }
 
-              _passwordController.text = '';
+                _passwordController.text = '';
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  state.profile.profilePicturePath != null && state.profile.profilePicturePath != ''
-                    ? InkWell(
-                      onTap: handleProfilePictureUpdate,
-                      child: ClipOval(
-                        child: ExtendedImage.network(
-                          '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                          imageCacheName: state.profile.profilePictureUri,
-                        ),
-                      ),
-                    )
-                    : InkWell(
-                      onTap: handleProfilePictureUpdate,
-                      child: Icon(
-                        Icons.account_circle,
-                        size: 100,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                  Text(
-                    state.profile.formattedUsername,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  const SizedBox(height: 16),
-                  DetailsList(
-                    onConfirmEdition: () async {
-                      if (_passwordController.text.isNotEmpty) {
-                        await userService.update(state.profile.id, _passwordController.text);
-                        _passwordController.text = '';
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Profil mis à jour'),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    state.profile.profilePicturePath != null &&
+                            state.profile.profilePicturePath != ''
+                        ? InkWell(
+                            onTap: handleProfilePictureUpdate,
+                            child: ClipOval(
+                              child: ExtendedImage.network(
+                                '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                imageCacheName: state.profile.profilePictureUri,
+                              ),
+                            ),
+                          )
+                        : InkWell(
+                            onTap: handleProfilePictureUpdate,
+                            child: Icon(
+                              Icons.account_circle,
+                              size: 100,
+                              color: Theme.of(context).hintColor,
+                            ),
                           ),
-                        );
-                      }
-                    },
-                    items: [
-                      DetailItem(
-                        title: 'Mot de passe',
-                        isEditable: true,
-                        controller: _passwordController,
-                        obscureText: true,
-                      ),
-                      DetailItem(
-                        title: 'Role',
-                        value: state.profile.role.toString().split('.').last,
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            }
-            return const SizedBox();
-          })),
+                    Text(
+                      state.profile.formattedUsername,
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    const SizedBox(height: 16),
+                    DetailsList(
+                      onConfirmEdition: () async {
+                        if (_passwordController.text.isNotEmpty) {
+                          await userService.update(
+                              state.profile.id, _passwordController.text);
+                          _passwordController.text = '';
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Profil mis à jour'),
+                            ),
+                          );
+                        }
+                      },
+                      items: [
+                        DetailItem(
+                          title: 'Mot de passe',
+                          isEditable: true,
+                          controller: _passwordController,
+                          obscureText: true,
+                        ),
+                        DetailItem(
+                          title: 'Role',
+                          value: state.profile.role.toString().split('.').last,
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox();
+            })),
       ),
     );
   }

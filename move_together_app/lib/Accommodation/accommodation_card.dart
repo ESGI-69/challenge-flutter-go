@@ -24,13 +24,15 @@ class AccommodationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AccommodationBloc(context)..add(AccommodationsDataFetch(tripId)),
-      child: BlocBuilder<AccommodationBloc, AccommodationState>(
-        builder: (context, state) {
+        create: (context) =>
+            AccommodationBloc(context)..add(AccommodationsDataFetch(tripId)),
+        child: BlocBuilder<AccommodationBloc, AccommodationState>(
+            builder: (context, state) {
           if (state is AccommodationsDataLoadingSuccess) {
             return TripFeatureCard(
               title: 'Hébergements',
-              emptyMessage: 'Où on dormira ? Appuie sur le + pour ajouter un logement',
+              emptyMessage:
+                  'Où on dormira ? Appuie sur le + pour ajouter un logement',
               showAddButton: userHasEditPermission,
               icon: Icons.home,
               isLoading: state is AccommodationsDataLoading,
@@ -57,15 +59,19 @@ class AccommodationCard extends StatelessWidget {
                       'accommodation',
                       pathParameters: {
                         'tripId': tripId.toString(),
-                        'accommodationId': state.accommodations[index].id.toString(),
+                        'accommodationId':
+                            state.accommodations[index].id.toString(),
                       },
                       queryParameters: {
-                        'hasTripEditPermission': userHasEditPermission.toString(),
+                        'hasTripEditPermission':
+                            userHasEditPermission.toString(),
                         'isTripOwner': userIsOwner.toString(),
                       },
                       extra: state.accommodations[index],
                     );
-                    context.read<AccommodationBloc>().add(AccommodationsDataFetch(tripId));
+                    context
+                        .read<AccommodationBloc>()
+                        .add(AccommodationsDataFetch(tripId));
                     onRefresh();
                   },
                 );
@@ -74,7 +80,8 @@ class AccommodationCard extends StatelessWidget {
           } else if (state is AccommodationsDataLoading) {
             return TripFeatureCard(
               title: 'Accommodations',
-              emptyMessage: 'Comment on va dormir ? Appuie sur le + pour ajouter un logement',
+              emptyMessage:
+                  'Comment on va dormir ? Appuie sur le + pour ajouter un logement',
               showAddButton: false,
               icon: Icons.home,
               isLoading: true,
@@ -93,8 +100,6 @@ class AccommodationCard extends StatelessWidget {
             );
           }
           return const SizedBox();
-        }
-      )
-    );
+        }));
   }
 }

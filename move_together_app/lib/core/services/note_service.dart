@@ -7,7 +7,7 @@ class NoteService {
   final AuthProvider authProvider;
 
   NoteService(
-      this.authProvider,
+    this.authProvider,
   );
 
   Future<List<Note>> getAll(int tripId) async {
@@ -15,8 +15,12 @@ class NoteService {
       '/trips/$tripId/notes',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      return (response.data as List).map((note) => Note.fromJson(note)).toList();
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return (response.data as List)
+          .map((note) => Note.fromJson(note))
+          .toList();
     } else {
       throw Exception('Failed to get user');
     }
@@ -35,7 +39,9 @@ class NoteService {
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Note.fromJson(response.data);
     } else {
       throw Exception('Failed to create note');
@@ -47,8 +53,9 @@ class NoteService {
       '/trips/$tripId/notes/$noteId',
     );
 
-
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to delete note');

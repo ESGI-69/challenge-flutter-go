@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/router.dart';
 
-class NavigationBarBackoffice extends StatelessWidget implements PreferredSizeWidget {
+class NavigationBarBackoffice extends StatelessWidget
+    implements PreferredSizeWidget {
   const NavigationBarBackoffice({super.key});
 
   @override
@@ -12,27 +13,33 @@ class NavigationBarBackoffice extends StatelessWidget implements PreferredSizeWi
       title: const Text('Backoffice'),
       actions: [
         TextButton(
-          child: Text('Dashboard', style: TextStyle(color: Theme.of(context).primaryColor)),
+          child: Text('Dashboard',
+              style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () => backOfficeRouter.replaceNamed('dashboard'),
         ),
         TextButton(
-          child: Text('Feature', style: TextStyle(color: Theme.of(context).primaryColor)),
+          child: Text('Feature',
+              style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () => backOfficeRouter.replaceNamed('feature'),
         ),
         TextButton(
-          child: Text('Trip', style: TextStyle(color: Theme.of(context).primaryColor)),
+          child: Text('Trip',
+              style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () => backOfficeRouter.replaceNamed('trip'),
         ),
         TextButton(
-          child: Text('Logs', style: TextStyle(color: Theme.of(context).primaryColor)),
+          child: Text('Logs',
+              style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () => backOfficeRouter.replaceNamed('logs'),
         ),
         TextButton(
-          child: Text('Users', style: TextStyle(color: Theme.of(context).primaryColor)),
+          child: Text('Users',
+              style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () => backOfficeRouter.replaceNamed('users'),
         ),
         TextButton(
-          child: Text('Logout', style: TextStyle(color: Theme.of(context).primaryColor)),
+          child: Text('Logout',
+              style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () async {
             final authProvider = context.read<AuthProvider>();
             await authProvider.logout();

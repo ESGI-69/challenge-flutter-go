@@ -9,10 +9,8 @@ class Backoffice extends StatefulWidget {
 }
 
 class _BackofficeState extends State<Backoffice> {
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp.router(
       debugShowCheckedModeBanner: true,
       theme: ThemeData(

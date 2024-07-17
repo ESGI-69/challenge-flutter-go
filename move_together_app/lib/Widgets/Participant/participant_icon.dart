@@ -26,27 +26,30 @@ class ParticipantIcon extends StatelessWidget {
           color: Colors.white,
           width: 3,
         ),
-        image: 
-          participant.profilePicturePath != null && participant.profilePicturePath != ''
+        image: participant.profilePicturePath != null &&
+                participant.profilePicturePath != ''
             ? DecorationImage(
-              image: ExtendedNetworkImageProvider(
-                '${dotenv.env['API_ADDRESS']}${participant.profilePictureUri}',
-                imageCacheName: participant.profilePictureUri,
-              ),
-              fit: BoxFit.cover,
-            )
+                image: ExtendedNetworkImageProvider(
+                  '${dotenv.env['API_ADDRESS']}${participant.profilePictureUri}',
+                  imageCacheName: participant.profilePictureUri,
+                ),
+                fit: BoxFit.cover,
+              )
             : null,
       ),
-      child: participant.profilePicturePath == null || participant.profilePicturePath == '' ? Center(
-        child: Text(
-          participant.username[0].toUpperCase(),
-          style: TextStyle(
-            fontSize: 18,
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ) : null,
+      child: participant.profilePicturePath == null ||
+              participant.profilePicturePath == ''
+          ? Center(
+              child: Text(
+                participant.username[0].toUpperCase(),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }

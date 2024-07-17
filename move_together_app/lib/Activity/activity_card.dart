@@ -24,13 +24,15 @@ class ActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ActivityBloc(context)..add(ActivitiesDataFetch(tripId)),
-      child: BlocBuilder<ActivityBloc, ActivityState>(
-        builder: (context, state) {
+        create: (context) =>
+            ActivityBloc(context)..add(ActivitiesDataFetch(tripId)),
+        child:
+            BlocBuilder<ActivityBloc, ActivityState>(builder: (context, state) {
           if (state is ActivitiesDataLoadingSuccess) {
             return TripFeatureCard(
               title: 'Activities',
-              emptyMessage: 'Qu\'allons-nous faire ? Appuie sur le + pour ajouter des activités',
+              emptyMessage:
+                  'Qu\'allons-nous faire ? Appuie sur le + pour ajouter des activités',
               showAddButton: userHasEditPermission,
               icon: Icons.kayaking,
               isLoading: state is ActivitiesDataLoading,
@@ -60,12 +62,15 @@ class ActivityCard extends StatelessWidget {
                         'activityId': state.activities[index].id.toString()
                       },
                       queryParameters: {
-                        'hasTripEditPermission': userHasEditPermission.toString(),
+                        'hasTripEditPermission':
+                            userHasEditPermission.toString(),
                         'isTripOwner': userIsOwner.toString(),
                       },
                       extra: state.activities[index],
                     );
-                    context.read<ActivityBloc>().add(ActivitiesDataFetch(tripId));
+                    context
+                        .read<ActivityBloc>()
+                        .add(ActivitiesDataFetch(tripId));
                     onRefresh();
                   },
                 );
@@ -74,7 +79,8 @@ class ActivityCard extends StatelessWidget {
           } else if (state is ActivitiesDataLoading) {
             return TripFeatureCard(
               title: 'Activities',
-              emptyMessage: 'Qu\'allons-nous faire ? Appuie sur le + pour ajouter des activités',
+              emptyMessage:
+                  'Qu\'allons-nous faire ? Appuie sur le + pour ajouter des activités',
               showAddButton: false,
               icon: Icons.kayaking,
               isLoading: true,
@@ -93,8 +99,6 @@ class ActivityCard extends StatelessWidget {
             );
           }
           return const SizedBox();
-        }
-      )
-    );
+        }));
   }
 }

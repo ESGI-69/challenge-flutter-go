@@ -13,7 +13,9 @@ class TripService {
   Future<Trip> join(String inviteCode) async {
     final response = await api.post('/trips/join?inviteCode=$inviteCode');
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
       throw Exception('Failed to join trip');
@@ -23,8 +25,12 @@ class TripService {
   Future<List<Trip>> getAll() async {
     final response = await api.get('/trips');
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      return (response.data as List).map((trip) => Trip.fromJson(trip)).toList();
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return (response.data as List)
+          .map((trip) => Trip.fromJson(trip))
+          .toList();
     } else {
       throw Exception('Failed to get trips');
     }
@@ -33,7 +39,9 @@ class TripService {
   Future<void> leave(String tripId) async {
     final response = await api.post('/trips/$tripId/leave');
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to leave trip');
@@ -43,7 +51,9 @@ class TripService {
   Future<void> delete(String tripId) async {
     final response = await api.delete('/trips/$tripId');
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to delete trip');
@@ -53,7 +63,9 @@ class TripService {
   Future<Trip> create(Trip trip) async {
     final response = await api.post('/trips', data: trip.toJson());
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
       throw Exception('Failed to create trip');
@@ -62,8 +74,10 @@ class TripService {
 
   Future<Trip> get(String tripId) async {
     final response = await api.get('/trips/$tripId');
-    
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
       throw Exception('Failed to get trip');
@@ -89,7 +103,9 @@ class TripService {
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
       throw Exception('Failed to edit trip');

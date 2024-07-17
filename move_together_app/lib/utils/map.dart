@@ -8,7 +8,8 @@ import 'dart:math';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/models/transport.dart';
 
-CameraPosition getMapCameraPositionFromMarkers(Set<Marker> markers, bool isCard, LatLng initialCameraPosition) {
+CameraPosition getMapCameraPositionFromMarkers(
+    Set<Marker> markers, bool isCard, LatLng initialCameraPosition) {
   if (markers.isEmpty) {
     return CameraPosition(
       target: initialCameraPosition,
@@ -19,8 +20,10 @@ CameraPosition getMapCameraPositionFromMarkers(Set<Marker> markers, bool isCard,
   final LatLngBounds bounds = getBoundsFromMarkers(markers);
   return CameraPosition(
     target: LatLng(
-      bounds.southwest.latitude + (bounds.northeast.latitude - bounds.southwest.latitude) / 2,
-      bounds.southwest.longitude + (bounds.northeast.longitude - bounds.southwest.longitude) / 2,
+      bounds.southwest.latitude +
+          (bounds.northeast.latitude - bounds.southwest.latitude) / 2,
+      bounds.southwest.longitude +
+          (bounds.northeast.longitude - bounds.southwest.longitude) / 2,
     ),
     zoom: getZoomLevel(bounds, isCard ? 2 : 0.8),
   );
@@ -48,8 +51,11 @@ LatLngBounds getBoundsFromMarkers(Set<Marker> markers) {
 }
 
 double getZoomLevel(LatLngBounds bounds, double padding) {
-  final double latFraction = (latRad(bounds.northeast.latitude) - latRad(bounds.southwest.latitude)) / 3.141592653589793;
-  final double lngDiff = bounds.northeast.longitude - bounds.southwest.longitude;
+  final double latFraction =
+      (latRad(bounds.northeast.latitude) - latRad(bounds.southwest.latitude)) /
+          3.141592653589793;
+  final double lngDiff =
+      bounds.northeast.longitude - bounds.southwest.longitude;
   final double lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
 
   final double latZoom = zoom(latFraction, padding);
@@ -116,7 +122,6 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         height: iconHeight,
         'assets/images/pins/hotel_pin.png',
       ),
-
       BitmapDescriptor.asset(
         const ImageConfiguration(
           devicePixelRatio: 2.5,
@@ -124,7 +129,6 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         height: iconHeight,
         'assets/images/pins/start_pin.png',
       ),
-
       BitmapDescriptor.asset(
         const ImageConfiguration(
           devicePixelRatio: 2.5,
@@ -132,7 +136,6 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         height: iconHeight,
         'assets/images/pins/end_pin.png',
       ),
-
       BitmapDescriptor.asset(
         const ImageConfiguration(
           devicePixelRatio: 2.5,
@@ -140,7 +143,6 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         height: iconHeight,
         'assets/images/pins/activity_pin.png',
       ),
-
       BitmapDescriptor.asset(
         const ImageConfiguration(
           devicePixelRatio: 2.5,
@@ -181,7 +183,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
             // bottom center
             anchor: const Offset(0.5, 0),
           ),
-          icon: activityPin ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          icon: activityPin ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
     }
@@ -196,7 +199,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
             title: accommodation.name,
             snippet: accommodation.address,
           ),
-          icon: hotelPin ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          icon: hotelPin ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
     }
@@ -211,7 +215,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
             title: transport.startAddress,
             snippet: transport.startDate.toString(),
           ),
-          icon: transportStartPin ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          icon: transportStartPin ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
 
@@ -224,7 +229,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
             title: transport.endAddress,
             snippet: transport.endDate.toString(),
           ),
-          icon: transportEndPin ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          icon: transportEndPin ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
 
@@ -245,12 +251,14 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
           Marker(
             consumeTapEvents: disabledTapOnMarker,
             markerId: MarkerId('transport-meeting-${transport.id}'),
-            position: LatLng(transport.meetingLatitude, transport.meetingLongitude),
+            position:
+                LatLng(transport.meetingLatitude, transport.meetingLongitude),
             infoWindow: InfoWindow(
               title: transport.meetingAddress ?? 'Meeting Point',
               snippet: transport.meetingTime?.toString() ?? 'Meeting Time',
             ),
-            icon: meetingPin ?? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            icon: meetingPin ??
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           ),
         );
 
@@ -258,7 +266,10 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
           tempPolyline.add(
             Polyline(
               polylineId: PolylineId('transport-meeting-start-${transport.id}'),
-              patterns: <PatternItem>[PatternItem.dash(300), PatternItem.gap(300)],
+              patterns: <PatternItem>[
+                PatternItem.dash(300),
+                PatternItem.gap(300)
+              ],
               points: [
                 LatLng(transport.startLatitude, transport.startLongitude),
                 LatLng(transport.meetingLatitude, transport.meetingLongitude),
@@ -314,7 +325,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
       return const Center(
         child: CircularProgressIndicator(),
       );
-    } else if (widget.type == RefinedGoogleMapType.fullPage || widget.type == RefinedGoogleMapType.appBar) {
+    } else if (widget.type == RefinedGoogleMapType.fullPage ||
+        widget.type == RefinedGoogleMapType.appBar) {
       return GoogleMap(
         onMapCreated: (GoogleMapController controller) {
           widget.onMapCreated?.call(controller);
@@ -329,13 +341,16 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         rotateGesturesEnabled: true,
         mapToolbarEnabled: true,
         tiltGesturesEnabled: true,
-        gestureRecognizers: <Factory<OneSequenceGestureRecognizer>> {
-          Factory<OneSequenceGestureRecognizer> (
+        gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+          Factory<OneSequenceGestureRecognizer>(
             () => EagerGestureRecognizer(),
           ),
         },
         mapType: MapType.hybrid,
-        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, RefinedGoogleMapType.appBar == widget.type, widget.initialCameraPosition),
+        initialCameraPosition: getMapCameraPositionFromMarkers(
+            _markers,
+            RefinedGoogleMapType.appBar == widget.type,
+            widget.initialCameraPosition),
         markers: _markers,
         polylines: _polylines,
         myLocationButtonEnabled: false,
@@ -351,7 +366,8 @@ class _RefinedGoogleMapState extends State<RefinedGoogleMap> {
         rotateGesturesEnabled: false,
         tiltGesturesEnabled: false,
         mapType: MapType.hybrid,
-        initialCameraPosition: getMapCameraPositionFromMarkers(_markers, true, widget.initialCameraPosition),
+        initialCameraPosition: getMapCameraPositionFromMarkers(
+            _markers, true, widget.initialCameraPosition),
         markers: _markers,
         polylines: _polylines,
         myLocationButtonEnabled: false,

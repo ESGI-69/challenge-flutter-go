@@ -24,19 +24,19 @@ class PhotoItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         showCupertinoModalBottomSheet(
-          context: context,
-          builder: (context) => PhotoInfo(
-            tripId: tripId,
-            photo: photo,
-            onDeleteSuccess: onDeleteSuccess,
-          )
-        );
+            context: context,
+            builder: (context) => PhotoInfo(
+                  tripId: tripId,
+                  photo: photo,
+                  onDeleteSuccess: onDeleteSuccess,
+                ));
       },
       child: ExtendedImage.network(
         '${dotenv.env['API_ADDRESS']}${photo.uri}',
         fit: BoxFit.cover,
         headers: {
-          'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
+          'Authorization':
+              context.read<AuthProvider>().getAuthorizationHeader(),
         },
       ),
     );

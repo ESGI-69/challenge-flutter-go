@@ -11,7 +11,6 @@ class ActivityRow extends StatelessWidget {
     required this.onTap,
   });
 
-
   @override
   Widget build(BuildContext context) {
     const activityIcon = Icons.hiking;
@@ -50,7 +49,8 @@ class ActivityRow extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, color: Colors.black38, size: 16)
+              const Icon(Icons.arrow_forward_ios,
+                  color: Colors.black38, size: 16)
             ],
           ),
         ),

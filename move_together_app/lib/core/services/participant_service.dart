@@ -8,7 +8,7 @@ class ParticipantResponseData {
   ParticipantResponseData({
     required this.participants,
   });
-} 
+}
 
 class ParticipantService {
   final api = Api().dio;
@@ -23,14 +23,19 @@ class ParticipantService {
       '/trips/$tripId/participants',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      return (response.data['participants'] as List).map((e) => Participant.fromJson(e)).toList();
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return (response.data['participants'] as List)
+          .map((e) => Participant.fromJson(e))
+          .toList();
     } else {
       throw Exception('Failed to get trip participants');
     }
   }
 
-  Future<void> changeRole(int tripId, int participantId, ParticipantTripRole role) async {
+  Future<void> changeRole(
+      int tripId, int participantId, ParticipantTripRole role) async {
     if (role == ParticipantTripRole.OWNER) {
       throw Exception('Cannot change role to owner');
     }
@@ -41,7 +46,9 @@ class ParticipantService {
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to change participant role');
@@ -53,7 +60,9 @@ class ParticipantService {
       '/trips/$tripId/participants/$participantId',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to remove participant');

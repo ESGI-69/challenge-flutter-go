@@ -16,28 +16,27 @@ void showUnifiedDialog({
 
   if (isIos) {
     showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: [
-            CupertinoDialogAction(
-              onPressed: onCancelPressed,
-              isDefaultAction: true,
-              textStyle: cancelButtonTextStyle,
-              child: Text(cancelButtonText),
-            ),
-            CupertinoDialogAction(
-              onPressed: onOkPressed,
-              isDefaultAction: true,
-              textStyle: okButtonTextStyle,
-              child: Text(okButtonText),
-            ),
-          ],
-        );
-      }
-    );
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: onCancelPressed,
+                isDefaultAction: true,
+                textStyle: cancelButtonTextStyle,
+                child: Text(cancelButtonText),
+              ),
+              CupertinoDialogAction(
+                onPressed: onOkPressed,
+                isDefaultAction: true,
+                textStyle: okButtonTextStyle,
+                child: Text(okButtonText),
+              ),
+            ],
+          );
+        });
   } else {
     showDialog(
       context: context,

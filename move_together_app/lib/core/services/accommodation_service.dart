@@ -15,8 +15,12 @@ class AccommodationService {
       '/trips/$tripId/accommodations',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      return (response.data as List).map((accommodation) => Accommodation.fromJson(accommodation)).toList();
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return (response.data as List)
+          .map((accommodation) => Accommodation.fromJson(accommodation))
+          .toList();
     } else {
       throw Exception('Failed to get user');
     }
@@ -45,7 +49,9 @@ class AccommodationService {
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Accommodation.fromJson(response.data);
     } else {
       throw Exception('Failed to create accommodation');
@@ -57,8 +63,9 @@ class AccommodationService {
       '/trips/$tripId/accommodations/$accommodationId',
     );
 
-
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to delete accommodation');

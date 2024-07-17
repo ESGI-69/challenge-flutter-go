@@ -6,14 +6,12 @@ import 'package:move_together_app/Backoffice/Logs/logs_table.dart';
 
 import 'package:move_together_app/Widgets/button.dart';
 
-
 class LogsScreen extends StatefulWidget {
   const LogsScreen({super.key});
 
   @override
   State<LogsScreen> createState() => _LogsScreenState();
 }
-
 
 class _LogsScreenState extends State<LogsScreen> {
   String? selectedFilter = '';
@@ -24,9 +22,9 @@ class _LogsScreenState extends State<LogsScreen> {
     return Scaffold(
       appBar: const NavigationBarBackoffice(),
       body: BlocProvider(
-        create: (context) => LogsBloc(context)..add(LogsDataFetch(page: currentPage)),
-        child: BlocBuilder<LogsBloc, LogsState>(
-          builder: (context, state) {
+          create: (context) =>
+              LogsBloc(context)..add(LogsDataFetch(page: currentPage)),
+          child: BlocBuilder<LogsBloc, LogsState>(builder: (context, state) {
             if (state is LogsDataLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -54,7 +52,8 @@ class _LogsScreenState extends State<LogsScreen> {
                           children: [
                             DropdownButton<String>(
                               value: selectedFilter,
-                              items: <String>['', 'INFO', 'WARN', 'ERROR'].map((String value) {
+                              items: <String>['', 'INFO', 'WARN', 'ERROR']
+                                  .map((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(value),
@@ -64,7 +63,9 @@ class _LogsScreenState extends State<LogsScreen> {
                                 setState(() {
                                   selectedFilter = newValue;
                                   currentPage = 1;
-                                  context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
+                                  context.read<LogsBloc>().add(LogsDataFetch(
+                                      filter: selectedFilter,
+                                      page: currentPage));
                                 });
                               },
                             ),
@@ -83,7 +84,10 @@ class _LogsScreenState extends State<LogsScreen> {
                                     onPressed: () {
                                       setState(() {
                                         currentPage--;
-                                        context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
+                                        context.read<LogsBloc>().add(
+                                            LogsDataFetch(
+                                                filter: selectedFilter,
+                                                page: currentPage));
                                       });
                                     },
                                     text: 'Previous',
@@ -93,7 +97,10 @@ class _LogsScreenState extends State<LogsScreen> {
                                     onPressed: () {
                                       setState(() {
                                         currentPage++;
-                                        context.read<LogsBloc>().add(LogsDataFetch(filter: selectedFilter, page: currentPage));
+                                        context.read<LogsBloc>().add(
+                                            LogsDataFetch(
+                                                filter: selectedFilter,
+                                                page: currentPage));
                                       });
                                     },
                                     text: 'Next',
@@ -109,9 +116,7 @@ class _LogsScreenState extends State<LogsScreen> {
               );
             }
             return const SizedBox();
-          }
-        )
-      ),
+          })),
     );
   }
 }
