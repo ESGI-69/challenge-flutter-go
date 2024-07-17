@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../Widgets/button.dart';
-import '../../core/models/trip.dart';
+import 'package:move_together_app/Widgets/button.dart';
+import 'package:move_together_app/core/models/trip.dart';
 
 class TripsTable extends StatelessWidget {
   final List<Trip> trips;

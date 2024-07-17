@@ -4,7 +4,7 @@ import 'package:move_together_app/Backoffice/Widgets/navigation_bar_backoffice.d
 import 'package:move_together_app/Backoffice/Logs/bloc/logs_bloc.dart';
 import 'package:move_together_app/Backoffice/Logs/logs_table.dart';
 
-import '../../Widgets/button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 
 class LogsScreen extends StatefulWidget {

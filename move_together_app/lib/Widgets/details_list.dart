@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 class DetailItem {
   final String title;
