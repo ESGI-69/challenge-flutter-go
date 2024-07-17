@@ -23,7 +23,6 @@ class FeatureProvider with ChangeNotifier, WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      print("reload features when app came back to foreground");
       loadFeatures();
     }
   }
