@@ -16,7 +16,7 @@ class TripScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tripId = GoRouterState.of(context).uri.pathSegments[1];
+    final tripId = GoRouterState.of(context).uri.pathSegments[0];
 
     return BlocProvider(
         create: (context) =>

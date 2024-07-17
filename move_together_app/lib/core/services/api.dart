@@ -46,7 +46,7 @@ class AppInterceptors extends Interceptor {
         err.requestOptions.path != '/login' &&
         err.requestOptions.path != '/register') {
       await AuthProvider().logout();
-      router.go('/');
+      router.goNamed('login');
       handler.reject(err);
     }
   }

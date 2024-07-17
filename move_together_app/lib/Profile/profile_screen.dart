@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () async {
               final authProvider = context.read<AuthProvider>();
               await authProvider.logout();
-              router.go('/');
+              router.goNamed('login');
             },
           ),
         ],

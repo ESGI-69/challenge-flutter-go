@@ -9,7 +9,7 @@ class PhotosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[1]);
+    final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[0]);
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
