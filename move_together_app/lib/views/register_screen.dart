@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/Widgets/logo_area.dart';
 import 'package:move_together_app/core/services/auth_service.dart';
-
 import 'package:move_together_app/Widgets/button.dart';
+import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -29,7 +30,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         setState(() {
           errorMessage = null;
         });
-        context.go('/login');
+        context.goNamed('login');
       }
     } catch (e) {
       if (mounted) {
@@ -43,27 +44,37 @@ class RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
+              const LogoArea(),
+              const Text(
+                "Bienvenue sur MoveTogether",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Text(
+                "Inscris toi pour continuer",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
                 ),
               ),
               const SizedBox(height: 16),
-              TextField(
+              CoolTextField(
+                controller: _usernameController,
+                hintText: 'Nom d\'utilisateur',
+              ),
+              const SizedBox(height: 16),
+              CoolTextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                ),
+                hintText: 'Mot de passe',
                 obscureText: true,
               ),
               const SizedBox(height: 16),
@@ -77,6 +88,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               ),
               if (errorMessage != null)
                 Text(errorMessage!, style: const TextStyle(color: Colors.red)),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -88,7 +100,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      context.goNamed('home');
+                      context.goNamed('landing');
                     },
                     child: const Text('Login'),
                   ),
