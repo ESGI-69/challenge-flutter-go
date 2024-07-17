@@ -6,6 +6,7 @@ import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/services/activity_service.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 import 'package:move_together_app/Widgets/button.dart';
 
@@ -42,17 +43,27 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
     if (cantPost()) {
       return;
     }
-    final createdActivity =
-        await ActivityService(context.read<AuthProvider>()).create(
-      tripId: widget.tripId,
-      name: _nameController.text,
-      description: _descriptionController.text,
-      endDate: _endDate,
-      startDate: _startDateTime,
-      location: _locationController.text,
-      price: double.parse(_priceController.text),
-    );
-    widget.onActivityCreated(createdActivity);
+
+    try {
+      final createdActivity =
+          await ActivityService(context.read<AuthProvider>()).create(
+        tripId: widget.tripId,
+        name: _nameController.text,
+        description: _descriptionController.text,
+        endDate: _endDate,
+        startDate: _startDateTime,
+        location: _locationController.text,
+        price: double.parse(_priceController.text),
+      );
+      widget.onActivityCreated(createdActivity);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exceptionToString(error)),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override

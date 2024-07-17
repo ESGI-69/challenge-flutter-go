@@ -5,6 +5,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/details_list.dart';
 import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
 
@@ -28,19 +29,38 @@ class DocumentScreen extends StatelessWidget {
         GoRouterState.of(context).uri.queryParameters['isTripOwner'] == 'true';
 
     void deleteDocument() async {
-      await DocumentService(context.read<AuthProvider>())
-          .delete(tripId, document.id);
-      context.pop();
+      try {
+        await DocumentService(context.read<AuthProvider>())
+            .delete(tripId, document.id);
+        context.pop();
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(exceptionToString(error)),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
     }
 
     void downloadDocument() async {
-      final documentPath = await DocumentService(context.read<AuthProvider>())
-          .download(tripId, document.id, document.title);
-      final result = await OpenFile.open(documentPath, type: 'application/pdf');
-      if (result.type != ResultType.done) {
+      try {
+        final documentPath = await DocumentService(context.read<AuthProvider>())
+            .download(tripId, document.id, document.title);
+        final result =
+            await OpenFile.open(documentPath, type: 'application/pdf');
+        if (result.type != ResultType.done) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Erreur lors de l\'ouverture du document'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        }
+      } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Erreur lors de l\'ouverture du document'),
+            content: Text(exceptionToString(error)),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );

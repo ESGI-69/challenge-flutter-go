@@ -6,6 +6,7 @@ import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/details_list.dart';
 import 'package:move_together_app/core/models/accommodation.dart';
 import 'package:move_together_app/core/services/accommodation_service.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 import 'package:move_together_app/utils/map.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,9 +36,18 @@ class AccommodationScreen extends StatelessWidget {
         GoRouterState.of(context).uri.queryParameters['isTripOwner'] == 'true';
 
     void deleteAccommodation() async {
-      await AccommodationService(context.read<AuthProvider>())
-          .delete(tripId, accommodation.id);
-      context.pop();
+      try {
+        await AccommodationService(context.read<AuthProvider>())
+            .delete(tripId, accommodation.id);
+        context.pop();
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(exceptionToString(error)),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
     }
 
     Uri urlParsed;

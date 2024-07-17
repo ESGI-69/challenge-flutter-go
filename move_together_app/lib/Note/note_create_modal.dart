@@ -4,6 +4,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/note.dart';
 import 'package:move_together_app/core/services/note_service.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 import 'package:move_together_app/Widgets/button.dart';
 
@@ -29,12 +30,22 @@ class _NoteCreateModalState extends State<NoteCreateModal> {
     if (_titleController.text.isEmpty || _contentController.text.isEmpty) {
       return;
     }
-    final createdNote = await NoteService(context.read<AuthProvider>()).create(
-      tripId: widget.tripId,
-      title: _titleController.text,
-      content: _contentController.text,
-    );
-    widget.onNoteCreated(createdNote);
+    try {
+      final createdNote =
+          await NoteService(context.read<AuthProvider>()).create(
+        tripId: widget.tripId,
+        title: _titleController.text,
+        content: _contentController.text,
+      );
+      widget.onNoteCreated(createdNote);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exceptionToString(error)),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override

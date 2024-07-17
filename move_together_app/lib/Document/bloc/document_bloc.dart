@@ -4,6 +4,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/exceptions/api_exception.dart';
 import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 part 'document_event.dart';
 part 'document_state.dart';
@@ -20,7 +21,7 @@ class DocumentBloc extends Bloc<DocumentEvent, DocumentState> {
       } on ApiException catch (error) {
         emit(DocumentsDataLoadingError(errorMessage: error.message));
       } catch (error) {
-        emit(DocumentsDataLoadingError(errorMessage: 'Unhandled error'));
+        emit(DocumentsDataLoadingError(errorMessage: exceptionToString(error)));
       }
     });
   }

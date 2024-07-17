@@ -4,6 +4,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/exceptions/api_exception.dart';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/services/activity_service.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 part 'activity_event.dart';
 part 'activity_state.dart';
@@ -20,7 +21,8 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       } on ApiException catch (error) {
         emit(ActivitiesDataLoadingError(errorMessage: error.message));
       } catch (error) {
-        emit(ActivitiesDataLoadingError(errorMessage: 'Unhandled error'));
+        emit(
+            ActivitiesDataLoadingError(errorMessage: exceptionToString(error)));
       }
     });
   }

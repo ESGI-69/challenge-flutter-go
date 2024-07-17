@@ -9,6 +9,7 @@ import 'package:move_together_app/core/services/transport_service.dart';
 import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
 
 import 'package:move_together_app/Widgets/button.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 Map<TransportType, String> transportTypeString = {
   TransportType.car: 'car',
@@ -49,19 +50,29 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
         _priceController.text.isEmpty) {
       return;
     }
-    final createdTransport =
-        await TransportService(context.read<AuthProvider>()).create(
-      tripId: widget.tripId,
-      transportType: _selectedTransportType,
-      startDate: _startDateTime,
-      endDate: _endDateTime,
-      startAddress: _startAddressController.text,
-      endAddress: _endAddressController.text,
-      price: double.parse(_priceController.text),
-      meetingAddress: _meetingAddressController.text,
-      meetingTime: _meetingDateTime,
-    );
-    widget.onTransportCreated(createdTransport);
+
+    try {
+      final createdTransport =
+          await TransportService(context.read<AuthProvider>()).create(
+        tripId: widget.tripId,
+        transportType: _selectedTransportType,
+        startDate: _startDateTime,
+        endDate: _endDateTime,
+        startAddress: _startAddressController.text,
+        endAddress: _endAddressController.text,
+        price: double.parse(_priceController.text),
+        meetingAddress: _meetingAddressController.text,
+        meetingTime: _meetingDateTime,
+      );
+      widget.onTransportCreated(createdTransport);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exceptionToString(error)),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override

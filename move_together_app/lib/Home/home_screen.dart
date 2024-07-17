@@ -6,6 +6,7 @@ import 'package:move_together_app/Home/blocs/home_bloc.dart';
 import 'package:move_together_app/Home/empty_home.dart';
 import 'package:move_together_app/Participant/participant_info.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/Provider/feature_provider.dart';
 import 'package:move_together_app/Trip/trip_card.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
@@ -53,6 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   onPressed: () {
                     context.read<HomeBloc>().add(HomeDataFetch());
+                    // feature provider loadFeatures call
+                    context.read<FeatureProvider>().loadFeatures();
                     setState(() {
                       _currentIndex = 0;
                     });

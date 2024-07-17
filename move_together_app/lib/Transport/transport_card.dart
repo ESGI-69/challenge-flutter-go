@@ -90,12 +90,16 @@ class TransportCard extends StatelessWidget {
               },
             );
           } else if (state is TransportsDataLoadingError) {
-            return Center(
-              child: Column(
-                children: [
-                  Text(state.errorMessage),
-                ],
-              ),
+            return TripFeatureCard(
+              title: 'Transports',
+              emptyMessage: state.errorMessage,
+              showAddButton: userHasEditPermission,
+              icon: Icons.directions_car,
+              isLoading: state is TransportsDataLoading,
+              length: 0,
+              itemBuilder: (context, index) {
+                return const SizedBox();
+              },
             );
           }
           return const SizedBox();

@@ -79,13 +79,16 @@ class DocumentCard extends StatelessWidget {
                   return const SizedBox();
                 });
           } else if (state is DocumentsDataLoadingError) {
-            return Center(
-              child: Column(
-                children: [
-                  Text(state.errorMessage),
-                ],
-              ),
-            );
+            return TripFeatureCard(
+                title: 'Documents',
+                emptyMessage: state.errorMessage,
+                showAddButton: userHasEditPermission,
+                icon: Icons.folder,
+                isLoading: state is DocumentsDataLoading,
+                length: 0,
+                itemBuilder: (context, index) {
+                  return const SizedBox();
+                });
           }
           return const SizedBox();
         }));

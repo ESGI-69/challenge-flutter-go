@@ -6,7 +6,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
 import 'package:file_picker/file_picker.dart';
-
+import 'package:move_together_app/utils/exception_to_string.dart';
 import 'package:move_together_app/Widgets/button.dart';
 
 class DocumentCreateModal extends StatefulWidget {
@@ -47,14 +47,23 @@ class _DocumentCreateModalState extends State<DocumentCreateModal> {
       return;
     }
 
-    final createdDocument =
-        await DocumentService(context.read<AuthProvider>()).create(
-      tripId: widget.tripId,
-      title: _titleDocumentController.text,
-      description: _descriptionDocumentController.text,
-      document: File(_selectedFile!.path!),
-    );
-    widget.onDocumentCreated(createdDocument);
+    try {
+      final createdDocument =
+          await DocumentService(context.read<AuthProvider>()).create(
+        tripId: widget.tripId,
+        title: _titleDocumentController.text,
+        description: _descriptionDocumentController.text,
+        document: File(_selectedFile!.path!),
+      );
+      widget.onDocumentCreated(createdDocument);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exceptionToString(error)),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override

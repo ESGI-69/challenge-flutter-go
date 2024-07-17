@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:move_together_app/Participant/participant_info.dart';
+import 'package:move_together_app/Provider/feature_provider.dart';
 import 'package:move_together_app/Trip/bloc/trip_bloc.dart';
 import 'package:move_together_app/Trip/trip_app_bar.dart';
 import 'package:move_together_app/Trip/trip_body.dart';
@@ -91,6 +92,7 @@ class TripScreen extends StatelessWidget {
                   context.read<TripBloc>().add(TripDataFetch(
                         state.trip.id,
                       ));
+                  context.read<FeatureProvider>().loadFeatures();
                 },
                 child: TripBody(
                   trip: state.trip,

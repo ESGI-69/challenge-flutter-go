@@ -39,8 +39,20 @@ class ChatScreen extends StatelessWidget {
                 ),
               );
             } else if (state is ChatDataLoadingError) {
-              return Center(
-                child: Text(state.errorMessage),
+              // return Center(
+              //   child: Text(state.errorMessage),
+              // );
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(tripName),
+                  leading: const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: ButtonBack(),
+                  ),
+                ),
+                body: Center(
+                  child: Text(state.errorMessage),
+                ),
               );
             } else if (state is ChatDataLoadingSuccess) {
               return Scaffold(

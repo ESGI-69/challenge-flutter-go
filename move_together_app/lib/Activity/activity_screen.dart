@@ -6,6 +6,7 @@ import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/details_list.dart';
 import 'package:move_together_app/core/models/activity.dart';
 import 'package:move_together_app/core/services/activity_service.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 import 'package:move_together_app/utils/map.dart';
 
 import 'package:move_together_app/Widgets/button.dart';
@@ -28,9 +29,18 @@ class ActivityScreen extends StatelessWidget {
         GoRouterState.of(context).uri.queryParameters['isTripOwner'] == 'true';
 
     void deleteActivity() async {
-      await ActivityService(context.read<AuthProvider>())
-          .delete(tripId, activity.id);
-      context.pop();
+      try {
+        await ActivityService(context.read<AuthProvider>())
+            .delete(tripId, activity.id);
+        context.pop();
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(exceptionToString(error)),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
     }
 
     return Scaffold(

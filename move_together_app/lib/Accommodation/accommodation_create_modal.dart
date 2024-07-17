@@ -7,6 +7,7 @@ import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/accommodation.dart';
 import 'package:move_together_app/core/services/accommodation_service.dart';
 import 'package:move_together_app/Widgets/Input/cool_number_field.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 import 'package:move_together_app/Widgets/button.dart';
 
@@ -47,18 +48,28 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
         _priceController.text.isEmpty) {
       return;
     }
-    final createdAccommodation =
-        await AccommodationService(context.read<AuthProvider>()).create(
-      tripId: widget.tripId,
-      accommodationType: _selectedAccommodationType,
-      startDate: _startDateTime,
-      endDate: _endDateTime,
-      address: _addressController.text,
-      name: _nameController.text,
-      bookingUrl: _bookingUrlController.text,
-      price: double.parse(_priceController.text),
-    );
-    widget.onAccommodationCreated(createdAccommodation);
+
+    try {
+      final createdAccommodation =
+          await AccommodationService(context.read<AuthProvider>()).create(
+        tripId: widget.tripId,
+        accommodationType: _selectedAccommodationType,
+        startDate: _startDateTime,
+        endDate: _endDateTime,
+        address: _addressController.text,
+        name: _nameController.text,
+        bookingUrl: _bookingUrlController.text,
+        price: double.parse(_priceController.text),
+      );
+      widget.onAccommodationCreated(createdAccommodation);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exceptionToString(error)),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override

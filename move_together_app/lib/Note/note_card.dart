@@ -81,12 +81,16 @@ class NoteCard extends StatelessWidget {
               },
             );
           } else if (state is NotesDataLoadingError) {
-            return Center(
-              child: Column(
-                children: [
-                  Text(state.errorMessage),
-                ],
-              ),
+            return TripFeatureCard(
+              title: 'Notes',
+              emptyMessage: state.errorMessage,
+              showAddButton: userHasEditPermission,
+              icon: Icons.note,
+              isLoading: state is NotesDataLoading,
+              length: 0,
+              itemBuilder: (context, index) {
+                return const SizedBox();
+              },
             );
           }
           return const SizedBox();

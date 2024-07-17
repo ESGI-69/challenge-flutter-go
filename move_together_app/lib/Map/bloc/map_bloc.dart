@@ -21,21 +21,52 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<MapDataFetch>((event, emit) async {
       emit(MapDataLoading());
 
-      var results = await Future.wait([
-        transportService.getAll(event.tripId),
-        accommodationService.getAll(event.tripId),
-        activityService.getAll(event.tripId),
-      ]);
+      var results = [];
 
-      var transportsWithGeoPos = (results[0] as List<Transport>)
-          .where((transport) => transport.hasValidGeolocation)
-          .toList();
-      var accommodationsWithGeoPos = (results[1] as List<Accommodation>)
-          .where((accommodation) => accommodation.hasValidGeolocation)
-          .toList();
-      var activitiesWithGeoPos = (results[2] as List<Activity>)
-          .where((activity) => activity.hasValidGeolocation)
-          .toList();
+      try {
+        results.add(await transportService.getAll(event.tripId));
+      } catch (error) {
+        results.add([]);
+      }
+
+      try {
+        results.add(await accommodationService.getAll(event.tripId));
+      } catch (error) {
+        results.add([]);
+      }
+
+      try {
+        results.add(await activityService.getAll(event.tripId));
+      } catch (error) {
+        results.add([]);
+      }
+
+      var transportsWithGeoPos = <Transport>[];
+      if (results[0] is List<Transport>) {
+        transportsWithGeoPos = (results[0] as List<Transport>)
+            .where((transport) => transport.hasValidGeolocation)
+            .toList();
+      } else {
+        transportsWithGeoPos = [];
+      }
+
+      var accommodationsWithGeoPos = <Accommodation>[];
+      if (results[1] is List<Accommodation>) {
+        accommodationsWithGeoPos = (results[1] as List<Accommodation>)
+            .where((accommodation) => accommodation.hasValidGeolocation)
+            .toList();
+      } else {
+        accommodationsWithGeoPos = [];
+      }
+
+      var activitiesWithGeoPos = <Activity>[];
+      if (results[2] is List<Activity>) {
+        activitiesWithGeoPos = (results[2] as List<Activity>)
+            .where((activity) => activity.hasValidGeolocation)
+            .toList();
+      } else {
+        activitiesWithGeoPos = [];
+      }
 
       emit(MapDataLoadingSuccess(
         transports: transportsWithGeoPos,
