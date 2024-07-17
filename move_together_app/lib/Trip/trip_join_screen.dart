@@ -87,33 +87,34 @@ class JoinTripScreenState extends State<JoinTripScreen> {
           child: Column(
             children: [
               const Text('Tu as été invité?'),
-              const Text('S\'il te plait, entre le code PIN ci-dessous ou scanne le QR code'),
-              const Icon(Icons.groups_rounded, size: 100, color: Color(0xFF79D0BF)),
-              if(!isKeyboardEnable)
-              Expanded(
-                child: 
-                QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
-                  overlay: QrScannerOverlayShape(
-                    borderColor: const Color(0xFF79D0BF),
-                    borderRadius: 10,
-                    borderLength: 30,
-                    borderWidth: 10,
-                    cutOutSize: 300,
+              const Text(
+                  'S\'il te plait, entre le code PIN ci-dessous ou scanne le QR code'),
+              const Icon(Icons.groups_rounded,
+                  size: 100, color: Color(0xFF79D0BF)),
+              if (!isKeyboardEnable)
+                Expanded(
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                    overlay: QrScannerOverlayShape(
+                      borderColor: const Color(0xFF79D0BF),
+                      borderRadius: 10,
+                      borderLength: 30,
+                      borderWidth: 10,
+                      cutOutSize: 300,
+                    ),
                   ),
                 ),
-              ),
               const SizedBox(height: 16),
-                TextField(
+              TextField(
                 controller: _tripCodeController,
                 decoration: const InputDecoration(
                   counterText: '',
                   enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pinkAccent),
+                    borderSide: BorderSide(color: Colors.pinkAccent),
                   ),
                   focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pinkAccent),
+                    borderSide: BorderSide(color: Colors.pinkAccent),
                   ),
                 ),
                 textAlign: TextAlign.center,
@@ -125,15 +126,15 @@ class JoinTripScreenState extends State<JoinTripScreen> {
                 ),
                 onTap: () {
                   setState(() {
-                  isKeyboardEnable = true;
+                    isKeyboardEnable = true;
                   });
                 },
                 onSubmitted: (_) {
                   setState(() {
-                  isKeyboardEnable = false;
+                    isKeyboardEnable = false;
                   });
                 },
-                ),
+              ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
