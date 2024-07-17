@@ -77,24 +77,13 @@ class _NoteCreateModalState extends State<NoteCreateModal> {
               prefixIcon: Icons.text_fields,
             ),
             const SizedBox(height: 8),
-            ElevatedButton(
+            Button(
               onPressed: createNote,
-              style: _titleController.text.isEmpty ||
+              type: _titleController.text.isEmpty ||
                       _contentController.text.isEmpty
-                  ? ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all<Color>(Colors.grey),
-                    )
-                  : ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                          Theme.of(context).primaryColor),
-                    ),
-              child: const Text(
-                'Créer',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+                  ? ButtonType.disabled
+                  : ButtonType.primary,
+              text: 'Créer',
             ),
           ]),
         ),

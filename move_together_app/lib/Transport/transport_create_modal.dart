@@ -183,27 +183,16 @@ class _TransportCreateModalState extends State<TransportCreateModal> {
               prefixIcon: Icons.euro,
             ),
             const SizedBox(height: 8),
-            ElevatedButton(
+            Button(
               onPressed: createTransport,
-              style: _startAddressController.text.isEmpty ||
+              type: _startAddressController.text.isEmpty ||
                       _endAddressController.text.isEmpty ||
                       _startDateTime ==
                           DateTime.fromMillisecondsSinceEpoch(0) ||
                       _endDateTime == DateTime.fromMillisecondsSinceEpoch(0)
-                  ? ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all<Color>(Colors.grey),
-                    )
-                  : ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                          Theme.of(context).primaryColor),
-                    ),
-              child: const Text(
-                'Créer',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+                  ? ButtonType.disabled
+                  : ButtonType.primary,
+              text: 'Créer',
             ),
           ]),
         ),

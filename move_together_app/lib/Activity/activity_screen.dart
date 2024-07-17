@@ -96,18 +96,10 @@ class ActivityScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 (hasTripEditPermission && activity.owner.isMe(context)) ||
                         isTripOwner
-                    ? ElevatedButton(
+                    ? Button(
                         onPressed: deleteActivity,
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(
-                              Theme.of(context).colorScheme.error),
-                        ),
-                        child: const Text(
-                          'Supprimer',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                        type: ButtonType.destructive,
+                        text: 'Supprimer',
                       )
                     : !hasTripEditPermission
                         ? Text(

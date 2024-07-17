@@ -137,23 +137,10 @@ class _ActivityCreateModalState extends State<ActivityCreateModal> {
               prefixIcon: Icons.location_on,
             ),
             const SizedBox(height: 8),
-            ElevatedButton(
+            Button(
               onPressed: createActivity,
-              style: cantPost()
-                  ? ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all<Color>(Colors.grey),
-                    )
-                  : ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                          Theme.of(context).primaryColor),
-                    ),
-              child: const Text(
-                'Créer',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+              type: cantPost() ? ButtonType.disabled : ButtonType.primary,
+              text: 'Créer',
             ),
           ]),
         ),

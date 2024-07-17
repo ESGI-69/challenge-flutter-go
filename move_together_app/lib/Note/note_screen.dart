@@ -59,18 +59,10 @@ class NoteScreen extends StatelessWidget {
               const SizedBox(height: 16),
               (hasTripEditPermission && note.author.isMe(context)) ||
                       isTripOwner
-                  ? ElevatedButton(
+                  ? Button(
                       onPressed: deleteNote,
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                            Theme.of(context).colorScheme.error),
-                      ),
-                      child: const Text(
-                        'Supprimer',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                      type: ButtonType.destructive,
+                      text: 'Supprimer',
                     )
                   : !hasTripEditPermission
                       ? Text(
