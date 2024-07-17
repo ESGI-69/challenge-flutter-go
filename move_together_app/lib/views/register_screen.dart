@@ -72,6 +72,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               ),
               if (errorMessage != null)
                 Text(errorMessage!, style: const TextStyle(color: Colors.red)),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
