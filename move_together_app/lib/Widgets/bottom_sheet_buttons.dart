@@ -26,10 +26,16 @@ class BottomSheetButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.only(
+        top: 16.0,
+        left: 16.0,
+        right: 16.0,
+        bottom: MediaQuery.of(context).padding.bottom,
+      ),
       height: 200,
       color: Colors.transparent,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ButtonsGroup(buttons: buttons.map((button) => Button(
               text: button.text,
@@ -58,7 +64,7 @@ class BottomSheetButtons extends StatelessWidget {
 }
 
 Future showBottomSheetButtons(BuildContext context, List<BottomSheetButton> buttons) {
-  return showCupertinoModalBottomSheet(
+  return showMaterialModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     elevation: 0,
