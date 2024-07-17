@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"challenge-flutter-go/api/caca"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -60,8 +59,6 @@ func SearchPlaces(query string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error decoding response: %v", err)
 	}
-
-	caca.PrettyPrint(result)
 
 	// Return the first photo name
 	if len(result.Places) > 0 && len(result.Places[0].Photos) > 0 {
