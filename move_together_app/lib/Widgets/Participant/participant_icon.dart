@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:move_together_app/core/models/participant.dart';
@@ -25,10 +26,16 @@ class ParticipantIcon extends StatelessWidget {
           color: Colors.white,
           width: 3,
         ),
-        image: participant.profilePicturePath != null && participant.profilePicturePath != '' ? DecorationImage(
-          image: NetworkImage('${dotenv.env['API_ADDRESS']}${participant.profilePictureUri}?v=${uuid.v4()}'),
-          fit: BoxFit.cover,
-        ) : null,
+        image: 
+          participant.profilePicturePath != null && participant.profilePicturePath != ''
+            ? DecorationImage(
+              image: ExtendedNetworkImageProvider(
+                '${dotenv.env['API_ADDRESS']}${participant.profilePictureUri}',
+                imageCacheName: participant.profilePictureUri,
+              ),
+              fit: BoxFit.cover,
+            )
+            : null,
       ),
       child: participant.profilePicturePath == null || participant.profilePicturePath == '' ? Center(
         child: Text(
