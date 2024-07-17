@@ -51,7 +51,9 @@ class AccommodationService {
       },
     );
 
-    if (response.statusCode != null &&
+    if (response.statusCode! == 503) {
+      throw Exception('Feature not available for now');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return Accommodation.fromJson(response.data);
@@ -65,7 +67,9 @@ class AccommodationService {
       '/trips/$tripId/accommodations/$accommodationId',
     );
 
-    if (response.statusCode != null &&
+    if (response.statusCode! == 503) {
+      throw Exception('Feature not available for now');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return;
