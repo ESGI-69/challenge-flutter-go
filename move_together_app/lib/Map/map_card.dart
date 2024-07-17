@@ -31,13 +31,23 @@ class MapCard extends StatelessWidget {
               onTitleTap: () {
                 context.pushNamed('map', pathParameters: {'tripId': tripId.toString()});
               },
-              child: RefinedGoogleMap(
-                activities: state.activities,
-                accommodations: state.accommodations,
-                transports: state.transports,
-                type: RefinedGoogleMapType.card,
-                initialCameraPosition: trip.latLng,
-              ),
+                child: Stack(
+                children: [
+                  RefinedGoogleMap(
+                  activities: state.activities,
+                  accommodations: state.accommodations,
+                  transports: state.transports,
+                  type: RefinedGoogleMapType.card,
+                  initialCameraPosition: trip.latLng,
+                  ),
+                  GestureDetector(
+                  onTap: () {
+                    context.pushNamed('map', pathParameters: {'tripId': tripId.toString()});
+                  },
+                  behavior: HitTestBehavior.translucent,
+                  ),
+                ],
+                ),
             );
           } else {
             return TripFeatureCard(
