@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:move_together_app/Widgets/details_list.dart';
 import 'package:move_together_app/utils/photo_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -67,6 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final XFile? image = await pickPhoto(context);
                 if (image != null) {
                   await userService.uploadProfilePicture(image);
+                  clearMemoryImageCache(state.profile.profilePictureUri);
+                  await clearDiskCachedImage('${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}');
                   context.read<ProfileBloc>().add(ProfilePictureUpdated());
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -85,11 +88,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ? InkWell(
                       onTap: handleProfilePictureUpdate,
                       child: ClipOval(
-                        child: Image.network(
-                          '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}?v=${uuid.v4()}',
+                        child: ExtendedImage.network(
+                          '${dotenv.env['API_ADDRESS']}${state.profile.profilePictureUri}',
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
+                          imageCacheName: state.profile.profilePictureUri,
                         ),
                       ),
                     )

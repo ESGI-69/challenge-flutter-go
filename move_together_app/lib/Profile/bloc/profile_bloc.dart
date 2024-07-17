@@ -26,6 +26,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     });
 
     on<ProfilePictureUpdated>((event, emit) async {
+      emit(ProfileDataLoading());
       final profile = await userService.get(authProvider.userId.toString());
       emit(ProfileDataLoadingSuccess(profile: profile));
     });
