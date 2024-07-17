@@ -32,7 +32,9 @@ class CoolTextField extends StatelessWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
           hintText: hintText,
-          prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: Theme.of(context).primaryColor) : null,
+          prefixIcon: prefixIcon != null
+              ? Icon(prefixIcon, color: Theme.of(context).primaryColor)
+              : null,
           filled: true,
           fillColor: Colors.white,
           enabledBorder: const OutlineInputBorder(
