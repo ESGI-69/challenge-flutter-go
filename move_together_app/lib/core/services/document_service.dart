@@ -48,7 +48,9 @@ class DocumentService {
       data: formData,
     );
 
-    if (response.statusCode != null &&
+    if (response.statusCode! == 503) {
+      throw Exception('Feature not available for now');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return Document.fromJson(response.data);
@@ -62,7 +64,9 @@ class DocumentService {
       '/trips/$tripId/documents/$documentId',
     );
 
-    if (response.statusCode != null &&
+    if (response.statusCode! == 503) {
+      throw Exception('Feature not available for now');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return;
@@ -87,7 +91,9 @@ class DocumentService {
       documentPath,
     );
 
-    if (response.statusCode != null &&
+    if (response.statusCode! == 503) {
+      throw Exception('Feature not available for now');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return documentPath;

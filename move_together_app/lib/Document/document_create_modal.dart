@@ -6,8 +6,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/core/models/document.dart';
 import 'package:move_together_app/core/services/document_service.dart';
 import 'package:file_picker/file_picker.dart';
-
-import 'package:move_together_app/Widgets/button.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 class DocumentCreateModal extends StatefulWidget {
   final Function(Document) onDocumentCreated;
@@ -47,14 +46,23 @@ class _DocumentCreateModalState extends State<DocumentCreateModal> {
       return;
     }
 
-    final createdDocument =
-        await DocumentService(context.read<AuthProvider>()).create(
-      tripId: widget.tripId,
-      title: _titleDocumentController.text,
-      description: _descriptionDocumentController.text,
-      document: File(_selectedFile!.path!),
-    );
-    widget.onDocumentCreated(createdDocument);
+    try {
+      final createdDocument =
+          await DocumentService(context.read<AuthProvider>()).create(
+        tripId: widget.tripId,
+        title: _titleDocumentController.text,
+        description: _descriptionDocumentController.text,
+        document: File(_selectedFile!.path!),
+      );
+      widget.onDocumentCreated(createdDocument);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exceptionToString(error)),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override
@@ -90,19 +98,28 @@ class _DocumentCreateModalState extends State<DocumentCreateModal> {
               const SizedBox(height: 8),
               Button(
                 onPressed: selectDocument,
-                text: _selectedFile == null
+                child: Text(_selectedFile == null
                     ? 'Sélectionner un document'
-                    : 'Document sélectionné : ${_selectedFile!.name}',
+                    : 'Document sélectionné : ${_selectedFile!.name}'),
               ),
               const SizedBox(height: 8),
               Button(
                 onPressed: createDocument,
-                type: _titleDocumentController.text.isEmpty ||
+                style: _titleDocumentController.text.isEmpty ||
                         _descriptionDocumentController.text.isEmpty ||
                         _selectedFile == null
-                    ? ButtonType.disabled
-                    : ButtonType.primary,
-                text: 'Créer le document',
+                    ? ButtonStyle(
+                        backgroundColor:
+                            WidgetStateProperty.all(Colors.black12))
+                    : ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                            Theme.of(context).primaryColor)),
+                child: const Text(
+                  'Créer le document',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ],
           ),
