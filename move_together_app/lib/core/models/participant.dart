@@ -25,7 +25,8 @@ class Participant {
     return Participant(
       id: json['id'],
       username: json['username'],
-      tripRole: ParticipantTripRole.values.firstWhere((e) => e.toString().split('.').last == json['tripRole']),
+      tripRole: ParticipantTripRole.values
+          .firstWhere((e) => e.toString().split('.').last == json['tripRole']),
       profilePicturePath: json['profilePicturePath'],
       profilePictureUri: json['profilePictureUri'],
     );
@@ -50,7 +51,7 @@ class Participant {
       'profilePictureUri': profilePictureUri,
     };
   }
-  
+
   bool isMe(BuildContext context) {
     final userId = context.read<AuthProvider>().userId;
     return userId == id;

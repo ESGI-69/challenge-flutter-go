@@ -15,7 +15,6 @@ Map<FeatureNames, String> featureNames = {
   FeatureNames.activity: 'activity',
 };
 
-
 class FeaturesTable extends StatelessWidget {
   final List<Feature> features;
   final Function patchFeature;
@@ -30,100 +29,100 @@ class FeaturesTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Table(
       border: TableBorder.all(
-          color: Colors.white,
-          width: 2,
+        color: Colors.white,
+        width: 2,
       ),
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: [
-        const TableRow(
-          decoration: BoxDecoration(
-            color: Color(0xFFB9F6CA),
-          ),
-          children: [
-            TableCell(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.title),
-                      SizedBox(width: 8),
-                      Text(
-                        'Name',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF263238),
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+            const TableRow(
+              decoration: BoxDecoration(
+                color: Color(0xFFB9F6CA),
               ),
-            ),
-            TableCell(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.date_range),
-                      SizedBox(width: 8),
-                      Text(
-                        'Updated At',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF263238),
-                          fontSize: 16,
-                        ),
+              children: [
+                TableCell(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.title),
+                          SizedBox(width: 8),
+                          Text(
+                            'Name',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF263238),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            TableCell(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.supervised_user_circle),
-                      SizedBox(width: 8),
-                      Text(
-                        'Modified By',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF263238),
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            TableCell(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    "Actions",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF263238),
-                      fontSize: 16,
                     ),
                   ),
                 ),
-              ),
+                TableCell(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.date_range),
+                          SizedBox(width: 8),
+                          Text(
+                            'Updated At',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF263238),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                TableCell(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.supervised_user_circle),
+                          SizedBox(width: 8),
+                          Text(
+                            'Modified By',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF263238),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                TableCell(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        "Actions",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF263238),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ] +
+          ] +
           features.map((feature) {
             return TableRow(
               decoration: const BoxDecoration(
@@ -150,7 +149,8 @@ class FeaturesTable extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          DateFormat('kk:mm dd-MM-yyyy').format(feature.updatedAt),
+                          DateFormat('kk:mm dd-MM-yyyy')
+                              .format(feature.updatedAt),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF263238),
@@ -178,12 +178,11 @@ class FeaturesTable extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: Switch(
-                      value: feature.isEnabled,
-                      activeColor: Colors.green,
-                      onChanged: (bool value) {
-                        patchFeature(feature.copyWith(isEnabled: value));
-                      }
-                    ),
+                        value: feature.isEnabled,
+                        activeColor: Colors.green,
+                        onChanged: (bool value) {
+                          patchFeature(feature.copyWith(isEnabled: value));
+                        }),
                   ),
                 ),
               ],

@@ -12,7 +12,8 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tripId = GoRouterState.of(context).uri.pathSegments[1];
-    final tripName = GoRouterState.of(context).uri.queryParameters['tripName'] ?? '';
+    final tripName =
+        GoRouterState.of(context).uri.queryParameters['tripName'] ?? '';
     final authProvider = context.read<AuthProvider>();
     final currentUserId = authProvider.userId;
     final token = authProvider.token;
@@ -20,7 +21,8 @@ class ChatScreen extends StatelessWidget {
     return SafeArea(
       top: false,
       child: BlocProvider(
-        create: (context) => ChatBloc(context, tripId, token)..add(ChatDataFetch(tripId)),
+        create: (context) =>
+            ChatBloc(context, tripId, token)..add(ChatDataFetch(tripId)),
         child: BlocBuilder<ChatBloc, ChatState>(
           builder: (context, state) {
             if (state is ChatDataLoading) {
@@ -55,9 +57,10 @@ class ChatScreen extends StatelessWidget {
                   userId: currentUserId,
                   scrollController: ScrollController(),
                 ),
-                bottomNavigationBar: state.sendMessageState is ChatSendMessageLoading
-                    ? const LinearProgressIndicator()
-                    : const SizedBox(height: 4),
+                bottomNavigationBar:
+                    state.sendMessageState is ChatSendMessageLoading
+                        ? const LinearProgressIndicator()
+                        : const SizedBox(height: 4),
               );
             } else {
               return const Text('Unhandled state');

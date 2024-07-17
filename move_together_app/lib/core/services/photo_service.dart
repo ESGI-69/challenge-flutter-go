@@ -19,7 +19,9 @@ class PhotoService {
       '/trips/$userId/photos',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return (response.data as List).map((e) => Photo.fromJson(e)).toList();
     } else {
       throw Exception('Failed to get photos');
@@ -37,7 +39,9 @@ class PhotoService {
       data: formData,
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Photo.fromJson(response.data);
     } else {
       throw Exception('Failed to create photo');
@@ -45,12 +49,15 @@ class PhotoService {
   }
 
   Future<String> download(int tripId, int photoId) async {
-    final imagePath = '${Directory.systemTemp.path}/${photoId}_moove_together.jpg';
+    final imagePath =
+        '${Directory.systemTemp.path}/${photoId}_moove_together.jpg';
     final response = await api.download(
       '/trips/$tripId/photos/$photoId/download',
       imagePath,
     );
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return imagePath;
     } else {
       throw Exception('Failed to download photo');
@@ -62,7 +69,9 @@ class PhotoService {
       '/trips/$tripId/photos/$photoId',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to delete photo');

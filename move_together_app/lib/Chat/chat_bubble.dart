@@ -21,10 +21,8 @@ class ChatBubble extends StatelessWidget {
       mainAxisAlignment:
           isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
-        if ( !isOwnMessage )
-          ParticipantIcon(
-              participant: Participant.fromUser(message.author)
-          ),
+        if (!isOwnMessage)
+          ParticipantIcon(participant: Participant.fromUser(message.author)),
         Container(
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width * 0.8,

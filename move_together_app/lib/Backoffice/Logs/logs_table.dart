@@ -7,7 +7,6 @@ Map<LogLevel, String> logLevelToString = {
   LogLevel.WARN: 'WARNING',
 };
 
-
 class LogsTable extends StatelessWidget {
   final List<Log> logs;
 
@@ -26,7 +25,8 @@ class LogsTable extends StatelessWidget {
             border: TableBorder.all(
                 color: const Color(0xFF81C784),
                 width: 2,
-                borderRadius: const BorderRadius.all(Radius.elliptical(10, 10))),
+                borderRadius:
+                    const BorderRadius.all(Radius.elliptical(10, 10))),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: [
               const TableRow(
@@ -47,9 +47,13 @@ class LogsTable extends StatelessWidget {
               for (final log in logs)
                 TableRow(
                   children: [
-                    TableCell(child: Center(child: Text(log.timestamp.toLocal().toString()))),
+                    TableCell(
+                        child: Center(
+                            child: Text(log.timestamp.toLocal().toString()))),
                     TableCell(child: Center(child: Text(log.id.toString()))),
-                    TableCell(child: Center(child: Text(logLevelToString[log.level]!))),
+                    TableCell(
+                        child:
+                            Center(child: Text(logLevelToString[log.level]!))),
                     TableCell(child: Center(child: Text(log.message))),
                     TableCell(child: Center(child: Text(log.ip))),
                     TableCell(child: Center(child: Text(log.path))),

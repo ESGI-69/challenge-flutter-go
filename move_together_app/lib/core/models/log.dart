@@ -6,6 +6,7 @@ enum LogLevel {
   // ignore: constant_identifier_names
   ERROR,
 }
+
 class Log {
   final int id;
   final LogLevel level;
@@ -30,7 +31,8 @@ class Log {
   factory Log.fromJson(Map<String, dynamic> json) {
     return Log(
       id: json['id'],
-      level: LogLevel.values.firstWhere((e) => e.toString().split('.').last == json['level']),
+      level: LogLevel.values
+          .firstWhere((e) => e.toString().split('.').last == json['level']),
       message: json['message'],
       timestamp: DateTime.parse(json['timestamp']),
       ip: json['ip'] ?? '',

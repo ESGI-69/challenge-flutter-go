@@ -189,10 +189,9 @@ final GoRouter backOfficeRouter = GoRouter(
       builder: (context, state) => const BackofficeFeaturesScreen(),
     ),
     GoRoute(
-      path: '/logs',
-      name: 'logs',
-      builder: (context, state) => const LogsScreen()
-    ),
+        path: '/logs',
+        name: 'logs',
+        builder: (context, state) => const LogsScreen()),
     GoRoute(
         path: '/users',
         name: 'users',

@@ -38,12 +38,12 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[1]);
-    final Completer<GoogleMapController> mapController = Completer<GoogleMapController>();
+    final Completer<GoogleMapController> mapController =
+        Completer<GoogleMapController>();
 
     return BlocProvider(
-      create: (context) => MapBloc(context)..add(MapDataFetch(tripId)),
-      child: BlocBuilder<MapBloc, MapState>(
-        builder: (context, state) {
+        create: (context) => MapBloc(context)..add(MapDataFetch(tripId)),
+        child: BlocBuilder<MapBloc, MapState>(builder: (context, state) {
           if (state is MapDataLoadingSuccess) {
             return Scaffold(
               extendBodyBehindAppBar: true,
@@ -76,8 +76,6 @@ class _MapScreenState extends State<MapScreen> {
               child: CircularProgressIndicator(),
             );
           }
-        }
-      )
-    );
+        }));
   }
 }

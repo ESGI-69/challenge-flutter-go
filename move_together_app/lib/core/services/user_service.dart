@@ -17,23 +17,25 @@ class UserService {
       '/users/$userId',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return User.fromJson(response.data);
     } else {
       throw Exception('Failed to get user');
     }
-
   }
 
   Future<User> uploadProfilePicture(XFile image) async {
-    final formData = FormData.fromMap({
-      'photo': await MultipartFile.fromFile(image.path)
-    });
+    final formData =
+        FormData.fromMap({'photo': await MultipartFile.fromFile(image.path)});
     final response = await api.patch(
       '/users/photo',
       data: formData,
     );
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return User.fromJson(response.data);
     } else {
       throw Exception('Failed to upload profile picture');
@@ -48,11 +50,12 @@ class UserService {
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return User.fromJson(response.data);
     } else {
       throw Exception('Failed to update user');
     }
   }
 }
- 

@@ -5,7 +5,8 @@ class CoolTextField extends StatelessWidget {
   final String hintText;
   final IconData prefixIcon;
 
-  const CoolTextField({super.key, 
+  const CoolTextField({
+    super.key,
     required this.controller,
     required this.hintText,
     required this.prefixIcon,

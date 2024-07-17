@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final tripService = TripService(context.read<AuthProvider>());
@@ -44,9 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   context.pushNamed('profile');
                 },
-                icon: const Icon(
-                  Icons.person
-                ),
+                icon: const Icon(Icons.person),
               ),
               actions: [
                 IconButton(
@@ -85,61 +82,81 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Flex(
                   direction: Axis.vertical,
-                  children: state is HomeDataLoading ?
-                    const <Widget>[
-                      Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ] : state is HomeDataLoadingError ? <Widget>[
-                      Center(
-                        child: Text(state.errorMessage),
-                      ),
-                    ] : state is HomeDataLoadingSuccess && state.trips.isNotEmpty ? <Widget>[
-                      Expanded(
-                        child: PageView(
-                          onPageChanged: changePage,
-                          children:
-                            state.trips.map((trip) {
-                              return TripCard(
-                              tripId: trip.id,
-                              onTap: () async {
-                                await context.pushNamed('trip', pathParameters: {'tripId': trip.id.toString()});
-                                context.read<HomeBloc>().add(HomeDataFetchSingleTrip(trip.id));
-                              },
-                              onLeave: () => context.read<HomeBloc>().add(HomeDataLeaveTrip(trip)),
-                              onDelete: () => context.read<HomeBloc>().add(HomeDataDeleteTrip(trip)),
-                              imageUrl:  "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
-                              name: trip.name,
-                              country: trip.country,
-                              city: trip.city,
-                              startDate: trip.startDate,
-                              endDate: trip.endDate,
-                              inviteCode: trip.inviteCode,
-                              participants: trip.participants,
-                              isCurrentUserOwner: trip.isCurrentUserOwner(context),
-                              onParticipantsTap: () async {
-                                await showCupertinoModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) => ParticipantInfo(
-                                    tripId: trip.id,
-                                    inviteCode: trip.inviteCode,
-                                  )
-                                );
-                                state.trips[_currentIndex] = await tripService.get(trip.id.toString());
-                              },
-                              totalPrice: trip.totalPrice,
-                            );
-                            }).toList(),
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      PageIndicator(
-                        currentIndex: _currentIndex,
-                        pageCount: state.trips.length,
-                      ),
-                    ] : <Widget>[
-                      const EmptyHome(),
-                    ],
+                  children: state is HomeDataLoading
+                      ? const <Widget>[
+                          Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ]
+                      : state is HomeDataLoadingError
+                          ? <Widget>[
+                              Center(
+                                child: Text(state.errorMessage),
+                              ),
+                            ]
+                          : state is HomeDataLoadingSuccess &&
+                                  state.trips.isNotEmpty
+                              ? <Widget>[
+                                  Expanded(
+                                    child: PageView(
+                                      onPageChanged: changePage,
+                                      children: state.trips.map((trip) {
+                                        return TripCard(
+                                          tripId: trip.id,
+                                          onTap: () async {
+                                            await context.pushNamed('trip',
+                                                pathParameters: {
+                                                  'tripId': trip.id.toString()
+                                                });
+                                            context.read<HomeBloc>().add(
+                                                HomeDataFetchSingleTrip(
+                                                    trip.id));
+                                          },
+                                          onLeave: () => context
+                                              .read<HomeBloc>()
+                                              .add(HomeDataLeaveTrip(trip)),
+                                          onDelete: () => context
+                                              .read<HomeBloc>()
+                                              .add(HomeDataDeleteTrip(trip)),
+                                          imageUrl:
+                                              "${dotenv.env['API_ADDRESS']}/trips/${trip.id}/banner/download",
+                                          name: trip.name,
+                                          country: trip.country,
+                                          city: trip.city,
+                                          startDate: trip.startDate,
+                                          endDate: trip.endDate,
+                                          inviteCode: trip.inviteCode,
+                                          participants: trip.participants,
+                                          isCurrentUserOwner:
+                                              trip.isCurrentUserOwner(context),
+                                          onParticipantsTap: () async {
+                                            await showCupertinoModalBottomSheet(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        ParticipantInfo(
+                                                          tripId: trip.id,
+                                                          inviteCode:
+                                                              trip.inviteCode,
+                                                        ));
+                                            state.trips[_currentIndex] =
+                                                await tripService
+                                                    .get(trip.id.toString());
+                                          },
+                                          totalPrice: trip.totalPrice,
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16.0),
+                                  PageIndicator(
+                                    currentIndex: _currentIndex,
+                                    pageCount: state.trips.length,
+                                  ),
+                                ]
+                              : <Widget>[
+                                  const EmptyHome(),
+                                ],
                 ),
               ),
             ),
@@ -154,7 +171,8 @@ class PageIndicator extends StatefulWidget {
   final int currentIndex;
   final int pageCount;
 
-  const PageIndicator({super.key, required this.currentIndex, required this.pageCount});
+  const PageIndicator(
+      {super.key, required this.currentIndex, required this.pageCount});
 
   @override
   State<PageIndicator> createState() => _PageIndicatorState();
@@ -172,7 +190,9 @@ class _PageIndicatorState extends State<PageIndicator> {
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: widget.currentIndex == index ? Theme.of(context).primaryColor : Colors.grey,
+            color: widget.currentIndex == index
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
           ),
         );
       }),

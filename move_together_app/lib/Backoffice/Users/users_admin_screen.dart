@@ -6,18 +6,15 @@ import 'package:move_together_app/Backoffice/Users/bloc/users_admin_bloc.dart';
 import 'package:move_together_app/core/models/user.dart';
 
 class UsersAdminScreen extends StatelessWidget {
-  const UsersAdminScreen({
-    super.key
-});
+  const UsersAdminScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const NavigationBarBackoffice(),
       body: BlocProvider(
-        create: (context) => UsersBloc(context)..add(UsersDataFetch()),
-        child: BlocBuilder<UsersBloc, UsersState>(
-          builder: (context, state) {
+          create: (context) => UsersBloc(context)..add(UsersDataFetch()),
+          child: BlocBuilder<UsersBloc, UsersState>(builder: (context, state) {
             if (state is UsersDataLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -45,15 +42,19 @@ class UsersAdminScreen extends StatelessWidget {
                         child: UsersTable(
                           users: state.users,
                           changeUserRole: (User user) {
-                            final newRole = user.role == Role.ADMIN ? Role.USER : Role.ADMIN;
-                
+                            final newRole = user.role == Role.ADMIN
+                                ? Role.USER
+                                : Role.ADMIN;
+
                             final newUser = User(
                               id: user.id,
                               name: user.name,
                               role: newRole,
                             );
-                
-                            context.read<UsersBloc>().add(UserDataUpdateUser(newUser));
+
+                            context
+                                .read<UsersBloc>()
+                                .add(UserDataUpdateUser(newUser));
                           },
                         ),
                       )
@@ -63,9 +64,7 @@ class UsersAdminScreen extends StatelessWidget {
               );
             }
             return const SizedBox();
-          }
-        )
-      ),
+          })),
     );
   }
 }

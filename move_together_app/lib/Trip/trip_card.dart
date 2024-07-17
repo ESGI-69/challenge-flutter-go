@@ -77,7 +77,8 @@ class TripCard extends StatelessWidget {
                   width: double.infinity,
                   fit: BoxFit.cover,
                   headers: {
-                    'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
+                    'Authorization':
+                        context.read<AuthProvider>().getAuthorizationHeader(),
                   },
                 ),
               ),
@@ -97,63 +98,71 @@ class TripCard extends StatelessWidget {
                       participants: participants,
                       onTap: onParticipantsTap,
                     ),
-                    ...!isCurrentUserOwner ? [
-                      const SizedBox(width: 10),
-                      Container(
-                        height: 40,
-                        width: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
-                          borderRadius: const BorderRadius.all(Radius.circular(2)),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      ButtonLeave(
-                        onTap: () => showUnifiedDialog(
-                          context: context,
-                          title: 'Quitter $name?',
-                          content: 'Etes-vous sûr de vouloir quitter ce voyage?',
-                          cancelButtonText: 'Annuler',
-                          okButtonText: 'Quitter',
-                          okButtonTextStyle: TextStyle(color: Theme.of(context).colorScheme.error),
-                          onCancelPressed: () {
-                            context.pop();
-                          },
-                          onOkPressed: () async {
-                            context.pop();
-                            onLeave();
-                          },
-                        ),
-                      ),
-                    ] : [
-                      const SizedBox(width: 10),
-                      Container(
-                        height: 40,
-                        width: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
-                          borderRadius: const BorderRadius.all(Radius.circular(2)),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      ButtonDelete(
-                        onTap: () => showUnifiedDialog(
-                          context: context,
-                          title: 'Supprimer $name?',
-                          content: 'Etes-vous sûr de vouloir supprimer ce voyage?',
-                          cancelButtonText: 'Annuler',
-                          okButtonText: 'Supprimer',
-                          okButtonTextStyle: TextStyle(color: Theme.of(context).colorScheme.error),
-                          onCancelPressed: () {
-                            context.pop();
-                          },
-                          onOkPressed: () async {
-                            context.pop();
-                            onDelete();
-                          },
-                        ),
-                      ),
-                    ],
+                    ...!isCurrentUserOwner
+                        ? [
+                            const SizedBox(width: 10),
+                            Container(
+                              height: 40,
+                              width: 4,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.2),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(2)),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            ButtonLeave(
+                              onTap: () => showUnifiedDialog(
+                                context: context,
+                                title: 'Quitter $name?',
+                                content:
+                                    'Etes-vous sûr de vouloir quitter ce voyage?',
+                                cancelButtonText: 'Annuler',
+                                okButtonText: 'Quitter',
+                                okButtonTextStyle: TextStyle(
+                                    color: Theme.of(context).colorScheme.error),
+                                onCancelPressed: () {
+                                  context.pop();
+                                },
+                                onOkPressed: () async {
+                                  context.pop();
+                                  onLeave();
+                                },
+                              ),
+                            ),
+                          ]
+                        : [
+                            const SizedBox(width: 10),
+                            Container(
+                              height: 40,
+                              width: 4,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.2),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(2)),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            ButtonDelete(
+                              onTap: () => showUnifiedDialog(
+                                context: context,
+                                title: 'Supprimer $name?',
+                                content:
+                                    'Etes-vous sûr de vouloir supprimer ce voyage?',
+                                cancelButtonText: 'Annuler',
+                                okButtonText: 'Supprimer',
+                                okButtonTextStyle: TextStyle(
+                                    color: Theme.of(context).colorScheme.error),
+                                onCancelPressed: () {
+                                  context.pop();
+                                },
+                                onOkPressed: () async {
+                                  context.pop();
+                                  onDelete();
+                                },
+                              ),
+                            ),
+                          ],
                   ],
                 ),
               ),

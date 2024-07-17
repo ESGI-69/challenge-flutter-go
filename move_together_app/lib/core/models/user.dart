@@ -24,7 +24,10 @@ class User {
     return User(
       id: json['id'],
       name: json['username'],
-      role: json['role'] != null ? Role.values.firstWhere((e) => e.toString().split('.').last == json['role']) : Role.USER,
+      role: json['role'] != null
+          ? Role.values
+              .firstWhere((e) => e.toString().split('.').last == json['role'])
+          : Role.USER,
       profilePicturePath: json['profilePicturePath'],
       profilePictureUri: json['profilePictureUri'],
     );

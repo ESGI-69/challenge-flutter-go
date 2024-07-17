@@ -50,7 +50,9 @@ class ChatBodyState extends State<ChatBody> {
       var messageToSend = MessageToSend(
         content: messageText,
       );
-      context.read<ChatBloc>().add(ChatDataSendMessage(widget.tripId, messageToSend));
+      context
+          .read<ChatBloc>()
+          .add(ChatDataSendMessage(widget.tripId, messageToSend));
 
       setState(() {
         _controller.clear();
@@ -62,7 +64,8 @@ class ChatBodyState extends State<ChatBody> {
 
   void _scrollToBottom() {
     if (widget.scrollController.hasClients) {
-      widget.scrollController.jumpTo(widget.scrollController.position.minScrollExtent);
+      widget.scrollController
+          .jumpTo(widget.scrollController.position.minScrollExtent);
     }
   }
 
@@ -83,11 +86,11 @@ class ChatBodyState extends State<ChatBody> {
             reverse: true,
             itemCount: widget.messages.length,
             itemBuilder: (context, index) {
-              final message = widget.messages[widget.messages.length - 1 - index];
+              final message =
+                  widget.messages[widget.messages.length - 1 - index];
               return ChatBubble(
                   message: message,
-                  isOwnMessage: message.isCurrentUserAuthor(context)
-              );
+                  isOwnMessage: message.isCurrentUserAuthor(context));
             },
           ),
         ),

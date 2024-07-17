@@ -45,11 +45,15 @@ class Trip {
       city: json['city'],
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
-      participants: json['participants'].map<Participant>((e) => Participant.fromJson(e)).toList(),
+      participants: json['participants']
+          .map<Participant>((e) => Participant.fromJson(e))
+          .toList(),
       inviteCode: json['inviteCode'],
       totalPrice: dynamicToDouble(json['totalPrice']),
-      createdAt: json['createdAt'] != "" ? DateTime.parse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != "" ? DateTime.parse(json['updatedAt']) : null,
+      createdAt:
+          json['createdAt'] != "" ? DateTime.parse(json['createdAt']) : null,
+      updatedAt:
+          json['updatedAt'] != "" ? DateTime.parse(json['updatedAt']) : null,
       owner: json['owner'] != null ? User.fromJson(json['owner']) : null,
       latitude: dynamicToDouble(json['latitude']),
       longitude: dynamicToDouble(json['longitude']),
@@ -64,18 +68,22 @@ class Trip {
       'city': city,
       'startDate': startDate.toUtc().toIso8601String(),
       'endDate': endDate.toUtc().toIso8601String(),
-      'participants': participants.map((participant) => participant.toJson()).toList(),
+      'participants':
+          participants.map((participant) => participant.toJson()).toList(),
       'inviteCode': inviteCode,
     };
   }
 
   bool isCurrentUserOwner(BuildContext context) {
-    final Participant owner = participants.firstWhere((participant) => participant.tripRole == ParticipantTripRole.OWNER);
+    final Participant owner = participants.firstWhere(
+        (participant) => participant.tripRole == ParticipantTripRole.OWNER);
     return owner.isMe(context);
   }
 
   bool currentUserHasEditingRights(BuildContext context) {
-    final myRole = participants.firstWhere((participant) => participant.isMe(context)).tripRole;
+    final myRole = participants
+        .firstWhere((participant) => participant.isMe(context))
+        .tripRole;
     if (myRole == ParticipantTripRole.OWNER) return true;
     if (myRole == ParticipantTripRole.EDITOR) return true;
     return false;

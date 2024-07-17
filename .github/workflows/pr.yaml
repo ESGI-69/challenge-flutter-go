@@ -8,6 +8,17 @@ env:
   DOCKERHUB_REPO: ${{ vars.DOCKERHUB_USERNAME }}/challenge-flutter-go-backend
 
 jobs:
+  dart-format:
+    defaults:
+      run:
+        working-directory: move_together_app
+    name: Dart Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart format --set-exit-if-changed .
+
   flutter-analyze:
     defaults:
       run:
@@ -36,7 +47,9 @@ jobs:
         working-directory: move_together_app
     name: Flutter Build iOS
     runs-on: macos-latest
-    needs: flutter-analyze
+    needs:
+      - flutter-analyze
+      - dart-format
     steps:
     - uses: actions/checkout@v4
     - name: Set up Flutter
@@ -59,7 +72,9 @@ jobs:
         working-directory: move_together_app
     name: Flutter Build Android
     runs-on: ubuntu-latest
-    needs: flutter-analyze
+    needs:
+      - flutter-analyze
+      - dart-format
     steps:
     - uses: actions/checkout@v4
     - name: Set up Flutter
@@ -82,7 +97,9 @@ jobs:
         working-directory: move_together_app
     name: Flutter Build Web
     runs-on: ubuntu-latest
-    needs: flutter-analyze
+    needs:
+      - flutter-analyze
+      - dart-format
     steps:
     - uses: actions/checkout@v4
     - name: Set up Flutter

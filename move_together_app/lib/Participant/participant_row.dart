@@ -40,52 +40,54 @@ class ParticipantRow extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           participant.isMe(context)
-            ? Text(
-              '(me)',
-              style: TextStyle(
-                color: Theme.of(context).hintColor,
-                fontSize: 10,
-              ),
-            )
-            : const SizedBox(),
+              ? Text(
+                  '(me)',
+                  style: TextStyle(
+                    color: Theme.of(context).hintColor,
+                    fontSize: 10,
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
-      trailing: !showTrailingButton 
-        ? const SizedBox()
-        : participant.isMe(context)
+      trailing: !showTrailingButton
           ? const SizedBox()
-          : PopupMenuButton(
-            itemBuilder: (context) {
-              return [
-                participant.tripRole == ParticipantTripRole.VIEWER
-                  ? const PopupMenuItem(
-                      value: 'promote',
-                      child: Text('Accorder les droits d\'édition'),
-                    )
-                  : const PopupMenuItem(
-                      value: 'demote',
-                      child: Text('Retirer les droits d\'édition'),
-                    ),
-                const PopupMenuItem(
-                  value: 'kick',
-                  child: Text(
-                    'Exclure',
-                    style: TextStyle(color: Colors.red),
-                  ),
+          : participant.isMe(context)
+              ? const SizedBox()
+              : PopupMenuButton(
+                  itemBuilder: (context) {
+                    return [
+                      participant.tripRole == ParticipantTripRole.VIEWER
+                          ? const PopupMenuItem(
+                              value: 'promote',
+                              child: Text('Accorder les droits d\'édition'),
+                            )
+                          : const PopupMenuItem(
+                              value: 'demote',
+                              child: Text('Retirer les droits d\'édition'),
+                            ),
+                      const PopupMenuItem(
+                        value: 'kick',
+                        child: Text(
+                          'Exclure',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ];
+                  },
+                  onSelected: (value) async {
+                    if (value == 'kick') {
+                      await participantService.remove(tripId, participant.id);
+                    } else if (value == 'promote') {
+                      await participantService.changeRole(
+                          tripId, participant.id, ParticipantTripRole.EDITOR);
+                    } else if (value == 'demote') {
+                      await participantService.changeRole(
+                          tripId, participant.id, ParticipantTripRole.VIEWER);
+                    }
+                    onAction();
+                  },
                 ),
-              ];
-            },
-            onSelected: (value) async {
-              if (value == 'kick') {
-                await participantService.remove(tripId, participant.id);
-              } else if (value == 'promote') {
-                await participantService.changeRole(tripId, participant.id, ParticipantTripRole.EDITOR);
-              } else if (value == 'demote') {
-                await participantService.changeRole(tripId, participant.id, ParticipantTripRole.VIEWER);
-              }
-              onAction();
-            },
-          ),
     );
   }
 }

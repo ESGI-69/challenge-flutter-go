@@ -19,9 +19,8 @@ class MapCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MapBloc(context)..add(MapDataFetch(tripId)),
-      child: BlocBuilder<MapBloc, MapState>(
-        builder: (context, state) {
+        create: (context) => MapBloc(context)..add(MapDataFetch(tripId)),
+        child: BlocBuilder<MapBloc, MapState>(builder: (context, state) {
           if (state is MapDataLoadingSuccess) {
             return TripFeatureCard(
               title: 'Carte',
@@ -29,25 +28,27 @@ class MapCard extends StatelessWidget {
               isLoading: false,
               icon: Icons.pin_drop,
               onTitleTap: () {
-                context.pushNamed('map', pathParameters: {'tripId': tripId.toString()});
+                context.pushNamed('map',
+                    pathParameters: {'tripId': tripId.toString()});
               },
-                child: Stack(
+              child: Stack(
                 children: [
                   RefinedGoogleMap(
-                  activities: state.activities,
-                  accommodations: state.accommodations,
-                  transports: state.transports,
-                  type: RefinedGoogleMapType.card,
-                  initialCameraPosition: trip.latLng,
+                    activities: state.activities,
+                    accommodations: state.accommodations,
+                    transports: state.transports,
+                    type: RefinedGoogleMapType.card,
+                    initialCameraPosition: trip.latLng,
                   ),
                   GestureDetector(
-                  onTap: () {
-                    context.pushNamed('map', pathParameters: {'tripId': tripId.toString()});
-                  },
-                  behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      context.pushNamed('map',
+                          pathParameters: {'tripId': tripId.toString()});
+                    },
+                    behavior: HitTestBehavior.translucent,
                   ),
                 ],
-                ),
+              ),
             );
           } else {
             return TripFeatureCard(
@@ -57,8 +58,6 @@ class MapCard extends StatelessWidget {
               icon: Icons.pin_drop,
             );
           }
-        }
-      )
-    );
+        }));
   }
 }

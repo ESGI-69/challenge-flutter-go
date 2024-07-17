@@ -17,8 +17,12 @@ class DocumentService {
       '/trips/$tripId/documents',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      return (response.data as List).map((document) => Document.fromJson(document)).toList();
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return (response.data as List)
+          .map((document) => Document.fromJson(document))
+          .toList();
     } else {
       throw Exception('Failed to get documents');
     }
@@ -33,7 +37,8 @@ class DocumentService {
     FormData formData = FormData.fromMap({
       'title': title,
       'description': description,
-      'document': await MultipartFile.fromFile(document!.path, filename: document.path.split('/').last),
+      'document': await MultipartFile.fromFile(document!.path,
+          filename: document.path.split('/').last),
     });
 
     final response = await api.post(
@@ -41,7 +46,9 @@ class DocumentService {
       data: formData,
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Document.fromJson(response.data);
     } else {
       throw Exception('Failed to create document');
@@ -53,14 +60,17 @@ class DocumentService {
       '/trips/$tripId/documents/$documentId',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to delete document');
     }
   }
 
-  Future<String> download(int tripId, int documentId, String documentName) async {
+  Future<String> download(
+      int tripId, int documentId, String documentName) async {
     Directory? directory;
     if (Platform.isAndroid) {
       directory = await getExternalStorageDirectory();
@@ -68,13 +78,16 @@ class DocumentService {
       directory = await getApplicationDocumentsDirectory();
     }
 
-    final documentPath = path.join(directory!.path, '${documentId}_${documentName}_moove_together.pdf');
+    final documentPath = path.join(
+        directory!.path, '${documentId}_${documentName}_moove_together.pdf');
     final response = await api.download(
       '/trips/$tripId/documents/$documentId/download',
       documentPath,
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return documentPath;
     } else {
       throw Exception('Failed to download document');

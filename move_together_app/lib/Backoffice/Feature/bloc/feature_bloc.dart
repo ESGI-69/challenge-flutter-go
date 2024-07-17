@@ -26,10 +26,13 @@ class FeatureBloc extends Bloc<FeaturesEvent, FeaturesState> {
 
     on<FeatureDataPatchFeature>((event, emit) async {
       try {
-        final feature = await adminServices.patchFeature(event.feature.name.toString().split('.').last, event.feature.isEnabled);
+        final feature = await adminServices.patchFeature(
+            event.feature.name.toString().split('.').last,
+            event.feature.isEnabled);
         if (state is FeaturesDataLoadingSuccess) {
           final features = (state as FeaturesDataLoadingSuccess).features;
-          final index = features.indexWhere((element) => element.name == feature.name);
+          final index =
+              features.indexWhere((element) => element.name == feature.name);
           if (index != -1) {
             features[index] = feature;
             emit(FeaturesDataLoadingSuccess(features: features));

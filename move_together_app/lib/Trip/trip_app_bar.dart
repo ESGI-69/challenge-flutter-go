@@ -113,7 +113,6 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
-
         actions: [
           Row(
             children: [
@@ -146,13 +145,12 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 35),
-                child: ExtendedImage.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                  headers: {
-                    'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
-                  }
-                ),
+                child: ExtendedImage.network(imageUrl,
+                    fit: BoxFit.cover,
+                    headers: {
+                      'Authorization':
+                          context.read<AuthProvider>().getAuthorizationHeader(),
+                    }),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -166,12 +164,12 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
                     showDialog(
                         context: context,
                         builder: (context) => EditTripNameDialog(
-                          onNameUpdate: nameEdit,
-                        )
-                    );
+                              onNameUpdate: nameEdit,
+                            ));
                   },
                   onDateTap: () async {
-                    final DateTimeRange? newDateRange = await showDateRangePicker(
+                    final DateTimeRange? newDateRange =
+                        await showDateRangePicker(
                       context: context,
                       initialDateRange: DateTimeRange(
                         start: startDate.toLocal(),

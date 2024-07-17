@@ -4,7 +4,7 @@ class TripFeatureCardEmptyBody extends StatelessWidget {
   final String message;
 
   const TripFeatureCardEmptyBody({
-    super.key, 
+    super.key,
     required this.message,
   });
 

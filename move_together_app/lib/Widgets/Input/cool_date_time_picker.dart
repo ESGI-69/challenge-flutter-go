@@ -56,16 +56,16 @@ class _CoolDateTimePickerState extends State<CoolDateTimePicker> {
       );
 
       return selectedTime == null
-        ? selectedDate
-        : DateTime(
-          selectedDate.year,
-          selectedDate.month,
-          selectedDate.day,
-          selectedTime.hour,
-          selectedTime.minute,
-        );
+          ? selectedDate
+          : DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+              selectedTime.hour,
+              selectedTime.minute,
+            );
     }
-    
+
     return GestureDetector(
       onTap: () => showDateTimePicker(
         initialDate: widget.initialDate,
@@ -98,27 +98,31 @@ class _CoolDateTimePickerState extends State<CoolDateTimePicker> {
               Expanded(
                 child: Row(
                   children: [
-                    Icon(widget.prefixIcon, color: Theme.of(context).primaryColor),
+                    Icon(widget.prefixIcon,
+                        color: Theme.of(context).primaryColor),
                     const SizedBox(width: 12),
-                    _Text(hintText: widget.hintText, selectedDate: _selectedDateTime),
+                    _Text(
+                        hintText: widget.hintText,
+                        selectedDate: _selectedDateTime),
                   ],
                 ),
               ),
               _selectedDateTime != DateTime.fromMicrosecondsSinceEpoch(0)
-                ? GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedDateTime = DateTime.fromMicrosecondsSinceEpoch(0);
-                    });
-                    widget.onDateTimeCleared?.call();
-                  },
-                  child: Icon(
-                    Icons.clear_rounded,
-                    color: Theme.of(context).hintColor,
-                    size: 16,
-                  ),
-                )
-                : const SizedBox(),
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedDateTime =
+                              DateTime.fromMicrosecondsSinceEpoch(0);
+                        });
+                        widget.onDateTimeCleared?.call();
+                      },
+                      child: Icon(
+                        Icons.clear_rounded,
+                        color: Theme.of(context).hintColor,
+                        size: 16,
+                      ),
+                    )
+                  : const SizedBox(),
             ],
           ),
         ),

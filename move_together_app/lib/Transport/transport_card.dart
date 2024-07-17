@@ -24,13 +24,15 @@ class TransportCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TransportBloc(context)..add(TransportsDataFetch(tripId)),
-      child: BlocBuilder<TransportBloc, TransportState>(
-        builder: (context, state) {
+        create: (context) =>
+            TransportBloc(context)..add(TransportsDataFetch(tripId)),
+        child: BlocBuilder<TransportBloc, TransportState>(
+            builder: (context, state) {
           if (state is TransportsDataLoadingSuccess) {
             return TripFeatureCard(
               title: 'Transports',
-              emptyMessage: 'Comment voyagerons-nous ? Appuie sur le + pour ajouter un moyen de transport',
+              emptyMessage:
+                  'Comment voyagerons-nous ? Appuie sur le + pour ajouter un moyen de transport',
               showAddButton: userHasEditPermission,
               icon: Icons.directions_car,
               isLoading: state is TransportsDataLoading,
@@ -60,12 +62,15 @@ class TransportCard extends StatelessWidget {
                         'transportId': state.transports[index].id.toString()
                       },
                       queryParameters: {
-                        'hasTripEditPermission': userHasEditPermission.toString(),
+                        'hasTripEditPermission':
+                            userHasEditPermission.toString(),
                         'isTripOwner': userIsOwner.toString(),
                       },
                       extra: state.transports[index],
                     );
-                    context.read<TransportBloc>().add(TransportsDataFetch(tripId));
+                    context
+                        .read<TransportBloc>()
+                        .add(TransportsDataFetch(tripId));
                     onRefresh();
                   },
                 );
@@ -74,7 +79,8 @@ class TransportCard extends StatelessWidget {
           } else if (state is TransportsDataLoading) {
             return TripFeatureCard(
               title: 'Transports',
-              emptyMessage: 'Comment voyagerons-nous ? Appuie sur le + pour ajouter un moyen de transport',
+              emptyMessage:
+                  'Comment voyagerons-nous ? Appuie sur le + pour ajouter un moyen de transport',
               showAddButton: false,
               icon: Icons.directions_car,
               isLoading: true,
@@ -93,8 +99,6 @@ class TransportCard extends StatelessWidget {
             );
           }
           return const SizedBox();
-        }
-      )
-    );
+        }));
   }
 }

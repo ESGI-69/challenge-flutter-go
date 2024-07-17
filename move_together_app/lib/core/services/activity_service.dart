@@ -7,7 +7,7 @@ class ActivityService {
   final AuthProvider authProvider;
 
   ActivityService(
-      this.authProvider,
+    this.authProvider,
   );
 
   Future<List<Activity>> getAll(int tripId) async {
@@ -15,8 +15,12 @@ class ActivityService {
       '/trips/$tripId/activities',
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
-      return (response.data as List).map((note) => Activity.fromJson(note)).toList();
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      return (response.data as List)
+          .map((note) => Activity.fromJson(note))
+          .toList();
     } else {
       throw Exception('Failed to get Activities');
     }
@@ -43,7 +47,9 @@ class ActivityService {
       },
     );
 
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return Activity.fromJson(response.data);
     } else {
       throw Exception('Failed to create activities');
@@ -55,8 +61,9 @@ class ActivityService {
       '/trips/$tripId/activities/$activityId',
     );
 
-
-    if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
       return;
     } else {
       throw Exception('Failed to delete activities');

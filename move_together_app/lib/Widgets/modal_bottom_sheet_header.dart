@@ -35,7 +35,6 @@ class ModalBottomSheetHeader extends StatelessWidget {
             width: 1,
           ),
         ),
-      
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,14 +44,13 @@ class ModalBottomSheetHeader extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(
-                  'Fermer',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                )
-              ),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    'Fermer',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )),
             ),
           ),
           Expanded(

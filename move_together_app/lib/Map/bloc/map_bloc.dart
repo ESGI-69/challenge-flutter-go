@@ -14,21 +14,28 @@ part 'map_state.dart';
 class MapBloc extends Bloc<MapEvent, MapState> {
   MapBloc(BuildContext context) : super(MapInitial()) {
     final transportService = TransportService(context.read<AuthProvider>());
-    final accommodationService = AccommodationService(context.read<AuthProvider>());
+    final accommodationService =
+        AccommodationService(context.read<AuthProvider>());
     final activityService = ActivityService(context.read<AuthProvider>());
-    
+
     on<MapDataFetch>((event, emit) async {
       emit(MapDataLoading());
-      
+
       var results = await Future.wait([
         transportService.getAll(event.tripId),
         accommodationService.getAll(event.tripId),
         activityService.getAll(event.tripId),
       ]);
 
-      var transportsWithGeoPos = (results[0] as List<Transport>).where((transport) => transport.hasValidGeolocation).toList();
-      var accommodationsWithGeoPos = (results[1] as List<Accommodation>).where((accommodation) => accommodation.hasValidGeolocation).toList();
-      var activitiesWithGeoPos = (results[2] as List<Activity>).where((activity) => activity.hasValidGeolocation).toList();
+      var transportsWithGeoPos = (results[0] as List<Transport>)
+          .where((transport) => transport.hasValidGeolocation)
+          .toList();
+      var accommodationsWithGeoPos = (results[1] as List<Accommodation>)
+          .where((accommodation) => accommodation.hasValidGeolocation)
+          .toList();
+      var activitiesWithGeoPos = (results[2] as List<Activity>)
+          .where((activity) => activity.hasValidGeolocation)
+          .toList();
 
       emit(MapDataLoadingSuccess(
         transports: transportsWithGeoPos,

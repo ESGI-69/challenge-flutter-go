@@ -14,7 +14,7 @@ class FeatureProvider with ChangeNotifier {
   }
 
   bool isFeatureEnabled(FeatureNames featureName) {
-    return _features.any((feature) => feature.name == featureName && feature.isEnabled);
+    return _features
+        .any((feature) => feature.name == featureName && feature.isEnabled);
   }
 }
-

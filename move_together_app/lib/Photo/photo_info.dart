@@ -31,7 +31,9 @@ class PhotoInfo extends StatelessWidget {
             BottomShitHeaderAction(
               label: 'Enrigistrer dans la galerie',
               onPressed: () async {
-                final imagePath = await PhotoService(context.read<AuthProvider>()).download(tripId, photo.id);
+                final imagePath =
+                    await PhotoService(context.read<AuthProvider>())
+                        .download(tripId, photo.id);
                 await Gal.putImage(imagePath);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -51,7 +53,8 @@ class PhotoInfo extends StatelessWidget {
                   okButtonText: 'Supprimer',
                   onCancelPressed: () => Navigator.of(context).pop(),
                   onOkPressed: () async {
-                    await PhotoService(context.read<AuthProvider>()).delete(tripId, photo.id);
+                    await PhotoService(context.read<AuthProvider>())
+                        .delete(tripId, photo.id);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                     onDeleteSuccess(photo);
@@ -67,14 +70,14 @@ class PhotoInfo extends StatelessWidget {
         ),
         Expanded(
           child: Center(
-            child: ExtendedImage.network(
-              '${dotenv.env['API_ADDRESS']}${photo.uri}',
-              fit: BoxFit.contain,
-              headers: {
-                'Authorization': context.read<AuthProvider>().getAuthorizationHeader(),
-              },
-            )
-          ),
+              child: ExtendedImage.network(
+            '${dotenv.env['API_ADDRESS']}${photo.uri}',
+            fit: BoxFit.contain,
+            headers: {
+              'Authorization':
+                  context.read<AuthProvider>().getAuthorizationHeader(),
+            },
+          )),
         ),
       ],
     );

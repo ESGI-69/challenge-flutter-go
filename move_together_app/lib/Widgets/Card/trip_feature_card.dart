@@ -37,7 +37,6 @@ class TripFeatureCard extends StatelessWidget {
     this.type = TripFeatureCardType.row,
   });
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -183,19 +182,23 @@ class _Header extends StatelessWidget {
                   isLoading: isLoading,
                   title: title,
                   showArrow: showTitleArrow,
-                  onTitleTap: !isLoading && onTitleTap != null ? () => onTitleTap!() : () {},
+                  onTitleTap: !isLoading && onTitleTap != null
+                      ? () => onTitleTap!()
+                      : () {},
                 ),
               ],
             ),
-            ...isLoading || !showAddButton ? [] : [
-              GestureDetector(
-                onTap: onAddTap != null ? () => onAddTap!() : null,
-                child: const Icon(
-                  Icons.add,
-                  size: 24,
-                ),
-              ),
-            ],
+            ...isLoading || !showAddButton
+                ? []
+                : [
+                    GestureDetector(
+                      onTap: onAddTap != null ? () => onAddTap!() : null,
+                      child: const Icon(
+                        Icons.add,
+                        size: 24,
+                      ),
+                    ),
+                  ],
           ],
         ),
       ),
@@ -226,34 +229,33 @@ class _HeaderTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _onTap,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
-          ...isLoading || !showArrow ? [] : [
-            const SizedBox(width: 4),
-            Container(
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.arrow_forward_ios,
-                size: 12,
-                color: Colors.black54,
-              ),
-            ),
-          ],
-        ]
-      ),
+        ),
+        ...isLoading || !showArrow
+            ? []
+            : [
+                const SizedBox(width: 4),
+                Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 12,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+      ]),
     );
   }
 }

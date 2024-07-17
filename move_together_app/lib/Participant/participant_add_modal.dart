@@ -28,12 +28,11 @@ class ParticipantAddModal extends StatelessWidget {
             const _Header(),
             const SizedBox(height: 16),
             const Text(
-              'Invitez vos amis à rejoindre votre voyage en leur donnant ce code :',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-              )
-            ),
+                'Invitez vos amis à rejoindre votre voyage en leur donnant ce code :',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                )),
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
@@ -44,7 +43,8 @@ class ParticipantAddModal extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -102,8 +102,8 @@ class _Header extends StatelessWidget {
           const SizedBox(height: 4),
           const Row(
             children: [
-              Expanded(child: 
-                Text(
+              Expanded(
+                child: Text(
                   'Inviter des participants',
                   textAlign: TextAlign.center,
                   style: TextStyle(

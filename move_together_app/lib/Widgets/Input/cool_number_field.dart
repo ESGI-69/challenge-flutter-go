@@ -6,7 +6,8 @@ class CoolNumberField extends StatelessWidget {
   final String hintText;
   final IconData prefixIcon;
 
-  const CoolNumberField({super.key, 
+  const CoolNumberField({
+    super.key,
     required this.controller,
     required this.hintText,
     required this.prefixIcon,
