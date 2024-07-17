@@ -91,12 +91,16 @@ class AccommodationCard extends StatelessWidget {
               },
             );
           } else if (state is AccommodationsDataLoadingError) {
-            return Center(
-              child: Column(
-                children: [
-                  Text(state.errorMessage),
-                ],
-              ),
+            return TripFeatureCard(
+              title: 'Accommodations',
+              emptyMessage: state.errorMessage,
+              showAddButton: userHasEditPermission,
+              icon: Icons.home,
+              isLoading: state is AccommodationsDataLoading,
+              length: 0,
+              itemBuilder: (context, index) {
+                return const SizedBox();
+              },
             );
           }
           return const SizedBox();
