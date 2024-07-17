@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import 'package:move_together_app/Widgets/button.dart';
 
@@ -18,6 +18,10 @@ class JoinTripScreen extends StatefulWidget {
 class JoinTripScreenState extends State<JoinTripScreen> {
   final TextEditingController _tripCodeController = TextEditingController();
   String? errorMessage;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
+  bool isKeyboardEnable = false;
 
   @override
   void initState() {
@@ -29,6 +33,7 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   void dispose() {
     _tripCodeController.removeListener(_handleTextChanged);
     _tripCodeController.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -50,6 +55,19 @@ class JoinTripScreenState extends State<JoinTripScreen> {
     }
   }
 
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+        _tripCodeController.text = result!.code!;
+        _joinTrip();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,18 +87,33 @@ class JoinTripScreenState extends State<JoinTripScreen> {
           child: Column(
             children: [
               const Text('Tu as été invité?'),
-              const Text('S\'il te plait, entre le code PIN ci-dessous'),
-              const Icon(Icons.groups_rounded,
-                  size: 100, color: Color(0xFF79D0BF)),
-              TextField(
+              const Text('S\'il te plait, entre le code PIN ci-dessous ou scanne le QR code'),
+              const Icon(Icons.groups_rounded, size: 100, color: Color(0xFF79D0BF)),
+              if(!isKeyboardEnable)
+              Expanded(
+                child: 
+                QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                  overlay: QrScannerOverlayShape(
+                    borderColor: const Color(0xFF79D0BF),
+                    borderRadius: 10,
+                    borderLength: 30,
+                    borderWidth: 10,
+                    cutOutSize: 300,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+                TextField(
                 controller: _tripCodeController,
                 decoration: const InputDecoration(
                   counterText: '',
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.pinkAccent),
+                  borderSide: BorderSide(color: Colors.pinkAccent),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.pinkAccent),
+                  borderSide: BorderSide(color: Colors.pinkAccent),
                   ),
                 ),
                 textAlign: TextAlign.center,
@@ -90,7 +123,17 @@ class JoinTripScreenState extends State<JoinTripScreen> {
                   fontSize: 40.0,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
+                onTap: () {
+                  setState(() {
+                  isKeyboardEnable = true;
+                  });
+                },
+                onSubmitted: (_) {
+                  setState(() {
+                  isKeyboardEnable = false;
+                  });
+                },
+                ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,

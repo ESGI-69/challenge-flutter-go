@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ParticipantAddModal extends StatelessWidget {
   final String inviteCode;
@@ -27,6 +28,11 @@ class ParticipantAddModal extends StatelessWidget {
           children: [
             const _Header(),
             const SizedBox(height: 16),
+            QrImageView(
+              data: inviteCode,
+              version: QrVersions.auto,
+              size: 200.0,
+            ),
             const Text(
                 'Invitez vos amis à rejoindre votre voyage en leur donnant ce code :',
                 textAlign: TextAlign.center,
