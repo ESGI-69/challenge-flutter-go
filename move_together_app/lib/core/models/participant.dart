@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
+import 'package:move_together_app/core/models/user.dart';
 
 // ignore: constant_identifier_names
 enum ParticipantTripRole { OWNER, EDITOR, VIEWER }
@@ -27,6 +28,16 @@ class Participant {
       tripRole: ParticipantTripRole.values.firstWhere((e) => e.toString().split('.').last == json['tripRole']),
       profilePicturePath: json['profilePicturePath'],
       profilePictureUri: json['profilePictureUri'],
+    );
+  }
+
+  factory Participant.fromUser(User user) {
+    return Participant(
+      id: user.id,
+      username: user.name,
+      tripRole: ParticipantTripRole.VIEWER,
+      profilePicturePath: user.profilePicturePath,
+      profilePictureUri: user.profilePictureUri,
     );
   }
 
