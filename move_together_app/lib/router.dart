@@ -36,12 +36,12 @@ List<String> loggedRoutes = [
   '/trips/:tripId/participants',
   '/trips/:tripId/photos',
   '/profile',
+  '/',
 ];
 
 List<String> unloggedRoutes = [
   '/login',
   '/register',
-  '/',
 ];
 
 List<String> backOfficeRoutes = [
@@ -130,7 +130,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       name: 'profile',
-      path: 'profile',
+      path: '/profile',
       builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
