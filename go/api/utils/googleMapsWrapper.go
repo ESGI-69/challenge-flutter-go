@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"challenge-flutter-go/api/caca"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -26,7 +27,7 @@ type ResponseBody struct {
 func SearchPlaces(query string) (string, error) {
 	url := "https://places.googleapis.com/v1/places:searchText"
 
-	fmt.Printf("Search Places query : %v", query)
+	fmt.Printf("Search Places query : %+v\n", query)
 
 	requestBody := RequestBody{
 		TextQuery: query,
@@ -34,29 +35,32 @@ func SearchPlaces(query string) (string, error) {
 	}
 	jsonData, err := json.Marshal(requestBody)
 	if err != nil {
+		fmt.Printf("Search Places error marshalling request body: %v+\n", err)
 		return "", fmt.Errorf("error marshalling request body: %v", err)
 	}
 
-	fmt.Printf("Search Places jsonData : %v", string(jsonData))
+	fmt.Printf("Search Places jsonData : %+v\n", string(jsonData))
 
 	// Create a new POST request
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
+		fmt.Printf("Search Places error creating request: %v+\n", err)
 		return "", fmt.Errorf("error creating request: %v", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Goog-Api-Key", viper.GetString("GOOGLE_API_KEY"))
 	req.Header.Set("X-Goog-FieldMask", "places.formattedAddress,places.photos")
 
-	fmt.Print("Search Places request : ", req)
+	fmt.Printf("Search Places request :%+v\n", req)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		fmt.Printf("Search Places error sending request: %v+\n", err)
 		return "", fmt.Errorf("error sending request: %v", err)
 	}
 
-	fmt.Printf("Search Places response : %v", resp)
+	fmt.Printf("Search Places response : %+v\n", resp)
 
 	defer resp.Body.Close()
 
@@ -64,16 +68,20 @@ func SearchPlaces(query string) (string, error) {
 	var result ResponseBody
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
+		fmt.Printf("Search Places error decoding response: %v+\n", err)
 		return "", fmt.Errorf("error decoding response: %v", err)
 	}
 
-	fmt.Printf("Search Places result : %v", result)
+	fmt.Printf("Search Places result :\n")
+	caca.PrettyPrint(result)
 
 	// Return the first photo name
 	if len(result.Places) > 0 && len(result.Places[0].Photos) > 0 {
+		fmt.Printf("Search Places photo found : %+v\n", result.Places[0].Photos[0].Name)
 		return result.Places[0].Photos[0].Name, nil
 	}
 
+	fmt.Printf("Search Places no photo found\n")
 	return "", fmt.Errorf("no photo found")
 }
 
