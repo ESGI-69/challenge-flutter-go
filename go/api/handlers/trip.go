@@ -8,7 +8,6 @@ import (
 	"challenge-flutter-go/logger"
 	"challenge-flutter-go/models"
 	"challenge-flutter-go/repository"
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -59,12 +58,8 @@ func (handler *TripHandler) Create(context *gin.Context) {
 	//Get an image from google maps api for the trip
 	image, err := utils.GetPhotoURIFromPlaceName(requestBody.City + ", " + requestBody.Country)
 	if err != nil {
-		fmt.Printf("Create trip : Error getting image from google maps api : %+v\n", err)
 		logger.ApiError(context, "Error getting image from google maps api")
 	}
-
-	// fmt.Printf("Create Trip image :\n")
-	// caca.PrettyPrint(image)
 
 	var uniqueTitleString string
 	filePath, err := utils.DownloadImageFromURL(context, image)
