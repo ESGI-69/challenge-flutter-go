@@ -6,8 +6,10 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/core/services/trip_service.dart';
 
+import 'package:move_together_app/Widgets/button.dart';
+
 class JoinTripScreen extends StatefulWidget {
-  const JoinTripScreen({ super.key });
+  const JoinTripScreen({super.key});
 
   @override
   JoinTripScreenState createState() => JoinTripScreenState();
@@ -31,8 +33,7 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   }
 
   void _handleTextChanged() {
-    setState(() {
-    });
+    setState(() {});
   }
 
   Future<void> _joinTrip() async {
@@ -54,13 +55,13 @@ class JoinTripScreenState extends State<JoinTripScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const Padding(
-        padding: EdgeInsets.only(left: 16.0),
-         child: Row(
-          children: [
-            ButtonBack(),
-          ],
+          padding: EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: [
+              ButtonBack(),
+            ],
+          ),
         ),
-      ),
       ),
       body: Center(
         child: Padding(
@@ -69,48 +70,37 @@ class JoinTripScreenState extends State<JoinTripScreen> {
             children: [
               const Text('Tu as été invité?'),
               const Text('S\'il te plait, entre le code PIN ci-dessous'),
-              const Icon(Icons.groups_rounded, size: 100, color: Color(0xFF79D0BF)),
+              const Icon(Icons.groups_rounded,
+                  size: 100, color: Color(0xFF79D0BF)),
               TextField(
                 controller: _tripCodeController,
                 decoration: const InputDecoration(
                   counterText: '',
-                   enabledBorder: OutlineInputBorder(
-                            borderSide:  BorderSide(color: Colors.pinkAccent),
-                          ),
-                    focusedBorder: OutlineInputBorder(
-                            borderSide:  BorderSide(color: Colors.pinkAccent),
-                          ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.pinkAccent),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.pinkAccent),
+                  ),
                 ),
                 textAlign: TextAlign.center,
                 maxLength: 10,
-                style: const TextStyle(color: Colors.black,
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _joinTrip,
-                style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith<Color>(
-                    (Set<WidgetState> states) {
-                      if (_tripCodeController.text.length >= 8) {
-                        return const Color(0xFF79D0BF);
-                      }
-                      return const Color(0xFFb2e4da);
-                    },
-                  ),                  
-                  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-                  padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                    const EdgeInsets.symmetric(horizontal: 70.0),
-                  ),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
+              SizedBox(
+                width: double.infinity,
+                child: Button(
+                  onPressed: _joinTrip,
+                  type: _tripCodeController.text.length >= 8
+                      ? ButtonType.primary
+                      : ButtonType.disabled,
+                  text: 'Rejoindre Maintenant',
                 ),
-                child: const Text('Rejoindre Maintenant'),
               ),
               const SizedBox(height: 16),
               if (errorMessage != null)
@@ -124,9 +114,4 @@ class JoinTripScreenState extends State<JoinTripScreen> {
       ),
     );
   }
-
-
-
 }
-      
-

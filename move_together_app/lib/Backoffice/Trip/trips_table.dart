@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../core/models/trip.dart';
+import 'package:move_together_app/Widgets/button.dart';
+import 'package:move_together_app/core/models/trip.dart';
 
 class TripsTable extends StatelessWidget {
   final List<Trip> trips;
@@ -551,15 +552,12 @@ class TripsTable extends StatelessWidget {
             TableCell(
               child: Align(
                 alignment: Alignment.center,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    foregroundColor: WidgetStateProperty.all(Colors.red),
-                    padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
-                  ),
+                child: Button(
+                  type: ButtonType.destructive,
                   onPressed: () {
                     deleteTrip(trip);
                   },
-                  child: const Icon(Icons.delete),
+                  icon: Icons.delete,
                 ),
               ),
             ),

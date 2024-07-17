@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:move_together_app/Widgets/button.dart';
+
 class DetailItem {
   final String title;
   final dynamic value;
@@ -145,14 +147,14 @@ class _DetailsListState extends State<DetailsList> {
           ? [
             const SizedBox(height: 16),
             Center(
-              child: ElevatedButton(
+              child: Button(
                 onPressed: () {
                   widget.onConfirmEdition?.call();
                   setState(() {
                     _isEdited = false;
                   });
                 },
-                child: const Text('Confirmer les modifications'),
+                text: 'Confirmer les modifications',
               ),
             ),
           ]

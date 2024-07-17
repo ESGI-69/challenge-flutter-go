@@ -5,6 +5,8 @@ import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 import 'package:move_together_app/core/models/note.dart';
 import 'package:move_together_app/core/services/note_service.dart';
 
+import 'package:move_together_app/Widgets/button.dart';
+
 class NoteCreateModal extends StatefulWidget {
   final Function(Note) onNoteCreated;
   final int tripId;
@@ -49,41 +51,30 @@ class _NoteCreateModalState extends State<NoteCreateModal> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const _Header(),
-                const SizedBox(height: 8),
-                CoolTextField(
-                  controller: _titleController,
-                  hintText: 'Titre',
-                  prefixIcon: Icons.title,
-                ),
-                const SizedBox(height: 8),
-                CoolTextField(
-                  controller: _contentController,
-                  hintText: 'Contenu',
-                  prefixIcon: Icons.text_fields,
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: createNote,
-                  style: _titleController.text.isEmpty || _contentController.text.isEmpty
-                      ? ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                  )
-                      : ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).primaryColor),
-                  ),
-                  child: const Text(
-                    'Créer',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ]
-          ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            const _Header(),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _titleController,
+              hintText: 'Titre',
+              prefixIcon: Icons.title,
+            ),
+            const SizedBox(height: 8),
+            CoolTextField(
+              controller: _contentController,
+              hintText: 'Contenu',
+              prefixIcon: Icons.text_fields,
+            ),
+            const SizedBox(height: 8),
+            Button(
+              onPressed: createNote,
+              type: _titleController.text.isEmpty ||
+                      _contentController.text.isEmpty
+                  ? ButtonType.disabled
+                  : ButtonType.primary,
+              text: 'Créer',
+            ),
+          ]),
         ),
       ),
     );
@@ -113,14 +104,14 @@ class _Header extends StatelessWidget {
           const SizedBox(height: 4),
           const Row(
             children: [
-              Expanded(child:
-              Text(
-                'Créer une note',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  'Créer une note',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
               )
             ],
           ),

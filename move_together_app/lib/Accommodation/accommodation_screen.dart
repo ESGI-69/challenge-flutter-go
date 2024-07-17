@@ -9,6 +9,8 @@ import 'package:move_together_app/core/services/accommodation_service.dart';
 import 'package:move_together_app/utils/map.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:move_together_app/Widgets/button.dart';
+
 Map<AccommodationType, String> accommodationTypeString = {
   AccommodationType.hotel: 'Hotel',
   AccommodationType.airbnb: 'airbnb',
@@ -18,18 +20,23 @@ Map<AccommodationType, String> accommodationTypeString = {
 class AccommodationScreen extends StatelessWidget {
   const AccommodationScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final accommodation = GoRouterState.of(context).extra as Accommodation;
 
-    final tripId = int.parse(GoRouterState.of(context).pathParameters['tripId']!);
+    final tripId =
+        int.parse(GoRouterState.of(context).pathParameters['tripId']!);
 
-    final hasTripEditPermission = GoRouterState.of(context).uri.queryParameters['hasTripEditPermission'] == 'true';
-    final isTripOwner = GoRouterState.of(context).uri.queryParameters['isTripOwner'] == 'true';
+    final hasTripEditPermission = GoRouterState.of(context)
+            .uri
+            .queryParameters['hasTripEditPermission'] ==
+        'true';
+    final isTripOwner =
+        GoRouterState.of(context).uri.queryParameters['isTripOwner'] == 'true';
 
     void deleteAccommodation() async {
-      await AccommodationService(context.read<AuthProvider>()).delete(tripId, accommodation.id);
+      await AccommodationService(context.read<AuthProvider>())
+          .delete(tripId, accommodation.id);
       context.pop();
     }
 
@@ -71,63 +78,69 @@ class AccommodationScreen extends StatelessWidget {
                 children: [
                   DetailsList(
                     items: [
-                      DetailItem(title: 'Type', value: accommodationTypeString[accommodation.accommodationType]),
+                      DetailItem(
+                          title: 'Type',
+                          value: accommodationTypeString[
+                              accommodation.accommodationType]),
                       DetailItem(title: 'Name', value: accommodation.name),
-                      DetailItem(title: 'Adresse', value: accommodation.address),
-                      DetailItem(title: 'Date de début', value: accommodation.startDate),
-                      DetailItem(title: 'Date de fin', value: accommodation.endDate),
-                      DetailItem(title: 'URL de réservation', value: accommodation.bookingUrl),
-                      DetailItem(title: 'Prix', value: '${accommodation.price.toStringAsFixed(2)}€'),
+                      DetailItem(
+                          title: 'Adresse', value: accommodation.address),
+                      DetailItem(
+                          title: 'Date de début',
+                          value: accommodation.startDate),
+                      DetailItem(
+                          title: 'Date de fin', value: accommodation.endDate),
+                      DetailItem(
+                          title: 'URL de réservation',
+                          value: accommodation.bookingUrl),
+                      DetailItem(
+                          title: 'Prix',
+                          value: '${accommodation.price.toStringAsFixed(2)}€'),
                     ],
                   ),
-                  (accommodation.bookingUrl != null && accommodation.bookingUrl!.isNotEmpty)
-                    ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                      const Icon(
-                        Icons.link,
-                        color: Colors.green,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                        if (accommodation.bookingUrl != null) {
-                          urlParsed = Uri.parse(accommodation.bookingUrl!);
-                          launchUrl(urlParsed);
-                        }
-                        },
-                        child: Text(
-                        'Lien de réservation',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        ),
-                      ),
-                      ],
-                    )
-                    : const SizedBox(),
+                  (accommodation.bookingUrl != null &&
+                          accommodation.bookingUrl!.isNotEmpty)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.link,
+                              color: Colors.green,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                if (accommodation.bookingUrl != null) {
+                                  urlParsed =
+                                      Uri.parse(accommodation.bookingUrl!);
+                                  launchUrl(urlParsed);
+                                }
+                              },
+                              child: Text(
+                                'Lien de réservation',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                   const SizedBox(height: 16),
                   (hasTripEditPermission) || isTripOwner
-                    ? ElevatedButton(
-                      onPressed: deleteAccommodation,
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.error),
-                      ),
-                      child: const Text(
-                        'Supprimer',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                    : !hasTripEditPermission
-                      ? Text(
-                        'Vous n\'avez pas la permission de supprimer ce accommodation car vous ne pouvez pas modifier le voyage',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                        color: Theme.of(context).hintColor,
-                        ),
-                      )
-                      : const SizedBox(),
+                      ? Button(
+                          onPressed: deleteAccommodation,
+                          type: ButtonType.destructive,
+                          text: 'Supprimer',
+                        )
+                      : !hasTripEditPermission
+                          ? Text(
+                              'Vous n\'avez pas la permission de supprimer ce accommodation car vous ne pouvez pas modifier le voyage',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Theme.of(context).hintColor,
+                              ),
+                            )
+                          : const SizedBox(),
                 ],
               ),
             ),

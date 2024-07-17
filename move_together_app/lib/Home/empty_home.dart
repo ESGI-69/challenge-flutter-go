@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../Widgets/button.dart';
+import 'package:move_together_app/Widgets/button.dart';
 
 class EmptyHome extends StatelessWidget {
   const EmptyHome({super.key});

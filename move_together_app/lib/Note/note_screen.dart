@@ -6,6 +6,8 @@ import 'package:move_together_app/Widgets/details_list.dart';
 import 'package:move_together_app/core/models/note.dart';
 import 'package:move_together_app/core/services/note_service.dart';
 
+import 'package:move_together_app/Widgets/button.dart';
+
 class NoteScreen extends StatelessWidget {
   const NoteScreen({super.key});
 
@@ -13,10 +15,15 @@ class NoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final note = GoRouterState.of(context).extra as Note;
 
-    final tripId = int.parse(GoRouterState.of(context).pathParameters['tripId']!);
+    final tripId =
+        int.parse(GoRouterState.of(context).pathParameters['tripId']!);
 
-    final hasTripEditPermission = GoRouterState.of(context).uri.queryParameters['hasTripEditPermission'] == 'true';
-    final isTripOwner = GoRouterState.of(context).uri.queryParameters['isTripOwner'] == 'true';
+    final hasTripEditPermission = GoRouterState.of(context)
+            .uri
+            .queryParameters['hasTripEditPermission'] ==
+        'true';
+    final isTripOwner =
+        GoRouterState.of(context).uri.queryParameters['isTripOwner'] == 'true';
 
     void deleteNote() async {
       await NoteService(context.read<AuthProvider>()).delete(tripId, note.id);
@@ -36,39 +43,34 @@ class NoteScreen extends StatelessWidget {
                 DetailItem(title: 'Titre', value: note.title),
                 DetailItem(title: 'Contenu', value: note.content),
                 DetailItem(title: 'Date de création', value: note.createdAt),
-                DetailItem(title: 'Créé par', value: note.author.formattedUsername),
+                DetailItem(
+                    title: 'Créé par', value: note.author.formattedUsername),
               ]),
               const SizedBox(height: 16),
-              (hasTripEditPermission && note.author.isMe(context)) || isTripOwner
-                  ? ElevatedButton(
-                onPressed: deleteNote,
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.error),
-                ),
-                child: const Text(
-                  'Supprimer',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              )
+              (hasTripEditPermission && note.author.isMe(context)) ||
+                      isTripOwner
+                  ? Button(
+                      onPressed: deleteNote,
+                      type: ButtonType.destructive,
+                      text: 'Supprimer',
+                    )
                   : !hasTripEditPermission
-                  ? Text(
-                'Vous n\'avez pas la permission de supprimer cette note car vous ne pouvez pas modifier le voyage',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).hintColor,
-                ),
-              )
-                  : !note.author.isMe(context)
-                  ? Text(
-                'Vous ne pouvez pas supprimer cette note car vous n\'êtes pas son créateur',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).hintColor,
-                ),
-              )
-                  : const SizedBox(),
+                      ? Text(
+                          'Vous n\'avez pas la permission de supprimer cette note car vous ne pouvez pas modifier le voyage',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Theme.of(context).hintColor,
+                          ),
+                        )
+                      : !note.author.isMe(context)
+                          ? Text(
+                              'Vous ne pouvez pas supprimer cette note car vous n\'êtes pas son créateur',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Theme.of(context).hintColor,
+                              ),
+                            )
+                          : const SizedBox(),
             ],
           ),
         ),
