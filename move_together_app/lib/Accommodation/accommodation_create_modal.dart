@@ -48,18 +48,6 @@ class _AccommodationCreateModalState extends State<AccommodationCreateModal> {
         _priceController.text.isEmpty) {
       return;
     }
-    // final createdAccommodation =
-    //     await AccommodationService(context.read<AuthProvider>()).create(
-    //   tripId: widget.tripId,
-    //   accommodationType: _selectedAccommodationType,
-    //   startDate: _startDateTime,
-    //   endDate: _endDateTime,
-    //   address: _addressController.text,
-    //   name: _nameController.text,
-    //   bookingUrl: _bookingUrlController.text,
-    //   price: double.parse(_priceController.text),
-    // );
-    // widget.onAccommodationCreated(createdAccommodation);
 
     try {
       final createdAccommodation =
