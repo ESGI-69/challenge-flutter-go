@@ -7,20 +7,19 @@ import 'package:move_together_app/Photo/photo_item.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
 import 'package:move_together_app/core/services/photo_service.dart';
+import 'package:move_together_app/utils/photo_picker.dart';
 
 class PhotoCard extends StatelessWidget {
   final int tripId;
   final bool userHasEditPermission;
   final bool userIsOwner;
 
-  PhotoCard({
+  const PhotoCard({
     super.key,
     required this.tripId,
     required this.userHasEditPermission,
     required this.userIsOwner,
   });
-
-  final ImagePicker picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class PhotoCard extends StatelessWidget {
               type: TripFeatureCardType.grid,
               length: state.photos.length,
               onAddTap: () async {
-                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                final XFile? image = await pickPhoto(context);
                 if (image != null) {
                   await photoService.create(tripId, image);
                   context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
