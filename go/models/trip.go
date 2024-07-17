@@ -4,7 +4,7 @@ import (
 	"challenge-flutter-go/api/utils/geo"
 	"crypto/rand"
 	"encoding/base64"
-	"errors"
+	"fmt"
 	"time"
 
 	"gorm.io/gorm"
@@ -42,7 +42,7 @@ func (t *Trip) BeforeSave(tx *gorm.DB) error {
 		t.Name = t.City
 	}
 	if err := geo.GetGeoLocation(t.City+", "+t.Country, &t.Latitude, &t.Longitude); err != nil {
-		return errors.New("geo location api is on an error state")
+		fmt.Println("Error while getting geo location: ", err)
 	}
 	return nil
 }
