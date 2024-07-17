@@ -37,8 +37,8 @@ class PhotoCard extends StatelessWidget {
               showAddButton: userHasEditPermission,
               icon: Icons.camera_alt,
               isLoading: state is PhotosDataLoading,
-              length: state.photos.length,
               type: TripFeatureCardType.grid,
+              length: state.photos.length,
               onAddTap: () async {
                 final XFile? image = await picker.pickImage(source: ImageSource.gallery);
                 if (image != null) {
@@ -46,10 +46,13 @@ class PhotoCard extends StatelessWidget {
                   context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
                 }
               },
-              onTitleTap: () async {
-                await context.pushNamed('photos', pathParameters: { 'tripId': tripId.toString() });
-                context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
-              },
+              onTitleTap:
+                state.photos.isNotEmpty ?
+                () async {
+                  await context.pushNamed('photos', pathParameters: { 'tripId': tripId.toString() });
+                  context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
+                }
+                : null,
               itemBuilder: (context, index) => PhotoItem(
                 tripId: tripId,
                 photo: state.photos[index],
