@@ -51,6 +51,7 @@ func SearchPlaces(query string) (string, error) {
 	req.Header.Set("X-Goog-Api-Key", viper.GetString("GOOGLE_API_KEY"))
 	req.Header.Set("X-Goog-FieldMask", "places.formattedAddress,places.photos")
 
+	fmt.Printf("Search Places GOOGLE API KEY :%+v\n", viper.GetString("GOOGLE_API_KEY"))
 	fmt.Printf("Search Places request :%+v\n", req)
 
 	client := &http.Client{}
