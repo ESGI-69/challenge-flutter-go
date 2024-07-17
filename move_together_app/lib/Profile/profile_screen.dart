@@ -1,4 +1,5 @@
 import 'package:move_together_app/Widgets/details_list.dart';
+import 'package:move_together_app/utils/photo_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ImagePicker picker = ImagePicker();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             } else if (state is ProfileDataLoadingSuccess) {
               Future<void> handleProfilePictureUpdate() async {
-                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                final XFile? image = await pickPhoto(context);
                 if (image != null) {
                   await userService.uploadProfilePicture(image);
                   context.read<ProfileBloc>().add(ProfilePictureUpdated());
