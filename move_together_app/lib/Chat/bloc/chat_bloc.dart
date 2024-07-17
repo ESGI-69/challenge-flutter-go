@@ -8,6 +8,7 @@ import 'package:move_together_app/core/models/message.dart';
 import 'package:move_together_app/core/services/chat_service.dart';
 import 'package:move_together_app/core/services/websocket_service.dart';
 import '../../Provider/auth_provider.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 part 'chat_event.dart';
 part 'chat_state.dart';
@@ -39,7 +40,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     } on ApiException catch (error) {
       emit(ChatDataLoadingError(errorMessage: error.message));
     } catch (error) {
-      emit(ChatDataLoadingError(errorMessage: 'Unhandled error'));
+      emit(ChatDataLoadingError(errorMessage: exceptionToString(error)));
     }
   }
 
@@ -57,7 +58,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       } catch (error) {
         emit(currentState.copyWith(
             sendMessageState:
-                const ChatSendMessageError(errorMessage: 'Unhandled error')));
+                ChatSendMessageError(errorMessage: exceptionToString(error))));
       }
     }
   }

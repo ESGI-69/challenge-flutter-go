@@ -78,31 +78,46 @@ class ChatBodyState extends State<ChatBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            controller: widget.scrollController,
-            reverse: true,
-            itemCount: widget.messages.length,
-            itemBuilder: (context, index) {
-              final message =
-                  widget.messages[widget.messages.length - 1 - index];
-              return ChatBubble(
-                  message: message,
-                  isOwnMessage: message.isCurrentUserAuthor(context));
+    return BlocListener<ChatBloc, ChatState>(
+      listener: (context, state) {
+        if (state is ChatDataLoadingSuccess) {
+          if (state.sendMessageState is ChatSendMessageError) {
+            final errorState = state.sendMessageState as ChatSendMessageError;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorState.errorMessage),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          }
+        }
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              controller: widget.scrollController,
+              reverse: true,
+              itemCount: widget.messages.length,
+              itemBuilder: (context, index) {
+                final message =
+                    widget.messages[widget.messages.length - 1 - index];
+                return ChatBubble(
+                    message: message,
+                    isOwnMessage: message.isCurrentUserAuthor(context));
+              },
+            ),
+          ),
+          ChatInput(
+            controller: _controller,
+            isButtonEnabled: _isButtonEnabled,
+            onSendPressed: _sendMessage,
+            onAttachPressed: () {
+              // Handle attachment
             },
           ),
-        ),
-        ChatInput(
-          controller: _controller,
-          isButtonEnabled: _isButtonEnabled,
-          onSendPressed: _sendMessage,
-          onAttachPressed: () {
-            // Handle attachment
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
