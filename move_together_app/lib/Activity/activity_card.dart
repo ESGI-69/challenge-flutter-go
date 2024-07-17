@@ -90,12 +90,16 @@ class ActivityCard extends StatelessWidget {
               },
             );
           } else if (state is ActivitiesDataLoadingError) {
-            return Center(
-              child: Column(
-                children: [
-                  Text(state.errorMessage),
-                ],
-              ),
+            return TripFeatureCard(
+              title: 'Activities',
+              emptyMessage: state.errorMessage,
+              showAddButton: userHasEditPermission,
+              icon: Icons.kayaking,
+              isLoading: state is ActivitiesDataLoading,
+              length: 0,
+              itemBuilder: (context, index) {
+                return const SizedBox();
+              },
             );
           }
           return const SizedBox();
