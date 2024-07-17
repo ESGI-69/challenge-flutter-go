@@ -37,6 +37,9 @@ class PhotosScreen extends StatelessWidget {
                     photo: photo,
                     onDeleteSuccess: (photo) {
                       state.photos.remove(photo);
+                      if (state.photos.isEmpty) {
+                        context.pop();
+                      }
                     },
                   );
                 },
