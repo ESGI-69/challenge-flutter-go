@@ -10,7 +10,6 @@ import 'package:move_together_app/Map/map_screen.dart';
 import 'package:move_together_app/Note/note_screen.dart';
 import 'package:move_together_app/Photo/photos_screen.dart';
 import 'package:move_together_app/Transport/transport_screen.dart';
-import 'package:move_together_app/views/landing_screen.dart';
 import 'package:move_together_app/views/login_screen.dart';
 import 'package:move_together_app/views/register_screen.dart';
 import 'package:move_together_app/Home/home_screen.dart';
@@ -66,78 +65,73 @@ Future<bool> isAdmin(BuildContext context) async {
 final GoRouter router = GoRouter(
   routes: [
     GoRoute(
+      name: 'home',
       path: '/',
-      builder: (context, state) => const LandingScreen(),
+      builder: (context, state) => const HomeScreen(),
       routes: [
         GoRoute(
-            name: 'home',
-            path: 'trips',
-            builder: (context, state) => const HomeScreen(),
-            routes: [
-              GoRoute(
-                name: 'join',
-                path: 'join',
-                builder: (context, state) => const JoinTripScreen(),
-              ),
-              GoRoute(
-                name: 'create',
-                path: 'create',
-                builder: (context, state) => const CreateTripScreen(),
-              ),
-              GoRoute(
-                name: 'trip',
-                path: ':tripId',
-                builder: (context, state) => const TripScreen(),
-                routes: [
-                  GoRoute(
-                    name: 'chat',
-                    path: 'chat',
-                    builder: (context, state) => const ChatScreen(),
-                  ),
-                  GoRoute(
-                    name: 'photos',
-                    path: 'photos',
-                    builder: (context, state) => const PhotosScreen(),
-                  ),
-                  GoRoute(
-                    name: 'activity',
-                    path: 'activities/:activityId',
-                    builder: (context, state) => const ActivityScreen(),
-                  ),
-                  GoRoute(
-                    name: 'transport',
-                    path: 'transports/:transportId',
-                    builder: (context, state) => const TransportScreen(),
-                  ),
-                  GoRoute(
-                    name: 'accommodation',
-                    path: 'accommodations/:accommodationId',
-                    builder: (context, state) => const AccommodationScreen(),
-                  ),
-                  GoRoute(
-                    name: 'document',
-                    path: 'documents/:documentId',
-                    builder: (context, state) => const DocumentScreen(),
-                  ),
-                  GoRoute(
-                    name: 'note',
-                    path: 'notes/:noteId',
-                    builder: (context, state) => const NoteScreen(),
-                  ),
-                  GoRoute(
-                    name: 'map',
-                    path: 'map',
-                    builder: (context, state) => const MapScreen(),
-                  ),
-                ],
-              ),
-            ]),
+          name: 'join',
+          path: 'join',
+          builder: (context, state) => const JoinTripScreen(),
+        ),
         GoRoute(
-          name: 'profile',
-          path: 'profile',
-          builder: (context, state) => const ProfileScreen(),
+          name: 'create',
+          path: 'create',
+          builder: (context, state) => const CreateTripScreen(),
+        ),
+        GoRoute(
+          name: 'trip',
+          path: ':tripId',
+          builder: (context, state) => const TripScreen(),
+          routes: [
+            GoRoute(
+              name: 'chat',
+              path: 'chat',
+              builder: (context, state) => const ChatScreen(),
+            ),
+            GoRoute(
+              name: 'photos',
+              path: 'photos',
+              builder: (context, state) => const PhotosScreen(),
+            ),
+            GoRoute(
+              name: 'activity',
+              path: 'activities/:activityId',
+              builder: (context, state) => const ActivityScreen(),
+            ),
+            GoRoute(
+              name: 'transport',
+              path: 'transports/:transportId',
+              builder: (context, state) => const TransportScreen(),
+            ),
+            GoRoute(
+              name: 'accommodation',
+              path: 'accommodations/:accommodationId',
+              builder: (context, state) => const AccommodationScreen(),
+            ),
+            GoRoute(
+              name: 'document',
+              path: 'documents/:documentId',
+              builder: (context, state) => const DocumentScreen(),
+            ),
+            GoRoute(
+              name: 'note',
+              path: 'notes/:noteId',
+              builder: (context, state) => const NoteScreen(),
+            ),
+            GoRoute(
+              name: 'map',
+              path: 'map',
+              builder: (context, state) => const MapScreen(),
+            ),
+          ],
         ),
       ],
+    ),
+    GoRoute(
+      name: 'profile',
+      path: 'profile',
+      builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
       name: 'login',

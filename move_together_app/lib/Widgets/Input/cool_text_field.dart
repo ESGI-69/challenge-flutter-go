@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class CoolTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
+  final bool obscureText;
 
   const CoolTextField({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.prefixIcon,
+    this.prefixIcon,
+    this.obscureText = false,
   });
 
   @override
@@ -27,9 +29,10 @@ class CoolTextField extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
+        obscureText: obscureText,
         decoration: InputDecoration(
           hintText: hintText,
-          prefixIcon: Icon(prefixIcon, color: Theme.of(context).primaryColor),
+          prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: Theme.of(context).primaryColor) : null,
           filled: true,
           fillColor: Colors.white,
           enabledBorder: const OutlineInputBorder(

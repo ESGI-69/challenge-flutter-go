@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
-import 'package:move_together_app/core/services/auth_service.dart';
-
 import 'package:move_together_app/Widgets/button.dart';
+import 'package:move_together_app/Widgets/logo_area.dart';
+import 'package:move_together_app/core/services/auth_service.dart';
+import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -50,36 +51,68 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
+              const LogoArea(),
+              const Text(
+                "Bienvenue sur MoveTogether",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Text(
+                "Connecte toi à ton compte pour continuer",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
                 ),
               ),
               const SizedBox(height: 16),
-              TextField(
+              CoolTextField(
+                controller: _usernameController,
+                hintText: 'Nom d\'utilisateur',
+              ),
+              const SizedBox(height: 16),
+              CoolTextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                ),
+                hintText: 'Mot de passe',
                 obscureText: true,
               ),
               const SizedBox(height: 16),
-              Button(
-                onPressed: _login,
-                text: 'Login',
+              SizedBox(
+                width: double.infinity,
+                child: Button(
+                  text: 'Login',
+                  onPressed: _login,
+                  type: ButtonType.primary,
+                ),
               ),
               if (errorMessage != null)
                 Text(errorMessage!, style: const TextStyle(color: Colors.red)),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Don't have an account?",
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.goNamed('register');
+                    },
+                    child: const Text('Register'),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
