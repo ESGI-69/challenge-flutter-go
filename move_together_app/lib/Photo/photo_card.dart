@@ -8,6 +8,7 @@ import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Card/trip_feature_card.dart';
 import 'package:move_together_app/core/services/photo_service.dart';
 import 'package:move_together_app/utils/photo_picker.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 
 class PhotoCard extends StatelessWidget {
   final int tripId;
@@ -41,8 +42,17 @@ class PhotoCard extends StatelessWidget {
               onAddTap: () async {
                 final XFile? image = await pickPhoto(context);
                 if (image != null) {
-                  await photoService.create(tripId, image);
-                  context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
+                  try {
+                    await photoService.create(tripId, image);
+                    context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
+                  } catch (error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(exceptionToString(error)),
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                      ),
+                    );
+                  }
                 }
               },
               onTitleTap: state.photos.isNotEmpty

@@ -36,8 +36,6 @@ class AccommodationScreen extends StatelessWidget {
         GoRouterState.of(context).uri.queryParameters['isTripOwner'] == 'true';
 
     void deleteAccommodation() async {
-      // await AccommodationService(context.read<AuthProvider>()).delete(tripId, accommodation.id);
-
       try {
         await AccommodationService(context.read<AuthProvider>())
             .delete(tripId, accommodation.id);

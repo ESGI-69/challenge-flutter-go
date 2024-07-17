@@ -7,6 +7,7 @@ import 'package:move_together_app/Widgets/modal_bottom_sheet_header.dart';
 import 'package:move_together_app/core/models/photo.dart';
 import 'package:gal/gal.dart';
 import 'package:move_together_app/core/services/photo_service.dart';
+import 'package:move_together_app/utils/exception_to_string.dart';
 import 'package:move_together_app/utils/show_unified_dialog.dart';
 
 class PhotoInfo extends StatelessWidget {
@@ -31,15 +32,24 @@ class PhotoInfo extends StatelessWidget {
             BottomShitHeaderAction(
               label: 'Enrigistrer dans la galerie',
               onPressed: () async {
-                final imagePath =
-                    await PhotoService(context.read<AuthProvider>())
-                        .download(tripId, photo.id);
-                await Gal.putImage(imagePath);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Photo enregistrée dans la galerie'),
-                  ),
-                );
+                try {
+                  final imagePath =
+                      await PhotoService(context.read<AuthProvider>())
+                          .download(tripId, photo.id);
+                  await Gal.putImage(imagePath);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Photo enregistrée dans la galerie'),
+                    ),
+                  );
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(exceptionToString(error)),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                  );
+                }
               },
             ),
             BottomShitHeaderAction(
@@ -53,11 +63,21 @@ class PhotoInfo extends StatelessWidget {
                   okButtonText: 'Supprimer',
                   onCancelPressed: () => Navigator.of(context).pop(),
                   onOkPressed: () async {
-                    await PhotoService(context.read<AuthProvider>())
-                        .delete(tripId, photo.id);
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    onDeleteSuccess(photo);
+                    try {
+                      await PhotoService(context.read<AuthProvider>())
+                          .delete(tripId, photo.id);
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      onDeleteSuccess(photo);
+                    } catch (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(exceptionToString(error)),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
+                      );
+                      Navigator.of(context).pop();
+                    }
                   },
                   okButtonTextStyle: const TextStyle(
                     color: Colors.red,

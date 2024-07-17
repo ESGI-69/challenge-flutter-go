@@ -41,7 +41,9 @@ class PhotoService {
       data: formData,
     );
 
-    if (response.statusCode != null &&
+    if (response.statusCode! == 503) {
+      throw Exception('Feature not available for now');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return Photo.fromJson(response.data);
@@ -57,7 +59,9 @@ class PhotoService {
       '/trips/$tripId/photos/$photoId/download',
       imagePath,
     );
-    if (response.statusCode != null &&
+    if (response.statusCode! == 503) {
+      throw Exception('Feature not available for now');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return imagePath;
@@ -71,7 +75,9 @@ class PhotoService {
       '/trips/$tripId/photos/$photoId',
     );
 
-    if (response.statusCode != null &&
+    if (response.statusCode! == 503) {
+      throw Exception('Feature not available for now');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return;
