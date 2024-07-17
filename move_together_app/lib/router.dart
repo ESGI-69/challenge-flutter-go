@@ -36,12 +36,12 @@ List<String> loggedRoutes = [
   '/trips/:tripId/participants',
   '/trips/:tripId/photos',
   '/profile',
+  '/',
 ];
 
 List<String> unloggedRoutes = [
   '/login',
   '/register',
-  '/',
 ];
 
 List<String> backOfficeRoutes = [
@@ -64,6 +64,21 @@ Future<bool> isAdmin(BuildContext context) async {
 
 final GoRouter router = GoRouter(
   routes: [
+    GoRoute(
+      name: 'profile',
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
+    ),
+    GoRoute(
+      name: 'login',
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      name: 'register',
+      path: '/register',
+      builder: (context, state) => const RegisterScreen(),
+    ),
     GoRoute(
       name: 'home',
       path: '/',
@@ -128,21 +143,6 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-    GoRoute(
-      name: 'profile',
-      path: 'profile',
-      builder: (context, state) => const ProfileScreen(),
-    ),
-    GoRoute(
-      name: 'login',
-      path: '/login',
-      builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      name: 'register',
-      path: '/register',
-      builder: (context, state) => const RegisterScreen(),
-    ),
   ],
   redirect: (context, state) async {
     final topRoutePath = state.topRoute?.path;
@@ -151,10 +151,10 @@ final GoRouter router = GoRouter(
     final bool routeRequireAuthentication = loggedRoutes.contains(topRoutePath);
     if (!userIsAuthenticated && routeRequireAuthentication) {
       secureStorage.delete(key: 'jwt');
-      return '/';
+      return '/login';
     }
     if (userIsAuthenticated && routeIsPublic) {
-      return '/trips';
+      return '/';
     }
     return null;
   },

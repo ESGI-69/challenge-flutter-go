@@ -37,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[1]);
+    final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[0]);
     final Completer<GoogleMapController> mapController =
         Completer<GoogleMapController>();
 

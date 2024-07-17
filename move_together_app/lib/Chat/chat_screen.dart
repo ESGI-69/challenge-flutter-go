@@ -11,7 +11,7 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tripId = GoRouterState.of(context).uri.pathSegments[1];
+    final tripId = GoRouterState.of(context).uri.pathSegments[0];
     final tripName =
         GoRouterState.of(context).uri.queryParameters['tripName'] ?? '';
     final authProvider = context.read<AuthProvider>();
