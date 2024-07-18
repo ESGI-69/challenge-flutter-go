@@ -6,10 +6,15 @@ Quentin PELTIER (@Timdev0)
 Samuel GUENIER (@sguenier)
 Yohan CENTANNI (@ycenta)
 
-## Fonctionnalités
+## Features
 Back-end Notes (Quentin PELTIER)
 Swagger auto generation for GO API (Quentin PELTIER)
 Chat per Trip with socket.io (Quentin PELTIER)
+Documents upload and download (Quentin PELTIER)
+Profile Picture upload (Quentin PELTIER)
+Feature Flipping Client Side (Quentin PELTIER)
+Handle Back Office on Web (Quentin PELTIER)
+Promote & Demote user in Back Office (Quentin PELTIER)
 
 ## Development
 
