@@ -16,7 +16,7 @@ class TransportService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
@@ -24,7 +24,7 @@ class TransportService {
           .map((transport) => Transport.fromJson(transport))
           .toList();
     } else {
-      throw Exception('Failed to get user');
+      throw Exception('Échec de l\'obtention de l\'utilisateur');
     }
   }
 
@@ -54,13 +54,13 @@ class TransportService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return Transport.fromJson(response.data);
     } else {
-      throw Exception('Failed to create transport');
+      throw Exception('Échec de la création du transport');
     }
   }
 
@@ -74,7 +74,7 @@ class TransportService {
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to delete transport');
+      throw Exception('Échec de la suppression du transport');
     }
   }
 }

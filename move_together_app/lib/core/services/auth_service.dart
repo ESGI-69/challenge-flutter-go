@@ -26,7 +26,7 @@ class AuthService {
 
       return token;
     } else {
-      throw Exception('Failed to login user');
+      throw Exception('Échec de la connexion');
     }
   }
 
@@ -44,7 +44,7 @@ class AuthService {
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to register user');
+      throw Exception('Échec de l\'inscription');
     }
   }
 }

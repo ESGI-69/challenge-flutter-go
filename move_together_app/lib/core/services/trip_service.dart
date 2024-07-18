@@ -18,7 +18,7 @@ class TripService {
         response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
-      throw Exception('Failed to join trip');
+      throw Exception('Échec pour rejoindre le voyage');
     }
   }
 
@@ -32,7 +32,7 @@ class TripService {
           .map((trip) => Trip.fromJson(trip))
           .toList();
     } else {
-      throw Exception('Failed to get trips');
+      throw Exception('Échec de l\'obtention des voyages');
     }
   }
 
@@ -44,7 +44,7 @@ class TripService {
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to leave trip');
+      throw Exception('Échec pour quitter le voyage');
     }
   }
 
@@ -56,7 +56,7 @@ class TripService {
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to delete trip');
+      throw Exception('Échec de la suppression du voyage');
     }
   }
 
@@ -68,7 +68,7 @@ class TripService {
         response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
-      throw Exception('Failed to create trip');
+      throw Exception('Échec de la création du voyage');
     }
   }
 
@@ -80,7 +80,7 @@ class TripService {
         response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
-      throw Exception('Failed to get trip');
+      throw Exception('Échec de l\'obtention du voyage');
     }
   }
 
@@ -108,7 +108,7 @@ class TripService {
         response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
-      throw Exception('Failed to edit trip');
+      throw Exception('Échec de la modification du voyage');
     }
   }
 }

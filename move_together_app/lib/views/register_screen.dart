@@ -35,7 +35,7 @@ class RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          errorMessage = 'Registration failed';
+          errorMessage = 'Enregistrement échoué';
         });
       }
     }

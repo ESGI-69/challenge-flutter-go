@@ -43,7 +43,7 @@ class LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          errorMessage = 'Login failed';
+          errorMessage = 'Nom d\'utilisateur ou mot de passe incorrect';
         });
       }
     }

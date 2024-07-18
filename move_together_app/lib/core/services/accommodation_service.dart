@@ -16,7 +16,7 @@ class AccommodationService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
@@ -24,7 +24,7 @@ class AccommodationService {
           .map((accommodation) => Accommodation.fromJson(accommodation))
           .toList();
     } else {
-      throw Exception('Failed to get user');
+      throw Exception('Échec de l\'obtention de l\'utilisateur');
     }
   }
 
@@ -52,13 +52,13 @@ class AccommodationService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return Accommodation.fromJson(response.data);
     } else {
-      throw Exception('Failed to create accommodation');
+      throw Exception('Échec de la création de l\'hébergement');
     }
   }
 
@@ -68,13 +68,13 @@ class AccommodationService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to delete accommodation');
+      throw Exception('Échec de la suppression de l\'hébergement');
     }
   }
 }
