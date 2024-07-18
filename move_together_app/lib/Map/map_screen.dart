@@ -38,6 +38,11 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[0]);
+    final tripLatitude =
+        double.parse(GoRouterState.of(context).uri.queryParameters['lat']!);
+    final tripLongitude =
+        double.parse(GoRouterState.of(context).uri.queryParameters['lng']!);
+
     final Completer<GoogleMapController> mapController =
         Completer<GoogleMapController>();
 
@@ -69,6 +74,7 @@ class _MapScreenState extends State<MapScreen> {
                 activities: state.activities,
                 transports: state.transports,
                 type: RefinedGoogleMapType.fullPage,
+                initialCameraPosition: LatLng(tripLatitude, tripLongitude),
               ),
             );
           } else {
