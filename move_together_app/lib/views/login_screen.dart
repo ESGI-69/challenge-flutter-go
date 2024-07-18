@@ -8,6 +8,7 @@ import 'package:move_together_app/Widgets/button.dart';
 import 'package:move_together_app/Widgets/logo_area.dart';
 import 'package:move_together_app/core/services/auth_service.dart';
 import 'package:move_together_app/Widgets/Input/cool_text_field.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -96,23 +97,27 @@ class LoginScreenState extends State<LoginScreen> {
               if (errorMessage != null)
                 Text(errorMessage!, style: const TextStyle(color: Colors.red)),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Don't have an account?",
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.goNamed('register');
-                    },
-                    child: const Text('Register'),
-                  ),
-                ],
-              ),
+              ...kIsWeb
+                  ? []
+                  : [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Don't have an account?",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.goNamed('register');
+                            },
+                            child: const Text('Register'),
+                          ),
+                        ],
+                      ),
+                    ],
             ],
           ),
         ),
