@@ -114,7 +114,8 @@ class AccommodationScreen extends StatelessWidget {
                     ],
                   ),
                   (accommodation.bookingUrl != null &&
-                          accommodation.bookingUrl!.isNotEmpty)
+                          accommodation.bookingUrl!.isNotEmpty && Uri.parse(
+                              accommodation.bookingUrl!).isAbsolute)
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
