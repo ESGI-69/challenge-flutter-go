@@ -163,7 +163,7 @@ final GoRouter router = GoRouter(
 final GoRouter backOfficeRouter = GoRouter(
   routes: [
     GoRoute(
-      path: '/',
+      path: '/dashboard',
       name: 'dashboard',
       builder: (context, state) => const DashboardScreen(),
     ),
@@ -178,7 +178,7 @@ final GoRouter backOfficeRouter = GoRouter(
       builder: (context, state) => const BackofficeTripsScreen(),
     ),
     GoRoute(
-      path: '/feature',
+      path: '/',
       name: 'feature',
       builder: (context, state) => const BackofficeFeaturesScreen(),
     ),

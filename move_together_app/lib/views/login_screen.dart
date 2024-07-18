@@ -37,7 +37,7 @@ class LoginScreenState extends State<LoginScreen> {
       if (!kIsWeb) {
         context.goNamed('home');
       } else {
-        context.goNamed('dashboard');
+        context.goNamed('feature');
       }
     } catch (e) {
       if (mounted) {

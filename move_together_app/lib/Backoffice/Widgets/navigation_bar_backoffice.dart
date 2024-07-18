@@ -12,11 +12,11 @@ class NavigationBarBackoffice extends StatelessWidget
     return AppBar(
       title: const Text('Backoffice'),
       actions: [
-        TextButton(
-          child: Text('Dashboard',
-              style: TextStyle(color: Theme.of(context).primaryColor)),
-          onPressed: () => backOfficeRouter.replaceNamed('dashboard'),
-        ),
+        // TextButton(
+        //   child: Text('Dashboard',
+        //       style: TextStyle(color: Theme.of(context).primaryColor)),
+        //   onPressed: () => backOfficeRouter.replaceNamed('dashboard'),
+        // ),
         TextButton(
           child: Text('Feature',
               style: TextStyle(color: Theme.of(context).primaryColor)),
