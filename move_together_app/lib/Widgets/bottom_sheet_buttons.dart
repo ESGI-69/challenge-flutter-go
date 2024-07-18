@@ -27,7 +27,7 @@ class BottomSheetButtons extends StatelessWidget {
         top: 16.0,
         left: 16.0,
         right: 16.0,
-        bottom: MediaQuery.of(context).padding.bottom,
+        bottom: MediaQuery.of(context).padding.bottom+16,
       ),
       height: 200,
       color: Colors.transparent,
@@ -54,7 +54,7 @@ class BottomSheetButtons extends StatelessWidget {
           width: double.infinity,
           text: 'Annuler',
           type: ButtonType.destructive,
-        )
+        ),
       ]),
     );
   }

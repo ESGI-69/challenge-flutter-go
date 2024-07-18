@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/core/models/trip.dart';
 import 'package:move_together_app/Trip/bloc/trip_bloc.dart';
@@ -121,11 +122,14 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                                         dateTimeStart = selectedDateRange.start;
                                         dateTimeEnd = selectedDateRange.end;
                                         _dateController.text =
-                                            '${selectedDateRange.start.day}/${selectedDateRange.start.month} - ${selectedDateRange.end.day}/${selectedDateRange.end.month}';
+                                            '${DateFormat('dd/MM/yyyy').format(selectedDateRange.start)} - ${DateFormat('dd/MM/yyyy').format(selectedDateRange.start)}';
                                       });
                                     }
                                   },
                                   icon: Icons.calendar_month,
+                                  text: _dateController.text.isEmpty
+                                      ? 'Dates'
+                                      : _dateController.text,
                                   type: ButtonType.classic,
                                 ),
                               ),

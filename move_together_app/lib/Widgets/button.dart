@@ -60,14 +60,20 @@ class Button extends StatelessWidget {
             ),
           ),
         ),
-        child: text != null
-            ? Text(text!,
-                style: TextStyle(
-                  color: textColor(),
-                ))
-            : icon != null
-                ? Icon(icon)
-                : null,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) Icon(icon, color: textColor()),
+            if (icon != null) const SizedBox(width: 5),
+            Text(
+              text ?? '',
+              style: TextStyle(
+                color: textColor(),
+                fontSize: 16,
+              ),
+            ),
+          ],
+        )
       ),
     );
   }
