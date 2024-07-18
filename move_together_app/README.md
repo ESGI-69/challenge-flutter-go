@@ -6,9 +6,25 @@
 ## Run the project
 Copy the `.env.example` file to `.env` and fill the variables with your own values.
 
-And run the app with your favorite IDE or with the following command:
-```bash
-flutter run
+To use the google maps api and show the map, please add your api key in `move_together_app/android/app/src/main/AndroidManifest.xml`
+
+Or run the app with your favorite IDE with this argument
+```
+--dart-define GOOGLE_MAPS_API_KEY=<THEGOOGLEAPIKEY>
+```
+or run the command (flutter run or build)
+```
+flutter run --dart-define GOOGLE_MAPS_API_KEY=<THEGOOGLEAPIKEY>
+```
+
+In some cases, the map might still show a blank map with no terrain textures, if so, use the following command before running the flutter app 
+```
+flutter clean
+```
+
+Command to update the app icon :
+```
+flutter pub pub run flutter_launcher_icons:main
 ```
 
 ## Getting Started
