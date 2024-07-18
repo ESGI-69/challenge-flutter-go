@@ -13,6 +13,7 @@ import 'package:move_together_app/utils/show_unified_dialog.dart';
 class PhotoInfo extends StatelessWidget {
   final int tripId;
   final Photo photo;
+  final bool canBeRemoved;
   final Function(Photo) onDeleteSuccess;
 
   const PhotoInfo({
@@ -20,6 +21,7 @@ class PhotoInfo extends StatelessWidget {
     required this.tripId,
     required this.photo,
     required this.onDeleteSuccess,
+    required this.canBeRemoved,
   });
 
   @override
@@ -52,40 +54,46 @@ class PhotoInfo extends StatelessWidget {
                 }
               },
             ),
-            BottomShitHeaderAction(
-              label: 'Supprimer',
-              onPressed: () {
-                showUnifiedDialog(
-                  context: context,
-                  title: 'Supprimer la photo',
-                  content: 'Êtes-vous sûr de vouloir supprimer cette photo ?',
-                  cancelButtonText: 'Annuler',
-                  okButtonText: 'Supprimer',
-                  onCancelPressed: () => Navigator.of(context).pop(),
-                  onOkPressed: () async {
-                    try {
-                      await PhotoService(context.read<AuthProvider>())
-                          .delete(tripId, photo.id);
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      onDeleteSuccess(photo);
-                    } catch (error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(exceptionToString(error)),
-                          backgroundColor: Theme.of(context).colorScheme.error,
-                        ),
-                      );
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  okButtonTextStyle: const TextStyle(
-                    color: Colors.red,
-                  ),
-                );
-              },
-              desctructive: true,
-            ),
+            ...canBeRemoved
+                ? [
+                    BottomShitHeaderAction(
+                      label: 'Supprimer',
+                      onPressed: () {
+                        showUnifiedDialog(
+                          context: context,
+                          title: 'Supprimer la photo',
+                          content:
+                              'Êtes-vous sûr de vouloir supprimer cette photo ?',
+                          cancelButtonText: 'Annuler',
+                          okButtonText: 'Supprimer',
+                          onCancelPressed: () => Navigator.of(context).pop(),
+                          onOkPressed: () async {
+                            try {
+                              await PhotoService(context.read<AuthProvider>())
+                                  .delete(tripId, photo.id);
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              onDeleteSuccess(photo);
+                            } catch (error) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(exceptionToString(error)),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.error,
+                                ),
+                              );
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          okButtonTextStyle: const TextStyle(
+                            color: Colors.red,
+                          ),
+                        );
+                      },
+                      desctructive: true,
+                    )
+                  ]
+                : [],
           ],
         ),
         Expanded(

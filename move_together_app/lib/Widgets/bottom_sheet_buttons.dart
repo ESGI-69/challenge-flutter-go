@@ -29,7 +29,6 @@ class BottomSheetButtons extends StatelessWidget {
         right: 16.0,
         bottom: MediaQuery.of(context).padding.bottom + 16,
       ),
-      height: 200,
       color: Colors.transparent,
       child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
         ButtonsGroup(

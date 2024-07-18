@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Photo/bloc/photo_bloc.dart';
 import 'package:move_together_app/Photo/photo_item.dart';
+import 'package:move_together_app/Provider/auth_provider.dart';
 
 class PhotosScreen extends StatelessWidget {
   const PhotosScreen({super.key});
@@ -10,6 +11,9 @@ class PhotosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tripId = int.parse(GoRouterState.of(context).uri.pathSegments[0]);
+    final hasEditPermission =
+        GoRouterState.of(context).uri.queryParameters['hasEditPermission'] ==
+            'true';
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -41,6 +45,8 @@ class PhotosScreen extends StatelessWidget {
                           context.pop();
                         }
                       },
+                      canBeRemoved: hasEditPermission &&
+                          photo.owner.id == context.read<AuthProvider>().userId,
                     );
                   },
                 );

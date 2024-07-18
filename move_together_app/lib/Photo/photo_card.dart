@@ -57,8 +57,13 @@ class PhotoCard extends StatelessWidget {
               },
               onTitleTap: state.photos.isNotEmpty
                   ? () async {
-                      await context.pushNamed('photos',
-                          pathParameters: {'tripId': tripId.toString()});
+                      await context.pushNamed(
+                        'photos',
+                        pathParameters: {'tripId': tripId.toString()},
+                        queryParameters: {
+                          'hasEditPermission': userHasEditPermission.toString()
+                        },
+                      );
                       context.read<PhotoBloc>().add(PhotosDataFetch(tripId));
                     }
                   : null,
@@ -68,6 +73,10 @@ class PhotoCard extends StatelessWidget {
                 onDeleteSuccess: (photo) {
                   state.photos.remove(photo);
                 },
+                canBeRemoved: (userHasEditPermission &&
+                        state.photos[index].owner.id ==
+                            context.read<AuthProvider>().userId) ||
+                    userIsOwner,
               ),
             );
           } else if (state is PhotosDataLoadingError) {
