@@ -20,7 +20,7 @@ class ParticipantInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-      ParticipantBloc(context)..add(ParticipantDataFetch(tripId)),
+          ParticipantBloc(context)..add(ParticipantDataFetch(tripId)),
       child: BlocBuilder<ParticipantBloc, ParticipantState>(
         builder: (context, state) {
           return Scaffold(
@@ -50,8 +50,8 @@ class ParticipantInfo extends StatelessWidget {
                 );
 
                 context.read<ParticipantBloc>().add(ParticipantDataFetch(
-                  tripId,
-                ));
+                      tripId,
+                    ));
               },
               shape: const CircleBorder(),
               child: const Icon(Icons.add),
@@ -76,13 +76,10 @@ class ParticipantInfo extends StatelessWidget {
       );
     } else if (state is ParticipantDataLoadingSuccess) {
       final me = state.participants.firstWhere(
-              (participant) => participant.isMe(context),
+          (participant) => participant.isMe(context),
           orElse: () => Participant(
-              id: -1,
-              username: '',
-              tripRole: ParticipantTripRole.VIEWER));
-      final iAmTheOwner =
-          me.tripRole == ParticipantTripRole.OWNER;
+              id: -1, username: '', tripRole: ParticipantTripRole.VIEWER));
+      final iAmTheOwner = me.tripRole == ParticipantTripRole.OWNER;
 
       return ListView.builder(
         itemCount: state.participants.length,
@@ -94,9 +91,7 @@ class ParticipantInfo extends StatelessWidget {
             showTrailingButton: iAmTheOwner,
             tripId: tripId,
             onAction: () {
-              context
-                  .read<ParticipantBloc>()
-                  .add(ParticipantDataFetch(tripId));
+              context.read<ParticipantBloc>().add(ParticipantDataFetch(tripId));
             },
           );
         },

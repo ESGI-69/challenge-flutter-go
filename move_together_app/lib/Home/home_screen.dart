@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tripService = TripService(context.read<AuthProvider>());
     return BlocProvider(
       create: (context) => HomeBloc(context)..add(HomeDataFetch()),
       child: BlocBuilder<HomeBloc, HomeState>(
@@ -142,7 +141,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           inviteCode:
                                                               trip.inviteCode,
                                                         ));
-                                            context.read<HomeBloc>().add(HomeDataFetch());
+                                            context
+                                                .read<HomeBloc>()
+                                                .add(HomeDataFetch());
                                           },
                                           totalPrice: trip.totalPrice,
                                         );
