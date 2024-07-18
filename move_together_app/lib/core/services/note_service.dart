@@ -16,7 +16,7 @@ class NoteService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
@@ -24,7 +24,7 @@ class NoteService {
           .map((note) => Note.fromJson(note))
           .toList();
     } else {
-      throw Exception('Failed to get user');
+      throw Exception('Échec de l\'obtention de l\'utilisateur');
     }
   }
 
@@ -46,7 +46,7 @@ class NoteService {
         response.statusCode! < 300) {
       return Note.fromJson(response.data);
     } else {
-      throw Exception('Failed to create note');
+      throw Exception('Échec de la création de la note');
     }
   }
 
@@ -60,7 +60,7 @@ class NoteService {
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to delete note');
+      throw Exception('Échec de la suppression de la note');
     }
   }
 }

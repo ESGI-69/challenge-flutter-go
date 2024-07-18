@@ -16,7 +16,7 @@ class ActivityService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
@@ -24,7 +24,7 @@ class ActivityService {
           .map((note) => Activity.fromJson(note))
           .toList();
     } else {
-      throw Exception('Failed to get Activities');
+      throw Exception('Échec de l\'obtention des activités');
     }
   }
 
@@ -50,13 +50,13 @@ class ActivityService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return Activity.fromJson(response.data);
     } else {
-      throw Exception('Failed to create activities');
+      throw Exception('Échec de la création de l\'activité');
     }
   }
 
@@ -66,13 +66,13 @@ class ActivityService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to delete activities');
+      throw Exception('Échec de la suppression de l\'activité');
     }
   }
 }

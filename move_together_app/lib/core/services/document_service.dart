@@ -18,7 +18,7 @@ class DocumentService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
@@ -26,7 +26,7 @@ class DocumentService {
           .map((document) => Document.fromJson(document))
           .toList();
     } else {
-      throw Exception('Failed to get documents');
+      throw Exception('Échec de l\'obtention des documents');
     }
   }
 
@@ -49,7 +49,7 @@ class DocumentService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode == 413) {
       throw Exception('Fichier trop lourd, doit être > 5Mo');
     } else if (response.statusCode != null &&
@@ -57,7 +57,7 @@ class DocumentService {
         response.statusCode! < 300) {
       return Document.fromJson(response.data);
     } else {
-      throw Exception('Failed to create document');
+      throw Exception('Échec de la création du document');
     }
   }
 
@@ -67,13 +67,13 @@ class DocumentService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to delete document');
+      throw Exception('Échec de la suppression du document');
     }
   }
 
@@ -94,13 +94,13 @@ class DocumentService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return documentPath;
     } else {
-      throw Exception('Failed to download document');
+      throw Exception('Échec du téléchargement du document');
     }
   }
 }

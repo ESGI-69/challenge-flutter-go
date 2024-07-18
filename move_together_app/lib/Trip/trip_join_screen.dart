@@ -54,7 +54,7 @@ class JoinTripScreenState extends State<JoinTripScreen> {
       context.replaceNamed('home');
     } catch (e) {
       setState(() {
-        errorMessage = 'Joining trip failed';
+        errorMessage = 'Impossible de rejoindre le voyage';
       });
     } finally {
       setState(() {

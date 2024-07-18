@@ -20,13 +20,13 @@ class PhotoService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return (response.data as List).map((e) => Photo.fromJson(e)).toList();
     } else {
-      throw Exception('Failed to get photos');
+      throw Exception('Échec de l\'obtention des photos');
     }
   }
 
@@ -42,7 +42,7 @@ class PhotoService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode == 413) {
       throw Exception('Fichier trop lourd, doit être > 5Mo');
     } else if (response.statusCode != null &&
@@ -50,7 +50,7 @@ class PhotoService {
         response.statusCode! < 300) {
       return Photo.fromJson(response.data);
     } else {
-      throw Exception('Failed to create photo');
+      throw Exception('Échec de la création de la photo');
     }
   }
 
@@ -62,13 +62,13 @@ class PhotoService {
       imagePath,
     );
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return imagePath;
     } else {
-      throw Exception('Failed to download photo');
+      throw Exception('Échec du téléchargement de la photo');
     }
   }
 
@@ -78,13 +78,13 @@ class PhotoService {
     );
 
     if (response.statusCode! == 503) {
-      throw Exception('Feature not available for now');
+      throw Exception('Fonctionnalité indisponlibe pour l\'instant');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to delete photo');
+      throw Exception('Échec de la suppression de la photo');
     }
   }
 }

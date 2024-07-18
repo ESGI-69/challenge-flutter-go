@@ -13,7 +13,7 @@ class FeatureService {
           .map((feature) => Feature.fromJson(feature))
           .toList();
     } else {
-      throw Exception('Failed to load features');
+      throw Exception('Échec de l\'obtention des fonctionnalités');
     }
   }
 }

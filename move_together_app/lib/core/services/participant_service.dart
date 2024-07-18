@@ -30,7 +30,7 @@ class ParticipantService {
           .map((e) => Participant.fromJson(e))
           .toList();
     } else {
-      throw Exception('Failed to get trip participants');
+      throw Exception('Échec de l\'obtention des participants');
     }
   }
 
@@ -51,7 +51,7 @@ class ParticipantService {
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to change participant role');
+      throw Exception('Échec de la modification du rôle');
     }
   }
 
@@ -65,7 +65,7 @@ class ParticipantService {
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to remove participant');
+      throw Exception('Échec de la suppression du participant');
     }
   }
 }

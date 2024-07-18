@@ -23,7 +23,7 @@ class AdminService {
           .map((trip) => Trip.fromJson(trip))
           .toList();
     } else {
-      throw Exception('Failed to get trips');
+      throw Exception('Échec de l\'obtention des voyages');
     }
   }
 
@@ -35,7 +35,7 @@ class AdminService {
         response.statusCode! < 300) {
       return;
     } else {
-      throw Exception('Failed to delete trip');
+      throw Exception('Échec de la suppression du voyage');
     }
   }
 
@@ -63,7 +63,7 @@ class AdminService {
         response.statusCode! < 300) {
       return Trip.fromJson(response.data);
     } else {
-      throw Exception('Failed to edit trip');
+      throw Exception('Échec de la modification du voyage');
     }
   }
 
@@ -77,7 +77,7 @@ class AdminService {
           .map((user) => User.fromJson(user))
           .toList();
     } else {
-      throw Exception('Failed to get users');
+      throw Exception('Échec de l\'obtention de l\'utilisateurs');
     }
   }
 
@@ -95,7 +95,7 @@ class AdminService {
         response.statusCode! < 300) {
       return User.fromJson(response.data);
     } else {
-      throw Exception('Failed to change role');
+      throw Exception('Échec de la modification du rôle de l\'utilisateur');
     }
   }
 
@@ -112,7 +112,7 @@ class AdminService {
         response.statusCode! < 300) {
       return Feature.fromJson(response.data);
     } else {
-      throw Exception('Failed to patch feature');
+      throw Exception('Échec de la modification de la fonctionnalité');
     }
   }
 
@@ -128,7 +128,7 @@ class AdminService {
           .map((feature) => Feature.fromJson(feature))
           .toList();
     } else {
-      throw Exception('Failed to get features');
+      throw Exception('Échec de l\'obtention des fonctionnalités');
     }
   }
 
@@ -143,7 +143,7 @@ class AdminService {
         response.statusCode! < 300) {
       return (response.data as List).map((log) => Log.fromJson(log)).toList();
     } else {
-      throw Exception('Failed to get logs');
+      throw Exception('Échec de l\'obtention des logs');
     }
   }
 }

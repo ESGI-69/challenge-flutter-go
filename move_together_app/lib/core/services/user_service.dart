@@ -22,7 +22,7 @@ class UserService {
         response.statusCode! < 300) {
       return User.fromJson(response.data);
     } else {
-      throw Exception('Failed to get user');
+      throw Exception('Échec de l\'obtention de l\'utilisateur');
     }
   }
 
@@ -41,7 +41,7 @@ class UserService {
         response.statusCode! < 300) {
       return User.fromJson(response.data);
     } else {
-      throw Exception('Failed to upload profile picture');
+      throw Exception('Échec de la mise à jour de la photo de profil');
     }
   }
 
@@ -58,7 +58,7 @@ class UserService {
         response.statusCode! < 300) {
       return User.fromJson(response.data);
     } else {
-      throw Exception('Failed to update user');
+      throw Exception('Échec de la mise à jour de l\'utilisateur');
     }
   }
 }
