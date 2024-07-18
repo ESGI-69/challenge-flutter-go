@@ -65,11 +65,15 @@ class Button extends StatelessWidget {
             children: [
               if (icon != null) Icon(icon, color: textColor()),
               if (icon != null) const SizedBox(width: 5),
-              Text(
-                text ?? '',
-                style: TextStyle(
-                  color: textColor(),
-                  fontSize: 16,
+              Flexible(
+                child: Text(
+                  text ?? '',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: textColor(),
+                
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
