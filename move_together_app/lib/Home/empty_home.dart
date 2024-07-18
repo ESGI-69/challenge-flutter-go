@@ -4,7 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:move_together_app/Widgets/button.dart';
 
 class EmptyHome extends StatelessWidget {
-  const EmptyHome({super.key});
+  final Function() onRefresh;
+
+  const EmptyHome({
+    required this.onRefresh,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +35,9 @@ class EmptyHome extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: Button(
-                  onPressed: () {
-                    context.pushNamed('create');
+                  onPressed: () async {
+                    await context.pushNamed('create');
+                    onRefresh();
                   },
                   text: 'Créer un voyage',
                   type: ButtonType.primary,
@@ -41,8 +47,9 @@ class EmptyHome extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: Button(
-                  onPressed: () {
-                    context.pushNamed('join');
+                  onPressed: () async {
+                    await context.pushNamed('join');
+                    onRefresh();
                   },
                   text: 'Rejoindre un voyage',
                 ),

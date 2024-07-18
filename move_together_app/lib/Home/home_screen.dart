@@ -158,7 +158,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ]
                               : <Widget>[
-                                  const EmptyHome(),
+                                  EmptyHome(
+                                    onRefresh: () {
+                                      context
+                                          .read<HomeBloc>()
+                                          .add(HomeDataFetch());
+                                    },
+                                  ),
                                 ],
                 ),
               ),
