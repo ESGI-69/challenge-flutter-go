@@ -19,7 +19,7 @@ class ParticipantIcons extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 9),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          ...participants.map((participant) {
+          ...participants.take(6).map((participant) {
             return Align(
               widthFactor: 0.5,
               child: ParticipantIcon(

@@ -104,6 +104,7 @@ class TripAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
     } else {
       return AppBar(
+        centerTitle: true,
         forceMaterialTransparency: true,
         leading: const Padding(
           padding: EdgeInsets.only(left: 16.0),
