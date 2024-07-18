@@ -142,9 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           inviteCode:
                                                               trip.inviteCode,
                                                         ));
-                                            state.trips[_currentIndex] =
-                                                await tripService
-                                                    .get(trip.id.toString());
+                                            context.read<HomeBloc>().add(HomeDataFetch());
                                           },
                                           totalPrice: trip.totalPrice,
                                         );
