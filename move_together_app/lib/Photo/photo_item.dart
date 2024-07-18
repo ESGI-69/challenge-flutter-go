@@ -10,6 +10,7 @@ import 'package:move_together_app/core/models/photo.dart';
 class PhotoItem extends StatelessWidget {
   final int tripId;
   final Photo photo;
+  final bool canBeRemoved;
   final Function(Photo) onDeleteSuccess;
 
   const PhotoItem({
@@ -17,6 +18,7 @@ class PhotoItem extends StatelessWidget {
     required this.tripId,
     required this.photo,
     required this.onDeleteSuccess,
+    required this.canBeRemoved,
   });
 
   @override
@@ -29,6 +31,7 @@ class PhotoItem extends StatelessWidget {
                   tripId: tripId,
                   photo: photo,
                   onDeleteSuccess: onDeleteSuccess,
+                  canBeRemoved: canBeRemoved,
                 ));
       },
       child: ExtendedImage.network(
