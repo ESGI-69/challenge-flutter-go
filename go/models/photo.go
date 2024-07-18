@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -32,6 +33,7 @@ func (photo *Photo) BeforeDelete(tx *gorm.DB) (err error) {
 	err = os.Remove(filePath)
 
 	if err != nil {
+		fmt.Printf("Error while deleting photo file: %v", err)
 		return err
 	}
 
