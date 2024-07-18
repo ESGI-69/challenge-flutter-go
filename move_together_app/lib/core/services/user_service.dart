@@ -33,7 +33,10 @@ class UserService {
       '/users/photo',
       data: formData,
     );
-    if (response.statusCode != null &&
+
+    if (response.statusCode == 413) {
+      throw Exception('Fichier trop lourd, doit être > 5Mo');
+    } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
       return User.fromJson(response.data);

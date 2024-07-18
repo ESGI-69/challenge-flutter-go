@@ -89,7 +89,10 @@ func (handler *PhotoHandler) CreatePhoto(context *gin.Context) {
 
 	if file.Size > 5<<20 {
 		logger.ApiWarning(context, "File size exceeds limit of 5 MB")
-		context.JSON(http.StatusBadRequest, gin.H{"error": "File size exceeds limit of 5 MB"})
+		context.JSON(http.StatusRequestEntityTooLarge, gin.H{
+			"error": "File size exceeds limit of 5 MB",
+			"code":  "file_size_exceeds_limit",
+		})
 		return
 	}
 
