@@ -50,6 +50,8 @@ class DocumentService {
 
     if (response.statusCode! == 503) {
       throw Exception('Feature not available for now');
+    } else if (response.statusCode == 413) {
+      throw Exception('Fichier trop lourd, doit être > 5Mo');
     } else if (response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300) {
