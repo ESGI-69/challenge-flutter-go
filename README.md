@@ -1,5 +1,16 @@
 # Challenge Flutter Go
 
+## Team
+Gatien ANIZAN (@mrpinkcat)
+Quentin PELTIER (@Timdev0)
+Samuel GUENIER (@sguenier)
+Yohan CENTANNI (@ycenta)
+
+## Fonctionnalités
+Back-end Notes (Quentin PELTIER)
+Swagger auto generation for GO API (Quentin PELTIER)
+Chat per Trip with socket.io (Quentin PELTIER)
+
 ## Development
 
 ### Backend
