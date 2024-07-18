@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TripCostTag extends StatelessWidget {
   final double totalCost;
@@ -19,7 +20,9 @@ class TripCostTag extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          '${totalCost.round().toString()}€',
+          NumberFormat.compactCurrency(
+                  symbol: NumberFormat.simpleCurrency().currencySymbol)
+              .format(totalCost),
           style: TextStyle(
             color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.bold,

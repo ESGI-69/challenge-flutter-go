@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:move_together_app/Provider/auth_provider.dart';
 import 'package:move_together_app/Widgets/Button/button_back.dart';
 import 'package:move_together_app/Widgets/details_list.dart';
@@ -104,8 +105,12 @@ class AccommodationScreen extends StatelessWidget {
                           title: 'URL de réservation',
                           value: accommodation.bookingUrl),
                       DetailItem(
-                          title: 'Prix',
-                          value: '${accommodation.price.toStringAsFixed(2)}€'),
+                        title: 'Prix',
+                        value: NumberFormat.currency(
+                                symbol: NumberFormat.simpleCurrency()
+                                    .currencySymbol)
+                            .format(accommodation.price),
+                      )
                     ],
                   ),
                   (accommodation.bookingUrl != null &&
