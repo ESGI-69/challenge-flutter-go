@@ -25,6 +25,39 @@ class CreateTripScreenState extends State<CreateTripScreen> {
   var dateTimeStart = DateTime.now();
   var dateTimeEnd = DateTime.now();
 
+  bool cantPost() {
+    return _nameController.text.isEmpty ||
+        _dateController.text.isEmpty ||
+        _countryController.text.isEmpty ||
+        _destinationController.text.isEmpty;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _destinationController.addListener(_updateButtonState);
+    _countryController.addListener(_updateButtonState);
+    _nameController.addListener(_updateButtonState);
+    _dateController.addListener(_updateButtonState);
+  }
+
+  @override
+  void dispose() {
+    _destinationController.removeListener(_updateButtonState);
+    _destinationController.dispose();
+    _countryController.removeListener(_updateButtonState);
+    _countryController.dispose();
+    _nameController.removeListener(_updateButtonState);
+    _nameController.dispose();
+    _dateController.removeListener(_updateButtonState);
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  void _updateButtonState() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,6 +170,10 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                           ),
                           const SizedBox(height: 5),
                           Button(
+                            type: cantPost()
+                                ? ButtonType.disabled
+                                : ButtonType.primary,
+                            text: 'Ajoute un voyage',
                             onPressed: () {
                               if (_destinationController.text.isEmpty ||
                                   _dateController.text.isEmpty ||
@@ -163,12 +200,6 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                                   .add(TripDataCreateTrip(newTrip));
                               setState(() {});
                             },
-                            type: _destinationController.text.isEmpty ||
-                                    _dateController.text.isEmpty ||
-                                    _nameController.text.isEmpty
-                                ? ButtonType.disabled
-                                : ButtonType.primary,
-                            text: 'Ajoute un voyage',
                           ),
                         ],
                       ),
