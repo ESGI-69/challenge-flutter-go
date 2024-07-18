@@ -8,8 +8,13 @@ Yohan CENTANNI (@ycenta)
 
 ## Features
 
+### CD/CD
+
+- Everything (Gatien ANIZAN)
+
 ### Back 
 
+Init (Gatien ANIZAN)
 Back-end Notes (Quentin PELTIER)
 Swagger auto generation for GO API (Quentin PELTIER)
 Chat per Trip with socket.io back (Quentin PELTIER)
@@ -22,6 +27,19 @@ Backend Transports endpoints (Yohan CENTANNI)
 Backend Hebergements endpoints (Yohan CENTANNI)
 Get Place image of trip location when created (Yohan CENTANNI)
 Gmap & OSM Address resolver integration (Yohan CENTANNI)
+Transport (Gatien ANIZAN)
+Logger (Gatien ANIZAN)
+Trip creation, edit, deletion & view (Gatien ANIZAN)
+Trip participants relation & endpoints (Gatien ANIZAN)
+Request validator (Gatien ANIZAN)
+deserializer (Gatien ANIZAN)
+Password encryption (Gatien ANIZAN)
+Permissions middleware (Gatien ANIZAN)
+User endpoints (Gatien ANIZAN)
+Auto create admin user (Gatien ANIZAN)
+Activity endpoints (Gatien ANIZAN)
+Price calculation (Gatien ANIZAN)
+Backoffice serving (Gatien ANIZAN)
 
 ### Front
 
@@ -43,8 +61,23 @@ Create and join trip (Yohan CENTANNI)
 Accommodations Cards (Yohan CENTANNI)
 QR code integration (Yohan CENTANNI)
 Logs on backoffice (Yohan CENTANNI)
-Google maps integration (Yohan CENTANNI)
-
+Google maps integration (Yohan CENTANNI, Gatien ANIZAN)
+Dio client setup (Gatien ANIZAN)
+Creation modal (Gatien ANIZAN)
+Detail list (editable) (Gatien ANIZAN)
+Profile page (Gatien ANIZAN)
+Confirmation modal (Gatien ANIZAN)
+Date & price formating related to the user's locale (Gatien ANIZAN)
+Edit trip name modal (Gatien ANIZAN)
+Trip deletion (Gatien ANIZAN)
+Trip feature card (Gatien ANIZAN)
+Photo (Gatien ANIZAN)
+Refresh on scroll top (Gatien ANIZAN)
+Map on transport, trip & accommodation (Gatien ANIZAN)
+Map markers & line generation (Gatien ANIZAN)
+Map auto camera position (Gatien ANIZAN)
+User password edition (Gatien ANIZAN)
+Price calculation (Gatien ANIZAN)
 
 ## Development
 
