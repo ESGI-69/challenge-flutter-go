@@ -63,6 +63,7 @@ class NoteCard extends StatelessWidget {
                       },
                       extra: state.notes[index],
                     );
+                    context.read<NoteBloc>().add(NotesDataFetch(tripId));
                   },
                 );
               },
