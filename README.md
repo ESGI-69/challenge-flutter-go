@@ -18,6 +18,10 @@ Profile Picture upload back (Quentin PELTIER)
 Photos endpoint on backend (Samuel GUENIER)
 Feature flipping backend (Samuel GUENIER & Gatien ANIZAN)
 Admin backend (Samuel GUENIER)
+Backend Transports endpoints (Yohan CENTANNI)
+Backend Hebergements endpoints (Yohan CENTANNI)
+Get Place image of trip location when created (Yohan CENTANNI)
+Gmap & OSM Address resolver integration (Yohan CENTANNI)
 
 ### Front
 
@@ -27,7 +31,7 @@ Feature Flipping Client Side (Quentin PELTIER)
 Handle Back Office on Web (Quentin PELTIER)
 Promote & Demote user in Back Office (Quentin PELTIER)
 AuthProvider Flutter (Samuel GUENIER)
-Login/Register/Landing Flutter (Samuel GUENIER)
+Login/Register/Landing Flutter (Samuel GUENIER & Yohan CENTANNI)
 GoRouter on Flutter (Samuel GUENIER)
 BackOffice on Web Flutter (Samuel GUENIER)
 Cards Note Flutter (Samuel GUENIER)
@@ -35,6 +39,12 @@ Trip on backoffice (Samuel GUENIER)
 Feature flipping backoffice (Samuel GUENIER)
 Button Widget + BottomSheetsButtons (Samuel GUENIER)
 Chat per Trip with socket.io front (Quentin PELTIER)
+Create and join trip (Yohan CENTANNI)
+Accommodations Cards (Yohan CENTANNI)
+QR code integration (Yohan CENTANNI)
+Logs on backoffice (Yohan CENTANNI)
+Google maps integration (Yohan CENTANNI)
+
 
 ## Development
 
