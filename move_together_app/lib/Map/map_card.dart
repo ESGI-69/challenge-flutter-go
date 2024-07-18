@@ -28,8 +28,12 @@ class MapCard extends StatelessWidget {
               isLoading: false,
               icon: Icons.pin_drop,
               onTitleTap: () {
-                context.pushNamed('map',
-                    pathParameters: {'tripId': tripId.toString()});
+                context.pushNamed('map', pathParameters: {
+                  'tripId': tripId.toString()
+                }, queryParameters: {
+                  'lat': trip.latLng.latitude.toString(),
+                  'lng': trip.latLng.longitude.toString(),
+                });
               },
               child: Stack(
                 children: [
@@ -42,8 +46,12 @@ class MapCard extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      context.pushNamed('map',
-                          pathParameters: {'tripId': tripId.toString()});
+                      context.pushNamed('map', pathParameters: {
+                        'tripId': tripId.toString()
+                      }, queryParameters: {
+                        'lat': trip.latLng.latitude.toString(),
+                        'lng': trip.latLng.longitude.toString(),
+                      });
                     },
                     behavior: HitTestBehavior.translucent,
                   ),
