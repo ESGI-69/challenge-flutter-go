@@ -22,7 +22,7 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   Barcode? result;
   QRViewController? controller;
   bool isKeyboardEnable = false;
-
+  bool isJoiningTrip = false;
   @override
   void initState() {
     super.initState();
@@ -42,15 +42,23 @@ class JoinTripScreenState extends State<JoinTripScreen> {
   }
 
   Future<void> _joinTrip() async {
+    if (isJoiningTrip) return;
+    setState(() {
+      isJoiningTrip = true;
+    });
     try {
       final tripServices = TripService(context.read<AuthProvider>());
       await tripServices.join(
         _tripCodeController.text,
       );
-      context.pushNamed('home');
+      context.replaceNamed('home');
     } catch (e) {
       setState(() {
         errorMessage = 'Joining trip failed';
+      });
+    } finally {
+      setState(() {
+        isJoiningTrip = false;
       });
     }
   }
@@ -63,8 +71,8 @@ class JoinTripScreenState extends State<JoinTripScreen> {
       setState(() {
         result = scanData;
         _tripCodeController.text = result!.code!;
-        _joinTrip();
       });
+      _joinTrip();
     });
   }
 
