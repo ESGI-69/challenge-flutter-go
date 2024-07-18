@@ -164,6 +164,27 @@ jobs:
     - name: Build
       run: go build -v main.go
 
+  go-test:
+    runs-on: ubuntu-latest
+    name: Go Test
+    defaults:
+      run:
+        working-directory: go
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go/go.mod'
+        cache-dependency-path: go/go.sum
+
+    - name: Install depencies
+      run: go get .
+
+    - name: Test
+      run: go test -v ./...
+
   go-docker-build:
     needs: 
       - go-build
