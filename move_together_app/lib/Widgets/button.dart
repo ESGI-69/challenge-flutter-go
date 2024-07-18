@@ -50,31 +50,30 @@ class Button extends StatelessWidget {
     return SizedBox(
       width: width,
       child: ElevatedButton(
-        onPressed: onPressed,
-        style: ButtonStyle(
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          backgroundColor: WidgetStateProperty.all<Color>(backgroundColor()),
-          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: borderRadius ?? BorderRadius.circular(10.0),
-            ),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) Icon(icon, color: textColor()),
-            if (icon != null) const SizedBox(width: 5),
-            Text(
-              text ?? '',
-              style: TextStyle(
-                color: textColor(),
-                fontSize: 16,
+          onPressed: onPressed,
+          style: ButtonStyle(
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            backgroundColor: WidgetStateProperty.all<Color>(backgroundColor()),
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: borderRadius ?? BorderRadius.circular(10.0),
               ),
             ),
-          ],
-        )
-      ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon != null) Icon(icon, color: textColor()),
+              if (icon != null) const SizedBox(width: 5),
+              Text(
+                text ?? '',
+                style: TextStyle(
+                  color: textColor(),
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          )),
     );
   }
 }
