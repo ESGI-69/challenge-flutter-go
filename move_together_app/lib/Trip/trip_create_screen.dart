@@ -122,7 +122,7 @@ class CreateTripScreenState extends State<CreateTripScreen> {
                                         dateTimeStart = selectedDateRange.start;
                                         dateTimeEnd = selectedDateRange.end;
                                         _dateController.text =
-                                            '${DateFormat('dd/MM/yyyy').format(selectedDateRange.start)} - ${DateFormat('dd/MM/yyyy').format(selectedDateRange.start)}';
+                                            '${DateFormat('dd/MM/yyyy').format(selectedDateRange.start)} - ${DateFormat('dd/MM/yyyy').format(selectedDateRange.end)}';
                                       });
                                     }
                                   },
