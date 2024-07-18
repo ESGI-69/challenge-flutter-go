@@ -195,13 +195,22 @@ func (handler *PhotoHandler) DeletePhotoFromTrip(context *gin.Context) {
 		return
 	}
 
-	if (photo.OwnerID != currentUser.ID) || (photo.Trip.OwnerID != currentUser.ID) {
-		logger.ApiError(context, "User is not the owner of the photo or the trip")
-		context.JSON(http.StatusForbidden, gin.H{"error": "User is not the owner of the photo or the trip"})
-		return
+	userOwnPhoto := photo.OwnerID == currentUser.ID
+	userOwnTrip := photo.Trip.OwnerID == currentUser.ID
+
+	var err error
+	if !userOwnPhoto {
+		if userOwnTrip {
+			err = handler.Repository.DeletePhoto(photoID)
+		} else {
+			logger.ApiError(context, "User is not the owner of the photo and not the owner of the trip")
+			context.JSON(http.StatusForbidden, gin.H{"error": "User is not the owner of the photo and not the owner of the trip"})
+			return
+		}
+	} else {
+		err = handler.Repository.DeletePhoto(photoID)
 	}
 
-	err := handler.Repository.DeletePhoto(photoID)
 	if err != nil {
 		errorHandlers.HandleGormErrors(err, context)
 		return
