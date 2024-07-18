@@ -1,6 +1,15 @@
 # move_together_app
 
-A new Flutter project.
+## APK Link
+[Releases Link](https://github.com/ESGI-69/challenge-flutter-go/releases)
+
+## Run the project
+Copy the `.env.example` file to `.env` and fill the variables with your own values.
+
+And run the app with your favorite IDE or with the following command:
+```bash
+flutter run
+```
 
 ## Getting Started
 
