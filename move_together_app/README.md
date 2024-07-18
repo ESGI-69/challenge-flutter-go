@@ -1,6 +1,36 @@
 # move_together_app
 
-A new Flutter project.
+## APK Link
+[Releases Link](https://github.com/ESGI-69/challenge-flutter-go/releases)
+
+## Run the project
+Copier le fichier `.env.example` en `.env` et remplissez les variables avec vos propres valeurs.
+| Variable | Description | Valeur par défaut |
+| --- | --- | --- |
+| `API_ADDRESS` | Adresse du backend pour l'api | `localhost` |
+| `WEBSOCKET_ADDRESS` | Adresse du backend pour les websockets  | `5432` |
+
+Pour utiliser l'api google maps et afficher la carte, veuillez ajouter votre clé d'api dans `move_together_app/android/app/src/main/AndroidManifest.xml`
+
+
+Ou run l'application avec votre IDE préféré avec cet argument : 
+```
+--dart-define GOOGLE_MAPS_API_KEY=<THEGOOGLEAPIKEY>
+```
+ou exécutez la commande (flutter run ou build) :
+```
+flutter run --dart-define GOOGLE_MAPS_API_KEY=<THEGOOGLEAPIKEY>
+```
+ 
+Dans certains cas, la carte peut toujours afficher une carte vide sans textures de terrain, si c'est le cas, utilisez la commande suivante avant d'exécuter l'application flutter
+```
+flutter clean
+```
+
+Commande pour mettre à jour l'icône de l'application :
+```
+flutter pub pub run flutter_launcher_icons:main
+```
 
 ## Getting Started
 
