@@ -2,8 +2,11 @@
 
 ## Team
 Gatien ANIZAN (@mrpinkcat)
+
 Quentin PELTIER (@Timdev0)
+
 Samuel GUENIER (@sguenier)
+
 Yohan CENTANNI (@ycenta)
 
 ## Features
