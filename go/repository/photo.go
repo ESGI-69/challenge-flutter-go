@@ -24,7 +24,7 @@ func (d *PhotoRepository) Create(photo *models.Photo) error {
 
 // Get all the photos of a trip
 func (d *PhotoRepository) GetPhotos(tripId string) (photos []models.Photo, err error) {
-	err = d.Database.Model(&models.Photo{}).Preload(clause.Associations).Where("trip_id = ?", tripId).Find(&photos).Error
+	err = d.Database.Model(&models.Photo{}).Preload(clause.Associations).Order("created_at desc").Where("trip_id = ?", tripId).Find(&photos).Error
 	return
 }
 
