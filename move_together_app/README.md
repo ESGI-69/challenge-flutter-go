@@ -4,25 +4,30 @@
 [Releases Link](https://github.com/ESGI-69/challenge-flutter-go/releases)
 
 ## Run the project
-Copy the `.env.example` file to `.env` and fill the variables with your own values.
+Copier le fichier `.env.example` en `.env` et remplissez les variables avec vos propres valeurs.
+| Variable | Description | Valeur par défaut |
+| --- | --- | --- |
+| `API_ADDRESS` | Adresse du backend pour l'api | `localhost` |
+| `WEBSOCKET_ADDRESS` | Adresse du backend pour les websockets  | `5432` |
 
-To use the google maps api and show the map, please add your api key in `move_together_app/android/app/src/main/AndroidManifest.xml`
+Pour utiliser l'api google maps et afficher la carte, veuillez ajouter votre clé d'api dans `move_together_app/android/app/src/main/AndroidManifest.xml`
 
-Or run the app with your favorite IDE with this argument
+
+Ou run l'application avec votre IDE préféré avec cet argument : 
 ```
 --dart-define GOOGLE_MAPS_API_KEY=<THEGOOGLEAPIKEY>
 ```
-or run the command (flutter run or build)
+ou exécutez la commande (flutter run ou build) :
 ```
 flutter run --dart-define GOOGLE_MAPS_API_KEY=<THEGOOGLEAPIKEY>
 ```
-
-In some cases, the map might still show a blank map with no terrain textures, if so, use the following command before running the flutter app 
+ 
+Dans certains cas, la carte peut toujours afficher une carte vide sans textures de terrain, si c'est le cas, utilisez la commande suivante avant d'exécuter l'application flutter
 ```
 flutter clean
 ```
 
-Command to update the app icon :
+Commande pour mettre à jour l'icône de l'application :
 ```
 flutter pub pub run flutter_launcher_icons:main
 ```
