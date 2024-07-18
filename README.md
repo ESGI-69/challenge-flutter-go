@@ -15,6 +15,7 @@ Yohan CENTANNI (@ycenta)
 ### Back 
 
 Init (Gatien ANIZAN)
+Mise en place de viper (Gatien ANIZAN)
 Back-end Notes (Quentin PELTIER)
 Swagger auto generation for GO API (Quentin PELTIER)
 Chat per Trip with socket.io back (Quentin PELTIER)
