@@ -13,7 +13,7 @@ Yohan CENTANNI (@ycenta)
 Back-end Notes (Quentin PELTIER)
 Swagger auto generation for GO API (Quentin PELTIER)
 Chat per Trip with socket.io back (Quentin PELTIER)
-Documents upload and download back(Quentin PELTIER)
+Documents upload and download back (Quentin PELTIER)
 Profile Picture upload back (Quentin PELTIER)
 Photos endpoint on backend (Samuel GUENIER)
 Feature flipping backend (Samuel GUENIER & Gatien ANIZAN)
@@ -21,7 +21,7 @@ Admin backend (Samuel GUENIER)
 
 ### Front
 
-Documents upload and download front(Quentin PELTIER)
+Documents upload and download front (Quentin PELTIER)
 Profile Picture upload front (Quentin PELTIER)
 Feature Flipping Client Side (Quentin PELTIER)
 Handle Back Office on Web (Quentin PELTIER)
